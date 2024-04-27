@@ -1,0 +1,256 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-overlay: #0000004f;
+}
+
+/* Start Semi-circle Progress Bar */
+
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+html,
+html body {
+  scroll-behavior: smooth !important;
+  overflow-x: hidden;
+}
+
+input,
+label {
+  display: block;
+}
+
+.multigraph {
+  width: 300px;
+  height: 150px;
+}
+
+.multigraph:before {
+  content: '';
+  width: 300px;
+  height: 150px;
+  position: absolute;
+  border: 30px solid rgba(0, 0, 0, 0.1);
+  border-radius: 300px 300px 0 0;
+  border-bottom: none;
+  z-index: 5;
+}
+
+.tooltip {
+  width: 80px;
+  height: 30px;
+  background: lightgrey;
+  text-align: center;
+  font-size: 16px;
+  line-height: 30px;
+  font-weight: 200;
+  color: #000;
+  border: 1px solid grey;
+  position: absolute;
+  left: 30%;
+  bottom: -40px;
+  margin: -80px;
+  transition: all 300ms ease-in-out;
+  box-shadow: 0 0 5px grey;
+  opacity: 0;
+  transform: scale(0.1);
+  z-index: 5;
+}
+
+.multigraph:hover .tooltip {
+  bottom: 75%;
+  /* opacity: 0.8; */
+  transform: scale(1);
+}
+.graph {
+  width: 300px;
+  height: 150px;
+  position: absolute;
+  overflow: hidden;
+}
+
+.graph:before,
+.graph:after {
+  width: 300px;
+  height: 150px;
+  position: absolute;
+  top: 100%;
+  border: 30px solid #3265cb;
+  content: '';
+  border-radius: 0 0 300px 300px;
+  border-top: none;
+  animation: demo 3s;
+  transform-origin: center top;
+  z-index: 5;
+}
+
+.graph:after {
+  transform: rotate(150deg);
+}
+
+@keyframes demo {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+}
+
+/* End Semi-circle Progress Bar */
+
+/* Prime View */
+
+.p-inputtext {
+  padding: 14px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fafafa;
+}
+
+@layer components {
+  textarea,
+  select {
+    @apply h-full text-sm w-full font-light text-gray-500 focus:outline-none block appearance-none border border-gray-200 py-3 px-4 rounded-md resize-none;
+  }
+  textarea {
+    @apply min-h-32;
+  }
+}
+
+/* Testimonies */
+
+.testimony-container {
+  display: none;
+}
+
+.testimony {
+  display: none;
+  padding: 10px;
+  transition: 1.5s ease-in;
+}
+
+.active-testimony {
+  display: block;
+  animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hero Section Animation */
+
+.z-index-pulse-1 {
+  animation: jumpZIndex1 6s infinite ease-out;
+}
+
+.z-index-pulse-2 {
+  animation: jumpZIndex1 6s infinite ease-in;
+}
+
+@keyframes jumpZIndex1 {
+  0%,
+  100% {
+    z-index: 10;
+    transform: translateY(0) translateX(0) scale(0.9);
+  }
+  50% {
+    z-index: 1;
+    transform: translateY(40px) translateX(20px) scale(1);
+  }
+}
+
+@keyframes jumpZIndex2 {
+  0%,
+  100% {
+    z-index: 11;
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  50% {
+    z-index: 1;
+    transform: translateY(40px) translateX(-20px) scale(0.9);
+  }
+}
+
+/* Auth Image */
+.auth-image {
+  background: url('/auth-image.png') no-repeat center center/cover;
+}
+
+/* Remove the "up" and "down" arrows from number input fields */
+/* Standard syntax */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* Skeleton Loader */
+
+.skeleton-loader {
+  display: inline-block;
+  width: 100%; /* Adjust the width as needed */
+  min-height: 50px; /* Adjust the height as needed */
+  background: linear-gradient(
+    120deg,
+    rgb(219, 219, 219, 0.5) 25%,
+    rgb(232, 232, 232, 0.5) 50%,
+    rgb(234, 234, 234, 0.5) 85%
+  );
+  background-size: 200% 100%;
+  animation: pulse 3s infinite ease-in-out;
+  border-radius: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    background-position: 200% 0;
+  }
+  50% {
+    background-position: -200% 0;
+  }
+}
+
+/* UPPY React Styles */
+
+.uppy-StatusBar-actions,
+.uppy-StatusBar-actionBtn--upload {
+  display: none !important;
+}
+
+.uppy-Dashboard-inner {
+  z-index: 10 !important;
+}
+
+/* Primereact Menu Items */
+.p-menuitem-link {
+  background: transparent !important;
+}
+
+.order-border {
+  border-style: dashed;
+  border-spacing: 10px;
+}

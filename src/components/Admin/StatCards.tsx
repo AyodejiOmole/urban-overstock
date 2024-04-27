@@ -1,0 +1,85 @@
+import React from 'react';
+import { BiWallet } from 'react-icons/bi';
+import { CiMoneyBill } from 'react-icons/ci';
+import { FiShoppingCart } from 'react-icons/fi';
+import { GiReceiveMoney } from 'react-icons/gi';
+import { TbLineScan } from 'react-icons/tb';
+
+export default function StatCards() {
+  const card_icon_style =
+    'h-10 w-10 text-xl flex items-center justify-center rounded-full';
+
+  return (
+    <section className='my-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4'>
+      {/*  */}
+      <div className='rounded-lg bg-white border border-neural p-6'>
+        <span className={`${card_icon_style} bg-purple-50 text-purple-700`}>
+          <CiMoneyBill className='text-2xl' />
+        </span>
+        <p className='my-3 text-neutral text-sm'>Total Revenue</p>
+
+        <div className='flex items-center gap-4'>
+          <p className='text-gray-700 text-3xl font-medium'>
+            ${(59000).toLocaleString()}
+          </p>
+
+          <span className='py-1 px-2 bg-green-100 text-green-600 text-xs rounded-full font-semibold'>
+            +10%
+          </span>
+        </div>
+      </div>
+      {/*  */}
+      <div className='rounded-lg bg-white border border-neural p-6'>
+        <span className={`${card_icon_style} bg-green-50 text-green-700`}>
+          <FiShoppingCart />
+        </span>
+        <p className='my-3 text-neutral text-sm'>Total Orders</p>
+
+        <div className='flex items-center gap-4'>
+          <p className='text-gray-700 text-3xl font-medium'>
+            {(990).toLocaleString()}
+          </p>
+
+          <span className='py-1 px-2 bg-green-100 text-green-600 text-xs rounded-full font-semibold'>
+            +15%
+          </span>
+        </div>
+      </div>
+      {/*  */}
+      <div className='rounded-lg bg-white border border-neural p-6'>
+        <span className={`${card_icon_style} bg-pink-50 text-pink-700`}>
+          <TbLineScan />
+        </span>
+        <p className='my-3 text-neutral text-sm'>Product SKU</p>
+
+        <div className='flex items-center gap-4'>
+          <p className='text-gray-700 text-3xl font-medium'>
+            {(112).toLocaleString()}
+          </p>
+
+          <span className='py-1 px-2 bg-gray-100 text-gray-600 text-xs rounded-full font-semibold'>
+            0%
+          </span>
+        </div>
+      </div>
+      {/*  */}
+      <div className='rounded-lg bg-white border border-neural p-6'>
+        <span className={`${card_icon_style} bg-blue-50 text-blue-700`}>
+          <BiWallet />
+        </span>
+        <p className='my-3 text-neutral text-sm'>Balance</p>
+
+        <div className='flex items-center gap-4'>
+          <p className='text-gray-700 text-3xl font-medium'>
+            ${(781227).toLocaleString()}
+          </p>
+
+          <span className='py-1 px-2 bg-red-100 text-red-600 text-xs rounded-full font-semibold'>
+            -25%
+          </span>
+        </div>
+      </div>
+      {/*  */}
+    </section>
+  );
+}
