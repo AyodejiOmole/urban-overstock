@@ -34,7 +34,7 @@ export default function CategoryDetails() {
 
           <Button disabled>
             <TfiSave />
-            Save Product
+            Save Category
           </Button>
         </div>
       </div>
