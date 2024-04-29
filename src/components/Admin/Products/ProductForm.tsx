@@ -109,6 +109,16 @@ function getGroupedVariations(variations: IProductVariations[]) {
   return variations;
 }
 
+function getFormattedVariations(variations: IProductVariations[], variationImages: {variation: IProductVariations, imageUrl: string}[]) {
+  const newVariations = variations.map((variation: IProductVariations, index) => {
+    let { colorId, imageUrl, sizeOptions } = variation;
+    imageUrl = variationImages[index].imageUrl;
+    return { colorId, imageUrl, sizeOptions };
+  });
+
+  return newVariations;
+}
+
 function CustomError({ error }: { error?: string }) {
   if (!error) return;
 
@@ -144,7 +154,54 @@ export default function ProductForm({
   const [brandPicker, setBrandPicker] = useState<boolean | null>(false);
   const [brandToAdd, setBrandToAdd] = useState<string | null | undefined | any>("");
   const [addBrandDisplay, setAddBrandDisplay] = useState<boolean | null>(false);
+
+
+  const token = cookies.get('urban-token');
   // const [productVariations, setProductVariations] = useState<IProductVariations[]>([]);
+
+  async function uploadVariationImages() {
+    const variations = state;
+    let uploaded = true;
+
+    for (const variation of variations) {
+      try {
+        const variationFormdata = new FormData();
+        if(variation.imageFile !== null) {
+          variationFormdata.append('file', variation.imageFile);
+        }
+        
+        const requestOptions = {
+          method: 'POST',
+          body: variationFormdata,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
+          requestOptions
+        );
+
+        const jsonRes = await response.json();
+        console.log(jsonRes);
+
+        if(jsonRes) {
+          dispatch({
+            type: 'UPDATE',
+            payload: { ...variation, imageUrl: jsonRes.url },
+          });
+        }
+        
+        console.log(variation);
+      } catch (error) {
+        uploaded = false;
+        console.error("Error uploading file", error);
+      }
+    }
+
+    return uploaded;
+  }  
 
   const formik = useFormik({
     initialValues: {
@@ -152,8 +209,8 @@ export default function ProductForm({
       description: '',
       tag: '',
       brandId: 0,
+      quantity: 0,
       amount: 0,
-      basePrice: 0,
       discountType: '',
       discountPercentage: 0,
       taxClass: '',
@@ -167,103 +224,138 @@ export default function ProductForm({
       name: Yup.string().required().label('Name'),
       description: Yup.string().required().label('Description'),
       tag: Yup.string().required().label('Tag'),
-      amount: Yup.number().min(1).required().label('Quantity'),
-      basePrice: Yup.number().min(1).required().label('Price'),
+      quantity: Yup.number().min(1).required().label('Quantity'),
+      amount: Yup.number().min(1).required().label('Price'),
       discountType: Yup.string().required().label('Discount Type'),
       discountPercentage: Yup.number().min(1).required().label('Discount Type'),
       taxClass: Yup.string().required().label('Tax Class'),
-      // categoryId: Yup.number().min(1).required().label('Category'),
+      categoryId: Yup.number().min(1).required().label('Category'),
       vatAmount: Yup.number().min(1).required().label('VAT Amount'),
       sku: Yup.string().required().label('SKU'),
       barcode: Yup.string().required().label('Bar Code'),
       status: Yup.string().required().label('Status'),
     }),
     onSubmit: async (values) => {
-      // const token = cookies.get('urban-token');
-
       const variations = state;
       const groupedVariations = getGroupedVariations(variations);
+      let variationImages: {variation: IProductVariations, imageUrl: string}[] = [];
 
-      // const promises: Promise<Response>[] = [];
+      const promises: Promise<Response>[] = [];
+      const variationPromises: Promise<Response>[] = [];
 
-      // if (productImages.length < 1 || variations.length < 1) {
-      //   toast.error('Please add product images or variations.');
-      // } else {
-      //   try {
-      //     productImages.forEach((image: ProductImage) => {
-      //       const formdata = new FormData();
-      //       formdata.append('file', image.image);
+      if (productImages.length < 1 || variations.length < 1) {
+        toast.error('Please add product images or variations.');
+      } else {
+        try {
+          productImages.forEach((image: ProductImage) => {
+            const formdata = new FormData();
+            formdata.append('file', image.image);
 
-      //       const requestOptions = {
-      //         method: 'POST',
-      //         body: formdata,
-      //         headers: {
-      //           Authorization: `Bearer ${token}`,
-      //         },
-      //       };
+            const requestOptions = {
+              method: 'POST',
+              body: formdata,
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            };
 
-      //       promises.push(
-      //         fetch(
-      //           `${process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
-      //           requestOptions
-      //         )
-      //       );
-      //     });
+            promises.push(
+              fetch(
+                `${process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
+                requestOptions
+              )
+            );
+          });
 
-      //     const product_images = await Promise.all(promises)
-      //       .then((responses) => {
-      //         const responseData = responses.map(async (response, index) => {
-      //           const fileRes = await response.json();
+          const product_images = await Promise.all(promises)
+            .then((responses) => {
+              const responseData = responses.map(async (response, index) => {
+                const fileRes = await response.json();
 
-      //           return {
-      //             // color: productImages[index].color,
-      //             imageUrl: fileRes.url,
-      //           };
-      //         });
+                return fileRes.url;
+              });
 
-      //         return Promise.all(responseData);
-      //       })
-      //       .catch((error) => {
-      //         console.log(error);
-      //       });
+              return Promise.all(responseData);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
 
-      //     if (product_images && product_images.length > 0) {
-      //       const data = {
-      //         ...values,
-      //         categoryId: +values.categoryId,
-      //         productVarations: groupedVariations,
-      //         productImages: product_images,
-      //       };
+          // const uploaded = await uploadVariationImages();
+          if(variations.length > 0) {
+            for (const variation of variations) {
+              const variationFormdata = new FormData();
+              if(variation.imageFile !== null) {
+                variationFormdata.append('file', variation.imageFile);
+              }
+              
+              const requestOptions = {
+                method: 'POST',
+                body: variationFormdata,
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              };
+      
+              const response = await fetch(
+                `${process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
+                requestOptions
+              );
+      
+              const jsonRes = await response.json();
+              console.log(jsonRes);
+      
+              // if(jsonRes) {
+                variationImages.push({ variation, imageUrl: jsonRes.url });
+                
+              // }
+            };
+          }
 
-      //       console.log('Request Body: ', data);
+          // if(variationImages.length > 0) {
+            
+          // }
 
-      //       httpService
-      //         .post(ENDPOINTS.PRODUCTS, data, `Bearer ${token}`)
-      //         .then((apiRes) => {
-      //           console.log('Response: ', apiRes);
+          if (product_images && product_images.length > 0) {
+            const data = {
+              ...values,
+              categoryId: +values.categoryId,
+              productVarations: getFormattedVariations(state, variationImages),
+              // productImages: product_images,
+              imageUrls: product_images
+            };
 
-      //           if (apiRes.data) {
-      //             formik.resetForm();
+            console.log('Request Body: ', data);
+            console.log(variationImages);
 
-      //             toast.success('Product added successfully.');
+            httpService
+              .post(ENDPOINTS.PRODUCTS, data, `Bearer ${token}`)
+              .then((apiRes) => {
+                console.log('Response: ', apiRes);
 
-      //             setTimeout(() => {
-      //               replace('/admin/products');
-      //             }, 1000);
-      //           }
-      //         });
-      //     } else console.log('Products array not provided');
-      //   } catch (error) {
-      //     console.log(error);
-      //   }
-      // }
-      const data = {
-        ...values,
-        categoryId: +values.categoryId,
-        productVarations: groupedVariations,
-        // productImages: product_images,
-      };
-      console.log(data);
+                if (apiRes.data) {
+                  formik.resetForm();
+
+                  toast.success('Product added successfully.');
+
+                  setTimeout(() => {
+                    replace('/admin/products');
+                  }, 1000);
+                }
+              });
+          } else console.log('Products array not provided');
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      // const data = {
+      //   ...values,
+      //   categoryId: +values.categoryId,
+      //   productVarations: groupedVariations,
+      //   productImages: product_images,
+      // };
+      // console.log(data);
     },
     validateOnChange: true,
   });
@@ -567,10 +659,10 @@ export default function ProductForm({
             <TextInput
               inputMode='numeric'
               placeholder='Base Price'
-              id='basePrice'
+              id='amount'
               onChange={formik.handleChange}
-              value={formik.values.basePrice}
-              error={formik.errors.basePrice}
+              value={formik.values.amount}
+              error={formik.errors.amount}
               leftIcon={<BiDollar />}
               type='number'
             />
@@ -708,10 +800,10 @@ export default function ProductForm({
               <TextInput
                 inputMode='numeric'
                 placeholder='Type product quantity...'
-                id='amount'
+                id='quantity'
                 onChange={formik.handleChange}
-                value={formik.values.amount}
-                error={formik.errors.amount}
+                value={formik.values.quantity}
+                error={formik.errors.quantity}
                 type='number'
               />
             </div>
