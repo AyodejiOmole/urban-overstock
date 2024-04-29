@@ -98,7 +98,7 @@ export default function CategoriesTable({
   function template(category: ICategory) {
     return (
       <div className='flex items-center gap-4'>
-        {category.iconUrl.length > 0 && checkIfUrl(category.iconUrl) ? (
+        {/* {category.iconUrl?.length > 0 && checkIfUrl(category.iconUrl) ? (
           <Image
             src={category?.iconUrl}
             height={20}
@@ -108,12 +108,12 @@ export default function CategoriesTable({
           />
         ) : (
           <div className='h-12 w-12 bg-[#1b1b1b] rounded-md'></div>
-        )}
+        )} */}
         <div className='flex-1'>
           <p className='text-sm font-medium'>{category?.name}</p>
-          <p className='text-neutral text-sm font-light'>
+          {/* <p className='text-neutral text-sm font-light'>
             {category?.description}
-          </p>
+          </p> */}
         </div>
       </div>
     );
