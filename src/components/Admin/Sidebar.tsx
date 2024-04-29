@@ -1,13 +1,15 @@
 'use client';
-import { links } from '@/static/index';
+import { ISidebarLink, links } from '@/static/index';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 import { FaHeadphonesAlt } from 'react-icons/fa';
 import { FiSettings } from 'react-icons/fi';
 import logoIcon from '../../../public/logo-icon.png';
 import logo from '../../../public/logo.png';
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 
 type SidebarProps = {
   isOpen: Boolean;
@@ -16,6 +18,7 @@ type SidebarProps = {
 
 export default function AdminSidebar({ isOpen, toggleSidebar }: SidebarProps) {
   const pathname = usePathname();
+  const [isExpanded, setIsExpanded] = useState<null | number>(null);
 
   return (
     <>
@@ -41,7 +44,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar }: SidebarProps) {
           />
         </div>
         <div className={'p-2'}>
-          {links.map((link) => (
+          {/* {links.map((link) => (
             <Link
               key={link.name}
               href={link.page}
@@ -61,8 +64,131 @@ export default function AdminSidebar({ isOpen, toggleSidebar }: SidebarProps) {
                 <span>{link.icon}</span>
                 {isOpen && <p className={`capitalize`}>{link.name}</p>}
               </div>
+
             </Link>
-          ))}
+          ))} */}
+
+          {
+            links.map((link: ISidebarLink, index: number) => {
+              if(!link.children) {
+                return (
+                    <Link
+                      key={link.name}
+                      href={link.page}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        margin: '16px 0',
+                      }}
+                    >
+                      <div
+                        className={`py-4 flex gap-4 w-full h-10 items-center duration-500 rounded-md text-sm ${
+                          pathname.trim() === link.page
+                            ? 'bg-primary-2 text-white hover:bg-primary'
+                            : 'white text-neutral hover:bg-gray-100'
+                        } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
+                      >
+                        <span>{link.icon}</span>
+                        {isOpen && <p className={`capitalize`}>{link.name}</p>}
+                      </div>
+                    </Link>
+                )              
+              }
+              return (
+                <div
+                  key={link.name}
+                  className={`rounded-lg mt-4 duration-500 ${
+                    pathname.trim() === link.page
+                      ? 'bg-primary'
+                      : 'bg-gray-50'
+                  } `}
+                >
+                  <button
+                    onClick={() => {
+                      isExpanded === index
+                        ? setIsExpanded(null)
+                        : setIsExpanded(index);
+                    }}
+                    className={`py-4 flex gap-4 w-full h-10 items-center p-4
+                    ${isOpen ? 'justify-between' : 'justify-center'}
+                    ${
+                      isExpanded === index
+                        ? 'border-b-2 border-b-white'
+                        : 'border-0'
+                    }
+                      ${
+                        // isSimilar(pathname, link.root) > 50
+                        pathname.trim() === link.page
+                          ? 'text-neutral'
+                          : 'text-gray-800'
+                      } 
+                      `}
+                  >
+                    <div className='flex items-center gap-2'>
+                      <p>{link.icon}</p>
+                      {isOpen && <p className='capitalize'>{link.name}</p>}
+                    </div>
+                    {isOpen && (
+                      <span className='text-xl'>
+                        {isExpanded === index ? (
+                          <MdKeyboardArrowUp />
+                        ) : (
+                          <MdKeyboardArrowDown />
+                        )}
+                      </span>
+                    )}
+                  </button>
+
+                  {/* Children */}
+                  {isOpen && isExpanded === index && (
+                    <div className={`py-4 duration-500`}>
+                      {link.children && (
+                        <div className='px-4 text-sm'>
+                          {link?.children?.map((el) => (
+                            <Link
+                              key={el.name}
+                              className='capitalize my-2 mt-4 block'
+                              href={el.page}
+                            >
+                              <span className='flex items-center justify-between'>
+                                {el.name}
+                                {el.children && (
+                                  <span className='text-xl'>
+                                    {isExpanded === index ? (
+                                      <MdKeyboardArrowUp />
+                                    ) : (
+                                      <MdKeyboardArrowDown />
+                                    )}
+                                  </span>
+                                )}
+                              </span>
+                              {el.children && (
+                                <div className=''>
+                                  {el.children.map((innerEl) => (
+                                    <Link
+                                      href={innerEl.page}
+                                      key={innerEl.name}
+                                      className={`capitalize flex p-2 ${
+                                        pathname === innerEl.page
+                                          ? 'text-white'
+                                          : 'text-gray-800'
+                                      }`}
+                                    >
+                                      {innerEl.name}
+                                    </Link>
+                                  ))}
+                                </div>
+                              )}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          }
         </div>
 
         {/* Settings */}

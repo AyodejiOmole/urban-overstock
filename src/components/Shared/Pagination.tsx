@@ -7,7 +7,7 @@ import React from 'react'
 import Link from 'next/link';
 import { BiCurrentLocation } from 'react-icons/bi';
 
-const Pagination = () => {
+const Pagination = (  ) => {
     const router = useRouter();
     // const { pathname } = router;
     const pathname = usePathname();
@@ -17,6 +17,12 @@ const Pagination = () => {
       return currentRoute.charAt(0).toUpperCase() + currentRoute.slice(1).replace(/-/g, ' ');
     } 
 
+    // const ifAdd = () => {
+    //   return `Add ${currentPage}`
+    // }
+
+    // console.log(currentPage);
+
     pathname.split("/").reduce((acc, current, index, array) => {
         if(index > 0) {
             const link = `${acc}/${current}`;
@@ -24,7 +30,7 @@ const Pagination = () => {
                 <li key={link}>
                     <Link href={link}>
                         <div className='flex gap-1 items-center justify-center'>
-                          <p className='text-sm text-[#CFA31C]'>{current === "admin" ? "Dashboard" : current === "new" ? `New ${acc}` : formatString(current)}</p>
+                          <p className='text-sm text-[#CFA31C]'>{current === "admin" ? "Dashboard" : current === "new" ? `Add` : formatString(current)}</p>
                           <FaAngleRight className='fill-[#CFA31C]' color='#CFA31C'/>
                         </div> 
                     </Link>

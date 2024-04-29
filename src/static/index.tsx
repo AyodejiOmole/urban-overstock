@@ -9,6 +9,7 @@ import {
   MdOutlineShoppingBag,
   MdWallpaper,
 } from 'react-icons/md';
+import { CiShop } from "react-icons/ci";
 import { RiPercentLine } from 'react-icons/ri';
 import testimonial1 from '../../public/assets/testimonials/testimonial-1.png';
 import testimonial2 from '../../public/assets/testimonials/testimonial-2.png';
@@ -16,16 +17,25 @@ import testimonial3 from '../../public/assets/testimonials/testimonial-3.png';
 import testimonial4 from '../../public/assets/testimonials/testimonial-4.png';
 import testimonial5 from '../../public/assets/testimonials/testimonial-5.png';
 
-export const links = [
+export const links: ISidebarLink[] = [
   { name: 'dashboard', icon: <MdOutlineDashboard />, page: '/admin' },
-  { name: 'products', icon: <MdOutlineShoppingBag />, page: '/admin/products' },
-  {
-    name: 'categories',
-    icon: <MdOutlineCategory />,
-    page: '/admin/categories',
+  { 
+    name: 'products', 
+    icon: <MdOutlineShoppingBag />, 
+    page: '/admin/products' ,
+    children: [
+      { name: 'Product List', page: '/admin/products' },
+      { name: 'Categories', page: '/admin/categories' },
+    ],
   },
+  // {
+  //   name: 'categories',
+  //   icon: <MdOutlineCategory />,
+  //   page: '/admin/categories',
+  // },
   { name: 'orders', icon: <FiShoppingCart />, page: '/admin/orders' },
   { name: 'customers', icon: <FiUsers />, page: '/admin/customers' },
+  { name: 'sellers', icon: <CiShop />, page: '/admin/sellers' },
   {
     name: 'home slideshow',
     icon: <MdWallpaper />,
@@ -43,6 +53,13 @@ export const links = [
   },
   { name: 'notification', icon: <LuMail />, page: '/admin/notifications' },
 ];
+
+export type ISidebarLink = {
+  name: string;
+  page: string;
+  icon: React.ReactNode;
+  children?: ILink[];
+}
 
 type ILink = {
   name: string;

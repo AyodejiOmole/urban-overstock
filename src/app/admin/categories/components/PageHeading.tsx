@@ -10,7 +10,7 @@ export default function PageHeading() {
     <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8'>
       <div>
        <p className='text-xl font-bold text-gray-700'>Categories</p>
-       <Pagination/>
+       <Pagination />
       </div>
       
       <div className='flex items-center gap-4'>
