@@ -21,7 +21,8 @@ export default function Header() {
     setDefaultFilterOption(newIndex);
 
   return (
-    <div className='flex flex-col w-full justify-between 2xl:flex-row 2xl:items-center gap-8 mb-8'>
+    <div className='flex lg:flex-row gap-2 flex-col mb-4 justify-between w-full'>
+      {/* flex flex-col w-full justify-between lg:flex-col 2xl:items-center gap-8 mb-8 */}
       <CategoryNavigation
         categories={filter_options}
         defaultOption={defaultFilterOption}

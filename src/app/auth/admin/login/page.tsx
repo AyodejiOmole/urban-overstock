@@ -37,11 +37,14 @@ export default function AdminLogin() {
 
       if (res.error) toast.error(API_RESPONSES.SIGN_IN[res.statusCode]);
       else {
-        toast.success(
-          API_RESPONSES.SIGN_IN[res.statusCode] ||
-            API_RESPONSES.SIGN_IN[res.status]
-        );
-        if (res.status === 200) {
+
+        
+        if (res.status === 200 && res.data.userType === "ADMIN") {
+          toast.success(
+            API_RESPONSES.SIGN_IN[res.statusCode] ||
+              API_RESPONSES.SIGN_IN[res.status]
+          );
+
           storeCookies([
             {
               key: 'urban-token',
@@ -50,9 +53,11 @@ export default function AdminLogin() {
           ]);
 
           localStorage.setItem('urban-admin', JSON.stringify(res.data));
-
           replace('/admin');
+        } else {
+          toast.error("You are not allowed to login as an admin!");
         }
+
         if (res.statusCode === 203) {
           storeCookies([
             {
