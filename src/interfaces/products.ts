@@ -31,6 +31,7 @@
 // }
 
 export interface IProduct {
+  id: number;
   name: string
   description: string
   categoryId: number
@@ -47,6 +48,8 @@ export interface IProduct {
   barcode: string
   status: string
   productVarations: ProductVaration[]
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ProductVaration {
