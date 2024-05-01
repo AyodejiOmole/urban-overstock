@@ -19,7 +19,7 @@ export default function OrdersTable({
 }: {
   orders: IOrder[] | null;
   page?: 'orders' | 'return-request';
-  handleChangeSelectedOrders: (e: any) => void;
+  handleChangeSelectedOrders?: (e: any) => void;
   selectedOrders: IOrder[];
 }) {
   const [rowClick, setRowClick] = useState<boolean>(true);
