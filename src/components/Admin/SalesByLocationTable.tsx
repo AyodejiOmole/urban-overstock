@@ -167,7 +167,7 @@ export default function SalesByLocationTable() {
       <DataTable
         value={sales}
         dataKey='uuid'
-        // tableStyle={{ minWidth: '50rem' }}
+        // tableStyle={{ minWidth: '10rem' }}
         // paginator
         rows={20}
         rowsPerPageOptions={[20, 50, 100, 250]}

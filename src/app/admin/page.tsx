@@ -21,7 +21,7 @@ const AdminDashboard = async () => {
         <OrdersTable
             orders={null}
             // handleChangeSelectedOrders={function (e: any): void {
-            // throw new Error('Function not implemented.');
+            //     throw new Error('Function not implemented.');
             // }}
             selectedOrders={[]}
         />
