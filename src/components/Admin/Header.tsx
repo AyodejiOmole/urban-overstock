@@ -43,7 +43,7 @@ export default function AdminHeader({
 
       console.log(adminDetails);
     }
-  }, []);
+  }, [adminDetails]);
 
   return (
     <div
@@ -58,11 +58,11 @@ export default function AdminHeader({
         <CgMenu />
       </button>
       <div className='flex items-center gap-8'>
-        <button className='text-xl'>
+        {/* <button className='text-xl'>
           <IoSearchOutline />
-        </button>
-        <Notification icon={<TbCalendar />} number={2} />
-        <Notification icon={<BiBell />} number={10} />
+        </button> */}
+        {/* <Notification icon={<TbCalendar />} number={2} /> */}
+        {/* <Notification icon={<BiBell />} number={10} /> */}
         <Notification icon={<FiMail />} number={33} />
 
         <div className='h-12 w-[2px] bg-gray-200'></div>
