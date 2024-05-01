@@ -7,6 +7,8 @@ import { useState } from 'react';
 
 import { FaHeadphonesAlt } from 'react-icons/fa';
 import { FiSettings } from 'react-icons/fi';
+import { CgMenu } from 'react-icons/cg';
+import { CgClose } from 'react-icons/cg';
 import logoIcon from '../../../public/logo-icon.png';
 import logo from '../../../public/logo.png';
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
@@ -35,7 +37,14 @@ export default function AdminSidebar({ isOpen, toggleSidebar }: SidebarProps) {
             : 'lg:w-1/12 -translate-x-[100%] lg:translate-x-0 w-0 -left-4 lg:left-0'
         }`}
       >
-        <div className='p-4 mt-4 mb-16 flex items-center justify-center'>
+        <div
+          className='font-bold mt-2 mb-4 capitalize text-2xl text-gray-700 flex items-center justify-center'
+          onClick={toggleSidebar}
+        >
+          {isOpen && <CgClose />}
+          {!isOpen && <CgMenu />}
+        </div>
+        <div className='p-4 mt-2 mb-4 flex items-center justify-center'>
           <Image
             onClick={toggleSidebar}
             src={isOpen ? logo : logoIcon}
