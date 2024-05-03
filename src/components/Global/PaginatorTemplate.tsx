@@ -28,25 +28,34 @@ const paginatorTemplate = {
             </div>
         );
     },
+    PageLinks: (options: PaginatorPageLinksOptions) => {
+        if ((options.view.startPage === options.page && options.view.startPage !== 0) || (options.view.endPage === options.page && options.page + 1 !== options.totalPages)) {
+            const className = classNames(options.className, { 'p-disabled': true });
+
+            return (
+                <span className={classNames(options.className, 'border-round border border-[#CFA31C]')} style={{ userSelect: 'none' }}>
+                    ...
+                </span>
+            );
+        }
+
+        return (
+            <button type="button" className={classNames(options.className, 'border-round border border-[#CFA31C] bg-white flex flex-start items-center')} onClick={options.onClick}>
+                {options.page + 1}
+                {/* <Ripple /> */}
+            </button>
+        );
+    },
     CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
         return (
-            <div style={{ color: 'var(--text-color)', userSelect: 'none', width: '100%', textAlign: 'left' }} className='flex flex-end text-sm text-neutral'>
+            <div style={{ color: 'var(--text-color)', userSelect: 'none', width: 'auto', textAlign: 'left'}} className='flex absolute left-0 flex-end text-sm text-neutral items-center my-auto'>
                 {`Showing ${options.first} - ${options.last} from ${options.totalRecords}`}
             </div>
         );
     },
     PrevPageLink: (options: PaginatorPrevPageLinkOptions) => {
         return (
-            <button type="button" className={classNames(options.className, 'border-round bg-[#CFA31C] p-2')} onClick={options.onClick}>
-                {/* <span className="p-3">Previous</span>
-                <Ripple /> */}
-                <MdKeyboardArrowRight color="black"/>
-            </button>
-        );
-    },
-    NextPageLink: (options: PaginatorNextPageLinkOptions) => {
-        return (
-            <button type="button" className={classNames(options.className, 'border-round bg-[#CFA31C] p-2')} onClick={options.onClick}>
+            <button type="button" className={classNames(options.className, 'border-round bg-[#CFA31C] p-2 flex flex-start justify-center')} onClick={options.onClick} disabled={options.disabled}>
                 {/* <span className="p-3">Previous</span>
                 <Ripple /> */}
                 {/* <MdKeyboardArrowRight color="black"/> */}
@@ -54,6 +63,58 @@ const paginatorTemplate = {
             </button>
         );
     },
+    NextPageLink: (options: PaginatorNextPageLinkOptions) => {
+        return (
+            <button type="button" className={classNames(options.className, 'border-round bg-[#CFA31C] p-2 flex flex-start justify-center items-center')} onClick={options.onClick} disabled={options.disabled}>
+                {/* <span className="p-3">Previous</span>
+                <Ripple /> */}
+                {/* <MdKeyboardArrowRight color="black"/> */}
+                <MdKeyboardArrowRight color="black"/>
+            </button>
+        );
+    },
 };
+
+// export const paginatorTemplate2 = {
+//     layout: 'RowsPerPageDropdown PrevPageLink PageLinks NextPageLink ',
+//     RowsPerPageDropdown: (options: PaginatorRowsPerPageDropdownOptions) => {
+//         return (
+//             <div className="flex align-items-center">
+//             </div>
+//         );
+//     },
+//     PageLinks: (options: PaginatorPageLinksOptions) => {
+//         if ((options.view.startPage === options.page && options.view.startPage !== 0) || (options.view.endPage === options.page && options.page + 1 !== options.totalPages)) {
+//             const className = classNames(options.className, { 'p-disabled': true });
+
+//             return (
+//                 <span className={classNames(options.className, 'border-round border border-[#CFA31C]')} style={{ userSelect: 'none' }}>
+//                     ...
+//                 </span>
+//             );
+//         }
+
+//         return (
+//             <button type="button" className={classNames(options.className, 'border-round border border-[#CFA31C] bg-white flex flex-start items-center')} onClick={options.onClick}>
+//                 {options.page + 1}
+//                 {/* <Ripple /> */}
+//             </button>
+//         );
+//     },
+//     PrevPageLink: (options: PaginatorPrevPageLinkOptions) => {
+//         return (
+//             <button type="button" className={classNames(options.className, 'border-round bg-[#CFA31C] p-2 flex flex-start justify-center')} onClick={options.onClick} disabled={options.disabled}>
+//                 <MdOutlineKeyboardArrowLeft color="black"/>
+//             </button>
+//         );
+//     },
+//     NextPageLink: (options: PaginatorNextPageLinkOptions) => {
+//         return (
+//             <button type="button" className={classNames(options.className, 'border-round bg-[#CFA31C] p-2 flex flex-start justify-center items-center')} onClick={options.onClick} disabled={options.disabled}>
+//                 <MdKeyboardArrowRight color="black"/>
+//             </button>
+//         );
+//     },
+// }
 
 export default paginatorTemplate;

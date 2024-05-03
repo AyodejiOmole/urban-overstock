@@ -9,6 +9,7 @@ import React, { useState } from 'react';
 import { FaEye } from 'react-icons/fa';
 import { MdOutlineDelete } from 'react-icons/md';
 import { RxPencil2 } from 'react-icons/rx';
+import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 
 export default function HomeSlideshowTable({
   selectedDate,
@@ -80,6 +81,7 @@ export default function HomeSlideshowTable({
         dataKey='id'
         tableStyle={{ minWidth: '50rem' }}
         paginator
+        paginatorTemplate={paginatorTemplate}
         rows={5}
         rowsPerPageOptions={[5, 25, 50, 100]}
         className='rounded-xl text-sm'

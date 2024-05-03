@@ -16,6 +16,7 @@ import { FaEye } from 'react-icons/fa';
 import { MdOutlineDelete } from 'react-icons/md';
 import { RxPencil2 } from 'react-icons/rx';
 import Cookies from 'universal-cookie';
+import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 
 export default function ProductsTable({
   selectedDate,
@@ -165,6 +166,7 @@ export default function ProductsTable({
         dataKey='id'
         tableStyle={{ minWidth: '50rem' }}
         paginator
+        paginatorTemplate={paginatorTemplate}
         rows={20}
         rowsPerPageOptions={[20, 50, 100]}
         className='rounded-xl text-sm capitalize'

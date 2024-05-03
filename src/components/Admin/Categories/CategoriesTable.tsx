@@ -15,6 +15,7 @@ import { MdOutlineDelete } from 'react-icons/md';
 import { RxPencil2 } from 'react-icons/rx';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
+import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 
 export default function CategoriesTable({
   selectedDate,
@@ -166,6 +167,8 @@ export default function CategoriesTable({
         dataKey='id'
         tableStyle={{ minWidth: '50rem' }}
         paginator
+        paginatorTemplate={paginatorTemplate}
+        // paginatorPosition='left'
         rows={5}
         rowsPerPageOptions={[5, 25, 50, 100]}
         className='rounded-md text-sm'

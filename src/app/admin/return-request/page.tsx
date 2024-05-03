@@ -21,6 +21,7 @@ export default function AdminHomeSlideshow() {
           throw new Error('Function not implemented.');
         }}
         selectedOrders={[]}
+        searchValue=""
       />
     </section>
   );

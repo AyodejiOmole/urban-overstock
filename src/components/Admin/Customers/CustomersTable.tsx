@@ -1,5 +1,6 @@
 'use client';
 
+import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 import { formatCurrency, formatDate } from '@/helpers';
 import { ICustomer } from '@/interfaces/customers';
 import { customers } from '@/services/customers';
@@ -110,6 +111,7 @@ export default function CustomersTable({
         dataKey='id'
         tableStyle={{ minWidth: '50rem' }}
         paginator
+        paginatorTemplate={paginatorTemplate}
         rows={20}
         rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-md'
