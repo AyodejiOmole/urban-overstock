@@ -19,6 +19,7 @@ import { FaX } from 'react-icons/fa6';
 import { TfiSave } from 'react-icons/tfi';
 
 export default function CategoryDetails() {
+  const seeachParams = useSearchParams();
   return (
     <div>
       <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8 py-8'>
@@ -69,7 +70,7 @@ export default function CategoryDetails() {
                 placeholder='Type category name here...'
                 id='name'
                 // value={formik.values.name}
-                disabled
+                // disabled
               />
             </div>
             {/*  */}

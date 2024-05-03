@@ -52,7 +52,7 @@ export default function AdminHeader({
       }`}
     >
       <button
-        className='font-bold capitalize text-2xl text-gray-700 invisible'
+        className='font-bold capitalize text-2xl text-gray-700 lg:invisible'
         onClick={toggleSidebar}
       >
         <CgMenu />

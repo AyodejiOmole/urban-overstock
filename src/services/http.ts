@@ -56,7 +56,11 @@ export default class HTTPService {
     );
   }
 
-  patch() {}
+  async patch(url: string, data: IData, Authorization?: string | null) {
+    const method = 'PATCH';
+
+    return this.request(url, method, data, Authorization).then((res) => res.json());
+  }
 
   async delete(url: string, id: string, Authorization: string | null) {
     const method = 'DELETE';

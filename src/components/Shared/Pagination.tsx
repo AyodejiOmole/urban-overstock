@@ -30,8 +30,8 @@ const Pagination = (  ) => {
                 <li key={link}>
                     <Link href={link}>
                         <div className='flex gap-1 items-center justify-center'>
-                          <p className='text-sm text-[#CFA31C]'>{current === "admin" ? "Dashboard" : current === "new" ? `Add` : formatString(current)}</p>
-                          <FaAngleRight className='fill-[#CFA31C]' color='#CFA31C'/>
+                          <p className={`text-sm ${current === acc.split("/")[-1] ? "text-neutral" : "text-[#CFA31C]" }`}>{current === "admin" ? "Dashboard" : current === "new" ? `Add ${acc.split("/").slice(-1)}` : formatString(current)}</p>
+                          <FaAngleRight className='' color='gray'/>
                         </div> 
                     </Link>
                 </li>

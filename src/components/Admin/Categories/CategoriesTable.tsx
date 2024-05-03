@@ -8,22 +8,28 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import toast from 'react-hot-toast';
 import { FaEye } from 'react-icons/fa';
 import { MdOutlineDelete } from 'react-icons/md';
 import { RxPencil2 } from 'react-icons/rx';
 import Cookies from 'universal-cookie';
+import { useRouter } from 'next/navigation';
 
 export default function CategoriesTable({
   selectedDate,
   categories,
+  searchValue,
 }: {
-  selectedDate: Date | (Date | null)[] | Date[] | null | undefined;
+  // selectedDate: Date | (Date | null)[] | Date[] | null | undefined | number;
+  selectedDate: number | null;
   categories: ICategories | undefined;
+  searchValue: string;
+  // selectedDate: number | null;
 }) {
   const cookies = new Cookies();
   const httpService = new HTTPService();
+  const router = useRouter();
 
   console.log(categories);
 
@@ -56,6 +62,7 @@ export default function CategoriesTable({
       if (res.status === 200) {
         console.log(res);
         toast.success('Category successfully deleted');
+        router.refresh();
       } else toast.error('Cannot delete category at this time');
     }
   }
@@ -73,7 +80,10 @@ export default function CategoriesTable({
           <FaEye />
         </Link> */}
         <Link
-          href={`/admin/categories/${category.id}?edit=true`}
+          href={{
+            pathname: `/admin/categories/${category.id}`,
+            query: { id: category.id, name: category.name, edit: true }
+          }}
           className='text-xl text-neutral'
         >
           <RxPencil2 />
@@ -125,13 +135,31 @@ export default function CategoriesTable({
     console.log(e.value);
   };
 
+  const getCategoriesByDate = useMemo(() => {
+    if (selectedDate) {
+      return categories?.filter(
+        (category) => moment(category.createdAt).valueOf() >= selectedDate
+      );
+    } else return categories;
+  }, [categories, selectedDate]);
+
+  const matchedCategories = useMemo(() => {
+    if (searchValue.trim().length === 0) return getCategoriesByDate;
+
+    return getCategoriesByDate?.filter(
+      (category) =>
+        category.name?.toLowerCase().includes(searchValue) ||
+        category.description?.toLowerCase().includes(searchValue)
+    );
+  }, [getCategoriesByDate, searchValue]);
+
   return (
     <div className='card rounded-md p-4 bg-white border border-gray-200'>
       <div className='px-4 flex flex-col w-full justify-between lg:flex-row lg:items-center gap-8 mb-8'>
         <p className='font-bold text-xl text-gray-700'>Categories Table</p>
       </div>
       <DataTable
-        value={categories}
+        value={matchedCategories}
         selectionMode={rowClick ? null : 'multiple'}
         selection={selectedCategories!}
         onSelectionChange={selectChangeHandler}

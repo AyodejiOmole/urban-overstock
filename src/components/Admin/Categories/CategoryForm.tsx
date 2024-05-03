@@ -8,6 +8,7 @@ import HTTPService from '@/services/http';
 import { Dashboard } from '@uppy/react';
 import { useFormik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { Router } from 'next/router';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import Cookies from 'universal-cookie';
@@ -27,7 +28,8 @@ export default function CategoryForm() {
   //     })
   // );
 
-  const { replace } = useRouter();
+  // const router, { replace } = useRouter();
+  const router = useRouter();
 
   const [thumbnail, setThumbnail] = useState<Blob | File | null>(null);
 
@@ -112,24 +114,53 @@ export default function CategoryForm() {
       //     console.log(apiRes);
       //   }
       // } else toast.error('Please add an image');
-      const apiRes = await httpService.post(
-        ENDPOINTS.CATEGORIES,
-        {
-          name: values.name,
-          // description: values.description,
-          // iconUrl: fileRes.url,
-        },
-        `Bearer ${token}`
-      );
 
-      if (apiRes.data) {
-        toast.success('Category added successfully.');
 
-        setTimeout(() => {
-          replace('/admin/categories');
-        }, 1000);
+      if(params.get("edit")) {
+        const apiRes = await httpService.patch(
+          ENDPOINTS.CATEGORIES,
+          {
+            id: params.get("id"),
+            name: values.name,
+
+          },
+          `Bearer ${token}`
+        );
+  
+        if (apiRes.status === 200) {
+          toast.success('Category updated successfully.');
+  
+          setTimeout(() => {
+            // router.push('/admin/categories', { refresh: true, });
+            // window?.reload(true);
+             
+            router.back();
+          }, 1000);
+        }
+
+        console.log(apiRes);
+
+      } else {
+        const apiRes = await httpService.post(
+          ENDPOINTS.CATEGORIES,
+          {
+            name: values.name,
+            // description: values.description,
+            // iconUrl: fileRes.url,
+          },
+          `Bearer ${token}`
+        );
+
+        if (apiRes.data) {
+          toast.success('Category added successfully.');
+
+          setTimeout(() => {
+            router.push('/admin/categories');
+            // router.back();
+          }, 1000);
+        }
+        console.log(apiRes);
       }
-      console.log(apiRes);
     },
 
     validateOnChange: true,
@@ -137,14 +168,14 @@ export default function CategoryForm() {
 
   return (
     <div>
-      {params.get('edit') && (
+      {/* {params.get('edit') && (
         <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8 py-8'>
           <p className='text-xl font-bold text-gray-700'>
             {editCategory ? 'Edit Category' : 'Category Details'}
           </p>
           <CategoriesDetailsHeader />
         </div>
-      )}
+      )} */}
 
       <form
         onSubmit={formik.handleSubmit}
@@ -216,7 +247,7 @@ export default function CategoryForm() {
               loading={formik.isSubmitting}
               disabled={!editCategory}
             >
-              Add Category
+              {params.get("edit") ? "Update category" : "Add category"}
             </Button>
           </div>
         </div>

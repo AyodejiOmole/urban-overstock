@@ -118,7 +118,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar }: SidebarProps) {
                         ? setIsExpanded(null)
                         : setIsExpanded(index);
                     }}
-                    className={`py-4 flex gap-4 w-full h-10 items-center p-4
+                    className={`flex gap-4 w-full h-10 items-center p-4
                     ${isOpen ? 'justify-between' : 'justify-center'}
                     ${
                       isExpanded === index
@@ -150,13 +150,13 @@ export default function AdminSidebar({ isOpen, toggleSidebar }: SidebarProps) {
 
                   {/* Children */}
                   {isOpen && isExpanded === index && (
-                    <div className={`py-4 duration-500`}>
+                    <div className={`py-2 duration-500`}>
                       {link.children && (
-                        <div className='px-4 text-sm'>
+                        <div className='pl-12 text-sm'>
                           {link?.children?.map((el) => (
                             <Link
                               key={el.name}
-                              className='capitalize my-2 mt-4 block'
+                              className='capitalize my-2 block'
                               href={el.page}
                             >
                               <span className='flex items-center justify-between'>

@@ -308,7 +308,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
 
             <div className='flex items-center gap-2 flex-wrap'>
               <Button onClick={openModal}>Update Status</Button>
-              <Button variant='outlined'>Cancel Orer</Button>
+              <Button variant='outlined'>Cancel Order</Button>
             </div>
 
             {/* Update Status Modal */}

@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { FaEye } from 'react-icons/fa';
 import { RxPencil2 } from 'react-icons/rx';
 
@@ -16,8 +16,12 @@ export default function OrdersTable({
   page = 'orders',
   handleChangeSelectedOrders,
   selectedOrders,
+  selectedDate,
+  searchValue
 }: {
   orders: IOrder[] | null;
+  searchValue: string;
+  selectedDate?: number | null;
   page?: 'orders' | 'return-request';
   handleChangeSelectedOrders?: (e: any) => void;
   selectedOrders: IOrder[];
@@ -49,12 +53,12 @@ export default function OrdersTable({
         >
           <FaEye />
         </Link>
-        <Link
+        {/* <Link
           href={`/admin/${page}/${order.id}`}
           className='text-xl text-neutral'
         >
           <RxPencil2 />
-        </Link>
+        </Link> */}
       </div>
     );
   }
@@ -123,10 +127,28 @@ export default function OrdersTable({
     );
   }
 
+  const getOrdersByDate = useMemo(() => {
+    if (selectedDate) {
+      return orders?.filter(
+        (order) => moment(order.createdAt).valueOf() >= selectedDate
+      );
+    } else return orders;
+  }, [orders, selectedDate]);
+
+  const matchedOrders = useMemo(() => {
+    if (searchValue?.trim().length === 0) return getOrdersByDate;
+
+    return getOrdersByDate?.filter(
+      (order) =>
+        order.uuid.toLowerCase().includes(searchValue) ||
+        order.shippingId.toLowerCase().includes(searchValue)
+    );
+  }, [getOrdersByDate, searchValue]);
+
   return (
     <div className='card rounded-xl p-4 bg-white border border-gray-200'>
       <DataTable
-        value={orders ?? []}
+        value={matchedOrders ?? []}
         selectionMode={rowClick ? null : 'multiple'}
         selection={selectedOrders!}
         onSelectionChange={handleChangeSelectedOrders}
@@ -154,7 +176,8 @@ export default function OrdersTable({
           body={amountTemplate}
           sortable
         />
-        <Column body='Mastercard' header='Payment' />
+        {/* body="Mastercard" */}
+        <Column header='Payment' field="paymentMethod" />
         <Column field='status' header='Status' sortable body={statusTemplate} />
         <Column field='action' header='Action' body={actionTemplate} />
       </DataTable>

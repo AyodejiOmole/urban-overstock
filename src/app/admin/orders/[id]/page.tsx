@@ -10,6 +10,7 @@ import { TbFileInvoice } from 'react-icons/tb';
 import Cookies from 'universal-cookie';
 import OrderDetailsLoader from './components/Loader';
 import OrderDetails from './components/OrderDetails';
+import Pagination from '@/components/Shared/Pagination';
 
 export default function AdminOrderDetailsPage() {
   const params = useParams();
@@ -66,19 +67,23 @@ export default function AdminOrderDetailsPage() {
       {loading && <OrderDetailsLoader />}
       <section>
         <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-4 py-4'>
-          <p className='text-xl font-medium text-gray-700'>Order Details</p>
+          <div>
+            <p className='text-xl font-medium text-gray-700'>Order Details</p>
+            <Pagination />
+          </div>
+        
           <div className='flex items-center gap-4'>
             <div className='py-3.5 px-6 rounded-xl border border-gray-200 bg-white text-sm text-gray-600'>
               {orderData?.status}
             </div>
-            <Button variant='outlined' color='dark'>
+            {/* <Button variant='outlined' color='dark'>
               <PiExportBold />
               Export
             </Button>
             <Button>
               <TbFileInvoice />
               Invoice
-            </Button>
+            </Button> */}
           </div>
         </div>
         {/* Order Details */}

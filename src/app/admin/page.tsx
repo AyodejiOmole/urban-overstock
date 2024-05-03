@@ -24,6 +24,7 @@ const AdminDashboard = async () => {
             //     throw new Error('Function not implemented.');
             // }}
             selectedOrders={[]}
+            searchValue=''
         />
         </section>
   );
