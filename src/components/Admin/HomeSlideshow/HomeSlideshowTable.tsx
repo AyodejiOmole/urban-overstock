@@ -82,6 +82,7 @@ export default function HomeSlideshowTable({
         tableStyle={{ minWidth: '50rem' }}
         paginator
         paginatorTemplate={paginatorTemplate}
+        paginatorClassName='flex'
         rows={5}
         rowsPerPageOptions={[5, 25, 50, 100]}
         className='rounded-xl text-sm'

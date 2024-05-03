@@ -55,12 +55,12 @@ const paginatorTemplate = {
     },
     PrevPageLink: (options: PaginatorPrevPageLinkOptions) => {
         return (
-            <button type="button" className={classNames(options.className, 'border-round bg-[#CFA31C] p-2 flex flex-start justify-center')} onClick={options.onClick} disabled={options.disabled}>
+            <span className={classNames(options.className, 'border-round bg-[#CFA31C] p-2')} onClick={options.onClick} >
                 {/* <span className="p-3">Previous</span>
                 <Ripple /> */}
                 {/* <MdKeyboardArrowRight color="black"/> */}
                 <MdOutlineKeyboardArrowLeft color="black"/>
-            </button>
+            </span>
         );
     },
     NextPageLink: (options: PaginatorNextPageLinkOptions) => {

@@ -168,6 +168,7 @@ export default function CategoriesTable({
         tableStyle={{ minWidth: '50rem' }}
         paginator
         paginatorTemplate={paginatorTemplate}
+        paginatorClassName='flex'
         // paginatorPosition='left'
         rows={5}
         rowsPerPageOptions={[5, 25, 50, 100]}

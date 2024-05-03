@@ -14,6 +14,7 @@ import React, { useState } from 'react';
 // import { RxPencil2 } from 'react-icons/rx';
 import { productStatusTemplate } from '@/helpers/products';
 import { IProduct } from '@/interfaces/products';
+import paginatorTemplate from '../Global/PaginatorTemplate';
 
 export default function TopSellingProductsTable({
   products,
@@ -111,6 +112,8 @@ export default function TopSellingProductsTable({
         dataKey='uuid'
         tableStyle={{ minWidth: '50rem' }}
         paginator
+        paginatorTemplate={paginatorTemplate}
+        paginatorClassName='flex'
         rows={20}
         rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-md text-sm'

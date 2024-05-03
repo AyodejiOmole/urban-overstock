@@ -167,6 +167,7 @@ export default function ProductsTable({
         tableStyle={{ minWidth: '50rem' }}
         paginator
         paginatorTemplate={paginatorTemplate}
+        paginatorClassName='flex'
         rows={20}
         rowsPerPageOptions={[20, 50, 100]}
         className='rounded-xl text-sm capitalize'
