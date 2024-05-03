@@ -3,7 +3,7 @@ import React from 'react';
 interface IProps {
   defaultOption: number;
   categories: string[];
-  handleCategoryChange: (newIndex: number) => void;
+  handleCategoryChange: (newIndex: number, options: string) => void;
 }
 
 const CategoryNavigation = ({
@@ -19,7 +19,7 @@ const CategoryNavigation = ({
           className={`p-2 px-4 rounded-lg capitalize text-sm duration-500  ${
             i === defaultOption ? 'bg-yellow-50 text-primary-2' : 'text-neutral'
           }`}
-          onClick={() => handleCategoryChange(i)}
+          onClick={() => handleCategoryChange(i, option)}
         >
           {option}
         </button>

@@ -19,7 +19,8 @@ export default function OrdersTable({
   handleChangeSelectedOrders,
   selectedOrders,
   selectedDate,
-  searchValue
+  searchValue,
+  categoryNavigation,
 }: {
   orders: IOrder[] | null;
   searchValue: string;
@@ -27,6 +28,7 @@ export default function OrdersTable({
   page?: 'orders' | 'return-request';
   handleChangeSelectedOrders?: (e: any) => void;
   selectedOrders: IOrder[];
+  categoryNavigation?: any;
 }) {
   const [rowClick, setRowClick] = useState<boolean>(true);
 
@@ -137,15 +139,36 @@ export default function OrdersTable({
     } else return orders;
   }, [orders, selectedDate]);
 
+  const getOrdersByCategoryDate = useMemo(() => {
+    if(categoryNavigation) {
+      return orders?.filter((item) => {
+        const itemDate = new Date(item.createdAt);
+        return itemDate >= categoryNavigation.startDate && itemDate <= categoryNavigation.endDate;
+      });
+    } else return orders;
+
+  }, [orders, categoryNavigation]);
+
   const matchedOrders = useMemo(() => {
     if (searchValue?.trim().length === 0) return getOrdersByDate;
 
-    return getOrdersByDate?.filter(
-      (order) =>
-        order.uuid.toLowerCase().includes(searchValue) ||
-        order.shippingId.toLowerCase().includes(searchValue)
-    );
-  }, [getOrdersByDate, searchValue]);
+    if(selectedDate) {
+      return getOrdersByDate?.filter(
+        (order) =>
+          order.uuid.toLowerCase().includes(searchValue) ||
+          order.shippingId.toLowerCase().includes(searchValue)
+      );
+    }
+
+    if(categoryNavigation) {
+      return getOrdersByCategoryDate?.filter(
+        (order) =>
+          order.uuid.toLowerCase().includes(searchValue) ||
+          order.shippingId.toLowerCase().includes(searchValue)
+      );
+    }
+    
+  }, [getOrdersByDate, searchValue, getOrdersByCategoryDate, categoryNavigation, selectedDate]);
 
   return (
     <div className='card rounded-xl p-4 bg-white border border-gray-200'>

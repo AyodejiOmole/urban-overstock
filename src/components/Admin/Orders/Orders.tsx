@@ -22,6 +22,12 @@ export default function Orders({ orders }: { orders: IOrder[] | null }) {
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
 
+  const [categoryNavigation, setCategoryNavigation] = useState<any>();
+  const [defaultFilterOption, setDefaultFilterOption] = useState(0);
+
+  // const handleFilterOptionChange = (newIndex: number) =>
+  //   setDefaultFilterOption(newIndex);
+
   // const [updateTo, setUpdateTo] = useState<string>("");
   const [cardOpen, setCardOpen] = useState<boolean>(false);
 
@@ -154,9 +160,42 @@ export default function Orders({ orders }: { orders: IOrder[] | null }) {
               '24 hours',
             ]}
             // className="w-full"
-            defaultOption={0}
-            handleCategoryChange={function (newIndex: number): void {
-              throw new Error('Function not implemented.');
+            defaultOption={defaultFilterOption}
+            handleCategoryChange={function (newIndex: number, option): void {
+                
+                const now = new Date();
+                let dateRange: { startDate: Date | null, endDate: Date | null } = {
+                  startDate: null,
+                  endDate: null,
+                };
+              
+                switch (option) {
+                  case 'All time':
+                    dateRange.startDate = new Date(0); // earliest possible date
+                    dateRange.endDate = now;
+                    break;
+                  case '12 months':
+                    dateRange.startDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+                    dateRange.endDate = now;
+                    break;
+                  case '30 days':
+                    dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30);
+                    dateRange.endDate = now;
+                    break;
+                  case '7 days':
+                    dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+                    dateRange.endDate = now;
+                    break;
+                  case '24 hours':
+                    dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() - 24);
+                    dateRange.endDate = now;
+                    break;
+                  default:
+                    return; // return null for unknown filter options
+                }
+                setCategoryNavigation(dateRange);
+                setDefaultFilterOption(newIndex);
+              // throw new Error('Function not implemented.');
             }}
           />
         </div>
@@ -169,6 +208,7 @@ export default function Orders({ orders }: { orders: IOrder[] | null }) {
         selectedOrders={selectedOrders}
         selectedDate={selectedDate}
         searchValue={searchValue.toLowerCase()}
+        categoryNavigation={categoryNavigation}
       />
     </>
   );
