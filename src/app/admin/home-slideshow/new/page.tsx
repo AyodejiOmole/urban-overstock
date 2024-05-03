@@ -24,11 +24,20 @@ export default function AdminNewHomeSlideshow() {
   const addNewImage = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const fileSizeInBytes = e.target.files[0].size;
+      const fileType = e.target.files[0].type;
       const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+
+      if(fileType !== "image/jpeg" && fileType !== "image/png") {
+        toast.error('File type not supported!');
+        return;
+      }
 
       if (fileSizeInMB >= 1) {
         toast.error('File size too large');
-      } else setImage(e.target.files[0]);
+        return;
+      }
+      
+      setImage(e.target.files[0]);
     }
   };
 
