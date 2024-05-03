@@ -10,6 +10,7 @@ import { DataTable } from 'primereact/datatable';
 import React, { useState, useMemo } from 'react';
 import { FaEye } from 'react-icons/fa';
 import { RxPencil2 } from 'react-icons/rx';
+import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 
 export default function OrdersTable({
   orders,
@@ -155,6 +156,7 @@ export default function OrdersTable({
         dataKey='uuid'
         tableStyle={{ minWidth: '50rem' }}
         paginator
+        paginatorTemplate={paginatorTemplate}
         rows={20}
         rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-md text-sm'

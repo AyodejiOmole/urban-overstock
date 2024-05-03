@@ -370,6 +370,20 @@ export default function ProductForm({
 
     if (e.target.files) {
       // imagesCopy.push({ image: e.target.files[0], color: '#000000' });
+      const fileSizeInBytes = e.target.files[0].size;
+      const fileType = e.target.files[0].type;
+      const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+
+      if (fileType !== 'image/jpeg' && fileType !== 'image/png') {
+        toast.error('File type is not supported!');
+        return;
+      }
+
+      if (fileSizeInMB >= 1) {
+        toast.error('File size too large');
+        return;
+      }
+
       imagesCopy.push({ image: e.target.files[0] });
     }
     setProductImages(imagesCopy);
@@ -389,6 +403,7 @@ export default function ProductForm({
 
           if (apiRes.data) {
             toast.success('Brand preset added successfully.');
+            brands?.push(apiRes.data);
             setAddBrandDisplay(false);
 
             // setTimeout(() => {

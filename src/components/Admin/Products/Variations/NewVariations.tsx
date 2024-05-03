@@ -198,6 +198,22 @@ const VariationItem = ({
 
     if (e.target.files) {
       // imagesCopy.push({ image: e.target.files[0], color: '#000000' });
+      // imagesCopy.push({ image: e.target.files[0] });
+      console.log(e.target.files);
+      const fileSizeInBytes = e.target.files[0].size;
+      const fileType = e.target.files[0].type;
+      const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+
+      if (fileType !== 'image/jpeg' && fileType !== 'image/png') {
+        toast.error('File type is not supported!');
+        return;
+      }
+
+      if (fileSizeInMB >= 1) {
+        toast.error('File size is too large');
+        return;
+      }
+
       imagesCopy = e.target.files[0];
     }
     // setVariationImage(imagesCopy);
@@ -225,6 +241,7 @@ const VariationItem = ({
           console.log('Response: ', apiRes);
 
           if (apiRes.data) {
+            sizes?.push(apiRes.data);
             toast.success('Size preset added successfully.');
             setDisplayAddSize(-1);
           }
@@ -253,6 +270,7 @@ const VariationItem = ({
 
           if (apiRes.data) {
             toast.success('Color preset added successfully.');
+            colors?.push(apiRes.data);
             setDisplayAddColor(false);
           }
         });

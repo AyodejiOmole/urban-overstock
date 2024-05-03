@@ -120,8 +120,7 @@ export default function AdminNewHomeSlideshow() {
               <div className='flex items-center justify-center flex-col max-w-md gap-4 mb-4'>
                 <CiImageOn className='text-primary text-4xl border-8 border-[#EFEFFD] bg-[#DEDEFA] rounded-full h-16 w-16 p-2' />
                 <p className='text-neutral text-center font-light'>
-                  Drag and drop image here, or click add image Size 16:9 (Max.
-                  1920px wide x 1080px high)
+                  Drag and drop image here. Image size shouldnt exceed 1MB.
                 </p>
               </div>
             )}
