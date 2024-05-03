@@ -296,6 +296,7 @@ const VariationItem = ({
                 ref={imageInputRef}
                 onChange={addNewImage}
               />
+              {variation.imageFile == null && <p>Click below to upload an image. Your image should not exceed 1MB and should be either a .jpeg or .png</p>}
               <div className='flex items-center flex-wrap gap-2 mb-4'>
                 {variation.imageFile &&
                     <div
