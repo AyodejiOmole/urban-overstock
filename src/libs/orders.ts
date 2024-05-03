@@ -13,10 +13,10 @@ export default async function getOrders() {
       Authorization: `Bearer ${token}`,
     },
 
-    // cache: 'no-store',
-    next: {
-      revalidate: 10,
-    },
+    cache: 'no-store',
+    // next: {
+    //   revalidate: 10,
+    // },
   });
 
   const res = await apiRes.json();
