@@ -33,14 +33,14 @@ const paginatorTemplate = {
             const className = classNames(options.className, { 'p-disabled': true });
 
             return (
-                <span className={classNames(options.className, 'border-round border border-[#CFA31C]')} style={{ userSelect: 'none' }}>
+                <span className={classNames(options.className, 'border border-[#CFA31C]')} style={{ userSelect: 'none' }}>
                     ...
                 </span>
             );
         }
 
         return (
-            <button type="button" className={classNames(options.className, 'border-round border border-[#CFA31C] bg-white flex flex-start items-center')} onClick={options.onClick}>
+            <button type="button" className={classNames(options.className, 'border border-[#CFA31C] bg-white flex flex-start items-center')} onClick={options.onClick}>
                 {options.page + 1}
                 {/* <Ripple /> */}
             </button>
@@ -55,7 +55,7 @@ const paginatorTemplate = {
     },
     PrevPageLink: (options: PaginatorPrevPageLinkOptions) => {
         return (
-            <span className={classNames(options.className, 'border-round bg-[#CFA31C] p-2')} onClick={options.onClick} >
+            <span className={classNames(options.className, 'bg-[#CFA31C] p-2')} onClick={options.onClick} >
                 {/* <span className="p-3">Previous</span>
                 <Ripple /> */}
                 {/* <MdKeyboardArrowRight color="black"/> */}
