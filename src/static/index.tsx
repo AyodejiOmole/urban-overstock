@@ -35,7 +35,7 @@ export const links: ISidebarLink[] = [
   // },
   { name: 'orders', icon: <FiShoppingCart />, page: '/admin/orders' },
   { name: 'customers', icon: <FiUsers />, page: '/admin/customers' },
-  { name: 'sellers', icon: <CiShop />, page: '/admin/sellers' },
+  // { name: 'sellers', icon: <CiShop />, page: '/admin/sellers' },
   {
     name: 'home slideshow',
     icon: <MdWallpaper />,
