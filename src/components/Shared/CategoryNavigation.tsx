@@ -17,11 +17,11 @@ const CategoryNavigation = ({
         <button
           key={option}
           className={`p-2 px-4 rounded-lg capitalize text-sm duration-500  ${
-            i === defaultOption ? 'bg-yellow-50 text-primary-2' : 'text-neutral'
+            i === defaultOption ? 'bg-[#DEDEFA] text-primary-2' : 'text-neutral'
           }`}
           onClick={() => handleCategoryChange(i, option)}
         >
-          {option}
+          <p className="text-[#4543AE]">{option}</p>
         </button>
       ))}
     </div>
