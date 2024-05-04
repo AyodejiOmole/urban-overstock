@@ -13,9 +13,11 @@ export default function StatCards() {
     <section className='my-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4'>
       {/*  */}
       <div className='rounded-lg bg-white border border-neural p-6'>
-        <span className={`${card_icon_style} bg-purple-50 text-purple-700`}>
-          <CiMoneyBill className='text-2xl' />
-        </span>
+        {/* <span className={`${card_icon_style} bg-purple-30 text-purple-700`}> */}
+          <span className={`${card_icon_style} bg-[#DEDEFA] text-purple-700`}>
+            <CiMoneyBill className='text-2xl fill-[#F2C94C]' />
+          </span>
+        {/* </span> */}
         <p className='my-3 text-neutral text-sm'>Total Revenue</p>
 
         <div className='flex items-center gap-4'>
@@ -30,10 +32,12 @@ export default function StatCards() {
       </div>
       {/*  */}
       <div className='rounded-lg bg-white border border-neural p-6'>
-        <span className={`${card_icon_style} bg-green-50 text-green-700`}>
-          <FiShoppingCart />
+        {/* <span className={`${card_icon_style} bg-green-20`}> */}
+        <span className={`${card_icon_style} bg-[#CFE7DC] text-green-800`}>
+          <FiShoppingCart className='fill-[#0D894F]'/>
         </span>
-        <p className='my-3 text-neutral text-sm'>Total Orders</p>
+        {/* </span> */}
+        <p className='my-3 text-neutral text-sm'>Total Sales</p>
 
         <div className='flex items-center gap-4'>
           <p className='text-gray-700 text-3xl font-medium'>
@@ -47,8 +51,8 @@ export default function StatCards() {
       </div>
       {/*  */}
       <div className='rounded-lg bg-white border border-neural p-6'>
-        <span className={`${card_icon_style} bg-pink-50 text-pink-700`}>
-          <TbLineScan />
+        <span className={`${card_icon_style} bg-[#FCDAD7] text-pink-700`}>
+          <TbLineScan className="fill-[#F04438]"/>
         </span>
         <p className='my-3 text-neutral text-sm'>Product SKU</p>
 
@@ -64,8 +68,8 @@ export default function StatCards() {
       </div>
       {/*  */}
       <div className='rounded-lg bg-white border border-neural p-6'>
-        <span className={`${card_icon_style} bg-blue-50 text-blue-700`}>
-          <BiWallet />
+        <span className={`${card_icon_style} bg-[#FAE1CF] text-blue-700`}>
+          <BiWallet className='fill-[#E46A11]'/>
         </span>
         <p className='my-3 text-neutral text-sm'>Balance</p>
 

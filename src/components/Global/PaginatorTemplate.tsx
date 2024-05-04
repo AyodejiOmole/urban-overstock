@@ -40,7 +40,7 @@ const paginatorTemplate = {
         }
 
         return (
-            <button type="button" className={classNames(options.className, 'border border-[#CFA31C] bg-white flex flex-start items-center')} onClick={options.onClick}>
+            <button type="button" className={classNames(options.className, `${options.page ? "bg-[#CFA31C]" : "bg-white"} border border-[#CFA31C] `)} onClick={options.onClick}>
                 {options.page + 1}
                 {/* <Ripple /> */}
             </button>
