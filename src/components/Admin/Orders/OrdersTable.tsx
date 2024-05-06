@@ -136,8 +136,16 @@ export default function OrdersTable({
       return orders?.filter(
         (order) => moment(order.createdAt).valueOf() >= selectedDate
       );
+    }
+
+    if(categoryNavigation) {
+      return orders?.filter((item) => {
+        const itemDate = new Date(item.createdAt);
+        return itemDate >= categoryNavigation.startDate && itemDate <= categoryNavigation.endDate;
+      });
     } else return orders;
-  }, [orders, selectedDate]);
+
+  }, [orders, selectedDate, categoryNavigation]);
 
   const getOrdersByCategoryDate = useMemo(() => {
     if(categoryNavigation) {
@@ -152,23 +160,24 @@ export default function OrdersTable({
   const matchedOrders = useMemo(() => {
     if (searchValue?.trim().length === 0) return getOrdersByDate;
 
-    if(selectedDate) {
-      return getOrdersByDate?.filter(
-        (order) =>
-          order.uuid.toLowerCase().includes(searchValue) ||
-          order.shippingId.toLowerCase().includes(searchValue)
-      );
-    }
+    return getOrdersByDate?.filter(
+      (order) =>
+        order.uuid.toLowerCase().includes(searchValue) ||
+        order.shippingId.toLowerCase().includes(searchValue)
+    );
+    // if(selectedDate) {
+      
+    // }
 
-    if(categoryNavigation) {
-      return getOrdersByCategoryDate?.filter(
-        (order) =>
-          order.uuid.toLowerCase().includes(searchValue) ||
-          order.shippingId.toLowerCase().includes(searchValue)
-      );
-    }
+    // if(categoryNavigation) {
+    //   return getOrdersByCategoryDate?.filter(
+    //     (order) =>
+    //       order.uuid.toLowerCase().includes(searchValue) ||
+    //       order.shippingId.toLowerCase().includes(searchValue)
+    //   );
+    // }
     
-  }, [getOrdersByDate, searchValue, getOrdersByCategoryDate, categoryNavigation, selectedDate]);
+  }, [searchValue, getOrdersByDate]);
 
   return (
     <div className='card rounded-xl p-4 bg-white border border-gray-200'>
