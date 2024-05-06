@@ -124,7 +124,9 @@ function CustomError({ error }: { error?: string }) {
 
   return (
     <div className='text-xs font-light mt-1 ml-1 p-2'>
-      <span className='text-red-600'>{error}</span>
+      <span className='text-red-600'>
+        {error === "Category must be greater than or equal to 1" ? "Category field is required!": error}
+      </span>
     </div>
   );
 }
