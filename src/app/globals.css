@@ -83,7 +83,8 @@ label {
   height: 150px;
   position: absolute;
   top: 100%;
-  border: 30px solid #3265cb;
+  /* border: 30px solid #3265cb; */
+  border: 30px solid #F2C94C;
   content: '';
   border-radius: 0 0 300px 300px;
   border-top: none;

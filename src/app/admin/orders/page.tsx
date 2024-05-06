@@ -7,6 +7,8 @@ export default async function AdminOrders() {
   const apiRes: Promise<IOrder[] | null> = getOrders();
   const orders = await apiRes;
 
+  console.log(orders);
+
   return (
     <section>
       <Orders orders={orders} />

@@ -4,6 +4,7 @@ import { CiMoneyBill } from 'react-icons/ci';
 import { FiShoppingCart } from 'react-icons/fi';
 import { GiReceiveMoney } from 'react-icons/gi';
 import { TbLineScan } from 'react-icons/tb';
+import Link from 'next/link';
 
 export default function StatCards() {
   const card_icon_style =
@@ -31,41 +32,45 @@ export default function StatCards() {
         </div>
       </div>
       {/*  */}
-      <div className='rounded-lg bg-white border border-neural p-6'>
-        {/* <span className={`${card_icon_style} bg-green-20`}> */}
-        <span className={`${card_icon_style} bg-[#CFE7DC] text-green-800`}>
-          <FiShoppingCart className='fill-[#0D894F]'/>
-        </span>
-        {/* </span> */}
-        <p className='my-3 text-neutral text-sm'>Total Sales</p>
-
-        <div className='flex items-center gap-4'>
-          <p className='text-gray-700 text-3xl font-medium'>
-            {(990).toLocaleString()}
-          </p>
-
-          <span className='py-1 px-2 bg-green-100 text-green-600 text-xs rounded-full font-semibold'>
-            +15%
+      <Link href="admin/orders">
+        <div className='rounded-lg bg-white border border-neural p-6'>
+          {/* <span className={`${card_icon_style} bg-green-20`}> */}
+          <span className={`${card_icon_style} bg-[#CFE7DC] text-green-800`}>
+            <FiShoppingCart className='fill-[#0D894F]'/>
           </span>
+          {/* </span> */}
+          <p className='my-3 text-neutral text-sm'>Total Sales</p>
+
+          <div className='flex items-center gap-4'>
+            <p className='text-gray-700 text-3xl font-medium'>
+              {(990).toLocaleString()}
+            </p>
+
+            <span className='py-1 px-2 bg-green-100 text-green-600 text-xs rounded-full font-semibold'>
+              +15%
+            </span>
+          </div>
         </div>
-      </div>
+      </Link>
       {/*  */}
-      <div className='rounded-lg bg-white border border-neural p-6'>
-        <span className={`${card_icon_style} bg-[#FCDAD7] text-pink-700`}>
-          <TbLineScan className="fill-[#F04438]"/>
-        </span>
-        <p className='my-3 text-neutral text-sm'>Product SKU</p>
-
-        <div className='flex items-center gap-4'>
-          <p className='text-gray-700 text-3xl font-medium'>
-            {(112).toLocaleString()}
-          </p>
-
-          <span className='py-1 px-2 bg-gray-100 text-gray-600 text-xs rounded-full font-semibold'>
-            0%
+      <Link href="admin/products">
+        <div className='rounded-lg bg-white border border-neural p-6'>
+          <span className={`${card_icon_style} bg-[#FCDAD7] text-pink-700`}>
+            <TbLineScan className="fill-[#F04438]"/>
           </span>
+          <p className='my-3 text-neutral text-sm'>Product SKU</p>
+
+          <div className='flex items-center gap-4'>
+            <p className='text-gray-700 text-3xl font-medium'>
+              {(112).toLocaleString()}
+            </p>
+
+            <span className='py-1 px-2 bg-gray-100 text-gray-600 text-xs rounded-full font-semibold'>
+              0%
+            </span>
+          </div>
         </div>
-      </div>
+      </Link>
       {/*  */}
       <div className='rounded-lg bg-white border border-neural p-6'>
         <span className={`${card_icon_style} bg-[#FAE1CF] text-blue-700`}>

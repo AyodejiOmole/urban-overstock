@@ -1,5 +1,6 @@
 'use client';
 
+import { INotifications } from '@/interfaces/notifications';
 import Link from 'next/link';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
@@ -14,6 +15,12 @@ export interface INotificationType {
   displayLocation: 'in-app' | 'external';
   message: string;
 }
+
+// {
+//   notifications
+// }: {
+//   notifications: INotifications | null
+// }
 
 const notifications: INotificationType[] = [
   {
