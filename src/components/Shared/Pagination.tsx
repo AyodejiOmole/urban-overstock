@@ -17,15 +17,10 @@ const Pagination = (  ) => {
       return currentRoute.charAt(0).toUpperCase() + currentRoute.slice(1).replace(/-/g, ' ');
     } 
 
-    // const ifAdd = () => {
-    //   return `Add ${currentPage}`
-    // }
-
-    // console.log(currentPage);
-
     pathname.split("/").reduce((acc, current, index, array) => {
         if(index > 0) {
             const link = `${acc}/${current}`;
+            console.log(link);
             paginationLinks.push(
                 <li key={link}>
                     <Link href={link}>
@@ -37,6 +32,7 @@ const Pagination = (  ) => {
                 </li>
             );
         }
+        console.log(acc);
         return acc;
     }, '');
 

@@ -111,6 +111,7 @@ const VariationItem = ({
   const imageInputRef = useRef<HTMLInputElement | null>(null);
   // const [variationImage, setVariationImage] = useState<ProductImage | null>();
   const [variationColor, setVariationColor] = useState<string>("");
+  // const [sizeName, setSizeName] = useState<any>("");
   const [activeColorPicker, setActiveColorPicker] = useState<boolean>(false);
   const [sizePicker, setSizePicker] = useState<boolean | number | null>(null);
 
@@ -166,6 +167,13 @@ const VariationItem = ({
     });
 
     setSizePicker(null);
+  }
+
+  const updateColorVaritionValue = (colorId: number) => {
+    dispatch({
+      type: 'UPDATE',
+      payload: { ...variation, colorId: colorId },
+    });
   }
 
   const addNewSizeOptions = () => {
@@ -375,6 +383,7 @@ const VariationItem = ({
                                 key={colorIndex} 
                                 onClick={() => {
                                   setVariationColor(color?.name);
+                                  updateColorVaritionValue(color.id);
                                   setActiveColorPicker(false);
                                 }}
                               >
@@ -448,7 +457,9 @@ const VariationItem = ({
                     }
                     onClick={() => setSizePicker(index)}
                 >
+                    {/* {sizes?.filter((size: any) => size.id == option?.sizeId)?.code} */}
                     {option?.sizeId}
+                    {/* {} */}
                 </div>
                 
                 {sizePicker === index && (
