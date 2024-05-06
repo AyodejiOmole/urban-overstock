@@ -16,6 +16,7 @@ export default function DatePicker({
   const datePickerChangeHandler = (e: CalendarProps) => {
     setDateTime24h(e.value);
     handleSelectDate(e.value);
+    e.hideOnDateTimeSelect
   };
 
   return (
@@ -23,6 +24,7 @@ export default function DatePicker({
       id='calendar-24h'
       value={datetime24h}
       onChange={datePickerChangeHandler}
+      // onChange={(e) => setDateTime24h(e.value)}
       showTime
       hourFormat='24'
       placeholder='Select Dates'
@@ -31,6 +33,7 @@ export default function DatePicker({
       showButtonBar
       showIcon
       iconPos='left'
+      hideOnDateTimeSelect={true}
     />
   );
 }
