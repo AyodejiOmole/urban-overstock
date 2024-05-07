@@ -190,7 +190,7 @@ export default function OrdersTable({
         tableStyle={{ minWidth: '50rem' }}
         paginator
         paginatorTemplate={paginatorTemplate}
-        paginatorClassName='grid grid-cols-12'
+        paginatorClassName='flex justify-between'
         rows={20}
         rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-md text-sm'

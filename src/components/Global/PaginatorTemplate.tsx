@@ -33,14 +33,14 @@ const paginatorTemplate = {
             const className = classNames(options.className, { 'p-disabled': true });
 
             return (
-                <span className={classNames(options.className, 'border col-span-1 border-[#CFA31C]')} style={{ userSelect: 'none' }}>
+                <span className={classNames(options.className, 'border border-[#CFA31C]')} style={{ userSelect: 'none' }}>
                     ...
                 </span>
             );
         }
 
         return (
-            <button type="button" className={classNames(options.className, `${options.page ? "bg-[#CFA31C]" : "bg-white"} col-span-1 border border-[#CFA31C] `)} onClick={options.onClick}>
+            <button type="button" className={classNames(options.className, `${options.page ? "bg-[#CFA31C]" : "bg-white"} border border-[#CFA31C] `)} onClick={options.onClick}>
                 {options.page + 1}
                 {/* <Ripple /> */}
             </button>
@@ -48,14 +48,14 @@ const paginatorTemplate = {
     },
     CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
         return (
-            <div style={{ color: 'var(--text-color)', userSelect: 'none', width: 'auto', textAlign: 'left'}} className='col-span-9 text-sm text-neutral items-center my-auto'>
+            <div style={{ color: 'var(--text-color)', userSelect: 'none', width: 'auto', textAlign: 'left'}} className='text-sm text-neutral items-center my-auto mr-auto'>
                 {`Showing ${options.first} - ${options.last} from ${options.totalRecords}`}
             </div>
         );
     },
     PrevPageLink: (options: PaginatorPrevPageLinkOptions) => {
         return (
-            <span className={classNames(options.className, 'bg-[#CFA31C] p-2 col-span-1')} onClick={options.onClick} >
+            <span className={classNames(options.className, 'bg-[#CFA31C] p-2')} onClick={options.onClick} >
                 {/* <span className="p-3">Previous</span>
                 <Ripple /> */}
                 {/* <MdKeyboardArrowRight color="black"/> */}
@@ -65,7 +65,7 @@ const paginatorTemplate = {
     },
     NextPageLink: (options: PaginatorNextPageLinkOptions) => {
         return (
-            <span className={classNames(options.className, 'border-round bg-[#CFA31C] p-2 col-span-1')} onClick={options.onClick}>
+            <span className={classNames(options.className, 'border-round bg-[#CFA31C] p-2')} onClick={options.onClick}>
                 {/* <span className="p-3">Previous</span>
                 <Ripple /> */}
                 {/* <MdKeyboardArrowRight color="black"/> */}

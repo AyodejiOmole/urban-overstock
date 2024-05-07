@@ -457,7 +457,7 @@ const VariationItem = ({
                     }
                     onClick={() => setSizePicker(index)}
                 >
-                    {/* {sizes?.filter((size: any) => size.id == option?.sizeId)?.code} */}
+                    {/* {sizes?.filter((size: any) => size.id == option?.sizeId)} */}
                     {option?.sizeId}
                     {/* {} */}
                 </div>

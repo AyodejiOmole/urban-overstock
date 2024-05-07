@@ -169,7 +169,7 @@ export default function CategoriesTable({
         paginator
         paginatorTemplate={paginatorTemplate}
         // paginatorClassName='flex'
-        paginatorClassName='grid grid-cols-12'
+        paginatorClassName='flex justify-between'
         // paginatorPosition='left'
         rows={5}
         rowsPerPageOptions={[5, 25, 50, 100]}

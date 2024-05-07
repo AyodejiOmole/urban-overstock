@@ -112,7 +112,7 @@ export default function CustomersTable({
         tableStyle={{ minWidth: '50rem' }}
         paginator
         paginatorTemplate={paginatorTemplate}
-        paginatorClassName='flex'
+        paginatorClassName='flex justify-between'
         rows={20}
         rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-md'

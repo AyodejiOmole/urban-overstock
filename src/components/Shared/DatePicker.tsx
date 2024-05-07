@@ -16,7 +16,7 @@ export default function DatePicker({
   const datePickerChangeHandler = (e: CalendarProps) => {
     setDateTime24h(e.value);
     handleSelectDate(e.value);
-    e.hideOnDateTimeSelect
+    // e.hideOnDateTimeSelect
   };
 
   return (
