@@ -11,9 +11,10 @@ export default async function getOrders() {
   const apiRes = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.ORDERS}`, {
     headers: {
       Authorization: `Bearer ${token}`,
+      'Cache-Control': 'no-cache, max-age=0',
     },
 
-    cache: 'no-store',
+    // cache: 'no-store',
     // next: {
     //   revalidate: 10,
     // },

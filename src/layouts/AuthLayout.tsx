@@ -23,7 +23,7 @@ export default function AuthLayout(props: Readonly<Props>) {
   } = props;
 
   return (
-    <div className='grid grid-cols-1 lg:grid-cols-2 min-h-screen'>
+    <div className='grid grid-cols-1 lg:grid-cols-2 min-h-screen '>
       <div className='p-4 bg-white flex flex-col gap-8 items-center md:px-8 xl:px-16 w-full pt-24'>
         <Link href='/'>
           <Image src={logo} alt='Urban Overstock Logo' className='block w-52' />

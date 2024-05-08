@@ -10,7 +10,7 @@ export default function ProductDetails({ params }: { params: { id: string } }) {
     <section>
       {/* Add Product Form */}
       <PageHeading/>
-      <ProductForm activeProduct={null} />
+      <ProductForm activeProduct={null} productId={params.id}/>
     </section>
   );
 }

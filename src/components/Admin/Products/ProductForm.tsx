@@ -10,15 +10,15 @@ import clsx from 'clsx';
 import { useFormik } from 'formik';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { ChangeEvent, useReducer, useRef, useState } from 'react';
+import React, { ChangeEvent, useReducer, useRef, useState, useEffect } from 'react';
 import { SketchPicker } from 'react-color';
+import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { BiDollar } from 'react-icons/bi';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
 import Cookies from 'universal-cookie';
 import * as Yup from 'yup';
 // import Variations, { VariationData } from './Variations/Variations';
-import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { FaX, FaPlus } from 'react-icons/fa6';
 import { TfiSave } from 'react-icons/tfi';
@@ -27,6 +27,7 @@ import { IBrand } from '@/interfaces/brands';
 import { IBrands } from '@/interfaces/brands';
 import { IColors } from '@/interfaces/colors';
 import { ISizes } from '@/interfaces/sizes';
+import { Suspense } from 'react';
 
 interface ProductImage {
   // color: string;
@@ -136,12 +137,14 @@ export default function ProductForm({
   colors,
   sizes,
   brands,
+  productId,
 }: {
   activeProduct?: IProduct | null;
   categories?: ICategories | undefined;
   colors?: IColors | undefined;
   sizes?: ISizes | undefined;
   brands?: IBrands | undefined;
+  productId?: string | undefined,
 }) {
   const cookies = new Cookies();
   const { replace } = useRouter();
@@ -422,6 +425,46 @@ export default function ProductForm({
     // console.log(e);
     setBrandToAdd(e.target.value);
   }
+
+  useEffect(() => {
+    if(productId) {
+
+      // const getProduct = async () => {
+      //   const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
+
+      //     const apiRes = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.PRODUCTS}/${productId}`, {
+      //       headers: {
+      //         Authorization: `Bearer ${token}`,
+      //       },
+      //     });
+
+      //     console.log(apiRes);
+      //     const date = await apiRes.json();
+      //     return data;
+      // }
+      try {
+        // httpService
+        //       .get(`${ENDPOINTS.PRODUCTS}/${productId}`,`Bearer ${token}`)
+        //       .then((apiRes) => {
+        //         console.log('Response: ', apiRes);
+
+        //         if (apiRes.data) {
+        //           // formik.resetForm();
+        //           const data = apiRes.data;
+        //           console.log(data);
+        //         }
+        //       });
+          // const product = getProduct();
+          // console.log(product);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, []);
+
+  // if(productId) {
+
+  // }
 
   // const updateImageColor = (index: number, color: string) => {
   //   const updatedImages = productImages.filter((img, i) => i !== index);

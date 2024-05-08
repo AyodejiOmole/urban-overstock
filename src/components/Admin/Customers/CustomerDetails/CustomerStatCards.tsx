@@ -2,7 +2,15 @@ import { formatCurrency } from '@/helpers';
 import React from 'react';
 import { IoWalletOutline } from 'react-icons/io5';
 
-export default function CustomerStatCards() {
+export default function CustomerStatCards({
+  orderCount,
+  orderBalance,
+  rewardPoint,
+}: {
+  orderCount: number | undefined,
+  orderBalance: number | undefined,
+  rewardPoint: number | undefined,
+}) {
   const card_icon_style =
     'h-12 w-12 text-xl flex items-center justify-center rounded-full';
 
@@ -15,7 +23,7 @@ export default function CustomerStatCards() {
         </span>
         <p className='my-3 text-neutral text-sm'>Total Balance</p>
         <p className='text-gray-700 text-2xl font-bold'>
-          {formatCurrency(59000)}
+          {formatCurrency(orderBalance ?? 0)}
         </p>
       </div>
       {/*  */}
@@ -25,7 +33,7 @@ export default function CustomerStatCards() {
         </span>
         <p className='my-3 text-neutral text-sm'>Total Orders</p>
         <p className='text-gray-700 text-2xl font-bold'>
-          {(12).toLocaleString()}
+          {(orderCount ?? 0).toLocaleString()}
         </p>
       </div>
       {/*  */}
@@ -35,7 +43,7 @@ export default function CustomerStatCards() {
         </span>
         <p className='my-3 text-neutral text-sm'>Rewards Point</p>
         <p className='text-gray-700 text-2xl font-bold'>
-          {(2442).toLocaleString()}
+          {(rewardPoint ?? 0).toLocaleString()}
         </p>
       </div>
     </section>

@@ -2,36 +2,38 @@
 
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 import { formatCurrency, formatDate } from '@/helpers';
-import { ICustomer } from '@/interfaces/customers';
-import { customers } from '@/services/customers';
+import { ICustomer, ICustomers } from '@/interfaces/customers';
+// import { customers } from '@/services/customers';
 import Link from 'next/link';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { FaEye } from 'react-icons/fa';
 import { MdOutlineDelete } from 'react-icons/md';
 import { RxPencil2 } from 'react-icons/rx';
+import moment from 'moment';
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 export default function CustomersTable({
   selectedDate,
+  customers,
+  searchValue,
 }: {
   selectedDate: Date | (Date | null)[] | Date[] | null | undefined | number;
+  searchValue: string;
+  customers: ICustomers | undefined;
 }) {
   const [selectedCustomers, setSelectedCustomers] = useState<
     ICustomer[] | null
   >(null);
   const [rowClick, setRowClick] = useState<boolean>(true);
 
-  const dateTemplate = (customer: ICustomer) => {
-    const { created } = customer;
-
-    const timestampInMilliseconds = created.getTime();
-
-    return formatDate(timestampInMilliseconds);
-  };
+  const dateTemplate = (customer: ICustomer) =>
+    moment(customer.createdAt).format('MMM Do YYYY, h:mm a');
 
   function amountTemplate(customer: ICustomer) {
-    return formatCurrency(customer.balance);
+    return formatCurrency(customer.orderBalance);
   }
 
   function actionTemplate(customer: ICustomer) {
@@ -47,10 +49,12 @@ export default function CustomersTable({
           href={`/admin/customers/${customer.id}?edit=true`}
           className='text-xl text-neutral'
         >
-          <RxPencil2 />
+          {/* <RxPencil2 /> */}
+          <MdOutlineModeEdit />
         </Link>
         <button>
-          <MdOutlineDelete className='text-xl' />
+          {/* <MdOutlineDelete className='text-xl' /> */}
+          <RiDeleteBin6Line className='text-xl'/>
         </button>
       </div>
     );
@@ -59,10 +63,10 @@ export default function CustomersTable({
   function customerTemplate(customer: ICustomer) {
     return (
       <div className='flex items-center gap-4'>
-        <div className='h-12 w-12 bg-gray-300 rounded-full'></div>
+        {/* <div className='h-12 w-12 bg-gray-300 rounded-full'></div> */}
 
         <div>
-          <p className='text-sm font-medium'>{customer.name}</p>
+          <p className='text-sm font-medium'>{customer.firstName + " " + customer.lastName}</p>
           <p className='text-sm text-neutral font-light'>{customer.email}</p>
         </div>
       </div>
@@ -98,13 +102,25 @@ export default function CustomersTable({
     );
   }
 
+  const matchedCustomers = useMemo(() => {
+    if (searchValue.trim().length === 0) return customers;
+
+    return customers?.filter(
+      (customer) =>
+        customer.firstName.toLowerCase().includes(searchValue) ||
+        customer.lastName.toLowerCase().includes(searchValue) ||
+        customer.email.toLowerCase().includes(searchValue) ||
+        customer.uuid.toLowerCase().includes(searchValue)
+    );
+  }, [searchValue, customers]);
+
   return (
     <div className='card rounded-md p-4 bg-white border border-gray-200'>
       <div className='px-4 flex flex-col w-full justify-between lg:flex-row lg:items-center gap-8 mb-8'>
         <p className='font-bold text-xl text-gray-700'>Customers Table</p>
       </div>
       <DataTable
-        value={customers}
+        value={matchedCustomers}
         selectionMode={rowClick ? null : 'multiple'}
         selection={selectedCustomers!}
         onSelectionChange={dateChangeHandler}
@@ -113,7 +129,7 @@ export default function CustomersTable({
         paginator
         paginatorTemplate={paginatorTemplate}
         paginatorClassName='flex justify-between'
-        rows={20}
+        rows={10}
         rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-md'
         sortOrder={-1}
@@ -130,8 +146,8 @@ export default function CustomersTable({
           sortable
           body={customerTemplate}
         ></Column>
-        <Column field='phone' header='Phone' sortable></Column>
-        <Column field='orders' header='Orders' sortable></Column>
+        {/* <Column field='phone' header='Phone' sortable></Column> */}
+        {/* <Column field='orders' header='Orders' sortable></Column> */}
         <Column
           field='balance'
           header='Balance'
@@ -146,7 +162,7 @@ export default function CustomersTable({
         ></Column>
         <Column
           field='created'
-          header='Date Joined'
+          header='Created'
           body={dateTemplate}
           sortable
         ></Column>

@@ -10,12 +10,14 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import React, { useState, useMemo } from 'react';
 import toast from 'react-hot-toast';
-import { FaEye } from 'react-icons/fa';
-import { MdOutlineDelete } from 'react-icons/md';
-import { RxPencil2 } from 'react-icons/rx';
+// import { FaEye } from 'react-icons/fa';
+// import { MdOutlineDelete } from 'react-icons/md';
+// import { RxPencil2 } from 'react-icons/rx';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 export default function CategoriesTable({
   selectedDate,
@@ -87,10 +89,12 @@ export default function CategoriesTable({
           }}
           className='text-xl text-neutral'
         >
-          <RxPencil2 />
+          {/* <RxPencil2 /> */}
+          <MdOutlineModeEdit />
         </Link>
         <button onClick={() => deleteCategory(category.id)}>
-          <MdOutlineDelete className='text-xl' />
+          {/* <MdOutlineDelete className='text-xl' /> */}
+          <RiDeleteBin6Line className='text-xl'/>
         </button>
       </div>
     );

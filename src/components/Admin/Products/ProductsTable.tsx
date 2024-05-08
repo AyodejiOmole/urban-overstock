@@ -168,7 +168,7 @@ export default function ProductsTable({
         paginator
         paginatorTemplate={paginatorTemplate}
         paginatorClassName='flex justify-between'
-        rows={20}
+        rows={10}
         rowsPerPageOptions={[20, 50, 100]}
         className='rounded-xl text-sm capitalize'
         sortOrder={-1}

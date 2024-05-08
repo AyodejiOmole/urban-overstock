@@ -35,12 +35,7 @@ export default function CategoryForm() {
 
   const [editCategory, setEditCategory] = useState(false);
 
-  useEffect(() => {
-    const editStatus = params.get('edit');
-
-    if (!editStatus || (editStatus && editStatus === 'true'))
-      setEditCategory(true);
-  }, [params]);
+  
 
   // useMemo(() => {
   //   if (isMounted) {
@@ -60,7 +55,7 @@ export default function CategoryForm() {
 
   const formik = useFormik({
     initialValues: {
-      name: '',
+      name: params.get("name") || "",
       // description: '',
     },
     validationSchema: Yup.object({
@@ -131,7 +126,7 @@ export default function CategoryForm() {
           toast.success('Category updated successfully.');
   
           setTimeout(() => {
-            // router.push('/admin/categories', { refresh: true, });
+            // router.push('/admin/categories', refresh: true );
             // window?.reload(true);
              
             router.back();
@@ -165,6 +160,18 @@ export default function CategoryForm() {
 
     validateOnChange: true,
   });
+
+  useEffect(() => {
+    const editStatus = params.get('edit');
+    // const initialName = params.get("name");
+
+    if (!editStatus || (editStatus && editStatus === 'true')) {
+      setEditCategory(true);
+      // if(initialName) {
+        // formik.setFieldValue('name', initialName);
+      // }
+    }
+  }, [params]);
 
   return (
     <div>
@@ -210,7 +217,8 @@ export default function CategoryForm() {
                 placeholder='Type category name here...'
                 id='name'
                 onChange={formik.handleChange}
-                value={formik.values.name}
+                value={formik.values.name.toString()}
+                name="name"
                 disabled={!editCategory}
                 error={formik.errors.name}
               />

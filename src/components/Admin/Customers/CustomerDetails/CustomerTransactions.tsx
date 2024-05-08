@@ -11,8 +11,13 @@ import { DataTable } from 'primereact/datatable';
 import React, { useState } from 'react';
 import { CiCalendarDate } from 'react-icons/ci';
 import { FaEye } from 'react-icons/fa';
+import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 
-export default function CustomerTransactionsTable() {
+export default function CustomerTransactionsTable({
+  history
+}: {
+  history: IOrder[] | undefined,
+}) {
   const [selectedOrders, setSelectedOrders] = useState<IOrder[] | null>(null);
   const [rowClick, setRowClick] = useState<boolean>(true);
 
@@ -99,14 +104,16 @@ export default function CustomerTransactionsTable() {
         </Button>
       </div>
       <DataTable
-        value={orders}
+        value={history}
         selectionMode={rowClick ? null : 'multiple'}
         selection={selectedOrders!}
         onSelectionChange={dateChangeHandler}
         dataKey='id'
         tableStyle={{ minWidth: '50rem' }}
         paginator
-        rows={20}
+        rows={5}
+        paginatorTemplate={paginatorTemplate}
+        paginatorClassName='flex justify-between'
         rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-xl text-sm'
         sortOrder={-1}

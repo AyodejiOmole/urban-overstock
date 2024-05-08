@@ -3,6 +3,7 @@ const ENDPOINTS = {
   PRODUCTS: `products`,
   CATEGORIES: `categories`,
   NOTIFICATIONS: `notifications`,
+  CUSTOMERS: `user/customer`,
   SIGN_IN_FIREBASE: `auth/login/firebase`,
   SIGN_IN: `auth/login`,
   SIGN_UP: `auth/register`,
@@ -13,6 +14,7 @@ const ENDPOINTS = {
   RESEND_OTP: `auth/resend-otp`,
   SLIDER_IMAGE: `settings/slider-image`,
   ORDERS: 'order',
+  USER_ORDER_HISTORY: `order/user`,
 
   // Landing Page Settings
   LANDING_PAGE_SETTINGS: `settings/landing-page`,
