@@ -15,6 +15,7 @@ import HTTPService from '@/services/http';
 import ENDPOINTS from '@/config/ENDPOINTS';
 import { GetColorName } from 'hex-color-to-color-name';
 import { FaHeartPulse } from 'react-icons/fa6';
+import { IProductVariations } from '../ProductForm';
 
 interface ProductVariationProps {
   value: string;
@@ -35,11 +36,25 @@ export interface VariationData {
 
 export interface ProductVariationData {
   id: number;
-  colorId: number,
   imageFile: File | null,
+  colorId: number,
   imageUrl: string
-  sizeOptions: { sizeId: number, quantity: number }[],
+  sizeOptions: { 
+    sizeId: number | undefined, 
+    quantity: number 
+  }[],
 }
+
+// export interface IProductVariations {
+//   id: number,
+//   imageFile: File | null,
+//   colorId: number,
+//   imageUrl: string,
+//   sizeOptions: { 
+//     sizeId: number | undefined, 
+//     quantity: number, 
+//   }[],
+// }
 
 interface SizeVariationProps extends ProductVariationProps {
   onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
@@ -102,8 +117,9 @@ const VariationItem = ({
   ) => void;
   onDelete: (id: number) => void;
   dispatch: React.Dispatch<{
-    type: 'ADD' | 'DELETE' | 'UPDATE';
+    type: 'ADD' | 'DELETE' | 'UPDATE' | 'RESET_STATE';
     payload: ProductVariationData;
+    newState: IProductVariations[] | [];
   }>;
   sizes: ISizes | undefined;
   colors: IColors | undefined;
@@ -133,6 +149,7 @@ const VariationItem = ({
     dispatch({
       type: 'UPDATE',
       payload: { ...variation, sizeOptions: newSizeOptions },
+      newState: [],
     });
   };
 
@@ -164,6 +181,7 @@ const VariationItem = ({
     dispatch({
       type: 'UPDATE',
       payload: { ...variation, sizeOptions: newSizeOptions },
+      newState: [],
     });
 
     setSizePicker(null);
@@ -173,6 +191,7 @@ const VariationItem = ({
     dispatch({
       type: 'UPDATE',
       payload: { ...variation, colorId: colorId },
+      newState: [],
     });
   }
 
@@ -182,6 +201,7 @@ const VariationItem = ({
     dispatch({
       type: 'UPDATE',
       payload: { ...variation, sizeOptions: newSizeOptions },
+      newState: [],
     }); 
   }
 
@@ -198,6 +218,7 @@ const VariationItem = ({
     dispatch({
       type: 'UPDATE',
       payload: { ...variation, imageFile: null },
+      newState: [],
     });
   };
 
@@ -228,6 +249,7 @@ const VariationItem = ({
     dispatch({
       type: 'UPDATE',
       payload: { ...variation, imageFile: imagesCopy },
+      newState: [],
     });
   };
 
@@ -579,8 +601,9 @@ const ProductVariations = ({
   sizes,
 }: {
   dispatch: React.Dispatch<{
-    type: 'ADD' | 'DELETE' | 'UPDATE';
+    type: 'ADD' | 'DELETE' | 'UPDATE' | "RESET_STATE";
     payload: ProductVariationData;
+    newState: IProductVariations[] | [];
   }>;
   state: ProductVariationData[];
   colors?: IColors | undefined;
@@ -595,7 +618,7 @@ const ProductVariations = ({
       sizeOptions: [],
     };
 
-    dispatch({ type: 'ADD', payload: newVariation });
+    dispatch({ type: 'ADD', payload: newVariation, newState: [] });
   };
 
   const handleVariationChange = (
@@ -605,7 +628,7 @@ const ProductVariations = ({
     imageFile: null,
     sizeOptions: [],
   ) => {
-    dispatch({ type: 'UPDATE', payload: { id, colorId, imageFile, imageUrl, sizeOptions, } });
+    dispatch({ type: 'UPDATE', payload: { id, colorId, imageFile, imageUrl, sizeOptions, }, newState: [] });
   };
 
   const deleteVariation = (id: number) => {
@@ -615,6 +638,7 @@ const ProductVariations = ({
       dispatch({
         type: 'DELETE',
         payload: current,
+        newState: [],
       });
   };
 

@@ -15,6 +15,7 @@ const ENDPOINTS = {
   SLIDER_IMAGE: `settings/slider-image`,
   ORDERS: 'order',
   USER_ORDER_HISTORY: `order/user`,
+  DISCOUNT_CODE: `discount-code`,
 
   // Landing Page Settings
   LANDING_PAGE_SETTINGS: `settings/landing-page`,

@@ -12,6 +12,7 @@ type InputType = React.InputHTMLAttributes<HTMLInputElement> & {
   leftIconClick?: () => void;
   rightIconClick?: () => void;
   rounded?: boolean;
+  value?: string | any;
 };
 
 export default function TextInput(props: InputType) {
@@ -44,7 +45,7 @@ export default function TextInput(props: InputType) {
     className
   );
 
-  const [fValue, setFValue] = useState<string>('');
+  const [fValue, setFValue] = useState<string>(value ?? "");
 
   //Convert value to a formated currency
   const formatValue = (val: string): string => {

@@ -1,14 +1,34 @@
+"use client";
 import DiscountCodesTable from '@/components/Admin/DiscountCodes/DiscountCodesTable';
 import Button from '@/components/Global/Button';
 import TextInput from '@/components/Global/TextInput';
 import Card from '@/components/Shared/Card';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import Pagination from '@/components/Shared/Pagination';
 
 export default function AdminDiscountCodeDetails() {
+  const params = useSearchParams();
+  const [discountCode, setDiscountCode] = useState<any>(null);
+  const [discountPer, setDiscountPer] = useState<any>(null);
+
+  useEffect(() => {
+    if (params.has('code') && params.has('percentage')) {
+      setDiscountCode(params.get("code"));
+      setDiscountPer(params.get("percentage"));
+    }
+
+    // setDiscountCode(params.get("code"));
+    // setDiscountPer(params.get("percentage"));
+  }, [params]);
+
   return (
     <section>
       <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 my-8'>
-        <p className='text-xl font-medium text-gray-700'>Discount Code</p>
+        <div>
+          <p className='text-xl font-medium text-gray-700'>Discount Code</p>
+          <Pagination/>
+        </div>
       </div>
       <Card>
         <div className='p-4'>
@@ -31,7 +51,9 @@ export default function AdminDiscountCodeDetails() {
                   Code
                 </label>
 
-                <TextInput id='code' placeholder={'302012'} disabled />
+                <TextInput id='code' placeholder={'Discount code...'} value={discountCode} disabled />
+                {/* <input type="text" value={discountCode || ''} disabled /> */}
+
               </div>
               <div className='mb-6'>
                 <label
@@ -40,7 +62,9 @@ export default function AdminDiscountCodeDetails() {
                 >
                   Percentage Off
                 </label>
-                <TextInput placeholder={'10'} disabled />
+                <TextInput placeholder={'Percentage off...'} disabled value={discountPer}/>
+                {/* <input type="text" value={discountPer || ''} disabled /> */}
+
               </div>
             </form>
           </div>

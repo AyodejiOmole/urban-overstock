@@ -35,8 +35,6 @@ export default function CategoryForm() {
 
   const [editCategory, setEditCategory] = useState(false);
 
-  
-
   // useMemo(() => {
   //   if (isMounted) {
   //     uppy.on('file-added', (result) => {
