@@ -13,11 +13,12 @@ export default function AdminDiscountCodeDetails() {
   const [discountPer, setDiscountPer] = useState<any>(null);
 
   useEffect(() => {
-    if (params.has('code') && params.has('percentage')) {
-      setDiscountCode(params.get("code"));
-      setDiscountPer(params.get("percentage"));
-    }
+    // if (params.has('code') && params.has('percentage')) {
+      
+    // }
 
+    setDiscountCode(params.get("code"));
+    setDiscountPer(params.get("percentage"));
     // setDiscountCode(params.get("code"));
     // setDiscountPer(params.get("percentage"));
   }, [params]);
@@ -64,7 +65,6 @@ export default function AdminDiscountCodeDetails() {
                 </label>
                 <TextInput placeholder={'Percentage off...'} disabled value={discountPer}/>
                 {/* <input type="text" value={discountPer || ''} disabled /> */}
-
               </div>
             </form>
           </div>

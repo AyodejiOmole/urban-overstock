@@ -81,7 +81,7 @@ export default function DiscountCodesTable({
           <FaEye />
         </Link>
         <Link
-          href={`/admin/discount-codes/edit?id=${discount.id}?code=${discount.code}&percentage=${discount.percentage}`}
+          href={`/admin/discount-codes/edit?id=${discount.id}&code=${discount.code}&percentage=${discount.percentage}`}
           className='text-xl text-neutral'
         >
           <RxPencil2 />

@@ -103,14 +103,17 @@ export default function AdminSidebar({ isOpen, toggleSidebar }: SidebarProps) {
                     </Link>
                 )              
               }
+              // ${
+              //   pathname.trim() === link.page
+              //     ? 'bg-primary'
+              //     : 'bg-gray-50'
+              // } 
               return (
                 <div
                   key={link.name}
-                  className={`rounded-lg mt-4 duration-500 ${
-                    pathname.trim() === link.page
-                      ? 'bg-primary'
-                      : 'bg-gray-50'
-                  } `}
+                  className={`rounded-lg mt-4 duration-500 'bg-gray-50' 
+                    
+                  `}
                 >
                   <button
                     onClick={() => {
@@ -156,7 +159,12 @@ export default function AdminSidebar({ isOpen, toggleSidebar }: SidebarProps) {
                           {link?.children?.map((el) => (
                             <Link
                               key={el.name}
-                              className='capitalize my-2 block'
+                              className={`capitalize my-3 rounded block ${
+                                pathname.trim() === el.page
+                                ? 'bg-primary'
+                                : ''
+                                } 
+                              `}
                               href={el.page}
                             >
                               <span className='flex items-center justify-between'>
