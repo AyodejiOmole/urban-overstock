@@ -16,7 +16,7 @@ import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 export default function CustomerTransactionsTable({
   history
 }: {
-  history: IOrder[] | undefined,
+  history?: IOrder[] | undefined,
 }) {
   const [selectedOrders, setSelectedOrders] = useState<IOrder[] | null>(null);
   const [rowClick, setRowClick] = useState<boolean>(true);
