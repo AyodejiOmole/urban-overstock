@@ -2,17 +2,16 @@ import React from 'react';
 import { CiLocationOn, CiLock, CiMail, CiShoppingCart } from 'react-icons/ci';
 import { MdOutlineAlternateEmail } from 'react-icons/md';
 import { SlPhone } from 'react-icons/sl';
-import CustomerStatCards from './CustomerStatCards';
-import CustomerTransactionsTable from './CustomerTransactions';
 import { IOrder } from '@/interfaces/orders';
 import { ISingleCustomer } from '@/interfaces/customers';
+import CancelledOrderTransactionTable from './CancelledOrderTransactionTable';
 
-export default function CustomerDetails({
-  customerOrderHistory,
-  customerDetails,
+export default function CancelledOrderDetails({
+  cancelledOrderHistory,
+  cancelledOrdersDetails,
 }: {
-  customerOrderHistory: IOrder[] | undefined,
-  customerDetails: ISingleCustomer | undefined,
+    cancelledOrderHistory: any;
+    cancelledOrdersDetails: any;
 }) {
   return (
     <div className='grid grid-cols-1 lg:grid-cols-6 gap-6'>
@@ -25,12 +24,12 @@ export default function CustomerDetails({
           <div className='pt-32 px-4'>
             <div className='p-4 text-center'>
               <p className='font-semibold text-gray-700 text-xl'>
-                {/* Isaiah Ernest */}
-                {customerDetails?.firstName + " " + customerDetails?.lastName}
+                Isaiah Ernest
+                {/* {customerDetails?.firstName + " " + customerDetails?.lastName} */}
               </p>
               <p className='text-neutral'>
-                {/* @isaiah_ernest */}
-                {customerDetails?.email}
+                @isaiah_ernest
+                {/* {customerDetails?.email} */}
               </p>
             </div>
 
@@ -45,8 +44,8 @@ export default function CustomerDetails({
                 <div className='flex-1'>
                   <p className='text-neutral font-medium'>User ID</p>
                   <p className='text-gray-800 font-light text-sm'>
-                    {/* U011012 */}
-                    {customerDetails?.uuid}
+                    U011012
+                    {/* {customerDetails?.uuid} */}
                   </p>
                 </div>
               </div>
@@ -58,8 +57,8 @@ export default function CustomerDetails({
                 <div className='flex-1'>
                   <p className='text-neutral font-medium'>Billing Email</p>
                   <p className='text-gray-800 font-light text-sm'>
-                    {/* johndoe@gmail.com */}
-                    {customerDetails?.email}
+                    johndoe@gmail.com
+                    {/* {customerDetails?.email} */}
                   </p>
                 </div>
               </div>
@@ -71,8 +70,8 @@ export default function CustomerDetails({
                 <div className='flex-1'>
                   <p className='text-neutral font-medium'>Phone Number</p>
                   <p className='text-gray-800 font-light text-sm'>
-                    {/* 0908 9898 990 */}
-                    {customerDetails?.shippingAddress?.phoneNumber}
+                    0908 9898 990
+                    {/* {customerDetails?.shippingAddress?.phoneNumber} */}
                   </p>
                 </div>
               </div>
@@ -84,8 +83,8 @@ export default function CustomerDetails({
                 <div className='flex-1'>
                   <p className='text-neutral font-medium'>Delivery Address</p>
                   <p className='text-gray-800 font-light text-sm'>
-                    {/* 1833 Bel Meadow Drive, Fontana, California 92335, USA */}
-                    {customerDetails?.shippingAddress?.streetAddress + " " + customerDetails?.shippingAddress?.city + " " + customerDetails?.shippingAddress?.state + " " + customerDetails?.shippingAddress?.country}
+                    1833 Bel Meadow Drive, Fontana, California 92335, USA
+                    {/* {customerDetails?.shippingAddress?.streetAddress + " " + customerDetails?.shippingAddress?.city + " " + customerDetails?.shippingAddress?.state + " " + customerDetails?.shippingAddress?.country} */}
                   </p>
                 </div>
               </div>
@@ -107,13 +106,8 @@ export default function CustomerDetails({
       </div>
       {/* Column 2 */}
       <div className='lg:col-span-4'>
-        <CustomerStatCards 
-          orderCount={customerDetails?.orderCount}
-          orderBalance={customerDetails?.orderBalance}
-          rewardPoint={customerDetails?.rewardPoint}
-        />
         <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg'>
-          <CustomerTransactionsTable history={customerOrderHistory}/>
+          <CancelledOrderTransactionTable history={cancelledOrderHistory}/>
         </div>
       </div>
     </div>

@@ -48,6 +48,4 @@ export default async function AdminCustomerDetails({
       <CustomerDetails customerOrderHistory={customerOrderHistory} customerDetails={customerDetails}/>
     </section>
   );
-
-  
 }

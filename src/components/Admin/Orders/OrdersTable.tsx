@@ -25,7 +25,7 @@ export default function OrdersTable({
   orders: IOrder[] | null;
   searchValue: string;
   selectedDate?: number | null;
-  page?: 'orders' | 'return-request';
+  page?: 'orders' | 'return-request' | 'cancelled orders';
   handleChangeSelectedOrders?: (e: any) => void;
   selectedOrders: IOrder[];
   categoryNavigation?: any;
@@ -52,7 +52,7 @@ export default function OrdersTable({
     return (
       <div className='flex items-center gap-3'>
         <Link
-          href={`/admin/${page}/${order.id}`}
+          href={page === "cancelled orders" ? `/admin/orders/cancelled-orders/${order.id}` : `/admin/${page}/${order.id}`}
           className='text-xl text-neutral'
         >
           <FaEye />
