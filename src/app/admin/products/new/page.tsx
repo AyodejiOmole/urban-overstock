@@ -1,4 +1,4 @@
-import ProductForm from '@/components/Admin/Products/ProductForm';
+// import ProductForm from '@/components/Admin/Products/ProductForm';
 import Button from '@/components/Global/Button';
 import { ICategories } from '@/interfaces/categories';
 import getAllCategories from '@/libs/categories';
@@ -9,10 +9,13 @@ import { FaX } from 'react-icons/fa6';
 import getAllBrands from '@/libs/brands';
 import getAllColors from '@/libs/colors';
 import getAllSizes from '@/libs/sizes';
+import getAllDiscountCodes from '@/libs/discount-codes';
 import { IBrands } from '@/interfaces/brands';
 import { IColors } from '@/interfaces/colors';
 import { ISizes } from '@/interfaces/sizes';
 import Pagination from '@/components/Shared/Pagination';
+import { IDiscountCodes } from '@/interfaces/discount-codes';
+import OldProductForm from '@/components/Admin/Products/OldProductForm';
 
 export default async function AdminNewProduct() {
   const apiRes: Promise<ICategories | undefined> = getAllCategories();
@@ -26,6 +29,9 @@ export default async function AdminNewProduct() {
 
   const apiResSizes: Promise<ISizes | undefined> = getAllSizes();
   const sizes = await apiResSizes;
+
+  const apiResDiscounts: Promise<IDiscountCodes | undefined> = getAllDiscountCodes();
+  const discounts = await apiResDiscounts;
 
   return (
     <section>
@@ -47,7 +53,7 @@ export default async function AdminNewProduct() {
       </div>
 
       {/* Add Product Form */}
-      <ProductForm categories={categories} brands={brands} colors={colors} sizes={sizes}/>
+      <OldProductForm categories={categories} discounts={discounts} brands={brands} colors={colors} sizes={sizes}/>
     </section>
   );
 }

@@ -12,124 +12,27 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, useReducer, useRef, useState, useEffect } from 'react';
 import { SketchPicker } from 'react-color';
-import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { BiDollar } from 'react-icons/bi';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
 import Cookies from 'universal-cookie';
 import * as Yup from 'yup';
+// import OldVariations from "./Variations/OldVariations"
 // import Variations, { VariationData } from './Variations/Variations';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { FaX, FaPlus } from 'react-icons/fa6';
 import { TfiSave } from 'react-icons/tfi';
-import NewVariations from "./Variations/NewVariations";
+// import NewVariations from "./Variations/NewVariations";
 import { IBrand } from '@/interfaces/brands';
 import { IBrands } from '@/interfaces/brands';
 import { IColors } from '@/interfaces/colors';
 import { ISizes } from '@/interfaces/sizes';
-import { Suspense } from 'react';
-import { Size } from '@/interfaces/products';
 import { IDiscountCodes } from '@/interfaces/discount-codes';
 
 interface ProductImage {
   // color: string;
   image: File;
-}
-
-interface GroupedVariation {
-  name: string;
-  options: { name: string; quantity: number }[];
-}
-
-export interface IProductVariations {
-    id: number,
-    imageFile: File | null,
-    colorId: number,
-    imageUrl: string,
-    sizeOptions: { 
-      // id?: number,
-      sizeId: number | undefined, 
-      quantity: number,
-      // size?: Size, 
-    }[],
-}
-
-const reducerMethod = (
-  variations: IProductVariations[],
-  action: {
-    type: 'ADD' | 'DELETE' | 'UPDATE' | 'RESET_STATE';
-    payload: IProductVariations;
-    newState: IProductVariations[] | [],
-  }
-) => {
-  switch (action.type) {
-    case 'ADD': {
-      return [...variations, action.payload];
-    }
-    case 'DELETE': {
-      const id = action.payload.id;
-      const updatedVariations = variations.filter(
-        (variation) => variation.id !== id
-      );
-
-      return updatedVariations;
-    }
-
-    case 'UPDATE': {
-      const filtered = variations.filter(
-        (variation) => variation.id !== action.payload.id
-      );
-
-      const updatedVariations = [...filtered, action.payload];
-      return updatedVariations;
-    }
-
-    case 'RESET_STATE': {
-      return action.newState;
-    }
-
-    default: {
-      throw new Error('Action does not exist');
-    }
-  }
-};
-
-// const initialValues: VariationData[] = [];
-const initialValues: IProductVariations[] = [];
-
-function getGroupedVariations(variations: IProductVariations[]) {
-  const groupedVariations: GroupedVariation[] = [];
-
-  // variations.forEach((variation) => {
-  //   const existingGroup = groupedVariations.find(
-  //     (group) => group.name === variation.type
-  //   );
-
-  //   if (existingGroup) {
-  //     existingGroup.options.push({
-  //       name: variation.value,
-  //       quantity: variation.quantity,
-  //     });
-  //   } else {
-  //     groupedVariations.push({
-  //       name: variation.type,
-  //       options: [{ name: variation.value, quantity: variation.quantity }],
-  //     });
-  //   }
-  // });
-
-  // return groupedVariations;
-  return variations;
-}
-
-function getFormattedVariations(variations: IProductVariations[], variationImages: {variation: IProductVariations, imageUrl: string}[]) {
-  const newVariations = variations.map((variation: IProductVariations, index) => {
-    let { colorId, imageUrl, sizeOptions } = variation;
-    imageUrl = variationImages[index].imageUrl;
-    return { colorId, imageUrl, sizeOptions };
-  });
-
-  return newVariations;
 }
 
 function CustomError({ error }: { error?: string }) {
@@ -144,20 +47,19 @@ function CustomError({ error }: { error?: string }) {
   );
 }
 
-export default function ProductForm({
+export default function UpdateProductForm({
   categories,
   colors,
   sizes,
   brands,
-  activeProduct,
   discounts,
+  activeProduct,
 }: {
-  activeProduct?: ISingleProduct | null;
+    activeProduct?: ISingleProduct | null;
   categories?: ICategories | undefined;
   colors?: IColors | undefined;
   sizes?: ISizes | undefined;
   brands?: IBrands | undefined;
-  productId?: string | undefined,
   discounts: IDiscountCodes | undefined;
 }) {
   const cookies = new Cookies();
@@ -168,66 +70,19 @@ export default function ProductForm({
 
   const [activeImage, setActiveImage] = useState<null | number>(null);
   const [productImages, setProductImages] = useState<ProductImage[]>([]);
-  const [state, dispatch] = useReducer(reducerMethod, initialValues);
 
   const [brandPicker, setBrandPicker] = useState<boolean | null>(false);
   const [brandToAdd, setBrandToAdd] = useState<string | null | undefined | any>("");
   const [addBrandDisplay, setAddBrandDisplay] = useState<boolean | null>(false);
 
   const token = cookies.get('urban-token');
-  // const [productVariations, setProductVariations] = useState<IProductVariations[]>([]);
-
-  async function uploadVariationImages() {
-    const variations = state;
-    let uploaded = true;
-
-    for (const variation of variations) {
-      try {
-        const variationFormdata = new FormData();
-        if(variation.imageFile !== null) {
-          variationFormdata.append('file', variation.imageFile);
-        }
-        
-        const requestOptions = {
-          method: 'POST',
-          body: variationFormdata,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
-          requestOptions
-        );
-
-        const jsonRes = await response.json();
-        console.log(jsonRes);
-
-        if(jsonRes) {
-          dispatch({
-            type: 'UPDATE',
-            payload: { ...variation, imageUrl: jsonRes.url },
-            newState: [],
-          });
-        }
-        
-        console.log(variation);
-      } catch (error) {
-        uploaded = false;
-        console.error("Error uploading file", error);
-      }
-    }
-
-    return uploaded;
-  }  
 
   const formik = useFormik({
     initialValues: {
       name: '',
       description: '',
       tag: '',
-      brandId: 0,
+    //   brandId: 0,
       quantity: 0,
       amount: 0,
       discountType: '',
@@ -255,196 +110,85 @@ export default function ProductForm({
       status: Yup.string().required().label('Status'),
     }),
     onSubmit: async (values) => {
-      const variations = state;
-      const groupedVariations = getGroupedVariations(variations);
-      let variationImages: {variation: IProductVariations, imageUrl: string}[] = [];
-
       const promises: Promise<Response>[] = [];
-      const variationPromises: Promise<Response>[] = [];
-
-      if (!searchParams.get("edit") && (productImages.length < 1 || variations.length < 1)) {
-        // toast.error('Please add product images or variations.');
-        // if(!activeProduct) {
-          toast.error('Please add product images or variations.');
-        // }
-      } else {
+    //   const variationPromises: Promise<Response>[] = [];
+      let product_images;
+      let data;
         try {
-          let product_images;
-          if(productImages.length > 0) {
-            productImages.forEach((image: ProductImage) => {
-              const formdata = new FormData();
-              formdata.append('file', image.image);
-  
-              const requestOptions = {
-                method: 'POST',
-                body: formdata,
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              };
-  
-              promises.push(
-                fetch(
-                  `${process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
-                  requestOptions
-                )
-              );
-            });
-  
-            product_images = await Promise.all(promises)
-              .then((responses) => {
-                const responseData = responses.map(async (response, index) => {
-                  const fileRes = await response.json();
-  
-                  return fileRes.url;
+            if(productImages.length > 0) {
+                productImages.forEach((image: ProductImage) => {
+                    const formdata = new FormData();
+                    formdata.append('file', image.image);
+        
+                    const requestOptions = {
+                        method: 'POST',
+                        body: formdata,
+                        headers: {
+                        Authorization: `Bearer ${token}`,
+                        },
+                    };
+        
+                    promises.push(
+                        fetch(
+                        `${process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
+                        requestOptions
+                        )
+                    );
                 });
-  
-                return Promise.all(responseData);
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          }
-          
-          // const uploaded = await uploadVariationImages();
-          if(variations.length > 0) {
-            for (const variation of variations) {
-              const variationFormdata = new FormData();
-              if(variation.imageFile !== null) {
-                variationFormdata.append('file', variation.imageFile);                
-              }
+        
+                product_images = await Promise.all(promises)
+                .then((responses) => {
+                    const responseData = responses.map(async (response, index) => {
+                    const fileRes = await response.json();
+    
+                    return fileRes.url;
+                    });
+    
+                    return Promise.all(responseData);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            }
+            
 
-              const requestOptions = {
-                method: 'POST',
-                body: variationFormdata,
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              };
-      
-              const response = await fetch(
-                `${process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
-                requestOptions
-              );
-      
-              const jsonRes = await response.json();
-              console.log(jsonRes);
-      
-              // if(jsonRes) {
-              variationImages.push({ variation, imageUrl: jsonRes.url });
-                
-              // }
-            };
-          }
-
-          if (!searchParams.get("edit") && (product_images && product_images.length > 0)) {
-            const data = {
-              ...values,
-              categoryId: +values.categoryId,
-              productVarations: getFormattedVariations(state, variationImages),
-              // productImages: product_images,
-              imageUrls: product_images,
-            };
+            if (product_images && product_images.length > 0) {
+                data = {
+                    ...values,
+                    categoryId: +values.categoryId,
+                    imageUrls: product_images
+                };
+            } else {
+                const formattedStr = `${activeProduct?.imageUrls.replace(/\\/g, '')}`;
+                const arr = JSON.parse(formattedStr);
+                data = {
+                    ...values,
+                    categoryId: +values.categoryId,
+                    imageUrls: arr,
+                };
+            }
 
             console.log('Request Body: ', data);
-            console.log(variationImages);
 
-            // if(activeProduct) {
-            //   httpService
-            //   .patch(ENDPOINTS.PRODUCTS, data, `Bearer ${token}`)
-            //   .then((apiRes) => {
-            //     console.log('Response: ', apiRes);
-
-            //     if (apiRes.data) {
-            //       formik.resetForm();
-
-            //       toast.success('Product updated successfully.');
-
-            //       setTimeout(() => {
-            //         replace('/admin/products');
-            //       }, 1000);
-            //     }
-            //   });
-            // } else {
-              httpService
-              .post(ENDPOINTS.PRODUCTS, data, `Bearer ${token}`)
-              .then((apiRes) => {
+            httpService
+                .patch(ENDPOINTS.PRODUCTS, data, `Bearer ${token}`)
+                .then((apiRes) => {
                 console.log('Response: ', apiRes);
 
                 if (apiRes.data) {
-                  formik.resetForm();
+                    formik.resetForm();
 
-                  toast.success('Product added successfully.');
+                    toast.success('Product updated successfully.');
 
-                  setTimeout(() => {
+                    setTimeout(() => {
                     replace('/admin/products');
-                  }, 1000);
+                    }, 1000);
                 }
-              });
-            // }
-            
-          } else if(searchParams.get("edit") && activeProduct) {
-            const formattedStr = `${activeProduct?.imageUrls.replace(/\\/g, '')}`;
-            const arr = JSON.parse(formattedStr);
-            const {
-              name,
-              description,
-              tag,
-              quantity,
-              amount,
-              discountType,
-              discountPercentage,
-              taxClass,
-              vatAmount,
-              sku,
-              barcode,
-              status,
-              categoryId,
-            } = values;
-            const data = {
-              // ...values,
-              name,
-              description,
-              tag,
-              quantity,
-              amount,
-              discountType,
-              discountPercentage,
-              taxClass,
-              vatAmount,
-              sku,
-              barcode,
-              status,
-              // categoryId,
-              categoryId: +values.categoryId,
-              productVarations: getFormattedVariations(state, variationImages),
-              // imageUrls: JSON.stringify(arr.concat(product_images)),
-              imageUrls: product_images ? arr.concat(product_images) : arr,
-            };
-
-            console.log('Request Body: ', data);
-            console.log(variationImages);
-
-            httpService
-            .patch(ENDPOINTS.PRODUCTS, data, `Bearer ${token}`)
-            .then((apiRes) => {
-              console.log('Response: ', apiRes);
-
-              if (apiRes.data) {
-                formik.resetForm();
-
-                toast.success('Product updated successfully.');
-
-                setTimeout(() => {
-                  replace('/admin/products');
-                }, 1000);
-              }
             });
-          } else console.log('Products array not provided');
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      }
+    
 
       // const data = {
       //   ...values,
@@ -457,7 +201,6 @@ export default function ProductForm({
     validateOnChange: true,
   });
 
-  
   useEffect(() => {
     if(activeProduct) {
       console.log(activeProduct);
@@ -482,7 +225,7 @@ export default function ProductForm({
         name: name.toString(),
         description,
         tag: activeProduct.tag.toLowerCase(),
-        brandId: brand.id,
+        // brandId: brand.id,
         quantity: Number(quantity),
         amount: Number(amount),
         discountType,
@@ -493,32 +236,6 @@ export default function ProductForm({
         barcode,
         status: status.toLowerCase(),
         categoryId: category.id,
-      });
-
-      const variations: IProductVariations[] = activeProduct.productVarations.map((variation) => {
-        const { id, colorId, imageUrl } = variation;
-        const sizeOptions = variation.sizeOptions.map((option) => {
-          const { quantity, size } = option;
-          delete option.size;
-          return { sizeId: size?.id, quantity };
-        })
-  
-        return { id, colorId, imageUrl, sizeOptions, imageFile: null };
-      });
-      console.log(variations);
-      dispatch({
-        type: 'RESET_STATE',
-        payload: {
-          id: 0,
-          imageFile: null,
-          colorId: 0,
-          imageUrl: "",
-          sizeOptions: [{ 
-            sizeId: 0, 
-            quantity: 0,
-          }],
-        },
-        newState: variations,
       });
     }
   }, [activeProduct]);
@@ -584,19 +301,6 @@ export default function ProductForm({
     setBrandToAdd(e.target.value);
   }
 
-  // const updateImageColor = (index: number, color: string) => {
-  //   const updatedImages = productImages.filter((img, i) => i !== index);
-  //   const current = productImages.find((img, i) => i === index);
-
-  //   if (current) {
-  //     current.color = color;
-
-  //     updatedImages.push(current);
-
-  //     setProductImages(updatedImages);
-  //   }
-  // };
-
   return (
     <form
       className='grid grid-cols-1 lg:grid-cols-6 gap-6'
@@ -640,33 +344,7 @@ export default function ProductForm({
             <CustomError error={formik.errors.description} />
           </div>
 
-          {/* <div className='mb-6'>
-              <label
-                htmlFor='brandId'
-                className='text-sm text-neutral mb-2 block'
-              >
-                Brand
-              </label>
-              <select
-                name='brandId'
-                id='brandId'
-                className='text-neutral'
-                onChange={formik.handleChange}
-                value={formik.values.brandId}
-              >
-                <option value='' defaultChecked disabled>
-                    Select a brand type....
-                </option>
-                {brands?.map((brand: IBrand, index: number) => {
-                  return (
-                    <option value={brand?.id} key={index}>{brand?.name}</option>
-                  )
-                })}
-              </select>
-              <CustomError error={formik.errors.brandId} />
-          </div> */}
-
-            <div className='mb-4 w-full relative'>
+            {/* <div className='mb-4 w-full relative'>
                 <label htmlFor='brandId' className='text-sm text-neutral mb-2 block'>
                   Brand:
                 </label>
@@ -745,7 +423,7 @@ export default function ProductForm({
                     </Button>
                   </div>
                 )}
-            </div>
+            </div> */}
         </div>
 
         {/* Media Upload */}
@@ -764,7 +442,6 @@ export default function ProductForm({
                 onChange={addNewImage}
               />
               {productImages.length < 1 && <p>Click below to upload an image. Your image should not exceed 1MB and should be either a .jpeg or .png</p>}
-              {/* {productImages.length < 1 || (activeProduct && activeProduct.imageUrls.length > 0) && <p>Click below to upload an image. Your image should not exceed 1MB and should be either a .jpeg or .png</p>} */}
               <div className='flex items-center flex-wrap gap-2 mb-4'>
                 {productImages &&
                   productImages.map((img, index) => (
@@ -775,31 +452,7 @@ export default function ProductForm({
                       <span className='text-xs absolute top-2 left-2 text-dark bg-green-100 py-1 px-2 rounded-md'>
                         {index + 1}
                       </span>
-                      {/* <button
-                        type='button'
-                        className={clsx(
-                          'text-xs absolute top-2 right-2 text-dark rounded-md h-6 w-6'
-                        )}
-                        onClick={() => {
-                          setActiveImage(index);
-                        }}
-                        style={{ background: img.color }}
-                      >
-                        {activeImage === index && (
-                          <SketchPicker
-                            color={img.color}
-                            onChange={(color) => {
-                              updateImageColor(index, color.hex);
-
-                              setTimeout(() => {
-                                setActiveImage(null);
-                              }, 500);
-                            }}
-                            className='relative z-20'
-                          />
-                        )}
-                      </button> */}
-
+                      
                       <Image
                         src={URL.createObjectURL(img.image)}
                         alt={img.image.name}
@@ -815,32 +468,6 @@ export default function ProductForm({
                       </button>
                     </div>
                   ))}
-
-                  {/* {activeProduct && activeProduct.imageUrls.length > 0 &&
-                    activeProduct.imageUrls.map((img, index) => (
-                    <div
-                      key={`${index}-${img.image.name}`}
-                      className='h-28 w-28 relative rounded-xl'
-                    >
-                      <span className='text-xs absolute top-2 left-2 text-dark bg-green-100 py-1 px-2 rounded-md'>
-                        {index + 1}
-                      </span>
-
-                      <Image
-                        src={img}
-                        alt={"Image"}
-                        width={100}
-                        height={100}
-                        className='rounded-lg w-full h-full object-cover'
-                      />
-                      <button
-                        className='absolute bottom-4 right-4 text-dark rounded-md p-1 bg-green-100'
-                        onClick={() => removeImage(index)}
-                      >
-                        <RiDeleteBin6Fill />
-                      </button>
-                    </div>
-                  ))} */}
               </div>
               <Button
                 size='small'
@@ -896,9 +523,9 @@ export default function ProductForm({
                   <option value='free'>No Discount</option>
                   {discounts?.map((discount, index) => {
                     return (
-                      <option key={index} value={discount.code}>{`${discount.percentage}%`}</option>
-                    )
-                  })}
+                        <option key={index} value={discount.code}>{`${discount.percentage}%`}</option>
+                        )
+                    })}
                 </select>
 
                 <CustomError error={formik.errors.discountType} />
@@ -1020,87 +647,6 @@ export default function ProductForm({
             </div>
           </div>
         </div>
-
-        {/* Variation */}
-        {/* <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4'>
-          <p className='text-lg font-semibold text-gray-700 mb-8'>Variation</p>
-          <Variations dispatch={dispatch} state={state} />
-        </div> */}
-        <div>
-          <NewVariations dispatch={dispatch} state={state} colors={colors} sizes={sizes}/>
-        </div>
-
-        {/* Shipping */}
-        {/* <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4'>
-          <p className='text-lg font-semibold text-gray-700 mb-8'>Shipping</p>
-
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-x-4 items-center'>
-            <div className='mb-6'>
-              <label htmlFor='sku' className='text-sm text-neutral mb-2 block'>
-                Weight
-              </label>
-              <TextInput
-                placeholder='Type product weight...'
-                id='sku'
-                onChange={formik.handleChange}
-                value={formik.values.sku}
-                error={formik.errors.sku}
-              />
-            </div>
-            
-            <div className='mb-6'>
-              <label
-                htmlFor='barcode'
-                className='text-sm text-neutral mb-2 block'
-              >
-                Length
-              </label>
-              <TextInput
-                placeholder='Type product length...'
-                id='barcode'
-                onChange={formik.handleChange}
-                value={formik.values.barcode}
-                error={formik.errors.barcode}
-              />
-            </div>
-            
-            <div className='mb-6'>
-              <label
-                htmlFor='amount'
-                className='text-sm text-neutral mb-2 block'
-              >
-                Height
-              </label>
-              <TextInput
-                inputMode='numeric'
-                placeholder='Type product height...'
-                id='amount'
-                onChange={formik.handleChange}
-                value={formik.values.amount}
-                error={formik.errors.amount}
-                type='number'
-              />
-            </div>
-            
-            <div className='mb-6'>
-              <label
-                htmlFor='amount'
-                className='text-sm text-neutral mb-2 block'
-              >
-                Width
-              </label>
-              <TextInput
-                inputMode='numeric'
-                placeholder='Type product quantity...'
-                id='amount'
-                onChange={formik.handleChange}
-                value={formik.values.amount}
-                error={formik.errors.amount}
-                type='number'
-              />
-            </div>
-          </div>
-        </div> */}
       </div>
 
       {/* Column 2 */}
