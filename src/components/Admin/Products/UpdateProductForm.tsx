@@ -75,8 +75,6 @@ export default function UpdateProductForm({
   const [brandToAdd, setBrandToAdd] = useState<string | null | undefined | any>("");
   const [addBrandDisplay, setAddBrandDisplay] = useState<boolean | null>(false);
 
-  
-
   const formik = useFormik({
     initialValues: {
       name: '',

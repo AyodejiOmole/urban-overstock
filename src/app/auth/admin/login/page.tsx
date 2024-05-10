@@ -127,14 +127,14 @@ export default function AdminLogin() {
           />
         </div>
 
-        <div className='flex items-center justify-end mb-6'>
+        {/* <div className='flex items-center justify-end mb-6'>
           <Link
             href='/auth/reset-password'
             className='font-semibold text-primary'
           >
             Forgot Password?
           </Link>
-        </div>
+        </div> */}
 
         <Button block rounded loading={formik.isSubmitting} type='submit'>
           Log In
