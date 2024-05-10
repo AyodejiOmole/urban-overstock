@@ -15,22 +15,7 @@ export default async function AdminCustomers() {
 
   return (
     <section>
-      <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8'>
-        <p className='text-xl font-bold text-gray-700'>Customers</p>
-
-        <div className='flex items-center gap-4'>
-          <Button variant='outlined' color='#F2C94C'>
-            <PiExportBold />
-            Block
-          </Button>
-          {/* <Link href='/admin/customers/new'> */}
-            <Button variant='outlined' color='#F2C94C'>
-              <FaPlus />
-              Unblock
-            </Button>
-          {/* </Link> */}
-        </div>
-      </div>
+      
 
       {/* Categories Table */}
       <Customers customers={customers}/>

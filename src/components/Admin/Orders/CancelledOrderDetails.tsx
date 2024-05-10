@@ -10,7 +10,7 @@ export default function CancelledOrderDetails({
   cancelledOrderHistory,
   cancelledOrdersDetails,
 }: {
-    cancelledOrderHistory: any;
+    cancelledOrderHistory: IOrder | undefined;
     cancelledOrdersDetails: any;
 }) {
   return (
@@ -24,12 +24,12 @@ export default function CancelledOrderDetails({
           <div className='pt-32 px-4'>
             <div className='p-4 text-center'>
               <p className='font-semibold text-gray-700 text-xl'>
-                Isaiah Ernest
-                {/* {customerDetails?.firstName + " " + customerDetails?.lastName} */}
+                {/* Isaiah Ernest */}
+                {cancelledOrderHistory?.receiverName}
               </p>
               <p className='text-neutral'>
-                @isaiah_ernest
-                {/* {customerDetails?.email} */}
+                {/* @isaiah_ernest */}
+                {cancelledOrderHistory?.receiverPhone}
               </p>
             </div>
 
@@ -44,8 +44,8 @@ export default function CancelledOrderDetails({
                 <div className='flex-1'>
                   <p className='text-neutral font-medium'>User ID</p>
                   <p className='text-gray-800 font-light text-sm'>
-                    U011012
-                    {/* {customerDetails?.uuid} */}
+                    {/* U011012 */}
+                    {cancelledOrderHistory?.userId}
                   </p>
                 </div>
               </div>
@@ -70,7 +70,8 @@ export default function CancelledOrderDetails({
                 <div className='flex-1'>
                   <p className='text-neutral font-medium'>Phone Number</p>
                   <p className='text-gray-800 font-light text-sm'>
-                    0908 9898 990
+                    {/* 0908 9898 990 */}
+                    {cancelledOrderHistory?.receiverPhone}
                     {/* {customerDetails?.shippingAddress?.phoneNumber} */}
                   </p>
                 </div>
@@ -83,7 +84,8 @@ export default function CancelledOrderDetails({
                 <div className='flex-1'>
                   <p className='text-neutral font-medium'>Delivery Address</p>
                   <p className='text-gray-800 font-light text-sm'>
-                    1833 Bel Meadow Drive, Fontana, California 92335, USA
+                    {/* 1833 Bel Meadow Drive, Fontana, California 92335, USA */}
+                    {cancelledOrderHistory?.address}
                     {/* {customerDetails?.shippingAddress?.streetAddress + " " + customerDetails?.shippingAddress?.city + " " + customerDetails?.shippingAddress?.state + " " + customerDetails?.shippingAddress?.country} */}
                   </p>
                 </div>
@@ -107,7 +109,7 @@ export default function CancelledOrderDetails({
       {/* Column 2 */}
       <div className='lg:col-span-4'>
         <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg'>
-          <CancelledOrderTransactionTable history={cancelledOrderHistory}/>
+          <CancelledOrderTransactionTable history={cancelledOrderHistory?.orderProduct}/>
         </div>
       </div>
     </div>

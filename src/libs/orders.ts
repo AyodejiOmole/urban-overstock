@@ -26,3 +26,27 @@ export default async function getOrders() {
 
   return res.data;
 }
+
+export async function getSingleOrder(orderId: string) {
+  const token = getCookie('urban-token', { cookies });
+
+  const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
+
+  const apiRes = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.ORDERS}/${orderId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Cache-Control': 'no-cache, max-age=0',
+    },
+
+    // cache: 'no-store',
+    // next: {
+    //   revalidate: 10,
+    // },
+  });
+
+  const res = await apiRes.json();
+
+  if (!res.status) throw new Error('Failed to fetch orders');
+
+  return res.data;
+}

@@ -19,14 +19,18 @@ export default function CustomersTable({
   selectedDate,
   customers,
   searchValue,
+  selectedCustomers,
+  handleChangeSelectedCustomers,
 }: {
   selectedDate: Date | (Date | null)[] | Date[] | null | undefined | number;
   searchValue: string;
   customers: ICustomers | undefined;
+  selectedCustomers: ICustomers;
+  handleChangeSelectedCustomers?: (e: any) => void;
 }) {
-  const [selectedCustomers, setSelectedCustomers] = useState<
-    ICustomer[] | null
-  >(null);
+  // const [selectedCustomers, setSelectedCustomers] = useState<
+  //   ICustomer[] | null
+  // >(null);
   const [rowClick, setRowClick] = useState<boolean>(true);
 
   const dateTemplate = (customer: ICustomer) =>
@@ -74,7 +78,8 @@ export default function CustomersTable({
   }
 
   const dateChangeHandler = (e: any) => {
-    setSelectedCustomers(e.value);
+    // setSelectedCustomers(e.value);
+    handleChangeSelectedCustomers!(e.value);
   };
 
   function statusTemplate(customer: ICustomer) {
@@ -83,14 +88,14 @@ export default function CustomersTable({
     let styles = '';
 
     switch (status) {
-      case 'active':
+      case 'ACTIVATED':
         styles = 'bg-green-100 text-green-600';
         break;
-      case 'blocked':
+      case 'BLOCKED':
         styles = 'bg-red-100 text-red-600';
         break;
       default:
-        styles = 'bg-blue-100 text-blue-600';
+        styles = 'bg-yellow-100 text-yellow-600';
     }
 
     return (
@@ -121,8 +126,8 @@ export default function CustomersTable({
       </div>
       <DataTable
         value={matchedCustomers}
-        selectionMode={rowClick ? null : 'multiple'}
-        selection={selectedCustomers!}
+        selection={selectedCustomers}
+        selectionMode={rowClick ? null : 'checkbox'}
         onSelectionChange={dateChangeHandler}
         dataKey='id'
         tableStyle={{ minWidth: '50rem' }}
@@ -136,7 +141,7 @@ export default function CustomersTable({
         sortField='dateAdded'
       >
         <Column
-          selectionMode='multiple'
+          selectionMode='single'
           headerStyle={{ width: '3rem' }}
           className='border-red-500'
         ></Column>
