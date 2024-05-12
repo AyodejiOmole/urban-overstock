@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 import HTTPService from '@/services/http';
 import { useRouter } from 'next/navigation';
 import ENDPOINTS from '@/config/ENDPOINTS';
+import Pagination from '@/components/Shared/Pagination';
 
 export default function Customers({
   customers,
@@ -89,7 +90,10 @@ export default function Customers({
   return (
     <div>
       <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8'>
-        <p className='text-xl font-bold text-gray-700'>Customers</p>
+        <div>
+          <p className='text-xl font-bold text-gray-700'>Customers</p>
+          <Pagination />
+        </div>
 
         <div className='flex items-center gap-4'>
           <Button variant='outlined' color='#F2C94C' onClick={() => updateCustomer(selectedCustomers, "ACTIVATED")}>

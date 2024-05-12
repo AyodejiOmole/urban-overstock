@@ -13,7 +13,7 @@ import { DataTable } from 'primereact/datatable';
 import React, { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { FaEye } from 'react-icons/fa';
-import { MdOutlineDelete } from 'react-icons/md';
+import { MdOutlineDelete, MdOutlineModeEdit } from 'react-icons/md';
 import { RxPencil2 } from 'react-icons/rx';
 import Cookies from 'universal-cookie';
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
@@ -84,7 +84,8 @@ export default function ProductsTable({
           href={`/admin/products/${product.id}?edit=true`}
           className='text-xl text-neutral'
         >
-          <RxPencil2 />
+          {/* <RxPencil2 /> */}
+          <MdOutlineModeEdit />
         </Link>
         <button onClick={() => deleteProduct(product.id)}>
           <MdOutlineDelete className='text-xl' />
