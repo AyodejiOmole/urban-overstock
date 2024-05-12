@@ -14,6 +14,7 @@ import { RxPencil2 } from 'react-icons/rx';
 import moment from 'moment';
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEdit } from "react-icons/md";
+import { IoIosArrowDown } from 'react-icons/io';
 
 export default function CustomersTable({
   selectedDate,
@@ -139,6 +140,7 @@ export default function CustomersTable({
         className='rounded-md'
         sortOrder={-1}
         sortField='dateAdded'
+        sortIcon={<IoIosArrowDown />}
       >
         <Column
           selectionMode='single'

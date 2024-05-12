@@ -11,6 +11,7 @@ import React, { useState, useMemo } from 'react';
 import { FaEye } from 'react-icons/fa';
 import { RxPencil2 } from 'react-icons/rx';
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
+import { IoIosArrowDown } from 'react-icons/io';
 // import { paginatorTemplate2 } from '@/components/Global/PaginatorTemplate';
 
 export default function OrdersTable({
@@ -196,6 +197,7 @@ export default function OrdersTable({
         className='rounded-md text-sm'
         sortOrder={-1}
         sortField='createdAt'
+        sortIcon={<IoIosArrowDown />}
       >
         <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} />
         <Column field='uuid' header='Order ID' />

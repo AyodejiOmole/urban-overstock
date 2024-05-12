@@ -15,6 +15,7 @@ import HTTPService from '@/services/http';
 import ENDPOINTS from '@/config/ENDPOINTS';
 import { GetColorName } from 'hex-color-to-color-name';
 import { FaHeartPulse } from 'react-icons/fa6';
+import { IoIosArrowDown } from 'react-icons/io';
 
 interface ProductVariationProps {
   value: string;
@@ -242,20 +243,24 @@ const VariationItem = ({
       code,
     }
 
-    try {
-      httpService
-        .post(ENDPOINTS.SIZE_SETTINGS, data, `Bearer ${token}`)
-        .then((apiRes) => {
-          console.log('Response: ', apiRes);
-
-          if (apiRes.data) {
-            sizes?.push(apiRes.data);
-            toast.success('Size preset added successfully.');
-            setDisplayAddSize(-1);
-          }
-        });
-    } catch (error) {
-      console.log(error);
+    if(sizes?.find((existingSize: ISize) => existingSize.code === code) || sizes?.find((existingSize: ISize) => existingSize.name === size)) {
+      toast.error("This size preset already exists!");
+    } else {
+      try {
+        httpService
+          .post(ENDPOINTS.SIZE_SETTINGS, data, `Bearer ${token}`)
+          .then((apiRes) => {
+            console.log('Response: ', apiRes);
+  
+            if (apiRes.data) {
+              sizes?.push(apiRes.data);
+              toast.success('Size preset added successfully.');
+              setDisplayAddSize(-1);
+            }
+          });
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
@@ -270,20 +275,24 @@ const VariationItem = ({
       code: color,
     }
 
-    try {
-      httpService
-        .post(ENDPOINTS.COLOR_SETTINGS, data, `Bearer ${token}`)
-        .then((apiRes) => {
-          console.log('Response: ', apiRes);
-
-          if (apiRes.data) {
-            toast.success('Color preset added successfully.');
-            colors?.push(apiRes.data);
-            setDisplayAddColor(false);
-          }
-        });
-    } catch (error) {
-      console.log(error);
+    if(colors?.find((existingColor: IColor) => existingColor.code.toString() === color)) {
+      toast.error("This color preset already exists!");
+    } else {
+      try {
+        httpService
+          .post(ENDPOINTS.COLOR_SETTINGS, data, `Bearer ${token}`)
+          .then((apiRes) => {
+            console.log('Response: ', apiRes);
+  
+            if (apiRes.data) {
+              toast.success('Color preset added successfully.');
+              colors?.push(apiRes.data);
+              setDisplayAddColor(false);
+            }
+          });
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
@@ -350,6 +359,7 @@ const VariationItem = ({
                 onClick={() => setActiveColorPicker(true)}
             >
                 {variationColor === "" ? "Select a color..." : variationColor}
+                <IoIosArrowDown className='absolute right-4 top-auto bottom-auto'/>
             </div>
 
               {activeColorPicker && (
@@ -392,6 +402,24 @@ const VariationItem = ({
                           )
                         })}
                       </div>
+                      {/* <div>
+                        {colors?.map((color: IColor, colorIndex: number) => {
+                            return (
+                                <Button 
+                                  variant='outlined' 
+                                  color='grey' 
+                                  key={colorIndex} 
+                                  onClick={() => {
+                                    setVariationColor(color?.name);
+                                    updateColorVaritionValue(color.id);
+                                    setActiveColorPicker(false);
+                                  }}
+                                >
+                                  <p className='text-xs text-neutral'>{color?.name}</p>
+                                </Button>
+                            )
+                          })}
+                      </div> */}
                   </div>
                 </div>
               )}
@@ -431,22 +459,6 @@ const VariationItem = ({
         {variation.sizeOptions.map((option, index) => {
           return (
             <div className='items-start gap-4 w-full' key={index}>
-              {/* <div className='mb-4 w-full'>
-                  <label htmlFor='size' className='text-sm text-neutral mb-2 block'>
-                    Size:
-                  </label>
-                  <select id='size' value={option.sizeId} onChange={(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => updateVariationValue(e, index)}>
-                    <option value=''>Select Size</option>
-                    <option value='XS'>XS</option>
-                    <option value='S'>S</option>
-                    <option value='M'>M</option>
-                    <option value='L'>L</option>
-                    <option value='XL'>XL</option>
-                    <option value='XXL'>XXL</option>
-                    <option value='3XL'>3XL</option>
-                  </select>
-              </div> */}
-
               <div className='mb-4 w-full relative'>
                 <label htmlFor='size' className='text-sm text-neutral mb-2 block'>
                   Size:
@@ -457,9 +469,11 @@ const VariationItem = ({
                     }
                     onClick={() => setSizePicker(index)}
                 >
-                    {/* {sizes?.filter((size: any) => size.id == option?.sizeId)?.code} */}
-                    {option?.sizeId}
+                    {sizes?.find((size: ISize) => size.id == option?.sizeId)?.code ? sizes?.find((size: ISize) => size.id == option?.sizeId)?.code : "Select a variation size..."}
+                    {/* {brands?.filter((brand) => brand.id === formik.values.brandId)[0]?.name ? brands?.filter((brand) => brand.id === formik.values.brandId)[0]?.name : "Select a brand..."} */}
+                    {/* {option?.sizeId} */}
                     {/* {} */}
+                    <IoIosArrowDown className='absolute right-4 top-auto bottom-auto'/>
                 </div>
                 
                 {sizePicker === index && (

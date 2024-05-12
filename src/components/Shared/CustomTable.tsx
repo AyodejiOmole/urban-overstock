@@ -3,6 +3,7 @@ import { Column, ColumnBodyOptions } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import React, { useEffect, useState } from 'react';
 import Loader from './Loader';
+import { IoIosArrowDown } from 'react-icons/io';
 
 export default function CustomTable(props: TableProps) {
   const {
@@ -45,6 +46,7 @@ export default function CustomTable(props: TableProps) {
           tableStyle={{ minWidth: '50rem' }}
           className='text-sm rounded-xl'
           dataKey='id'
+          sortIcon={<IoIosArrowDown />}
           // paginator
         >
           {/* If selectable is enabled */}

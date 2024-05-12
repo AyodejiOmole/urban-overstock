@@ -10,6 +10,7 @@ import { FaEye } from 'react-icons/fa';
 import { MdOutlineDelete } from 'react-icons/md';
 import { RxPencil2 } from 'react-icons/rx';
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
+import { IoIosArrowDown } from 'react-icons/io';
 
 export default function HomeSlideshowTable({
   selectedDate,
@@ -88,6 +89,7 @@ export default function HomeSlideshowTable({
         className='rounded-xl text-sm'
         sortOrder={-1}
         sortField='createdAt'
+        sortIcon={<IoIosArrowDown />}
       >
         <Column
           selectionMode='multiple'

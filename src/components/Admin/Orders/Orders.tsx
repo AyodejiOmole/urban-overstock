@@ -108,7 +108,11 @@ export default function Orders({ orders }: { orders: IOrder[] | null }) {
             <Button >
               <RiShoppingBasket2Line />
               Cancelled Orders
-              <div className='bg-red-500 p-1 text-xs rounded-full flex justify-center items-center'>{orders?.filter(order => order.status.toLocaleLowerCase() === "cancelled").length}</div>
+              {/* <div className='bg-red-500 p-1 text-xs rounded-full flex justify-center items-center'></div> */}
+              
+              <div className='py-1 px-[6px] bg-red-500 rounded-full text-[10px] text-white'>
+                {orders?.filter(order => order.status.toLocaleLowerCase() === "cancelled").length}
+              </div>
             </Button>
           </Link>
           {selectedOrders.length > 0 && (
