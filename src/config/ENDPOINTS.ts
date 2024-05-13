@@ -4,6 +4,7 @@ const ENDPOINTS = {
   CATEGORIES: `categories`,
   NOTIFICATIONS: `notifications`,
   CUSTOMERS: `user/customer`,
+  RETURN_REQUEST: `return-request`,
   SIGN_IN_FIREBASE: `auth/login/firebase`,
   SIGN_IN: `auth/login`,
   SIGN_UP: `auth/register`,

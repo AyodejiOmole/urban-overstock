@@ -45,7 +45,7 @@ export default function TextInput(props: InputType) {
     className
   );
 
-  const [fValue, setFValue] = useState<string>(value ?? "");
+  const [fValue, setFValue] = useState<string>(value.toLocaleString() ?? "");
 
   //Convert value to a formated currency
   const formatValue = (val: string): string => {
