@@ -163,9 +163,9 @@ export default function AdminSidebar({ isOpen,isOpenlg, toggleSidebar,toggleSide
                           {link?.children?.map((el) => (
                             <Link
                               key={el.name}
-                              className={`capitalize my-3 rounded block ${
+                              className={`capitalize my-3 rounded-[8px] block ${
                                 pathname.trim() === el.page
-                                ? 'bg-primary'
+                                ? 'bg-primary px-[10px] py-[10px]'
                                 : ''
                                 } 
                               `}
