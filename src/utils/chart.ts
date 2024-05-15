@@ -20,7 +20,7 @@ export const admin_sales_chart_options = {
       position: 'top' as const,
     },
     title: {
-      display: true,
+      display: false,
       text: 'Sales Chart',
     },
   },
