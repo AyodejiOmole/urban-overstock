@@ -50,30 +50,28 @@ export default function Customers({
     setSelectedCustomers(e.value);
   }
 
-  async function updateCustomer(customer: ICustomers, status: string) {
-    if(customer) {
+  async function updateCustomer(customers: ICustomers, status: string) {
+    if(customers) {
       const token = cookies.get('urban-token');
 
-      toast.loading('Updating customers...');
+      toast.loading('Updating customers status...');
 
-      // const data = orders.map((order) => {
-      //   const { id } = order;
-      //   return { status: status }
-      // }); 
+      const data = { ids: [...customers.map((customer: ICustomer) => { return customer.id } )], status: status }
+      console.log(data);
 
-      // const res = await httpService.patch(
-      //   `${ENDPOINTS.CUSTOMERS}/${customer.id}`,
-      //   { status: status },
-      //   `Bearer ${token}`
-      // );
+      const res = await httpService.patch(
+        `${ENDPOINTS.CUSTOMERS}/update-bulk`,
+        data,
+        `Bearer ${token}`
+      );
 
-      // toast.dismiss();
-      // if (res.status === 200) {
-      //   console.log(res);
-      //   toast.success('Customers successfully updated!');
-      //   router.refresh();
-      // } else toast.error('Cannot update customers at this time!');
-    } else toast.error("Please select a customer to update!");
+      toast.dismiss();
+      if (res.status === 200) {
+        console.log(res);
+        toast.success('Customers status successfully updated!');
+        router.refresh();
+      } else toast.error('Cannot update customers status at this time!');
+    } else toast.error("Please select at least one customer to update!");
 }
 
   const handleSelectDate = (

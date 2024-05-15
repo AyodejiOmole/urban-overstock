@@ -128,8 +128,8 @@ export default function CustomersTable({
       <DataTable
         value={matchedCustomers}
         selection={selectedCustomers}
-        selectionMode={rowClick ? null : 'checkbox'}
-        onSelectionChange={dateChangeHandler}
+        selectionMode={rowClick ? null : 'multiple'}
+        onSelectionChange={handleChangeSelectedCustomers}
         dataKey='id'
         tableStyle={{ minWidth: '50rem' }}
         paginator
@@ -143,9 +143,9 @@ export default function CustomersTable({
         sortIcon={<IoIosArrowDown />}
       >
         <Column
-          selectionMode='single'
+          selectionMode='multiple'
           headerStyle={{ width: '3rem' }}
-          className='border-red-500'
+          // className='border-red-500'
         ></Column>
         <Column
           field='customer.item'
