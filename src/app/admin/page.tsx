@@ -14,7 +14,7 @@ const AdminDashboard = async () => {
 
     return (
         <section>
-        <Header />
+        <Header  />
         <StatCards />
         <SalesChart />
         <Sales products={products}/>

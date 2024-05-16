@@ -25,7 +25,34 @@ export default async function getAllNotifications() {
 
   console.log(res);
 
-  if (!res.status) throw new Error('Failed to fetch products');
+  if (!res.status) throw new Error('Failed to fetch notifications.');
+
+  return res.data;
+}
+
+export async function getUnreadNotifications() {
+  const token = getCookie('urban-token', { cookies });
+
+  const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
+
+  const apiRes = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.NOTIFICATIONS}/count-unread`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+
+    cache: 'no-store',
+    // next: {
+    //   revalidate: 10,
+    // },
+  });
+
+  console.log(apiRes);
+
+  const res = await apiRes.json();
+
+  console.log(res);
+
+  if (!res.status) throw new Error('Failed to fetch notifications.');
 
   return res.data;
 }

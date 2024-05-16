@@ -2,7 +2,7 @@ const ENDPOINTS = {
   UPLOAD_FILE: `files/upload`,
   PRODUCTS: `products`,
   CATEGORIES: `categories`,
-  NOTIFICATIONS: `notifications`,
+  NOTIFICATIONS: `notification`,
   CUSTOMERS: `user/customer`,
   RETURN_REQUEST: `return-request`,
   SIGN_IN_FIREBASE: `auth/login/firebase`,

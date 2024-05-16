@@ -27,11 +27,14 @@ export interface AdminType {
 export default function AdminHeader({
   isOpen,
   toggleSidebar,
+  unreadNotifications,
 }: {
   isOpen: boolean;
   toggleSidebar: () => void;
+  unreadNotifications: number;
 }) {
   const [adminDetails, setAdminDetails] = useState<null | AdminType>(null);
+  console.log(unreadNotifications);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -63,7 +66,7 @@ export default function AdminHeader({
         </button> */}
         {/* <Notification icon={<TbCalendar />} number={2} /> */}
         {/* <Notification icon={<BiBell />} number={10} /> */}
-        <Notification icon={<FiMail />} number={33} />
+        <Notification icon={<FiMail />} number={unreadNotifications} />
 
         <div className='h-12 w-[2px] bg-gray-200'></div>
 
