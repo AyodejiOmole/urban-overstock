@@ -14,7 +14,7 @@ import logo from '../../../public/logo.png';
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 
 type SidebarProps = {
-  isOpen: Boolean;
+  isOpen: boolean;
   toggleSidebar: () => void;
 };
 
