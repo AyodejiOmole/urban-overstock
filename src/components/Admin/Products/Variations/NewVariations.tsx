@@ -850,16 +850,28 @@ const ProductVariations = ({
 
       const jsonRes = await response.json();
       console.log(jsonRes);
-      const productVarations = [{...variation, productId: productId, imageUrl: jsonRes.url}];
+      
+      const { colorId, sizeOptions } = variation;
+      const data = {
+        productVarations: [
+          {
+            colorId,
+            sizeOptions,
+            productId: productId, 
+            imageUrl: jsonRes.url
+          }
+        ]
+      }
 
       if(jsonRes) {
         httpService
-          .post(`${ENDPOINTS.PRODUCTS}/add-varation`, productVarations, `Bearer ${token}`)
+          .post(`${ENDPOINTS.PRODUCTS}/add-varation`, data, `Bearer ${token}`)
           .then((apiRes) => {
             console.log('Response: ', apiRes);
 
             if (apiRes.data) {
               toast.success('Product variation added successfully.');
+              dispatch({ type: 'ADD', payload: apiRes.data, newState: [] });
               console.log(apiRes.data);
             }
           });

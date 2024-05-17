@@ -44,6 +44,7 @@ export interface ISingleProduct {
   imageUrls: string
   amount: number
   discountType: string
+  costPrice: number
   discountPercentage: number
   taxClass: string
   vatAmount: number
