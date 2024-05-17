@@ -124,11 +124,15 @@ export default function Orders({ orders }: { orders: IOrder[] | null }) {
 
               {cardOpen && 
                 <div className='absolute card z-20 rounded-xl p-4 bg-white border border-gray-200'>
-                  <p onClick={() => bulkUpdateOrders(selectedOrders, "Cancel")} className='text-sm cursor-pointer p-2 text-black hover:bg-[#CFA31C] flex justify-center items-center'>Cancel</p>
+                  <p onClick={() => bulkUpdateOrders(selectedOrders, "Cancelled")} className='text-sm cursor-pointer p-2 text-black hover:bg-[#CFA31C] flex justify-center items-center'>Cancelled</p>
                   <p onClick={() => bulkUpdateOrders(selectedOrders, "Processing")} className='text-sm cursor-pointer p-2 text-black hover:bg-[#CFA31C] flex justify-center items-center'>Processing</p>
                   <p onClick={() => bulkUpdateOrders(selectedOrders, "Shipping")} className='text-sm p-2 cursor-pointer text-black hover:bg-[#CFA31C] flex justify-center items-center'>Shipping</p>
                   <p onClick={() => bulkUpdateOrders(selectedOrders, "Delivered")} className='text-sm p-2 cursor-pointer text-black hover:bg-[#CFA31C] flex justify-center items-center'>Delivered</p>
-              </div>
+                  <p onClick={() => bulkUpdateOrders(selectedOrders, "Placed")} className='text-sm p-2 cursor-pointer text-black hover:bg-[#CFA31C] flex justify-center items-center'>Placed</p>
+                  <p onClick={() => bulkUpdateOrders(selectedOrders, "Packed")} className='text-sm p-2 cursor-pointer text-black hover:bg-[#CFA31C] flex justify-center items-center'>Packed</p>
+                  <p onClick={() => bulkUpdateOrders(selectedOrders, "Confirmed")} className='text-sm p-2 cursor-pointer text-black hover:bg-[#CFA31C] flex justify-center items-center'>Confirmed</p>
+                  {/* [Placed, Processing, Packed, Shipping, Delivered, Cancelled, Confirmed] */}
+                </div>
               }
               
             </div>
