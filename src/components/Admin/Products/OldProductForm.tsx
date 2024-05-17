@@ -712,7 +712,7 @@ export default function OldProductForm({
             />
           </div>
           {/*  */}
-          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 xl:grid-cols-2 sm:gap-6 md:gap-0 xl:gap-6 items-center'>
+          <div className='grid grid-cols-1 relative sm:grid-cols-2 md:grid-cols-1 xl:grid-cols-2 sm:gap-6 md:gap-0 xl:gap-6 items-center'>
             <div>
               <div className='mb-6'>
                 <label
@@ -738,11 +738,12 @@ export default function OldProductForm({
                         )
                     })}
                 </select>
+                <IoIosArrowDown className='absolute right-4 top-auto bottom-auto'/>
 
                 <CustomError error={formik.errors.discountType} />
               </div>
 
-              <div className='mb-6'>
+              <div className='mb-6 relative'>
                 <label
                   htmlFor='taxClass'
                   className='text-sm text-neutral mb-2 block'
@@ -761,6 +762,8 @@ export default function OldProductForm({
                   </option>
                   <option value='none'>Tax Free</option>
                 </select>
+
+                <IoIosArrowDown className='absolute right-4 top-auto bottom-auto'/>
 
                 <CustomError error={formik.errors.taxClass} />
               </div>

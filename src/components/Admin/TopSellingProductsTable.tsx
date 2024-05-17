@@ -112,10 +112,10 @@ export default function TopSellingProductsTable({
         // onSelectionChange={handleChangeSelectedOrders}
         dataKey='uuid'
         tableStyle={{ minWidth: '50rem' }}
-        paginator
-        paginatorTemplate={paginatorTemplate}
-        paginatorClassName='flex'
-        rows={20}
+        // paginator
+        // paginatorTemplate={paginatorTemplate}
+        // paginatorClassName='flex'
+        rows={10}
         rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-md text-sm'
         sortOrder={-1}
