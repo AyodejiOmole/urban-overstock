@@ -12,48 +12,48 @@ import { FaEye } from 'react-icons/fa';
 import { RxPencil2 } from 'react-icons/rx';
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 import { IoIosArrowDown } from 'react-icons/io';
-import { IReturnRequests } from '@/interfaces/return-requests';
+import { IReturnRequest, IReturnRequests } from '@/interfaces/return-requests';
 
-export default function OrdersTable({
+export default function ReturnRequestTable({
   orders,
-  page = 'orders',
+//   page = 'orders',
   handleChangeSelectedOrders,
   selectedOrders,
   selectedDate,
   searchValue,
   categoryNavigation,
 }: {
-  orders: IOrder[] | null;
+  orders: IReturnRequests | null;
   searchValue: string;
   selectedDate?: number | null;
-  page?: 'orders' | 'return-request' | 'cancelled orders';
+//   page?: 'orders' | 'return-request' | 'cancelled orders';
   handleChangeSelectedOrders?: (e: any) => void;
-  selectedOrders: IOrder[];
+  selectedOrders: IReturnRequests;
   categoryNavigation?: any;
 }) {
   const [rowClick, setRowClick] = useState<boolean>(true);
 
-  const dateTemplate = (order: IOrder) => {
+  const dateTemplate = (order: IReturnRequest) => {
     const { createdAt } = order;
 
     return moment(createdAt).format('MMM Do YYYY, h:mm a');
   };
 
-  function amountTemplate(order: IOrder) {
+  function amountTemplate(order: IReturnRequest) {
     const { orderProduct } = order;
 
-    const totalAmount = orderProduct.reduce((a, b: OrderProductItem) => {
-      return a + b.amount;
-    }, 0);
+    // const totalAmount = orderProduct.reduce((a, b: OrderProductItem) => {
+    //   return a + b.amount;
+    // }, 0);
 
-    return formatCurrency(totalAmount);
+    return formatCurrency(orderProduct.total);
   }
 
-  function actionTemplate(order: IOrder) {
+  function actionTemplate(order: IReturnRequest) {
     return (
       <div className='flex items-center gap-3'>
         <Link
-          href={page === "cancelled orders" ? `/admin/orders/cancelled-orders/${order.id}` : `/admin/${page}/${order.id}`}
+          href={`/admin/return-request/${order.id}`}
           className='text-xl text-neutral'
         >
           <FaEye />
@@ -68,41 +68,41 @@ export default function OrdersTable({
     );
   }
 
-  function statusTemplate(order: IOrder) {
-    const { status } = order;
+//   function statusTemplate(order: IReturnRequest) {
+//     const { status } = order;
 
-    let styles = '';
+//     let styles = '';
 
-    switch (status.toLowerCase()) {
-      case 'processing':
-        styles = 'bg-orange-100 text-orange-600';
-        break;
-      case 'shipped':
-        styles = 'bg-blue-100 text-blue-600';
-        break;
-      case 'delivered':
-        styles = 'bg-green-100 text-green-600';
-        break;
-      case 'cancelled' || 'refunded':
-        styles = 'bg-red-100 text-red-600';
-        break;
-      default:
-        styles = 'bg-purple-50 text-purple-600';
-        break;
-    }
+//     switch (status.toLowerCase()) {
+//       case 'processing':
+//         styles = 'bg-orange-100 text-orange-600';
+//         break;
+//       case 'shipped':
+//         styles = 'bg-blue-100 text-blue-600';
+//         break;
+//       case 'delivered':
+//         styles = 'bg-green-100 text-green-600';
+//         break;
+//       case 'cancelled' || 'refunded':
+//         styles = 'bg-red-100 text-red-600';
+//         break;
+//       default:
+//         styles = 'bg-purple-50 text-purple-600';
+//         break;
+//     }
 
-    return (
-      <span className={`p-2 px-4 text-xs font-medium rounded-full ${styles}`}>
-        {order.status}
-      </span>
-    );
-  }
+//     return (
+//       <span className={`p-2 px-4 text-xs font-medium rounded-full ${styles}`}>
+//         {order.status}
+//       </span>
+//     );
+//   }
 
-  function productTemplate(order: IOrder) {
+  function productTemplate(order: IReturnRequest) {
     return (
       <div className='flex items-center gap-4'>
         <Image
-          src={order.orderProduct[0].image}
+          src={order.orderProduct.image}
           alt='image'
           width={20}
           height={20}
@@ -111,23 +111,23 @@ export default function OrdersTable({
 
         <div className='div capitalize'>
           <p className='text-sm flex-1 font-medium'>
-            {order.orderProduct[0].productName}
+            {order.orderProduct.productName}
           </p>
-          {order.orderProduct.length > 1 && (
+          {/* {order.orderProduct && (
             <p className='text-xs text-neutral'>
               +{order.orderProduct.length} other products
             </p>
-          )}
+          )} */}
         </div>
       </div>
     );
   }
 
-  function customerTemplate(order: IOrder) {
+  function customerTemplate(order: IReturnRequest) {
     return (
       <div className='flex flex-col gap-2 capitalize'>
-        <p className='text-sm flex-1 font-medium'>{order.receiverName}</p>
-        <p className='text-xs text-neutral'>{order.receiverPhone}</p>
+        <p className='text-sm flex-1 font-medium'>{order.user.firstname + " " + order.user.lastname}</p>
+        <p className='text-xs text-neutral'>{order.user.email}</p>
       </div>
     );
   }
@@ -148,42 +148,30 @@ export default function OrdersTable({
 
   }, [orders, selectedDate, categoryNavigation]);
 
-  const getOrdersByCategoryDate = useMemo(() => {
-    if(categoryNavigation) {
-      return orders?.filter((item) => {
-        const itemDate = new Date(item.createdAt);
-        return itemDate >= categoryNavigation.startDate && itemDate <= categoryNavigation.endDate;
-      });
-    } else return orders;
+//   const getOrdersByCategoryDate = useMemo(() => {
+//     if(categoryNavigation) {
+//       return orders?.filter((item) => {
+//         const itemDate = new Date(item.createdAt);
+//         return itemDate >= categoryNavigation.startDate && itemDate <= categoryNavigation.endDate;
+//       });
+//     } else return orders;
 
-  }, [orders, categoryNavigation]);
+//   }, [orders, categoryNavigation]);
 
-  const matchedOrders = useMemo(() => {
-    if (searchValue?.trim().length === 0) return getOrdersByDate;
+//   const matchedOrders = useMemo(() => {
+//     if (searchValue?.trim().length === 0) return getOrdersByDate;
 
-    return getOrdersByDate?.filter(
-      (order) =>
-        order.uuid.toLowerCase().includes(searchValue) ||
-        order.shippingId.toLowerCase().includes(searchValue)
-    );
-    // if(selectedDate) {
-      
-    // }
-
-    // if(categoryNavigation) {
-    //   return getOrdersByCategoryDate?.filter(
-    //     (order) =>
-    //       order.uuid.toLowerCase().includes(searchValue) ||
-    //       order.shippingId.toLowerCase().includes(searchValue)
-    //   );
-    // }
-    
-  }, [searchValue, getOrdersByDate]);
+//     return getOrdersByDate?.filter(
+//       (order) =>
+//         order.uuid.toLowerCase().includes(searchValue) ||
+//         order.shippingId.toLowerCase().includes(searchValue)
+//     );
+//   }, [searchValue, getOrdersByDate]);
 
   return (
     <div className='card rounded-xl p-4 bg-white border border-gray-200'>
       <DataTable
-        value={matchedOrders ?? []}
+        value={orders ?? []}
         selectionMode={rowClick ? null : 'multiple'}
         selection={selectedOrders!}
         onSelectionChange={handleChangeSelectedOrders}
@@ -200,7 +188,7 @@ export default function OrdersTable({
         sortIcon={<IoIosArrowDown />}
       >
         <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} />
-        <Column field='uuid' header='Order ID' />
+        <Column field='orderId' header='Order ID' />
         <Column body={productTemplate} header='Product' />
         <Column field='date' header='Date' body={dateTemplate} sortable />
         <Column
@@ -214,9 +202,8 @@ export default function OrdersTable({
           body={amountTemplate}
           sortable
         />
-        {/* body="Mastercard" */}
-        <Column header='Payment' field="paymentMethod" />
-        <Column field='status' header='Status' sortable body={statusTemplate} />
+        <Column header='Payment' field="order.paymentMethod" />
+        {/* <Column field='status' header='Status' sortable body={statusTemplate} /> */}
         <Column field='action' header='Action' body={actionTemplate} />
       </DataTable>
     </div>

@@ -1,7 +1,7 @@
 'use client';
 import Button from '@/components/Global/Button';
 import { formatCurrency, formatDate } from '@/helpers';
-import { IOrder } from '@/interfaces/orders';
+import { IOrder, OrderProductItem } from '@/interfaces/orders';
 import { orders } from '@/services/customers';
 import moment from 'moment';
 import Image from 'next/image';
@@ -12,23 +12,24 @@ import React, { useState } from 'react';
 import { CiCalendarDate } from 'react-icons/ci';
 import { FaEye } from 'react-icons/fa';
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
+import { IoIosArrowDown } from 'react-icons/io';
 
 export default function CancelledOrderTransactionTable({
   history
 }: {
-  history: IOrder[] | undefined,
+  history: OrderProductItem[] | undefined,
 }) {
   const [selectedOrders, setSelectedOrders] = useState<IOrder[] | null>(null);
   const [rowClick, setRowClick] = useState<boolean>(true);
 
-  const dateTemplate = (order: IOrder) => {
+  const dateTemplate = (order: OrderProductItem) => {
     const { createdAt } = order;
 
     return moment(createdAt).format('MMM Do YYYY');
   };
 
-  function amountTemplate(order: IOrder) {
-    return formatCurrency(order.id);
+  function amountTemplate(order: OrderProductItem) {
+    return formatCurrency(order.total);
   }
 
 //   function statusTemplate(order: IOrder) {
@@ -60,23 +61,23 @@ export default function CancelledOrderTransactionTable({
 //     );
 //   }
 
-  const orderProductsTemplate = (order: IOrder) => {
+  const orderProductsTemplate = (order: OrderProductItem) => {
     return (
       <div className='flex items-center gap-4'>
         <Image
-          src={order.orderProduct[0].image}
+          src={order?.image}
           alt='image'
           width={100}
           height={100}
           className='h-12 w-12 bg-[#1b1b1b] rounded-md'
         />
         <div>
-          <p className='font-medium'>{order.orderProduct[0].productName}</p>
-          {order.orderProduct.length > 1 && (
+          <p className='font-medium'>{order.productName}</p>
+          {/* {order.orderProduct.length > 1 && (
             <p className='text-sm flex-1'>
               +{order.orderProduct.length} other products
             </p>
-          )}
+          )} */}
         </div>
       </div>
     );
@@ -110,6 +111,7 @@ export default function CancelledOrderTransactionTable({
         className='rounded-xl text-sm'
         sortOrder={-1}
         sortField='date'
+        sortIcon={<IoIosArrowDown />}
       >
         <Column field='id' header='Order ID' sortable></Column>
         <Column
@@ -118,13 +120,13 @@ export default function CancelledOrderTransactionTable({
           body={orderProductsTemplate}
         ></Column>
         <Column
-          field='totalAmount'
+          field='total'
           header='Total'
           body={amountTemplate}
           sortable
         ></Column>
         <Column
-          field='date'
+          field='updatedAt'
           header='Date'
           body={dateTemplate}
           sortable

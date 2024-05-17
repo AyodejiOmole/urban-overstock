@@ -75,8 +75,6 @@ export default function UpdateProductForm({
   const [brandToAdd, setBrandToAdd] = useState<string | null | undefined | any>("");
   const [addBrandDisplay, setAddBrandDisplay] = useState<boolean | null>(false);
 
-  const token = cookies.get('urban-token');
-
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -111,6 +109,7 @@ export default function UpdateProductForm({
     }),
     onSubmit: async (values) => {
       const promises: Promise<Response>[] = [];
+      const token = cookies.get('urban-token');
     //   const variationPromises: Promise<Response>[] = [];
       let product_images;
       let data;
@@ -188,8 +187,6 @@ export default function UpdateProductForm({
         } catch (error) {
             console.log(error);
         }
-    
-
       // const data = {
       //   ...values,
       //   categoryId: +values.categoryId,

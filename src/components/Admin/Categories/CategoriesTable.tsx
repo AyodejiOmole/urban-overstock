@@ -18,6 +18,7 @@ import { useRouter } from 'next/navigation';
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEdit } from "react-icons/md";
+import { IoIosArrowDown } from 'react-icons/io';
 
 export default function CategoriesTable({
   selectedDate,
@@ -180,6 +181,7 @@ export default function CategoriesTable({
         className='rounded-md text-sm'
         sortOrder={-1}
         sortField='createdAt'
+        sortIcon={<IoIosArrowDown />}
       >
         <Column
           selectionMode='multiple'

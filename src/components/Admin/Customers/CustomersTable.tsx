@@ -14,19 +14,24 @@ import { RxPencil2 } from 'react-icons/rx';
 import moment from 'moment';
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEdit } from "react-icons/md";
+import { IoIosArrowDown } from 'react-icons/io';
 
 export default function CustomersTable({
   selectedDate,
   customers,
   searchValue,
+  selectedCustomers,
+  handleChangeSelectedCustomers,
 }: {
   selectedDate: Date | (Date | null)[] | Date[] | null | undefined | number;
   searchValue: string;
   customers: ICustomers | undefined;
+  selectedCustomers: ICustomers;
+  handleChangeSelectedCustomers?: (e: any) => void;
 }) {
-  const [selectedCustomers, setSelectedCustomers] = useState<
-    ICustomer[] | null
-  >(null);
+  // const [selectedCustomers, setSelectedCustomers] = useState<
+  //   ICustomer[] | null
+  // >(null);
   const [rowClick, setRowClick] = useState<boolean>(true);
 
   const dateTemplate = (customer: ICustomer) =>
@@ -74,7 +79,8 @@ export default function CustomersTable({
   }
 
   const dateChangeHandler = (e: any) => {
-    setSelectedCustomers(e.value);
+    // setSelectedCustomers(e.value);
+    handleChangeSelectedCustomers!(e.value);
   };
 
   function statusTemplate(customer: ICustomer) {
@@ -83,14 +89,14 @@ export default function CustomersTable({
     let styles = '';
 
     switch (status) {
-      case 'active':
+      case 'ACTIVATED':
         styles = 'bg-green-100 text-green-600';
         break;
-      case 'blocked':
+      case 'BLOCKED':
         styles = 'bg-red-100 text-red-600';
         break;
       default:
-        styles = 'bg-blue-100 text-blue-600';
+        styles = 'bg-yellow-100 text-yellow-600';
     }
 
     return (
@@ -121,9 +127,9 @@ export default function CustomersTable({
       </div>
       <DataTable
         value={matchedCustomers}
+        selection={selectedCustomers}
         selectionMode={rowClick ? null : 'multiple'}
-        selection={selectedCustomers!}
-        onSelectionChange={dateChangeHandler}
+        onSelectionChange={handleChangeSelectedCustomers}
         dataKey='id'
         tableStyle={{ minWidth: '50rem' }}
         paginator
@@ -134,11 +140,12 @@ export default function CustomersTable({
         className='rounded-md'
         sortOrder={-1}
         sortField='dateAdded'
+        sortIcon={<IoIosArrowDown />}
       >
         <Column
           selectionMode='multiple'
           headerStyle={{ width: '3rem' }}
-          className='border-red-500'
+          // className='border-red-500'
         ></Column>
         <Column
           field='customer.item'

@@ -7,5 +7,5 @@ export interface ISize {
     updatedAt: string
 }
 
-export type ISizes = ISizes[];
+export type ISizes = ISize[];
   

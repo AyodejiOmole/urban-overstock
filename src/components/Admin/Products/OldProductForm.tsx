@@ -29,6 +29,7 @@ import { IBrands } from '@/interfaces/brands';
 import { IColors } from '@/interfaces/colors';
 import { ISizes } from '@/interfaces/sizes';
 import { IDiscountCodes } from '@/interfaces/discount-codes';
+import { IoIosArrowDown } from "react-icons/io";
 
 interface ProductImage {
   // color: string;
@@ -395,30 +396,30 @@ export default function OldProductForm({
     setProductImages(imagesCopy);
   };
 
-  const createNewBrandPreset = async (color: string) => {
+  const createNewBrandPreset = async (brand: string) => {
     const token = cookies.get('urban-token');
     const data = {
-      name: color,
+      name: brand,
     }
 
-    try {
-      httpService
-        .post(ENDPOINTS.BRAND_SETTINGS, data, `Bearer ${token}`)
-        .then((apiRes) => {
-          console.log('Response: ', apiRes);
-
-          if (apiRes.data) {
-            toast.success('Brand preset added successfully.');
-            brands?.push(apiRes.data);
-            setAddBrandDisplay(false);
-
-            // setTimeout(() => {
-            //   replace('/admin/products');
-            // }, 1000);
-          }
-        });
-    } catch (error) {
-      console.log(error);
+    if(brands?.find((existingBrand: IBrand) => existingBrand.name === brand)) {
+      toast.error("This brand preset already exists!");
+    } else {
+      try {
+        httpService
+          .post(ENDPOINTS.BRAND_SETTINGS, data, `Bearer ${token}`)
+          .then((apiRes) => {
+            console.log('Response: ', apiRes);
+  
+            if (apiRes.data) {
+              toast.success('Brand preset added successfully.');
+              brands?.push(apiRes.data);
+              setAddBrandDisplay(false);
+            }
+          });
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
@@ -515,11 +516,12 @@ export default function OldProductForm({
                 </label>
                 <div 
                     className = {
-                        clsx('h-[48px] bg-white px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                        clsx('h-[48px] bg-white px-4 py-2 relative rounded-lg border border-dark-100 flex gap-2 items-center',)
                     }
                     onClick={() => setBrandPicker(true)}
                 >
                     {brands?.filter((brand) => brand.id === formik.values.brandId)[0]?.name ? brands?.filter((brand) => brand.id === formik.values.brandId)[0]?.name : "Select a brand..."}
+                    <IoIosArrowDown className='absolute right-4 top-auto bottom-auto'/>
                 </div>
 
                 {brandPicker && (

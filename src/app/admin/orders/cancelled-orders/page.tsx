@@ -9,6 +9,7 @@ export default async function CancelledOrders() {
   const orders = await apiRes;
 
   console.log(orders);
+  const filteredOrders: IOrder[] | undefined = orders?.filter((order: IOrder) => order.status.toLowerCase() === "cancelled");
 
   return (
     <section>
@@ -22,7 +23,7 @@ export default async function CancelledOrders() {
           />
         </div>
       </div> */}
-      <CancelledOrdersDisplay orders={orders} />
+      <CancelledOrdersDisplay orders={filteredOrders!} />
     </section>
   );
 }

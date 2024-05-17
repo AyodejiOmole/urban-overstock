@@ -7,6 +7,7 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import React, { useState } from 'react';
 import { FaEye } from 'react-icons/fa';
+import { IoIosArrowDown } from 'react-icons/io';
 import { RxPencil2 } from 'react-icons/rx';
 
 // export interface IDiscountCode {
@@ -136,6 +137,7 @@ export default function DiscountCodesTable({
         className='rounded-md text-sm'
         sortOrder={-1}
         sortField='id'
+        sortIcon={<IoIosArrowDown />}
       >
         <Column
           selectionMode='multiple'

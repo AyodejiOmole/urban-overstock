@@ -15,8 +15,11 @@ import toast from 'react-hot-toast';
 import { FaEye } from 'react-icons/fa';
 import {MdOutlineEdit } from 'react-icons/md';
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { MdOutlineDelete, MdOutlineModeEdit } from 'react-icons/md';
+import { RxPencil2 } from 'react-icons/rx';
 import Cookies from 'universal-cookie';
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
+import { IoIosArrowDown } from 'react-icons/io';
 
 export default function ProductsTable({
   selectedDate,
@@ -83,7 +86,8 @@ export default function ProductsTable({
           href={`/admin/products/${product.id}?edit=true`}
           className='text-xl text-neutral'
         >
-          <MdOutlineEdit />
+          {/* <RxPencil2 /> */}
+          <MdOutlineModeEdit />
         </Link>
         <button onClick={() => deleteProduct(product.id)}>
           <RiDeleteBin6Line className='text-xl' />
@@ -173,6 +177,7 @@ export default function ProductsTable({
         className='rounded-xl text-sm capitalize'
         sortOrder={-1}
         sortField='createdAt'
+        sortIcon={<IoIosArrowDown />}
       >
         <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} />
         <Column field='product.item' header='Product' body={productTemplate} />

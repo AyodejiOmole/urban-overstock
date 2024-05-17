@@ -6,6 +6,7 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import React, { useState } from 'react';
 import { FaEye } from 'react-icons/fa';
+import { IoIosArrowDown } from 'react-icons/io';
 import { RxPencil2 } from 'react-icons/rx';
 
 export interface INotificationType {
@@ -90,6 +91,7 @@ export default function NotificationsTable() {
         className='rounded-md text-xs capitalize'
         sortOrder={-1}
         sortField='_id'
+        sortIcon={<IoIosArrowDown />}
       >
         <Column field='type' header='Notification Type' sortable></Column>
         <Column field='userType' header='User Type' sortable></Column>

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import React, { useMemo } from 'react';
+import { IoIosArrowDown } from 'react-icons/io';
 
 export default function OrdersTable({
   orderList,
@@ -59,6 +60,7 @@ export default function OrdersTable({
         className='rounded-xl text-sm'
         sortOrder={-1}
         sortField='date'
+        sortIcon={<IoIosArrowDown />}
       >
         <Column
           body={productTemplate}

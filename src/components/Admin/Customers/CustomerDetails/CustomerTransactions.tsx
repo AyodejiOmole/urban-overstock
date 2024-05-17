@@ -12,6 +12,7 @@ import React, { useState } from 'react';
 import { CiCalendarDate } from 'react-icons/ci';
 import { FaEye } from 'react-icons/fa';
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
+import { IoIosArrowDown } from 'react-icons/io';
 
 export default function CustomerTransactionsTable({
   history
@@ -118,6 +119,7 @@ export default function CustomerTransactionsTable({
         className='rounded-xl text-sm'
         sortOrder={-1}
         sortField='date'
+        sortIcon={<IoIosArrowDown />}
       >
         <Column field='id' header='Order ID' sortable></Column>
         <Column

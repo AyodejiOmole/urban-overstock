@@ -1,35 +1,16 @@
 export interface INotification {
-    id: number;
-    name: string
-    description: string
-    categoryId: number
-    brandId: number
-    tag: string
-    imageUrls: string[]
-    amount: number
-    discountType: string
-    discountPercentage: number
-    taxClass: string
-    vatAmount: number
-    quantity: number
-    sku: string
-    barcode: string
-    status: string
-    productVarations: ProductVaration[]
-    createdAt: string;
-    updatedAt: string;
-  }
+  id: number
+  userId: number
+  title: string
+  body: string
+  metadataType: string
+  metadata: Metadata
+  createdAt: string
+  updatedAt: string
+}
   
-  export interface ProductVaration {
-    id: number
-    colorId: number
-    imageUrl: string
-    sizeOptions: SizeOption[]
-  }
+export interface Metadata {
+  orderId: number
+}
   
-  export interface SizeOption {
-    sizeId: number
-    quantity: number
-  }
-  
-  export type INotifications = INotification[];
+export type INotifications = INotification[];

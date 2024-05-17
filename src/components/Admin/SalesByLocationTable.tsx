@@ -6,6 +6,7 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import React, { useState } from 'react';
 import { IProduct } from '@/interfaces/products';
+import { IoIosArrowDown } from 'react-icons/io';
 
 export const sales = [
     {
@@ -174,7 +175,7 @@ export default function SalesByLocationTable() {
         className='rounded-md text-sm'
         sortOrder={-1}
         sortField='createdAt'
-        
+        sortIcon={<IoIosArrowDown />}
       >
         <Column 
             body={productTemplate} 

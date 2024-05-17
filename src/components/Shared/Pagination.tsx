@@ -58,7 +58,11 @@ const Pagination = () => {
     const pathname = usePathname();
 
     const formatString = (str: string) => {
-        return str.charAt(0).toUpperCase() + str.slice(1).replace(/-/g, ' ');
+        if(str === "admin") {
+            return "dashboard".charAt(0).toUpperCase() + "ashboard";
+        } else {
+            return str.charAt(0).toUpperCase() + str.slice(1).replace(/-/g, ' ');
+        }
     }
 
     const segments = pathname.split('/').filter(segment => segment !== '');
