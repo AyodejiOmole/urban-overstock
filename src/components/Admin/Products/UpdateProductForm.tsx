@@ -217,6 +217,7 @@ export default function UpdateProductForm({
         status,
         category,
       } = activeProduct;
+      console.log(activeProduct);
 
       formik.setValues({
         name: name.toString(),

@@ -1,15 +1,39 @@
 'use client';
 import Header from '@/components/Admin/Header';
 import AdminSidebar from '@/components/Admin/Sidebar';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+// import { getStaticProps } from 'next/dist/build/templates/pages';
+import ENDPOINTS from '@/config/ENDPOINTS';
+import { getCookie } from 'cookies-next';
+import { cookies } from 'next/headers';
+import Cookies from 'universal-cookie';
 
 export default function DashboardLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [isOpenlg, setIsOpenlg] = useState<boolean>(false); // State to manage sidebar open/close
+  const [unreadNotifications, setUnreadNotifications] = useState<number>(0);
+
+  useEffect(() => {
+    const cookies = new Cookies();
+    // const token = getCookie('urban-token', { cookies });
+    const token = cookies.get('urban-token');
+
+    const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
+  
+    fetch(`${baseUrl}/api/v1/${ENDPOINTS.NOTIFICATIONS}/count-unread`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+  
+      cache: 'no-store',
+    })
+    .then(response => response.json())
+    .then(data => setUnreadNotifications(data));
+  }, []);
 
   const handleToggleSidebar = () => setSidebarOpen((prev) => !prev);
   const toggleSidebarlg = () => {
@@ -42,10 +66,11 @@ export default function DashboardLayout({
           sidebarOpen ? 'lg:col-span-10' : 'lg:col-span-11'
         }`}
       >
-        <Header isOpen={sidebarOpen} toggleSidebar={handleToggleSidebar} />
+        <Header isOpen={sidebarOpen} toggleSidebar={handleToggleSidebar} unreadNotifications={unreadNotifications}/>
 
         {children}
       </div>
     </div>
   );
-}
+};
+

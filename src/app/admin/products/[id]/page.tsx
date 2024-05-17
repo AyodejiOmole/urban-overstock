@@ -1,4 +1,4 @@
-// import ProductForm from '@/components/Admin/Products/ProductForm';
+import ProductForm from '@/components/Admin/Products/ProductForm';
 import PageHeading from './components/PageHeading';
 import React from 'react';
 import { getSingleProduct } from '@/libs/products';
@@ -13,7 +13,7 @@ import getAllCategories from '@/libs/categories';
 import { ICategories } from '@/interfaces/categories';
 import getAllDiscountCodes from '@/libs/discount-codes';
 import { IDiscountCodes } from '@/interfaces/discount-codes';
-import UpdateProductForm from '@/components/Admin/Products/UpdateProductForm';
+// import UpdateProductForm from '@/components/Admin/Products/UpdateProductForm';
 
 export default async function ProductDetails({ params }: { params: { id: string } }) {
   console.log(params);
@@ -41,7 +41,7 @@ export default async function ProductDetails({ params }: { params: { id: string 
   return (
     <section>
       <PageHeading/>
-      <UpdateProductForm activeProduct={product} discounts={discounts} categories={categories} brands={brands} colors={colors} sizes={sizes}/>
+      <ProductForm activeProduct={product} discounts={discounts} categories={categories} brands={brands} colors={colors} sizes={sizes}/>
     </section>
   );
 }

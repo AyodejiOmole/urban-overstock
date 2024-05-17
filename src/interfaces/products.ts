@@ -44,6 +44,7 @@ export interface ISingleProduct {
   imageUrls: string
   amount: number
   discountType: string
+  costPrice: number
   discountPercentage: number
   taxClass: string
   vatAmount: number
@@ -71,7 +72,8 @@ export interface ProductVarationSingle {
 export interface SizeOptionSingle {
   id: number
   quantity: number
-  size?: Size
+  // size?: Size
+  sizeId: number
 }
 
 export interface Size {

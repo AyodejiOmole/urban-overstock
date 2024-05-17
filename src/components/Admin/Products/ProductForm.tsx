@@ -30,6 +30,7 @@ import { ISizes } from '@/interfaces/sizes';
 import { Suspense } from 'react';
 import { Size } from '@/interfaces/products';
 import { IDiscountCodes } from '@/interfaces/discount-codes';
+import { IoIosArrowDown } from 'react-icons/io';
 
 interface ProductImage {
   // color: string;
@@ -122,11 +123,20 @@ function getGroupedVariations(variations: IProductVariations[]) {
   return variations;
 }
 
-function getFormattedVariations(variations: IProductVariations[], variationImages: {variation: IProductVariations, imageUrl: string}[]) {
-  const newVariations = variations.map((variation: IProductVariations, index) => {
-    let { colorId, imageUrl, sizeOptions } = variation;
-    imageUrl = variationImages[index].imageUrl;
-    return { colorId, imageUrl, sizeOptions };
+// function getFormattedVariations(variations: IProductVariations[], variationImages: {variation: IProductVariations, imageUrl: string}[]) {
+//   const newVariations = variations.map((variation: IProductVariations, index) => {
+//     let { colorId, imageUrl, sizeOptions } = variation;
+//     imageUrl = variationImages[index].imageUrl;
+//     return { colorId, imageUrl, sizeOptions };
+//   });
+
+//   return newVariations;
+// }
+
+function getFormattedVariations(variations: IProductVariations[]) {
+  const newVariations = variations.map((variation: IProductVariations) => {
+    let { id, colorId, imageUrl, sizeOptions } = variation;
+    return { id, colorId, imageUrl, sizeOptions };
   });
 
   return newVariations;
@@ -165,6 +175,8 @@ export default function ProductForm({
   const httpService = new HTTPService();
   const imageInputRef = useRef<HTMLInputElement | null>(null);
   const searchParams = useSearchParams();
+
+  console.log(activeProduct);
 
   const [activeImage, setActiveImage] = useState<null | number>(null);
   const [productImages, setProductImages] = useState<ProductImage[]>([]);
@@ -238,6 +250,7 @@ export default function ProductForm({
       barcode: '',
       status: '',
       categoryId: 0,
+      costPrice: 0,
     },
     validationSchema: Yup.object({
       name: Yup.string().required().label('Name'),
@@ -253,6 +266,7 @@ export default function ProductForm({
       sku: Yup.string().required().label('SKU'),
       barcode: Yup.string().required().label('Bar Code'),
       status: Yup.string().required().label('Status'),
+      costPrice: Yup.number().min(1).required().label('Cost Price'),
     }),
     onSubmit: async (values) => {
       const variations = state;
@@ -262,202 +276,281 @@ export default function ProductForm({
       const promises: Promise<Response>[] = [];
       const variationPromises: Promise<Response>[] = [];
 
-      if (!searchParams.get("edit") && (productImages.length < 1 || variations.length < 1)) {
-        // toast.error('Please add product images or variations.');
-        // if(!activeProduct) {
-          toast.error('Please add product images or variations.');
-        // }
+      if (productImages.length < 1 || variations.length < 1) {
+        toast.error('Please add product images or variations.');
       } else {
         try {
-          let product_images;
-          if(productImages.length > 0) {
-            productImages.forEach((image: ProductImage) => {
-              const formdata = new FormData();
-              formdata.append('file', image.image);
-  
-              const requestOptions = {
-                method: 'POST',
-                body: formdata,
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              };
-  
-              promises.push(
-                fetch(
-                  `${process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
-                  requestOptions
-                )
-              );
-            });
-  
-            product_images = await Promise.all(promises)
-              .then((responses) => {
-                const responseData = responses.map(async (response, index) => {
-                  const fileRes = await response.json();
-  
-                  return fileRes.url;
-                });
-  
-                return Promise.all(responseData);
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          }
-          
-          // const uploaded = await uploadVariationImages();
-          if(variations.length > 0) {
-            for (const variation of variations) {
-              const variationFormdata = new FormData();
-              if(variation.imageFile !== null) {
-                variationFormdata.append('file', variation.imageFile);                
-              }
+          productImages.forEach((image: ProductImage) => {
+            const formdata = new FormData();
+            formdata.append('file', image.image);
 
-              const requestOptions = {
-                method: 'POST',
-                body: variationFormdata,
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              };
-      
-              const response = await fetch(
+            const requestOptions = {
+              method: 'POST',
+              body: formdata,
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            };
+
+            promises.push(
+              fetch(
                 `${process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
                 requestOptions
-              );
-      
-              const jsonRes = await response.json();
-              console.log(jsonRes);
-      
-              // if(jsonRes) {
-              variationImages.push({ variation, imageUrl: jsonRes.url });
-                
-              // }
-            };
-          }
+              )
+            );
+          });
 
-          if (!searchParams.get("edit") && (product_images && product_images.length > 0)) {
+          const product_images = await Promise.all(promises)
+            .then((responses) => {
+              const responseData = responses.map(async (response, index) => {
+                const fileRes = await response.json();
+
+                return fileRes.url;
+              });
+
+              return Promise.all(responseData);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+          if (product_images && product_images.length > 0) {
+
             const data = {
+              id: activeProduct?.id,
               ...values,
               categoryId: +values.categoryId,
-              productVarations: getFormattedVariations(state, variationImages),
-              // productImages: product_images,
+              productVarations: getFormattedVariations(state),
               imageUrls: product_images,
             };
 
             console.log('Request Body: ', data);
-            console.log(variationImages);
+            // console.log(variationImages);
 
-            // if(activeProduct) {
-            //   httpService
-            //   .patch(ENDPOINTS.PRODUCTS, data, `Bearer ${token}`)
-            //   .then((apiRes) => {
-            //     console.log('Response: ', apiRes);
-
-            //     if (apiRes.data) {
-            //       formik.resetForm();
-
-            //       toast.success('Product updated successfully.');
-
-            //       setTimeout(() => {
-            //         replace('/admin/products');
-            //       }, 1000);
-            //     }
-            //   });
-            // } else {
-              httpService
-              .post(ENDPOINTS.PRODUCTS, data, `Bearer ${token}`)
+            httpService
+              .patch(ENDPOINTS.PRODUCTS, data, `Bearer ${token}`)
               .then((apiRes) => {
                 console.log('Response: ', apiRes);
 
-                if (apiRes.data) {
+                if (apiRes.status === 200) {
                   formik.resetForm();
 
-                  toast.success('Product added successfully.');
+                  toast.success('Product updated successfully.');
 
                   setTimeout(() => {
                     replace('/admin/products');
                   }, 1000);
                 }
               });
-            // }
-            
-          } else if(searchParams.get("edit") && activeProduct) {
-            const formattedStr = `${activeProduct?.imageUrls.replace(/\\/g, '')}`;
-            const arr = JSON.parse(formattedStr);
-            const {
-              name,
-              description,
-              tag,
-              quantity,
-              amount,
-              discountType,
-              discountPercentage,
-              taxClass,
-              vatAmount,
-              sku,
-              barcode,
-              status,
-              categoryId,
-            } = values;
-            const data = {
-              // ...values,
-              name,
-              description,
-              tag,
-              quantity,
-              amount,
-              discountType,
-              discountPercentage,
-              taxClass,
-              vatAmount,
-              sku,
-              barcode,
-              status,
-              // categoryId,
-              categoryId: +values.categoryId,
-              productVarations: getFormattedVariations(state, variationImages),
-              // imageUrls: JSON.stringify(arr.concat(product_images)),
-              imageUrls: product_images ? arr.concat(product_images) : arr,
-            };
-
-            console.log('Request Body: ', data);
-            console.log(variationImages);
-
-            httpService
-            .patch(ENDPOINTS.PRODUCTS, data, `Bearer ${token}`)
-            .then((apiRes) => {
-              console.log('Response: ', apiRes);
-
-              if (apiRes.data) {
-                formik.resetForm();
-
-                toast.success('Product updated successfully.');
-
-                setTimeout(() => {
-                  replace('/admin/products');
-                }, 1000);
-              }
-            });
           } else console.log('Products array not provided');
         } catch (error) {
           console.log(error);
         }
       }
-
-      // const data = {
-      //   ...values,
-      //   categoryId: +values.categoryId,
-      //   productVarations: groupedVariations,
-      //   productImages: product_images,
-      // };
-      // console.log(data);
     },
+    // onSubmit: async (values) => {
+    //   const variations = state;
+    //   const groupedVariations = getGroupedVariations(variations);
+    //   let variationImages: {variation: IProductVariations, imageUrl: string}[] = [];
+
+    //   const promises: Promise<Response>[] = [];
+    //   const variationPromises: Promise<Response>[] = [];
+
+    //   if (!searchParams.get("edit") && (productImages.length < 1 || variations.length < 1)) {
+    //     // toast.error('Please add product images or variations.');
+    //     // if(!activeProduct) {
+    //       toast.error('Please add product images or variations.');
+    //     // }
+    //   } else {
+    //     try {
+    //       let product_images;
+    //       if(productImages.length > 0) {
+    //         productImages.forEach((image: ProductImage) => {
+    //           const formdata = new FormData();
+    //           formdata.append('file', image.image);
+  
+    //           const requestOptions = {
+    //             method: 'POST',
+    //             body: formdata,
+    //             headers: {
+    //               Authorization: `Bearer ${token}`,
+    //             },
+    //           };
+  
+    //           promises.push(
+    //             fetch(
+    //               `${process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
+    //               requestOptions
+    //             )
+    //           );
+    //         });
+  
+    //         product_images = await Promise.all(promises)
+    //           .then((responses) => {
+    //             const responseData = responses.map(async (response, index) => {
+    //               const fileRes = await response.json();
+  
+    //               return fileRes.url;
+    //             });
+  
+    //             return Promise.all(responseData);
+    //           })
+    //           .catch((error) => {
+    //             console.log(error);
+    //           });
+    //       }
+          
+    //       // const uploaded = await uploadVariationImages();
+    //       if(variations.length > 0) {
+    //         for (const variation of variations) {
+    //           const variationFormdata = new FormData();
+    //           if(variation.imageFile !== null) {
+    //             variationFormdata.append('file', variation.imageFile);                
+    //           }
+
+    //           const requestOptions = {
+    //             method: 'POST',
+    //             body: variationFormdata,
+    //             headers: {
+    //               Authorization: `Bearer ${token}`,
+    //             },
+    //           };
+      
+    //           const response = await fetch(
+    //             `${process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
+    //             requestOptions
+    //           );
+      
+    //           const jsonRes = await response.json();
+    //           console.log(jsonRes);
+      
+    //           // if(jsonRes) {
+    //           variationImages.push({ variation, imageUrl: jsonRes.url });
+                
+    //           // }
+    //         };
+    //       }
+
+    //       if (!searchParams.get("edit") && (product_images && product_images.length > 0)) {
+    //         const data = {
+    //           ...values,
+    //           categoryId: +values.categoryId,
+    //           productVarations: getFormattedVariations(state, variationImages),
+    //           // productImages: product_images,
+    //           imageUrls: product_images,
+    //         };
+
+    //         console.log('Request Body: ', data);
+    //         console.log(variationImages);
+
+    //         // if(activeProduct) {
+    //         //   httpService
+    //         //   .patch(ENDPOINTS.PRODUCTS, data, `Bearer ${token}`)
+    //         //   .then((apiRes) => {
+    //         //     console.log('Response: ', apiRes);
+
+    //         //     if (apiRes.data) {
+    //         //       formik.resetForm();
+
+    //         //       toast.success('Product updated successfully.');
+
+    //         //       setTimeout(() => {
+    //         //         replace('/admin/products');
+    //         //       }, 1000);
+    //         //     }
+    //         //   });
+    //         // } else {
+    //           httpService
+    //           .post(ENDPOINTS.PRODUCTS, data, `Bearer ${token}`)
+    //           .then((apiRes) => {
+    //             console.log('Response: ', apiRes);
+
+    //             if (apiRes.data) {
+    //               formik.resetForm();
+
+    //               toast.success('Product added successfully.');
+
+    //               setTimeout(() => {
+    //                 replace('/admin/products');
+    //               }, 1000);
+    //             }
+    //           });
+    //         // }
+            
+    //       } else if(searchParams.get("edit") && activeProduct) {
+    //         const formattedStr = `${activeProduct?.imageUrls.replace(/\\/g, '')}`;
+    //         const arr = JSON.parse(formattedStr);
+    //         const {
+    //           name,
+    //           description,
+    //           tag,
+    //           quantity,
+    //           amount,
+    //           discountType,
+    //           discountPercentage,
+    //           taxClass,
+    //           vatAmount,
+    //           sku,
+    //           barcode,
+    //           status,
+    //           categoryId,
+    //         } = values;
+    //         const data = {
+    //           // ...values,
+    //           name,
+    //           description,
+    //           tag,
+    //           quantity,
+    //           amount,
+    //           discountType,
+    //           discountPercentage,
+    //           taxClass,
+    //           vatAmount,
+    //           sku,
+    //           barcode,
+    //           status,
+    //           // categoryId,
+    //           categoryId: +values.categoryId,
+    //           productVarations: getFormattedVariations(state, variationImages),
+    //           // imageUrls: JSON.stringify(arr.concat(product_images)),
+    //           imageUrls: product_images ? arr.concat(product_images) : arr,
+    //         };
+
+    //         console.log('Request Body: ', data);
+    //         console.log(variationImages);
+
+    //         httpService
+    //         .patch(ENDPOINTS.PRODUCTS, data, `Bearer ${token}`)
+    //         .then((apiRes) => {
+    //           console.log('Response: ', apiRes);
+
+    //           if (apiRes.data) {
+    //             formik.resetForm();
+
+    //             toast.success('Product updated successfully.');
+
+    //             setTimeout(() => {
+    //               replace('/admin/products');
+    //             }, 1000);
+    //           }
+    //         });
+    //       } else console.log('Products array not provided');
+    //     } catch (error) {
+    //       console.log(error);
+    //     }
+    //   }
+
+    //   // const data = {
+    //   //   ...values,
+    //   //   categoryId: +values.categoryId,
+    //   //   productVarations: groupedVariations,
+    //   //   productImages: product_images,
+    //   // };
+    //   // console.log(data);
+    // },
     validateOnChange: true,
   });
 
-  
   useEffect(() => {
     if(activeProduct) {
       console.log(activeProduct);
@@ -465,7 +558,7 @@ export default function ProductForm({
         name,
         description,
         tag,
-        brand,
+        brandId,
         quantity,
         amount,
         discountType,
@@ -475,32 +568,34 @@ export default function ProductForm({
         sku,
         barcode,
         status,
-        category,
+        categoryId,
+        costPrice,
       } = activeProduct;
 
       formik.setValues({
-        name: name.toString(),
+        name,
         description,
-        tag: activeProduct.tag.toLowerCase(),
-        brandId: brand.id,
-        quantity: Number(quantity),
-        amount: Number(amount),
+        tag,
+        brandId,
+        quantity,
+        amount,
         discountType,
-        discountPercentage: Number(discountPercentage),
+        discountPercentage,
         taxClass,
-        vatAmount: Number(vatAmount),
-        sku: sku.toLowerCase(),
+        vatAmount,
+        sku,
         barcode,
-        status: status.toLowerCase(),
-        categoryId: category.id,
+        status,
+        categoryId,
+        costPrice
       });
 
       const variations: IProductVariations[] = activeProduct.productVarations.map((variation) => {
         const { id, colorId, imageUrl } = variation;
         const sizeOptions = variation.sizeOptions.map((option) => {
-          const { quantity, size } = option;
-          delete option.size;
-          return { sizeId: size?.id, quantity };
+          const { id, quantity, sizeId } = option;
+          // delete option.size;
+          return { id, sizeId, quantity };
         })
   
         return { id, colorId, imageUrl, sizeOptions, imageFile: null };
@@ -582,6 +677,11 @@ export default function ProductForm({
   const updateBrandToAdd = (e: ChangeEvent<HTMLInputElement>) => {
     // console.log(e);
     setBrandToAdd(e.target.value);
+  }
+
+  const handleDiscountChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    formik.setFieldValue("discountType", e.target.value);
+    formik.setFieldValue("discountPercentage", discounts?.find(discount => discount.code === e.target.value)?.percentage);
   }
 
   // const updateImageColor = (index: number, color: string) => {
@@ -677,6 +777,7 @@ export default function ProductForm({
                     onClick={() => setBrandPicker(true)}
                 >
                     {brands?.filter((brand) => brand.id === formik.values.brandId)[0]?.name ? brands?.filter((brand) => brand.id === formik.values.brandId)[0]?.name : "Select a brand..."}
+                    <IoIosArrowDown className='absolute right-4 top-auto bottom-auto' />
                 </div>
 
                 {brandPicker && (
@@ -860,6 +961,24 @@ export default function ProductForm({
               htmlFor='basePrice'
               className='text-sm text-neutral mb-2 block'
             >
+              Cost Price
+            </label>
+            <TextInput
+              inputMode='numeric'
+              placeholder='Cost Price'
+              id='costPrice'
+              onChange={formik.handleChange}
+              value={formik.values.costPrice}
+              error={formik.errors.costPrice}
+              leftIcon={<BiDollar />}
+              type='number'
+            />
+          </div>
+          <div className='mb-6'>
+            <label
+              htmlFor='basePrice'
+              className='text-sm text-neutral mb-2 block'
+            >
               Base Price
             </label>
             <TextInput
@@ -887,7 +1006,8 @@ export default function ProductForm({
                   name='discountType'
                   id='discountType'
                   className='text-neutral'
-                  onChange={formik.handleChange}
+                  // onChange={formik.handleChange}
+                  onChange={(e) => handleDiscountChange(e)}
                   value={formik.values.discountType}
                 >
                   <option value='' defaultChecked disabled>
@@ -896,7 +1016,7 @@ export default function ProductForm({
                   <option value='free'>No Discount</option>
                   {discounts?.map((discount, index) => {
                     return (
-                      <option key={index} value={discount.code}>{`${discount.percentage}%`}</option>
+                      <option key={index} value={discount.code}>{`${discount.code}`}</option>
                     )
                   })}
                 </select>
@@ -1027,7 +1147,7 @@ export default function ProductForm({
           <Variations dispatch={dispatch} state={state} />
         </div> */}
         <div>
-          <NewVariations dispatch={dispatch} state={state} colors={colors} sizes={sizes}/>
+          <NewVariations dispatch={dispatch} productId={activeProduct?.id} state={state} colors={colors} sizes={sizes}/>
         </div>
 
         {/* Shipping */}

@@ -226,6 +226,7 @@ export default function OldProductForm({
       barcode: '',
       status: '',
       categoryId: 0,
+      costPrice: 0,
     },
     validationSchema: Yup.object({
       name: Yup.string().required().label('Name'),
@@ -241,6 +242,7 @@ export default function OldProductForm({
       sku: Yup.string().required().label('SKU'),
       barcode: Yup.string().required().label('Bar Code'),
       status: Yup.string().required().label('Status'),
+      costPrice: Yup.number().min(1).required().label('Cost Price'),
     }),
     onSubmit: async (values) => {
       const variations = state;
@@ -673,6 +675,24 @@ export default function OldProductForm({
         {/* Pricing */}
         <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4'>
           <p className='text-lg font-semibold text-gray-700 mb-8'>Pricing</p>
+          <div className='mb-6'>
+            <label
+              htmlFor='basePrice'
+              className='text-sm text-neutral mb-2 block'
+            >
+              Cost Price
+            </label>
+            <TextInput
+              inputMode='numeric'
+              placeholder='Cost Price'
+              id='costPrice'
+              onChange={formik.handleChange}
+              value={formik.values.costPrice}
+              error={formik.errors.costPrice}
+              leftIcon={<BiDollar />}
+              type='number'
+            />
+          </div>
           <div className='mb-6'>
             <label
               htmlFor='basePrice'
