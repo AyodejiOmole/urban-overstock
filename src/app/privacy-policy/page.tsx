@@ -76,10 +76,10 @@ export default function PrivacyPolicy() {
           or content that is sexually explicit, hateful, or excessively violent.
           For more information on how we define these content categories, please
           see the
-          <a href='' className='underline'>
+          <Link href="/restricted-policy" className='underline'>
             {' '}
             Prohibited Items Policy.
-          </a>
+            </Link>
         </p>
       </div>
       {/* Be Safe */}

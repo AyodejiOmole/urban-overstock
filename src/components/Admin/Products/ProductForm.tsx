@@ -30,6 +30,7 @@ import { ISizes } from '@/interfaces/sizes';
 import { Suspense } from 'react';
 import { Size } from '@/interfaces/products';
 import { IDiscountCodes } from '@/interfaces/discount-codes';
+import { IoIosArrowDown } from 'react-icons/io';
 
 interface ProductImage {
   // color: string;
@@ -165,6 +166,8 @@ export default function ProductForm({
   const httpService = new HTTPService();
   const imageInputRef = useRef<HTMLInputElement | null>(null);
   const searchParams = useSearchParams();
+
+  console.log(activeProduct);
 
   const [activeImage, setActiveImage] = useState<null | number>(null);
   const [productImages, setProductImages] = useState<ProductImage[]>([]);
@@ -457,7 +460,6 @@ export default function ProductForm({
     validateOnChange: true,
   });
 
-  
   useEffect(() => {
     if(activeProduct) {
       console.log(activeProduct);
@@ -465,7 +467,7 @@ export default function ProductForm({
         name,
         description,
         tag,
-        brand,
+        brandId,
         quantity,
         amount,
         discountType,
@@ -475,32 +477,32 @@ export default function ProductForm({
         sku,
         barcode,
         status,
-        category,
+        categoryId,
       } = activeProduct;
 
       formik.setValues({
-        name: name.toString(),
+        name,
         description,
-        tag: activeProduct.tag.toLowerCase(),
-        brandId: brand.id,
-        quantity: Number(quantity),
-        amount: Number(amount),
+        tag,
+        brandId,
+        quantity,
+        amount,
         discountType,
-        discountPercentage: Number(discountPercentage),
+        discountPercentage,
         taxClass,
-        vatAmount: Number(vatAmount),
-        sku: sku.toLowerCase(),
+        vatAmount,
+        sku,
         barcode,
-        status: status.toLowerCase(),
-        categoryId: category.id,
+        status,
+        categoryId,
       });
 
       const variations: IProductVariations[] = activeProduct.productVarations.map((variation) => {
         const { id, colorId, imageUrl } = variation;
         const sizeOptions = variation.sizeOptions.map((option) => {
-          const { quantity, size } = option;
-          delete option.size;
-          return { sizeId: size?.id, quantity };
+          const { quantity, sizeId } = option;
+          // delete option.size;
+          return { sizeId, quantity };
         })
   
         return { id, colorId, imageUrl, sizeOptions, imageFile: null };
@@ -582,6 +584,11 @@ export default function ProductForm({
   const updateBrandToAdd = (e: ChangeEvent<HTMLInputElement>) => {
     // console.log(e);
     setBrandToAdd(e.target.value);
+  }
+
+  const handleDiscountChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    formik.setFieldValue("discountType", e.target.value);
+    formik.setFieldValue("discountPercentage", discounts?.find(discount => discount.code === e.target.value)?.percentage);
   }
 
   // const updateImageColor = (index: number, color: string) => {
@@ -677,6 +684,7 @@ export default function ProductForm({
                     onClick={() => setBrandPicker(true)}
                 >
                     {brands?.filter((brand) => brand.id === formik.values.brandId)[0]?.name ? brands?.filter((brand) => brand.id === formik.values.brandId)[0]?.name : "Select a brand..."}
+                    <IoIosArrowDown className='absolute right-4 top-auto bottom-auto' />
                 </div>
 
                 {brandPicker && (
@@ -887,7 +895,8 @@ export default function ProductForm({
                   name='discountType'
                   id='discountType'
                   className='text-neutral'
-                  onChange={formik.handleChange}
+                  // onChange={formik.handleChange}
+                  onChange={(e) => handleDiscountChange(e)}
                   value={formik.values.discountType}
                 >
                   <option value='' defaultChecked disabled>
@@ -896,7 +905,7 @@ export default function ProductForm({
                   <option value='free'>No Discount</option>
                   {discounts?.map((discount, index) => {
                     return (
-                      <option key={index} value={discount.code}>{`${discount.percentage}%`}</option>
+                      <option key={index} value={discount.code}>{`${discount.code}`}</option>
                     )
                   })}
                 </select>
@@ -1027,7 +1036,7 @@ export default function ProductForm({
           <Variations dispatch={dispatch} state={state} />
         </div> */}
         <div>
-          <NewVariations dispatch={dispatch} state={state} colors={colors} sizes={sizes}/>
+          <NewVariations dispatch={dispatch} productId={activeProduct?.id} state={state} colors={colors} sizes={sizes}/>
         </div>
 
         {/* Shipping */}

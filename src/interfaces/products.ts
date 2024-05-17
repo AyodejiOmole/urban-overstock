@@ -71,7 +71,8 @@ export interface ProductVarationSingle {
 export interface SizeOptionSingle {
   id: number
   quantity: number
-  size?: Size
+  // size?: Size
+  sizeId: number
 }
 
 export interface Size {
