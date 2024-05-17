@@ -20,7 +20,6 @@ export default function Features() {
           className='w-2/3 sm:w-[45%] mx-auto relative z-10'
           data-aos='fade-right'
         />
-
         <Image
           src={blur}
           alt='blur'
