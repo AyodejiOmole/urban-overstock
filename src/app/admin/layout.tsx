@@ -14,6 +14,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  const [isOpenlg, setIsOpenlg] = useState<boolean>(false); // State to manage sidebar open/close
   const [unreadNotifications, setUnreadNotifications] = useState<number>(0);
 
   useEffect(() => {
@@ -35,6 +36,15 @@ export default function DashboardLayout({
   }, []);
 
   const handleToggleSidebar = () => setSidebarOpen((prev) => !prev);
+  const toggleSidebarlg = () => {
+    setIsOpenlg(!isOpenlg);
+  };
+
+ const handleNavItemClick = () => {
+    if (!isOpenlg) {
+      setIsOpenlg(true); // Open sidebar if it's closed
+    }
+  };
 
   return (
     <div className='grid grid-cols-12 bg-gray-50 relative min-h-screen'>
@@ -45,7 +55,10 @@ export default function DashboardLayout({
       >
         <AdminSidebar
           isOpen={sidebarOpen}
+          isOpenlg={isOpenlg}
           toggleSidebar={handleToggleSidebar}
+          toggleSidebarlg={toggleSidebarlg}
+          handleNavItemClick = {handleNavItemClick}
         />
       </div>
       <div

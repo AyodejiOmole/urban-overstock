@@ -24,7 +24,7 @@ export const data = {
       data: months_labels.map(() => {
         return faker.number.int({ min: 10, max: 1000 });
       }),
-      borderColor: 'rgba(92, 89, 232, 1)',
+      borderColor: 'rgba(242, 201, 76, 1)',
       backgroundColor: 'rgba(125, 122, 237, 0.1)',
       borderWidth: 2,
       interpolationMode: 'smooth',
@@ -47,12 +47,11 @@ export default function SalesChart() {
           <div className='multigraph mx-auto mt-16 relative mb-4 z-10'>
             <span className='tooltip'>70%</span>
             <span className='graph'></span>
-
             <div className='absolute left-[50%] top-[60%] -translate-x-[50%] flex items-center justify-center flex-col'>
               <p className='font-bold text-2xl mb-1 text-gray-800'>75.55%</p>
-              <span className='bg-green-100 text-green-600 p-1 px-4 text-[12px] rounded-full'>
+              {/* <span className='bg-green-100 text-green-600 p-1 px-4 text-[12px] rounded-full'>
                 +10%
-              </span>
+              </span> */}
             </div>
           </div>
 
@@ -61,36 +60,28 @@ export default function SalesChart() {
             today, it`s higher than yesterday.
           </p>
 
-          <div className='mt-8 grid grid-cols-3 gap-2 max-w-sm mx-auto'>
+          <div className='mt-8 grid grid-cols-2 gap-2 max-w-sm mx-auto'>
             {/* 1 */}
-            <div className='flex flex-col justify-center items-center'>
-              <p className='text-[12px] text-neutral'>Target</p>
-              <p className='text-gray-700 text-xl flex items-center font-medium'>
-                $40K{' '}
-                <span className='text-red-600'>
-                  <GoArrowDown />
-                </span>
-              </p>
-            </div>
+          
             {/* 2 */}
             <div className='flex flex-col justify-center items-center'>
-              <p className='text-[12px] text-neutral'>Revenue</p>
-              <p className='text-gray-700 text-xl flex items-center font-medium'>
-                $30K{' '}
-                <span className='text-green-500'>
-                  <GoArrowUp />
-                </span>
-              </p>
+              <p className='text-[12px] text-neutral font-medium leading-[18px]'>Revenue</p>
+              <div className='flex items-center'>
+                <p className='text-[#101828] text-[24px] leading-[32px]  font-medium'>
+                  $30K{' '}
+                </p>
+                <GoArrowUp className='text-green-500 h-[20px] w-[20px] '/>
+              </div>
             </div>
             {/* 3 */}
             <div className='flex flex-col justify-center items-center'>
-              <p className='text-[12px] text-neutral'>Today</p>
-              <p className='text-gray-700 text-xl flex items-center font-medium'>
-                $2.5K{' '}
-                <span className='text-green-500'>
-                  <GoArrowUp />
-                </span>
-              </p>
+              <p className='text-[12px] text-neutral font-medium leading-[18px]'>Today</p>
+              <div className='flex items-center'>
+                <p className='text-[#101828] text-[24px] leading-[32px]  font-medium'>
+                  $2.5K{' '}
+                </p>
+                <GoArrowUp className='text-green-500 h-[20px] w-[20px] '/>
+              </div>
             </div>
           </div>
         </div>
