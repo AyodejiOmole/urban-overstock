@@ -24,6 +24,9 @@ const ENDPOINTS = {
   COLOR_SETTINGS: `settings/color`,
   BRAND_SETTINGS: `settings/brand`,
   SIZE_SETTINGS: `settings/size`,
+
+  // Dashboard
+  DASHBOARD_TOP_CHART: `dashboard/top-chart`
 };
 
 export default ENDPOINTS;

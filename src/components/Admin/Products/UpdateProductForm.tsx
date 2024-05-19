@@ -29,6 +29,7 @@ import { IBrands } from '@/interfaces/brands';
 import { IColors } from '@/interfaces/colors';
 import { ISizes } from '@/interfaces/sizes';
 import { IDiscountCodes } from '@/interfaces/discount-codes';
+import { IoIosArrowDown } from 'react-icons/io';
 
 interface ProductImage {
   // color: string;
@@ -526,6 +527,7 @@ export default function UpdateProductForm({
                     })}
                 </select>
 
+                <IoIosArrowDown className={`absolute right-4 ${formik.errors.discountType ? "top-10" : "bottom-4"}`} />
                 <CustomError error={formik.errors.discountType} />
               </div>
 
@@ -549,6 +551,7 @@ export default function UpdateProductForm({
                   <option value='none'>Tax Free</option>
                 </select>
 
+                <IoIosArrowDown className={`absolute right-4 ${formik.errors.taxClass ? "top-10" : "bottom-4"}`} />
                 <CustomError error={formik.errors.taxClass} />
               </div>
             </div>
@@ -666,8 +669,8 @@ export default function UpdateProductForm({
               onChange={formik.handleChange}
               value={formik.values.categoryId}
             >
-              <option defaultChecked disabled>
-                Select a category....
+              <option value='' defaultChecked disabled>
+                Select a category...
               </option>
               {categories?.map((category: ICategory) => (
                 <option key={category.id} value={category.id}>
@@ -675,6 +678,7 @@ export default function UpdateProductForm({
                 </option>
               ))}
             </select>
+            <IoIosArrowDown className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`} />
             <CustomError error={formik.errors.categoryId} />
           </div>
           {/* Product Tags */}
@@ -727,6 +731,7 @@ export default function UpdateProductForm({
               <option value='out-of-stock'>Out of Stock</option>
             </select>
 
+            <IoIosArrowDown className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`} />
             <CustomError error={formik.errors.status} />
           </div>
         </div>

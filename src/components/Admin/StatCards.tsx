@@ -5,8 +5,13 @@ import { FiShoppingCart } from 'react-icons/fi';
 import { GiReceiveMoney } from 'react-icons/gi';
 import { TbLineScan } from 'react-icons/tb';
 import Link from 'next/link';
+import { IDashboardData } from '@/app/admin/page';
 
-export default function StatCards() {
+export default function StatCards({
+  dashboardData,
+}: {
+  dashboardData: IDashboardData | null
+}) {
   const card_icon_style =
     'h-10 w-10 text-xl flex items-center justify-center rounded-full';
 
@@ -23,12 +28,13 @@ export default function StatCards() {
 
         <div className='flex items-center gap-4'>
           <p className='text-gray-700 text-3xl font-medium'>
-            ${(59000).toLocaleString()}
+            {/* ${(59000).toLocaleString()} */}
+            ${dashboardData?.revenue ? (dashboardData?.revenue).toLocaleString() : (0).toLocaleString()}
           </p>
 
-          <span className='py-1 px-2 bg-green-100 text-green-600 text-xs rounded-full font-semibold'>
+          {/* <span className='py-1 px-2 bg-green-100 text-green-600 text-xs rounded-full font-semibold'>
             +10%
-          </span>
+          </span> */}
         </div>
       </div>
       {/*  */}
@@ -43,12 +49,13 @@ export default function StatCards() {
 
           <div className='flex items-center gap-4'>
             <p className='text-gray-700 text-3xl font-medium'>
-              {(990).toLocaleString()}
+              {/* {(990).toLocaleString()} */}
+              {dashboardData?.sales ? (dashboardData.sales).toLocaleString() : (0).toLocaleString()}
             </p>
 
-            <span className='py-1 px-2 bg-green-100 text-green-600 text-xs rounded-full font-semibold'>
+            {/* <span className='py-1 px-2 bg-green-100 text-green-600 text-xs rounded-full font-semibold'>
               +15%
-            </span>
+            </span> */}
           </div>
         </div>
       </Link>
@@ -62,12 +69,13 @@ export default function StatCards() {
 
           <div className='flex items-center gap-4'>
             <p className='text-gray-700 text-3xl font-medium'>
-              {(112).toLocaleString()}
+              {/* {(112).toLocaleString()} */}
+              {dashboardData?.quantity ? (dashboardData.quantity).toLocaleString() : (0).toLocaleString()}
             </p>
 
-            <span className='py-1 px-2 bg-gray-100 text-gray-600 text-xs rounded-full font-semibold'>
+            {/* <span className='py-1 px-2 bg-gray-100 text-gray-600 text-xs rounded-full font-semibold'>
               0%
-            </span>
+            </span> */}
           </div>
         </div>
       </Link>
@@ -76,16 +84,17 @@ export default function StatCards() {
         <span className={`${card_icon_style} bg-[#FAE1CF] text-blue-700`}>
           <BiWallet className='fill-[#E46A11]'/>
         </span>
-        <p className='my-3 text-neutral text-sm'>Balance</p>
+        <p className='my-3 text-neutral text-sm'>Total customers</p>
 
         <div className='flex items-center gap-4'>
           <p className='text-gray-700 text-3xl font-medium'>
-            ${(781227).toLocaleString()}
+            {/* ${(781227).toLocaleString()} */}
+            {dashboardData?.costomers ? (dashboardData.costomers).toLocaleString() : (0).toLocaleString()}
           </p>
 
-          <span className='py-1 px-2 bg-red-100 text-red-600 text-xs rounded-full font-semibold'>
+          {/* <span className='py-1 px-2 bg-red-100 text-red-600 text-xs rounded-full font-semibold'>
             -25%
-          </span>
+          </span> */}
         </div>
       </div>
       {/*  */}

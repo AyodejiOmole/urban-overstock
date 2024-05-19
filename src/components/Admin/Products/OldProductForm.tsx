@@ -738,7 +738,7 @@ export default function OldProductForm({
                         )
                     })}
                 </select>
-                <IoIosArrowDown className='absolute right-4 bottom-4'/>
+                <IoIosArrowDown className={`absolute right-4 ${formik.errors.discountType ? "top-10" : "bottom-4"}`} />
 
                 <CustomError error={formik.errors.discountType} />
               </div>
@@ -753,19 +753,21 @@ export default function OldProductForm({
                 <select
                   name='taxClass'
                   id='taxClass'
-                  className='text-neutral'
+                  className='text-neutral relative'
                   onChange={formik.handleChange}
                   value={formik.values.taxClass}
+                  
                 >
                   <option value='' defaultChecked disabled>
                     Select tax class....
                   </option>
                   <option value='none'>Tax Free</option>
+                  
                 </select>
 
-                <IoIosArrowDown className='absolute right-4 bottom-4'/>
-
+                <IoIosArrowDown className={`absolute right-4 ${formik.errors.taxClass ? "top-10" : "bottom-4"}`} />
                 <CustomError error={formik.errors.taxClass} />
+                
               </div>
             </div>
             {/*  */}
@@ -963,14 +965,17 @@ export default function OldProductForm({
               onChange={formik.handleChange}
               value={formik.values.categoryId}
             >
-              <option value='' defaultChecked disabled>
+              <option value='' defaultChecked={true} disabled>
                 Select a category....
               </option>
-              {categories?.map((category: ICategory) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
+              {/* <option value='' className='invisible' disabled></option> */}
+              {categories?.map((category: ICategory) => {
+                return (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                )
+              })}
               {/* <option defaultChecked disabled>
                     Select a discount type....
                   </option>
@@ -981,7 +986,7 @@ export default function OldProductForm({
                         )
                     })} */}
             </select>
-            <IoIosArrowDown className='absolute right-4 bottom-4'/>
+            <IoIosArrowDown className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`} />
             <CustomError error={formik.errors.categoryId} />
           </div>
           {/* Product Tags */}
@@ -1034,7 +1039,7 @@ export default function OldProductForm({
               <option value='out-of-stock'>Out of Stock</option>
             </select>
 
-            <IoIosArrowDown className='absolute right-4 bottom-4'/>
+            <IoIosArrowDown className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`} />
             <CustomError error={formik.errors.status} />
           </div>
         </div>

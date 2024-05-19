@@ -7,15 +7,26 @@ import React from 'react';
 import Sales from '@/components/Admin/Sales';
 import { IProducts } from '@/interfaces/products';
 import getAllProducts from '@/libs/products';
+import getTopChart from '@/libs/dashboard';
+
+export interface IDashboardData {
+    costomers: number
+    quantity: number
+    sales: number
+    revenue: number
+}
 
 const AdminDashboard = async () => {
     const apiRes: Promise<IProducts | undefined> = getAllProducts();
     const products = await apiRes;
 
+    const apiTopChart: Promise<IDashboardData | null> = getTopChart();
+    const dashboardData = await apiTopChart;
+
     return (
         <section>
-        <Header  />
-        <StatCards />
+        <Header />
+        <StatCards dashboardData={dashboardData}/>
         <SalesChart />
         <Sales products={products}/>
         <OrdersTable
