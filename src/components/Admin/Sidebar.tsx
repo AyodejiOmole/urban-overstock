@@ -15,13 +15,11 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 
 type SidebarProps = {
   isOpen: Boolean;
-  isOpenlg:Boolean;
   toggleSidebar: () => void;
-  toggleSidebarlg:()=> void;
-  handleNavItemClick:() => void;
+  
 };
 
-export default function AdminSidebar({ isOpen,isOpenlg, toggleSidebar,toggleSidebarlg,handleNavItemClick}: SidebarProps) {
+export default function AdminSidebar({ isOpen, toggleSidebar}: SidebarProps) {
   const pathname = usePathname();
   const [isExpanded, setIsExpanded] = useState<null | number>(null);
 
@@ -29,7 +27,7 @@ export default function AdminSidebar({ isOpen,isOpenlg, toggleSidebar,toggleSide
     <>
     <div className='lg:hidden'>
       <div
-        className={`w-screen h-screen z-30 fixed top-0 left-0 backdrop-blur-sm bg-[#0000004f] duration-300 block lg:hidden ${
+        className={`w-screen h-screen z-30 fixed top-0 left-0 bg-[#0000004f] duration-300 block lg:hidden ${
           isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
         onClick={toggleSidebar}
@@ -237,35 +235,33 @@ export default function AdminSidebar({ isOpen,isOpenlg, toggleSidebar,toggleSide
       </div>
     </div>
     <div className='hidden lg:block'>
-    {/* Backdrop */}
-    {isOpenlg && (
       <div
-        className="fixed top-0 left-0 w-screen h-screen z-30 backdrop-blur-sm bg-[#0000004f] duration-500"
-        onClick={toggleSidebarlg}
-        //onMouseDown={toggleSidebar}
+        className={`w-screen h-screen z-30 fixed top-0 left-0 bg-[#0000004f] duration-300 block lg:hidden ${
+          isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+        }`}
+        onClick={toggleSidebar}
       ></div>
-    )}
-
-    {/* Sidebar */}
-    <div
-      className={`fixed top-0 z-50 bg-white h-screen duration-300 ${
-        isOpenlg ? 'lg:w-1/6 translate-x-0 w-64 left-0' : 'lg:w-1/12 -translate-x-[100%] lg:translate-x-0 w-0 -left-4 lg:left-0'
-      }`}
-    >
-        {/* Button for toggling sidebar */}
-        {/* <div className="font-bold mt-2 mb-4 capitalize text-2xl text-gray-700 flex items-center justify-center" onClick={toggleSidebar}>
+      <div
+        className={`fixed top-0 z-50 bg-white h-screen duration-300 ${
+          isOpen
+            ? 'lg:w-1/6 translate-x-0 w-64 left-0'
+            : 'lg:w-1/12 -translate-x-[100%] lg:translate-x-0 w-0 -left-4 lg:left-0'
+        }`}
+      >
+      {/* Button for toggling sidebar */}
+        {/* <div className="cursor-pointer font-bold mt-2 mb-4 text-gray-700 flex items-center justify-center" onClick={toggleSidebar}>
           {isOpen ? <CgClose /> : <CgMenu />}
         </div> */}
         <div className='flex items-center justify-center py-[15px] px-[20px]'>
           <Image
-              onClick={toggleSidebarlg}
-              src={isOpenlg ? logo : logoIcon}
+              onClick={toggleSidebar}
+              src={isOpen? logo : logoIcon}
               alt='Urban Overstock Logo'
-              className={`duration-500 ${isOpenlg ? 'w-2/3' : 'w-1/2'}`}
+              className={`duration-500 ${isOpen ? 'w-2/3' : 'w-1/2'}`}
             />
         </div>
-      {/* Sidebar content */}
-      <div className="flex flex-col h-full gap-[10px] px-[18px]">
+        {/* Sidebar content */}
+        <div className="flex flex-col h-full gap-[10px] px-[18px]">
         {/* Your sidebar navigation links */}
         {
             links.map((link: ISidebarLink, index: number) => {
@@ -285,11 +281,14 @@ export default function AdminSidebar({ isOpen,isOpenlg, toggleSidebar,toggleSide
                           pathname.trim() === link.page
                             ? 'bg-primary-2 text-white hover:bg-primary'
                             : 'white text-neutral hover:bg-gray-100'
-                        } ${isOpenlg ? 'justify-start pl-6' : 'justify-center pl-0'}`}
-                        onClick={handleNavItemClick}
+                        } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
+                        // onClick={handleNavItemClick}
                       >
-                        <span>{link.icon}</span>
-                        {isOpenlg && <p className={`capitalize`}>{link.name}</p>}
+                        <a data-tooltip-id="uo-tooltip"
+                          data-tooltip-content={link?.name}>
+                          <span>{link.icon}</span>
+                        </a>
+                        {isOpen && <p className={`capitalize`}>{link.name}</p>}
                       </div>
                     </Link>
                 )              
@@ -305,7 +304,7 @@ export default function AdminSidebar({ isOpen,isOpenlg, toggleSidebar,toggleSide
                   className={`rounded-lg  w-full duration-500 'bg-gray-50' 
                     
                   `}
-                  onClick={handleNavItemClick}
+                  // onClick={handleNavItemClick}
                 >
                   <button
                     onClick={() => {
@@ -314,7 +313,7 @@ export default function AdminSidebar({ isOpen,isOpenlg, toggleSidebar,toggleSide
                         : setIsExpanded(index);
                     }}
                     className={`flex gap-4 w-full h-10 items-center py-4
-                    ${isOpenlg ? 'justify-between pl-6' : 'justify-center'}
+                    ${isOpen ? 'justify-between pl-6' : 'justify-center'}
                     ${
                       isExpanded === index
                         ? 'border-b-2 border-b-white'
@@ -329,10 +328,12 @@ export default function AdminSidebar({ isOpen,isOpenlg, toggleSidebar,toggleSide
                       `}
                   >
                     <div className='flex items-center gap-2'>
-                      <p>{link.icon}</p>
-                      {isOpenlg && <p className='capitalize'>{link.name}</p>}
+                      <a data-tooltip-id="uo-tooltip">
+                        <p>{link.icon}</p>
+                      </a>
+                      {isOpen && <p className='capitalize'>{link.name}</p>}
                     </div>
-                    {isOpenlg && (
+                    {isOpen && (
                       <span className='text-xl'>
                         {isExpanded === index ? (
                           <MdKeyboardArrowUp />
@@ -344,7 +345,7 @@ export default function AdminSidebar({ isOpen,isOpenlg, toggleSidebar,toggleSide
                   </button>
 
                   {/* Children */}
-                  {isOpenlg && isExpanded === index && (
+                  {isOpen && isExpanded === index && (
                     <div className={`py-2 duration-500`}>
                       {link.children && (
                         <div className='pl-12 text-sm'>
@@ -403,26 +404,25 @@ export default function AdminSidebar({ isOpen,isOpenlg, toggleSidebar,toggleSide
           <Link href='' className='p-2 flex items-center'>
             <div
               className={`py-4 flex gap-4 w-full h-10 items-center duration-500 rounded-md font-medium white text-neutral hover:bg-gray-50
-              } ${isOpenlg ? 'justify-start pl-6' : 'justify-center pl-0'}`}
+              } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
             >
               <FaHeadphonesAlt />
-              {isOpenlg && <p className='capitalize'>Support</p>}
+              {isOpen && <p className='capitalize'>Support</p>}
             </div>
           </Link>
           {/*  */}
           <Link href='' className='p-2 flex items-center'>
             <div
               className={`py-4 flex gap-4 w-full h-10 items-center duration-500 rounded-md font-medium white text-neutral hover:bg-gray-50
-              } ${isOpenlg ? 'justify-start pl-6' : 'justify-center pl-0'}`}
+              } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
             >
               <FiSettings />
-              {isOpenlg && <p className='capitalize'>Settings</p>}
+              {isOpen && <p className='capitalize'>Settings</p>}
             </div>
           </Link>
         </div>
       </div>
-
-    </div>
+      </div>
     </div>
     </>
   );

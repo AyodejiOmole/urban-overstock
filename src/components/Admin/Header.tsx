@@ -7,6 +7,7 @@ import { IoSearchOutline } from 'react-icons/io5';
 import { TbCalendar } from 'react-icons/tb';
 import Notification from '../Shared/Notification';
 import UserAvatar from '../Shared/UserAvatar';
+import { CgClose } from 'react-icons/cg';
 
 export interface AdminType {
   createdAt: string;
@@ -55,11 +56,14 @@ export default function AdminHeader({
       }`}
     >
       <button
-        className='font-bold capitalize text-2xl text-gray-700 lg:invisible'
+        className='font-bold capitalize text-2xl text-gray-700 lg:hidden'
         onClick={toggleSidebar}
       >
         <CgMenu />
       </button>
+      <div className="cursor-pointer font-bold text-gray-700 flex items-center justify-center" onClick={toggleSidebar}>
+          {isOpen ? <CgClose className='h-[20px] w-[20px]' /> : <CgMenu className='h-[20px] w-[20px] '/>}
+      </div>
       <div className='flex items-center gap-8'>
         {/* <button className='text-xl'>
           <IoSearchOutline />

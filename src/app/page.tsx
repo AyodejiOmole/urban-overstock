@@ -8,7 +8,8 @@ import WhyUs from '@/components/LandingPage/WhyUs';
 import Navbar from '@/components/Navbar';
 import ENDPOINTS from '@/config/ENDPOINTS';
 import React from 'react';
-
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
 interface ISetting {
   id: string | number;
   name: string;
@@ -53,6 +54,7 @@ export default async function Page() {
       <Testimonials />
       <FindYourStyle />
       <Footer />
+      <Tooltip id="uo-tooltip" />
     </>
   );
 }
