@@ -26,7 +26,8 @@ const ENDPOINTS = {
   SIZE_SETTINGS: `settings/size`,
 
   // Dashboard
-  DASHBOARD_TOP_CHART: `dashboard/top-chart`
+  DASHBOARD_TOP_CHART: `dashboard/top-chart`,
+  DASHBOARD_TOP_SELLERS: `dashboard/top-sellers`,
 };
 
 export default ENDPOINTS;

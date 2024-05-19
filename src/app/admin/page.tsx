@@ -8,6 +8,8 @@ import Sales from '@/components/Admin/Sales';
 import { IProducts } from '@/interfaces/products';
 import getAllProducts from '@/libs/products';
 import getTopChart from '@/libs/dashboard';
+import { ITopSellingProducts } from '@/interfaces/top-selling-products';
+import { getTopProductsAndUsers } from '@/libs/dashboard';
 
 export interface IDashboardData {
     costomers: number
@@ -23,12 +25,15 @@ const AdminDashboard = async () => {
     const apiTopChart: Promise<IDashboardData | null> = getTopChart();
     const dashboardData = await apiTopChart;
 
+    const topSellingProductsApiRes: Promise<ITopSellingProducts | undefined> = getTopProductsAndUsers();
+    const topSellingProducts = await topSellingProductsApiRes;
+
     return (
         <section>
         <Header />
         <StatCards dashboardData={dashboardData}/>
         <SalesChart />
-        <Sales products={products}/>
+        <Sales products={topSellingProducts?.topProducts}/>
         <OrdersTable
             orders={null}
             // handleChangeSelectedOrders={function (e: any): void {

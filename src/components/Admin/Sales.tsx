@@ -4,11 +4,10 @@ import getAllProducts from '@/libs/products';
 import { IProducts } from '@/interfaces/products';
 // import HTTPService from '@/services/http';
 import SalesByLocationTable from './SalesByLocationTable';
+import { ITopProduct } from '@/interfaces/top-selling-products';
 
-const Sales = async ({ products } : { products: IProducts | null | undefined}) => {
+const Sales = async ({ products } : { products: ITopProduct[] | null | undefined}) => {
     // const httpService = new HTTPService();
-    
-
     return (
         <section className='grid grid-cols-1 xl:grid-cols-6 gap-4 my-8'>
             <div className='rounded-lg bg-white border border-neural p-6 xl:col-span-4'>
