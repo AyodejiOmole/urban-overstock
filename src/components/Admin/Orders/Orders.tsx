@@ -160,7 +160,7 @@ export default function Orders({ orders }: { orders: IOrder[] | null }) {
           />
         </div>
 
-        <DatePicker handleSelectDate={handleSelectDate} />
+        {/* <DatePicker handleSelectDate={handleSelectDate} /> */}
 
         <div className='w-full'>
           <CategoryNavigation

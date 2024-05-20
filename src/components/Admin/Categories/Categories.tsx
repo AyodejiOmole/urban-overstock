@@ -49,7 +49,7 @@ export default function Categories({
           />
         </div>
 
-        <div><DatePicker handleSelectDate={handleSelectDate} /></div>
+        {/* <div><DatePicker handleSelectDate={handleSelectDate} /></div> */}
       </div>
 
       {/* Categories Table */}
