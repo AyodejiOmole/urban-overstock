@@ -667,7 +667,8 @@ export default function UpdateProductForm({
               id='categoryId'
               className='text-neutral'
               onChange={formik.handleChange}
-              value={formik.values.categoryId}
+              // value={formik.values.categoryId}
+              value={formik.values.categoryId === 0 ? '' : formik.values.categoryId}
             >
               <option value='' defaultChecked disabled>
                 Select a category...

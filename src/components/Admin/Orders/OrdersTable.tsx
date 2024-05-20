@@ -182,6 +182,17 @@ export default function OrdersTable({
 
   return (
     <div className='card rounded-xl p-4 bg-white border border-gray-200'>
+      <div className='flex justify-between items-center mb-3'>
+        <p className="text-black text-md font-semibold">Recent orders</p>
+      
+        <Link
+          href="/admin/orders"
+        >
+          <Button className='text-black'>
+            See more
+          </Button>
+        </Link>
+      </div>
       <DataTable
         value={matchedOrders ?? []}
         selectionMode={rowClick ? null : 'multiple'}

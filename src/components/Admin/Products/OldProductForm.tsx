@@ -963,10 +963,11 @@ export default function OldProductForm({
               id='categoryId'
               className='text-neutral'
               onChange={formik.handleChange}
-              value={formik.values.categoryId}
+              // value={formik.values.categoryId}
+              value={formik.values.categoryId === 0 ? '' : formik.values.categoryId}
             >
-              <option value='' defaultChecked={true} disabled>
-                Select a category....
+              <option value='' defaultChecked disabled>
+                Select a category...
               </option>
               {/* <option value='' className='invisible' disabled></option> */}
               {categories?.map((category: ICategory) => {
@@ -1031,8 +1032,9 @@ export default function OldProductForm({
               value={formik.values.status}
             >
               <option value='' defaultChecked disabled>
-                Select a status....
+                Select a status...
               </option>
+              {/* <option value='' className='invisible' disabled></option> */}
               <option value='draft'>Draft</option>
               <option value='published'>Published</option>
               <option value='low-stock'>Low Stock</option>
