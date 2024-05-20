@@ -7,14 +7,14 @@ import ENDPOINTS from '@/config/ENDPOINTS';
 import { getCookie } from 'cookies-next';
 import { cookies } from 'next/headers';
 import Cookies from 'universal-cookie';
+import { Tooltip } from 'primereact/tooltip';
 
 export default function DashboardLayout({
   children
 }: {
   children: React.ReactNode;
 }) {
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
-  const [isOpenlg, setIsOpenlg] = useState<boolean>(false); // State to manage sidebar open/close
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const [unreadNotifications, setUnreadNotifications] = useState<number>(0);
 
   useEffect(() => {
@@ -36,17 +36,7 @@ export default function DashboardLayout({
   }, []);
 
   const handleToggleSidebar = () => setSidebarOpen((prev) => !prev);
-  const toggleSidebarlg = () => {
-    setIsOpenlg(!isOpenlg);
-  };
-
- const handleNavItemClick = () => {
-    if (!isOpenlg) {
-      setIsOpenlg(true); // Open sidebar if it's closed
-    }
-  };
-
-  return (
+ return (
     <div className='grid grid-cols-12 bg-gray-50 relative min-h-screen'>
       <div
         className={`bg-white duration-500 transition-all border-r-[1px] border-r-gray-50 w-0 h-0 ${
@@ -55,10 +45,7 @@ export default function DashboardLayout({
       >
         <AdminSidebar
           isOpen={sidebarOpen}
-          isOpenlg={isOpenlg}
           toggleSidebar={handleToggleSidebar}
-          toggleSidebarlg={toggleSidebarlg}
-          handleNavItemClick = {handleNavItemClick}
         />
       </div>
       <div
@@ -66,10 +53,11 @@ export default function DashboardLayout({
           sidebarOpen ? 'lg:col-span-10' : 'lg:col-span-11'
         }`}
       >
-        <Header isOpen={sidebarOpen} toggleSidebar={handleToggleSidebar} unreadNotifications={unreadNotifications}/>
 
+        <Header isOpen={sidebarOpen} toggleSidebar={handleToggleSidebar} unreadNotifications={unreadNotifications}/>
         {children}
       </div>
+      <Tooltip target=".uo-tool-tip" />
     </div>
   );
 };

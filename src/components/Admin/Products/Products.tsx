@@ -49,7 +49,7 @@ export default function Products({
           />
         </div>
 
-        <DatePicker handleSelectDate={handleSelectDate} />
+        {/* <DatePicker handleSelectDate={handleSelectDate} /> */}
       </div>
 
       {/* Products Table */}
