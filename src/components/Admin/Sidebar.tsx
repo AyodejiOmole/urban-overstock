@@ -10,7 +10,9 @@ import logoIcon from '../../../public/logo-icon.png';
 import logo from '../../../public/logo.png';
 import Image from 'next/image';
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
-
+import { IoIosLogOut } from "react-icons/io";
+import Cookies from 'universal-cookie';
+import { useRouter } from 'next/navigation';
 // Rest of your imports...
 
 type SidebarProps = {
@@ -22,7 +24,12 @@ type SidebarProps = {
 export default function AdminSidebar({ isOpen, toggleSidebar}: SidebarProps) {
   const pathname = usePathname();
   const [isExpanded, setIsExpanded] = useState<null | number>(null);
-
+  const cookies = new Cookies();
+  const router = useRouter();
+  const logOut = () => {
+    cookies.remove("urban-token");
+    router.push("/auth/admin/login");
+  }
   return (
     <>
     <div className='lg:hidden'>
@@ -277,17 +284,18 @@ export default function AdminSidebar({ isOpen, toggleSidebar}: SidebarProps) {
                       }}
                     >
                       <div
-                        className={`py-4  flex gap-4 w-full h-10 items-center duration-500 rounded-md text-sm ${
+                        className={`py-4 uo-tool-tip flex gap-4 w-full h-10 items-center duration-500 rounded-md text-sm ${
                           pathname.trim() === link.page
                             ? 'bg-primary-2 text-white hover:bg-primary'
                             : 'white text-neutral hover:bg-gray-100'
                         } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
                         // onClick={handleNavItemClick}
+                        data-pr-tooltip={link.name}
+                        data-pr-position="right"
                       >
-                        <a data-tooltip-id="uo-tooltip"
-                          data-tooltip-content={link?.name}>
+                        
                           <span>{link.icon}</span>
-                        </a>
+            
                         {isOpen && <p className={`capitalize`}>{link.name}</p>}
                       </div>
                     </Link>
@@ -301,9 +309,11 @@ export default function AdminSidebar({ isOpen, toggleSidebar}: SidebarProps) {
               return (
                 <div
                   key={link.name}
-                  className={`rounded-lg  w-full duration-500 'bg-gray-50' 
+                  className={`rounded-lg  w-full duration-500 'bg-gray-50 uo-tool-tip' 
                     
                   `}
+                  data-pr-tooltip={link.name}
+                  data-pr-position="right"
                   // onClick={handleNavItemClick}
                 >
                   <button
@@ -328,9 +338,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar}: SidebarProps) {
                       `}
                   >
                     <div className='flex items-center gap-2'>
-                      <a data-tooltip-id="uo-tooltip">
                         <p>{link.icon}</p>
-                      </a>
                       {isOpen && <p className='capitalize'>{link.name}</p>}
                     </div>
                     {isOpen && (
@@ -400,26 +408,17 @@ export default function AdminSidebar({ isOpen, toggleSidebar}: SidebarProps) {
             })
         }
         {/* Settings */}
-        <div className='mt-[20px]'>
-          <Link href='' className='p-2 flex items-center'>
+        <div className='cursor-pointer mt-[20px] p-2 flex items-center'>
             <div
-              className={`py-4 flex gap-4 w-full h-10 items-center duration-500 rounded-md font-medium white text-neutral hover:bg-gray-50
+              onClick={() => logOut()}
+              className={`uo-tool-tip py-4 flex  gap-4 w-full h-10 items-center duration-500 rounded-md font-medium white text-neutral hover:bg-gray-50
               } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
+              data-pr-tooltip="Logout"
+              data-pr-position="right"
             >
-              <FaHeadphonesAlt />
-              {isOpen && <p className='capitalize'>Support</p>}
+              <IoIosLogOut />
+              {isOpen && <p className='capitalize'>Logout</p>}
             </div>
-          </Link>
-          {/*  */}
-          <Link href='' className='p-2 flex items-center'>
-            <div
-              className={`py-4 flex gap-4 w-full h-10 items-center duration-500 rounded-md font-medium white text-neutral hover:bg-gray-50
-              } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
-            >
-              <FiSettings />
-              {isOpen && <p className='capitalize'>Settings</p>}
-            </div>
-          </Link>
         </div>
       </div>
       </div>

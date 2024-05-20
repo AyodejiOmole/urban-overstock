@@ -30,7 +30,7 @@ export default function Header() {
       />
 
       <div className='flex items-center gap-[16px]'>
-        <DatePicker handleSelectDate={(date) => console.log(date)} />
+        {/* <DatePicker handleSelectDate={(date) => console.log(date)} /> */}
         <Link href='/admin/products/new'>
           <button className='rounded-[8px] h-fit w-fit text-[14px] text-[#090917] gap-[4px] flex items-center whitespace-nowrap bg-[#F2C94C] py-[10px] px-[14px] ' >
             <FaPlus />

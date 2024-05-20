@@ -7,14 +7,14 @@ import ENDPOINTS from '@/config/ENDPOINTS';
 import { getCookie } from 'cookies-next';
 import { cookies } from 'next/headers';
 import Cookies from 'universal-cookie';
+import { Tooltip } from 'primereact/tooltip';
 
 export default function DashboardLayout({
   children
 }: {
   children: React.ReactNode;
 }) {
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
-  const [isOpenlg, setIsOpenlg] = useState<boolean>(false); // State to manage sidebar open/close
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const [unreadNotifications, setUnreadNotifications] = useState<number>(0);
 
   useEffect(() => {
@@ -34,7 +34,6 @@ export default function DashboardLayout({
     .then(response => response.json())
     .then(data => setUnreadNotifications(data));
   }, []);
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
   const handleToggleSidebar = () => setSidebarOpen((prev) => !prev);
  return (
@@ -58,6 +57,7 @@ export default function DashboardLayout({
         <Header isOpen={sidebarOpen} toggleSidebar={handleToggleSidebar} unreadNotifications={unreadNotifications}/>
         {children}
       </div>
+      <Tooltip target=".uo-tool-tip" />
     </div>
   );
 };
