@@ -227,6 +227,10 @@ export default function OldProductForm({
       status: '',
       categoryId: 0,
       costPrice: 0,
+      weight: 0,
+      height: 0,
+      length: 0,
+      width: 0,
     },
     validationSchema: Yup.object({
       name: Yup.string().required().label('Name'),
@@ -243,6 +247,10 @@ export default function OldProductForm({
       barcode: Yup.string().required().label('Bar Code'),
       status: Yup.string().required().label('Status'),
       costPrice: Yup.number().min(1).required().label('Cost Price'),
+      weight: Yup.number().min(1).required().label('Weight'),
+      height: Yup.number().min(1).required().label('Height'),
+      length: Yup.number().min(1).required().label('Length'),
+      width: Yup.number().min(1).required().label('Width'),
     }),
     onSubmit: async (values) => {
       const variations = state;
@@ -874,7 +882,7 @@ export default function OldProductForm({
         </div>
 
         {/* Shipping */}
-        {/* <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4'>
+        <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4'>
           <p className='text-lg font-semibold text-gray-700 mb-8'>Shipping</p>
 
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-x-4 items-center'>
@@ -884,10 +892,11 @@ export default function OldProductForm({
               </label>
               <TextInput
                 placeholder='Type product weight...'
-                id='sku'
+                id='weight'
                 onChange={formik.handleChange}
-                value={formik.values.sku}
-                error={formik.errors.sku}
+                value={formik.values.weight}
+                error={formik.errors.weight}
+                type='number'
               />
             </div>
             
@@ -900,16 +909,17 @@ export default function OldProductForm({
               </label>
               <TextInput
                 placeholder='Type product length...'
-                id='barcode'
+                id='length'
                 onChange={formik.handleChange}
-                value={formik.values.barcode}
-                error={formik.errors.barcode}
+                value={formik.values.length}
+                error={formik.errors.length}
+                type='number'
               />
             </div>
             
             <div className='mb-6'>
               <label
-                htmlFor='amount'
+                htmlFor='height'
                 className='text-sm text-neutral mb-2 block'
               >
                 Height
@@ -917,10 +927,10 @@ export default function OldProductForm({
               <TextInput
                 inputMode='numeric'
                 placeholder='Type product height...'
-                id='amount'
+                id='height'
                 onChange={formik.handleChange}
-                value={formik.values.amount}
-                error={formik.errors.amount}
+                value={formik.values.height}
+                error={formik.errors.height}
                 type='number'
               />
             </div>
@@ -935,15 +945,15 @@ export default function OldProductForm({
               <TextInput
                 inputMode='numeric'
                 placeholder='Type product quantity...'
-                id='amount'
+                id='width'
                 onChange={formik.handleChange}
-                value={formik.values.amount}
-                error={formik.errors.amount}
-                type='number'
+                value={formik.values.width}
+                error={formik.errors.width}
+                type="number"
               />
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
 
       {/* Column 2 */}
