@@ -80,23 +80,25 @@ export default function StatCards({
         </div>
       </Link>
       {/*  */}
-      <div className='rounded-lg bg-white border border-neural p-6'>
-        <span className={`${card_icon_style} bg-[#FAE1CF] text-blue-700`}>
-          <BiWallet className='fill-[#E46A11]'/>
-        </span>
-        <p className='my-3 text-neutral text-sm'>Total customers</p>
+      <Link href="admin/customers">
+        <div className='rounded-lg bg-white border border-neural p-6'>
+          <span className={`${card_icon_style} bg-[#FAE1CF] text-blue-700`}>
+            <BiWallet className='fill-[#E46A11]'/>
+          </span>
+          <p className='my-3 text-neutral text-sm'>Total customers</p>
 
-        <div className='flex items-center gap-4'>
-          <p className='text-gray-700 text-3xl font-medium'>
-            {/* ${(781227).toLocaleString()} */}
-            {dashboardData?.costomers ? (dashboardData.costomers).toLocaleString() : (0).toLocaleString()}
-          </p>
+          <div className='flex items-center gap-4'>
+            <p className='text-gray-700 text-3xl font-medium'>
+              {/* ${(781227).toLocaleString()} */}
+              {dashboardData?.costomers ? (dashboardData.costomers).toLocaleString() : (0).toLocaleString()}
+            </p>
 
-          {/* <span className='py-1 px-2 bg-red-100 text-red-600 text-xs rounded-full font-semibold'>
-            -25%
-          </span> */}
+            {/* <span className='py-1 px-2 bg-red-100 text-red-600 text-xs rounded-full font-semibold'>
+              -25%
+            </span> */}
+          </div>
         </div>
-      </div>
+      </Link>
       {/*  */}
     </section>
   );
