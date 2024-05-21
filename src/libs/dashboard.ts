@@ -14,7 +14,7 @@ export default async function getTopChart() {
       'Cache-Control': 'no-cache, max-age=0',
     },
 
-    cache: 'no-store',
+    // cache: 'no-store',
     // next: {
     //   revalidate: 10,
     // },
@@ -42,7 +42,7 @@ export async function getTopProductsAndUsers() {
       'Cache-Control': 'no-cache, max-age=0',
     },
 
-    cache: 'no-store',
+    // cache: 'no-store',
     // next: {
     //   revalidate: 10,
     // },
