@@ -218,27 +218,18 @@ export default function AdminSidebar({ isOpen, toggleSidebar}: SidebarProps) {
         </div>
 
               {/* Settings */}
-      <div className='mt-[20px]'>
-          <Link href='' className='p-2 flex items-center'>
+        <div className='cursor-pointer self-end  p-2 flex items-center'>
             <div
-              className={`py-4 flex gap-4 w-full h-10 items-center duration-500 rounded-md font-medium white text-neutral hover:bg-gray-50
+              onClick={() => logOut()}
+              className={`uo-tool-tip py-4 flex  gap-4 w-full h-10 items-center duration-500 rounded-md font-medium white text-neutral hover:bg-gray-50
               } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
+              data-pr-tooltip="Logout"
+              data-pr-position="right"
             >
-              <FaHeadphonesAlt />
-              {isOpen && <p className='capitalize'>Support</p>}
-            </div>
-          </Link>
-          {/*  */}
-          <Link href='' className='p-2 flex items-center'>
-            <div
-              className={`py-4 flex gap-4 w-full h-10 items-center duration-500 rounded-md font-medium white text-neutral hover:bg-gray-50
-              } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
-            >
-              <FiSettings />
-              {isOpen && <p className='capitalize'>Settings</p>}
-            </div>
-          </Link>
-      </div>
+              <IoIosLogOut />
+              {isOpen && <p className='capitalize'>Logout</p>}
+        </div>
+        </div>
       </div>
     </div>
     <div className='hidden lg:block'>
@@ -309,12 +300,10 @@ export default function AdminSidebar({ isOpen, toggleSidebar}: SidebarProps) {
               return (
                 <div
                   key={link.name}
-                  className={`rounded-lg  w-full duration-500 'bg-gray-50 uo-tool-tip' 
+                  className={`rounded-lg  w-full duration-500 'bg-gray-50' 
                     
                   `}
-                  data-pr-tooltip={link.name}
-                  data-pr-position="right"
-                  // onClick={handleNavItemClick}
+                  onClick={toggleSidebar}
                 >
                   <button
                     onClick={() => {
@@ -322,7 +311,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar}: SidebarProps) {
                         ? setIsExpanded(null)
                         : setIsExpanded(index);
                     }}
-                    className={`flex gap-4 w-full h-10 items-center py-4
+                    className={`flex gap-4 w-full h-10 items-center py-4 uo-tool-tip
                     ${isOpen ? 'justify-between pl-6' : 'justify-center'}
                     ${
                       isExpanded === index
@@ -333,11 +322,15 @@ export default function AdminSidebar({ isOpen, toggleSidebar}: SidebarProps) {
                         // isSimilar(pathname, link.root) > 50
                         pathname.trim() === link.page
                           ? 'text-neutral'
-                          : 'text-gray-800'
+                          : 'text-gray-800 hover:bg-gray-100'
                       } 
                       `}
+                      data-pr-tooltip={link.name}
+                    data-pr-position="right"
                   >
-                    <div className='flex items-center gap-2'>
+                    <div className='flex items-center gap-2' 
+                    
+                    >
                         <p>{link.icon}</p>
                       {isOpen && <p className='capitalize'>{link.name}</p>}
                     </div>
