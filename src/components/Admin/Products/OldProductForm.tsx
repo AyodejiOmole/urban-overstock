@@ -10,7 +10,7 @@ import clsx from 'clsx';
 import { useFormik } from 'formik';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { ChangeEvent, useReducer, useRef, useState } from 'react';
+import React, { ChangeEvent, useReducer, useRef, useState, useEffect } from 'react';
 import { SketchPicker } from 'react-color';
 import toast from 'react-hot-toast';
 import { BiDollar } from 'react-icons/bi';
@@ -159,9 +159,12 @@ export default function OldProductForm({
   const [state, dispatch] = useReducer(reducerMethod, initialValues);
 
   const [brandPicker, setBrandPicker] = useState<boolean | null>(false);
-  const [brandToAdd, setBrandToAdd] = useState<string | null | undefined | any>("");
-  const [addBrandDisplay, setAddBrandDisplay] = useState<boolean | null>(false);
+  const brandPickerRef = useRef<HTMLDivElement>(null);
 
+  const [brandToAdd, setBrandToAdd] = useState<string | null | undefined | any>("");
+
+  const [addBrandDisplay, setAddBrandDisplay] = useState<boolean | null>(false);
+  const addBrandPresetRef = useRef<HTMLDivElement>(null);
 
   const token = cookies.get('urban-token');
   // const [productVariations, setProductVariations] = useState<IProductVariations[]>([]);
@@ -237,7 +240,10 @@ export default function OldProductForm({
       description: Yup.string().required().label('Description'),
       tag: Yup.string().required().label('Tag'),
       quantity: Yup.number().min(1).required().label('Quantity'),
-      amount: Yup.number().min(1).required().label('Price'),
+      amount: Yup.number().min(1).required().label('Price').test('amount', 'Amount cannot exceed be less than cost price.', function () {
+        const { costPrice, amount } = this.parent;
+        return amount <= costPrice;
+      }),
       discountType: Yup.string().required().label('Discount Type'),
       discountPercentage: Yup.number().min(0).required().label('Discount Type'),
       taxClass: Yup.string().required().label('Tax Class'),
@@ -442,6 +448,19 @@ export default function OldProductForm({
     setBrandToAdd(e.target.value);
   }
 
+  useEffect(() => {
+    document.body.addEventListener('click', (event) => {
+      
+      if (!brandPickerRef.current?.contains(event.target as Node) &&  !addBrandPresetRef.current?.contains(event.target as Node)) {
+        setAddBrandDisplay(false);
+        setBrandPicker(false);
+      }
+    });
+    return () => {
+      document.body.removeEventListener('click', () => {});
+    };
+  }, []);
+
   // const updateImageColor = (index: number, color: string) => {
   //   const updatedImages = productImages.filter((img, i) => i !== index);
   //   const current = productImages.find((img, i) => i === index);
@@ -542,6 +561,7 @@ export default function OldProductForm({
                 {brandPicker && (
                     <div
                       className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
+                      ref={brandPickerRef}
                     >   
                       <div
                         className="flex justify-between align-center mb-2"
@@ -586,6 +606,7 @@ export default function OldProductForm({
                 {addBrandDisplay && (
                   <div
                     className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
+                    ref={addBrandPresetRef}
                   >  
                     <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
                         Input brand preset:

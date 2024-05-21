@@ -1,6 +1,6 @@
 import Button from '@/components/Global/Button';
 import TextInput from '@/components/Global/TextInput';
-import React, { ChangeEvent, useReducer, useState, useRef } from 'react';
+import React, { ChangeEvent, useReducer, useState, useRef, useEffect } from 'react';
 import { IoClose } from 'react-icons/io5';
 import Image from 'next/image';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
@@ -114,12 +114,19 @@ const VariationItem = ({
   const [variationColor, setVariationColor] = useState<string>("");
   // const [sizeName, setSizeName] = useState<any>("");
   const [activeColorPicker, setActiveColorPicker] = useState<boolean>(false);
+  const activeColorPickerRef = useRef<HTMLDivElement>(null);
+
   const [sizePicker, setSizePicker] = useState<boolean | number | null>(null);
+  const sizePickerRef = useRef<HTMLDivElement>(null);
 
   const [displayAddColor, setDisplayAddColor] = useState<boolean | number | null>(false);
+  const displayAddColorRef = useRef<HTMLDivElement>(null);
+
   const [colorToAdd, setColorToAdd] = useState<string>("");
 
   const [displayAddSize, setDisplayAddSize] = useState<boolean | number | null>(-1);
+  const displayAddSizeRef = useRef<HTMLDivElement>(null);
+
   const [sizeToAdd, setSizeToAdd] = useState<string | null | any>('');
   const [sizeCode, setSizeCode] = useState<string | null | any>('');
 
@@ -136,6 +143,22 @@ const VariationItem = ({
       payload: { ...variation, sizeOptions: newSizeOptions },
     });
   };
+
+  useEffect(() => {
+    document.body.addEventListener('click', (event) => {
+      
+      if (!displayAddSizeRef.current?.contains(event.target as Node) && !activeColorPickerRef.current?.contains(event.target as Node) && !sizePickerRef.current?.contains(event.target as Node) &&  !displayAddColorRef.current?.contains(event.target as Node)) {
+        setActiveColorPicker(false);
+        setDisplayAddColor(false);
+
+        setSizePicker(false);
+        setDisplayAddSize(false);
+      }
+    });
+    return () => {
+      document.body.removeEventListener('click', () => {});
+    };
+  }, []);
 
   // const updateVariationValue = (
   //   e?: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -356,7 +379,7 @@ const VariationItem = ({
             </label>
             <div 
                 className = {
-                    clsx('h-[48px] bg-white px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                    clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
                 }
                 onClick={() => setActiveColorPicker(true)}
             >
@@ -367,6 +390,7 @@ const VariationItem = ({
               {activeColorPicker && (
                 <div
                   className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
+                  ref={activeColorPickerRef}
                 >   
                   <div
                     className="flex justify-between align-center mb-2"
@@ -429,6 +453,7 @@ const VariationItem = ({
               {displayAddColor && (
                 <div
                   className='absolute top-2 z-20 right-2 p-4 border border-gray-200 bg-white rounded-lg'
+                  ref={displayAddColorRef}
                 >  
                   <SketchPicker
                       // color={variationColor}
@@ -467,7 +492,7 @@ const VariationItem = ({
                 </label>
                 <div 
                     className = {
-                        clsx('h-[48px] bg-white px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                        clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
                     }
                     onClick={() => setSizePicker(index)}
                 >
@@ -481,6 +506,7 @@ const VariationItem = ({
                 {sizePicker === index && (
                   <div
                     className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
+                    ref={sizePickerRef}
                   >   
                     <div
                       className="flex justify-between align-center mb-2"
@@ -516,6 +542,7 @@ const VariationItem = ({
                 {displayAddSize === index && (
                   <div
                     className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
+                    ref={displayAddSizeRef}
                   >  
                     <label htmlFor='size' className='text-sm text-neutral mb-2 block'>
                         Input size presets:
