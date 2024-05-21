@@ -57,7 +57,7 @@ export default function CategoryForm() {
       // description: '',
     },
     validationSchema: Yup.object({
-      name: Yup.string().required().label('Name'),
+      name: Yup.string().max(12, 'Category name must be 12 characters or less').required().label('Name'),
       // description: Yup.string().required().label('Description'),
     }),
     onSubmit: async (values) => {

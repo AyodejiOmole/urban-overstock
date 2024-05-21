@@ -216,21 +216,21 @@ export default function OldProductForm({
       description: '',
       tag: '',
       brandId: 0,
-      quantity: 0,
-      amount: 0,
+      quantity: undefined,
+      amount: undefined,
       discountType: '',
-      discountPercentage: 0,
+      discountPercentage: undefined,
       taxClass: '',
-      vatAmount: 0,
+      vatAmount: undefined,
       sku: '',
       barcode: '',
       status: '',
       categoryId: 0,
-      costPrice: 0,
-      weight: 0,
-      height: 0,
-      length: 0,
-      width: 0,
+      costPrice: undefined,
+      weight: undefined,
+      height: undefined,
+      length: undefined,
+      width: undefined,
     },
     validationSchema: Yup.object({
       name: Yup.string().required().label('Name'),
@@ -246,7 +246,10 @@ export default function OldProductForm({
       sku: Yup.string().required().label('SKU'),
       barcode: Yup.string().required().label('Bar Code'),
       status: Yup.string().required().label('Status'),
-      costPrice: Yup.number().min(1).required().label('Cost Price'),
+      costPrice: Yup.number().min(1).required().label('Cost Price').test('costPrice', 'Cost Price cannot exceed Price', function () {
+        const { costPrice, amount } = this.parent;
+        return costPrice <= amount;
+      }),
       weight: Yup.number().min(1).required().label('Weight'),
       height: Yup.number().min(1).required().label('Height'),
       length: Yup.number().min(1).required().label('Length'),
@@ -490,6 +493,7 @@ export default function OldProductForm({
               placeholder='Type product description here...'
               onChange={formik.handleChange}
               value={formik.values.description}
+              className='bg-[#E0E2E7] '
             ></textarea>
 
             <CustomError error={formik.errors.description} />
@@ -527,7 +531,7 @@ export default function OldProductForm({
                 </label>
                 <div 
                     className = {
-                        clsx('h-[48px] bg-white px-4 py-2 relative rounded-lg border border-dark-100 flex gap-2 items-center',)
+                        clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 relative rounded-lg border border-dark-100 flex gap-2 items-center',)
                     }
                     onClick={() => setBrandPicker(true)}
                 >
@@ -733,7 +737,7 @@ export default function OldProductForm({
                 <select
                   name='discountType'
                   id='discountType'
-                  className='text-neutral'
+                  className='text-neutral bg-[#E0E2E7] '
                   onChange={formik.handleChange}
                   value={formik.values.discountType}
                 >
@@ -762,7 +766,7 @@ export default function OldProductForm({
                 <select
                   name='taxClass'
                   id='taxClass'
-                  className='text-neutral relative'
+                  className='text-neutral relative bg-[#E0E2E7] '
                   onChange={formik.handleChange}
                   value={formik.values.taxClass}
                   
@@ -961,6 +965,7 @@ export default function OldProductForm({
       <div className='lg:col-span-2'>
         <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg max-h-96'>
           <p className='text-lg font-semibold text-gray-700 mb-8'>Category</p>
+
           {/* Product Category */}
           <div className='mb-6 relative'>
             <label
@@ -972,7 +977,7 @@ export default function OldProductForm({
             <select
               name='categoryId'
               id='categoryId'
-              className='text-neutral'
+              className='text-neutral bg-[#E0E2E7] '
               onChange={formik.handleChange}
               // value={formik.values.categoryId}
               value={formik.values.categoryId === 0 ? '' : formik.values.categoryId}
@@ -980,7 +985,6 @@ export default function OldProductForm({
               <option value='' defaultChecked disabled>
                 Select a category...
               </option>
-              {/* <option value='' className='invisible' disabled></option> */}
               {categories?.map((category: ICategory) => {
                 return (
                   <option key={category.id} value={category.id}>
@@ -988,19 +992,11 @@ export default function OldProductForm({
                   </option>
                 )
               })}
-              {/* <option defaultChecked disabled>
-                    Select a discount type....
-                  </option>
-                  <option value='free'>No Discount</option>
-                  {discounts?.map((discount, index) => {
-                    return (
-                        <option key={index} value={discount.code}>{`${discount.percentage}%`}</option>
-                        )
-                    })} */}
             </select>
             <IoIosArrowDown className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`} />
             <CustomError error={formik.errors.categoryId} />
           </div>
+
           {/* Product Tags */}
           <div className='mb-6'>
             <label htmlFor='tag' className='text-sm text-neutral mb-2 block'>
@@ -1038,18 +1034,17 @@ export default function OldProductForm({
             <select
               name='status'
               id='status'
-              className='text-neutral'
+              className='text-neutral bg-[#E0E2E7] '
               onChange={formik.handleChange}
               value={formik.values.status}
             >
               <option value='' defaultChecked disabled>
                 Select a status...
               </option>
-              {/* <option value='' className='invisible' disabled></option> */}
               <option value='draft'>Draft</option>
               <option value='published'>Published</option>
-              <option value='low-stock'>Low Stock</option>
-              <option value='out-of-stock'>Out of Stock</option>
+              <option value='low stock'>Low Stock</option>
+              <option value='out of stock'>Out of Stock</option>
             </select>
 
             <IoIosArrowDown className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`} />
@@ -1060,10 +1055,19 @@ export default function OldProductForm({
 
       <div className='fixed right-0 bottom-0 w-full p-4 bg-white flex items-center justify-end'>
         {!searchParams.get("edit") && (
-          <div className='max-w-md w-full'>
-            <Button type='submit' block loading={formik.isSubmitting}>
-              Add Product
-            </Button>
+          <div className='flex items-center gap-4'>
+              <Link href='/admin/products'>
+                <Button variant='outlined' color='dark'>
+                  <FaX />
+                  Cancel
+                </Button>
+              </Link>
+
+              <div className='max-w-md w-full'>
+                <Button type='submit' block loading={formik.isSubmitting}>
+                  Add Product
+                </Button>
+              </div>
           </div>
         )}
         
