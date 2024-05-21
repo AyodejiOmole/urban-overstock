@@ -245,6 +245,7 @@ const VariationItem = ({
 
     if(sizes?.find((existingSize: ISize) => existingSize.code === code) || sizes?.find((existingSize: ISize) => existingSize.name === size)) {
       toast.error("This size preset already exists!");
+      setDisplayAddSize(-1);
     } else {
       try {
         httpService
@@ -277,6 +278,7 @@ const VariationItem = ({
 
     if(colors?.find((existingColor: IColor) => existingColor.code.toString() === color)) {
       toast.error("This color preset already exists!");
+      setDisplayAddColor(false);
     } else {
       try {
         httpService

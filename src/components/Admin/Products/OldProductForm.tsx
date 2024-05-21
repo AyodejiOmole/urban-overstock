@@ -414,6 +414,7 @@ export default function OldProductForm({
 
     if(brands?.find((existingBrand: IBrand) => existingBrand.name === brand)) {
       toast.error("This brand preset already exists!");
+      setAddBrandDisplay(false);
     } else {
       try {
         httpService
