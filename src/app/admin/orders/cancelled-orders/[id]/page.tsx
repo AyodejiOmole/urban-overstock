@@ -11,6 +11,7 @@ import { getSingleOrder } from '@/libs/orders';
 import { IOrder } from '@/interfaces/orders';
 // import { ICustomer } from '@/interfaces/customers';
 // import { ISingleCustomer } from '@/interfaces/customers';
+import Pagination from '@/components/Shared/Pagination';
 
 export default async function AdminCustomerDetails({
   params,
@@ -30,7 +31,10 @@ export default async function AdminCustomerDetails({
   return (
     <section>
       <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8'>
-        <p className='text-xl font-bold text-gray-700'>Customer Details</p>
+        <div>
+          <p className='text-xl font-bold text-gray-700'>Return Request</p>
+          <Pagination />
+        </div>
 
         <div className='flex items-center gap-4'>
           <Button variant='outlined'>

@@ -11,6 +11,12 @@ import { MdOutlineDelete } from 'react-icons/md';
 import { RxPencil2 } from 'react-icons/rx';
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 import { IoIosArrowDown } from 'react-icons/io';
+import HTTPService from '@/services/http';
+import Cookies from 'universal-cookie';
+import toast from 'react-hot-toast';
+import ENDPOINTS from '@/config/ENDPOINTS';
+import { useRouter } from 'next/navigation';
+import { MdOutlineModeEdit } from "react-icons/md";
 
 export default function HomeSlideshowTable({
   selectedDate,
@@ -26,22 +32,52 @@ export default function HomeSlideshowTable({
 
   console.log(slideshows);
 
+  const cookies = new Cookies();
+  const httpService = new HTTPService();
+
+  const router = useRouter();
+
+  async function deleteSliderImage(id: number) {
+    const token = cookies.get('urban-token');
+
+    if (
+      confirm(
+        'Are you sure you want to delete this slider image? This cannot be undone.'
+      )
+    ) {
+      toast.loading('Deleting slideshow...');
+
+      const res = await httpService.deleteById(
+        `${ENDPOINTS.SLIDER_IMAGE}/${String(id)}`,
+        `Bearer ${token}`
+      );
+
+      toast.dismiss();
+      if (res.status === 200) {
+        console.log(res);
+        toast.success('Slider image successfully deleted');
+        router.refresh();
+      } else toast.error('Cannot delete slider image at this time');
+    }
+  }
+
   function actionTemplate(slideshow: SliderImageType) {
     return (
       <div className='flex items-center justify-end gap-3'>
-        <Link
+        {/* <Link
           href={`/admin/home-slideshow/${slideshow.id}?edit=false`}
           className='text-xl text-neutral'
         >
           <FaEye />
-        </Link>
+        </Link> */}
         <Link
           href={`/admin/home-slideshow/${slideshow.id}?edit=true`}
           className='text-xl text-neutral'
         >
-          <RxPencil2 />
+          {/* <RxPencil2 /> */}
+          <MdOutlineModeEdit />
         </Link>
-        <button>
+        <button onClick={() => deleteSliderImage(slideshow.id)}>
           <MdOutlineDelete className='text-xl' />
         </button>
       </div>

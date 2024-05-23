@@ -99,7 +99,7 @@ export default function CancelledOrdersDisplay({ orders }: { orders: IOrder[] | 
     <>
       <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-4 py-4'>
         <div>
-          <p className='text-xl font-medium text-gray-700'>Cancelled  Orders</p>
+          <p className='text-xl font-medium text-gray-700'>Order</p>
           <Pagination /> 
         </div>
         

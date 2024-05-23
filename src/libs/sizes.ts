@@ -11,12 +11,13 @@ export default async function getAllSizes() {
   const apiRes = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.SIZE_SETTINGS}`, {
     headers: {
       ...(token && { Authorization: `Bearer ${token}` }),
+      'Cache-Control': 'no-cache, max-age=0',
     },
 
     // cache: 'no-store',
-    next: {
-      revalidate: 10,
-    },
+    // next: {
+    //   revalidate: 10,
+    // },
   });
 
   const res = await apiRes.json();

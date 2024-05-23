@@ -8,7 +8,6 @@ import WhyUs from '@/components/LandingPage/WhyUs';
 import Navbar from '@/components/Navbar';
 import ENDPOINTS from '@/config/ENDPOINTS';
 import React from 'react';
-
 interface ISetting {
   id: string | number;
   name: string;

@@ -13,6 +13,8 @@ import { DataTable } from 'primereact/datatable';
 import React, { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { FaEye } from 'react-icons/fa';
+import {MdOutlineEdit } from 'react-icons/md';
+import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineDelete, MdOutlineModeEdit } from 'react-icons/md';
 import { RxPencil2 } from 'react-icons/rx';
 import Cookies from 'universal-cookie';
@@ -88,7 +90,7 @@ export default function ProductsTable({
           <MdOutlineModeEdit />
         </Link>
         <button onClick={() => deleteProduct(product.id)}>
-          <MdOutlineDelete className='text-xl' />
+          <RiDeleteBin6Line className='text-xl' />
         </button>
       </div>
     );

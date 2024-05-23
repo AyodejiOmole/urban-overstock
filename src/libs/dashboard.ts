@@ -3,74 +3,86 @@ import ENDPOINTS from '@/config/ENDPOINTS';
 import { getCookie } from 'cookies-next';
 import { cookies } from 'next/headers';
 
-export default async function getAllCustomers() {
+export default async function getTopChart() {
   const token = getCookie('urban-token', { cookies });
 
   const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
-//   {{URL}}/api/v1/user/customer?size=10&page=0
 
-  const apiRes = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.CUSTOMERS}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Cache-Control': 'no-cache, max-age=0',
-    },
-
-    // cache: 'no-store',
-  });
-
-  const res = await apiRes.json();
-
-  if (!res.status) {
-    throw new Error('Failed to fetch customers')
-  };
-
-  return res.data;
-}
-
-export async function getSingleCustomerOrderHistory(customerId: number) {
-  const token = getCookie('urban-token', { cookies });
-
-  const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
-//   {{URL}}/api/v1/user/customer?size=10&page=0
-
-  const apiRes = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.USER_ORDER_HISTORY}/${customerId}`, {
+  const apiRes = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.DASHBOARD_TOP_CHART}`, {
     headers: {
       Authorization: `Bearer ${token}`,
       'Cache-Control': 'no-cache, max-age=0',
     },
 
     cache: 'no-store',
+    // next: {
+    //   revalidate: 10,
+    // },
   });
+
+  console.log(apiRes);
 
   const res = await apiRes.json();
 
-  if (!res.status) {
-    throw new Error('Failed to fetch customer order history')
-  };
+  console.log(res);
+
+  if (!res.status) throw new Error('Failed to fetch dashboard details!');
 
   return res.data;
 }
 
-export async function getSingleCustomer(customerId: string) {
+export async function getTopProductsAndUsers() {
   const token = getCookie('urban-token', { cookies });
 
   const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
 
-  const apiRes = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.CUSTOMERS}/${customerId}`, {
+  const apiRes = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.DASHBOARD_TOP_SELLERS}`, {
     headers: {
       Authorization: `Bearer ${token}`,
       'Cache-Control': 'no-cache, max-age=0',
     },
 
     cache: 'no-store',
+    // next: {
+    //   revalidate: 10,
+    // },
   });
+
+  console.log(apiRes);
 
   const res = await apiRes.json();
 
-  if (!res.status) {
-    throw new Error('Failed to fetch customer details!')
-    // console.log(res);
-  };
+  console.log(res);
+
+  if (!res.status) throw new Error('Failed to fetch product.');
+
+  return res.data;
+}
+
+export async function getDashboardGraph() {
+  const token = getCookie('urban-token', { cookies });
+
+  const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
+
+  const apiRes = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.DASHBOARD_GRAPH}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Cache-Control': 'no-cache, max-age=0',
+    },
+
+    cache: 'no-store',
+    // next: {
+    //   revalidate: 10,
+    // },
+  });
+
+  console.log(apiRes);
+
+  const res = await apiRes.json();
+
+  console.log(res);
+
+  if (!res.status) throw new Error('Failed to fetch graph details.');
 
   return res.data;
 }

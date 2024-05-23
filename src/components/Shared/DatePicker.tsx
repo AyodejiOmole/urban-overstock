@@ -28,8 +28,8 @@ export default function DatePicker({
       showTime
       hourFormat='24'
       placeholder='Select Dates'
-      className='p-0 text-neutral text-base bg-white rounded-md'
-      icon={<FiCalendar />}
+      className='pl-[16px] text-[12px] bg-white rounded-[8px] h-[40px] w-[170px]'
+      icon={<FiCalendar className='text-black h-[20px] w-[20px]'/>}
       showButtonBar
       showIcon
       iconPos='left'

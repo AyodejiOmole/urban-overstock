@@ -5,6 +5,7 @@ import { SlPhone } from 'react-icons/sl';
 import { IOrder } from '@/interfaces/orders';
 import { ISingleCustomer } from '@/interfaces/customers';
 import CancelledOrderTransactionTable from './CancelledOrderTransactionTable';
+import Image from 'next/image';
 
 export default function CancelledOrderDetails({
   cancelledOrderHistory,
@@ -13,13 +14,24 @@ export default function CancelledOrderDetails({
     cancelledOrderHistory: IOrder | undefined;
     cancelledOrdersDetails: any;
 }) {
+  console.log(cancelledOrderHistory);
   return (
     <div className='grid grid-cols-1 lg:grid-cols-6 gap-6'>
       {/* Column 1 */}
       <div className='lg:col-span-2'>
         <div className='p-2 border border-gray-200 bg-white rounded-lg pb-16 relative'>
-          {/* <div className='bg-gray-800 p-4 h-52 rounded-lg'></div> */}
-          {/* <div className='w-48 h-48 bg-gray-200 rounded-full absolute left-1/2 -translate-x-1/2 top-32'></div> */}
+          <div className='bg-blue-800 p-4 h-52 rounded-lg'>
+            
+          </div>
+          <div className='w-48 h-48 bg-gray-200 rounded-full absolute left-1/2 -translate-x-1/2 top-32'>
+            <Image
+              src={cancelledOrderHistory?.orderProduct[0].image ?? " "}
+              alt={"Damaged image"}
+              // objectFit="cover"
+              layout="fill"
+              className='rounded-full'
+            />
+          </div>
 
           <div className='pt-32 px-4'>
             <div className='p-4 text-center'>
@@ -98,7 +110,8 @@ export default function CancelledOrderDetails({
                 <div className='flex-1'>
                   <p className='text-neutral font-medium'>Latest Transaction</p>
                   <p className='text-gray-800 font-light text-sm'>
-                    12 December 2023
+                    {/* 12 December 2023 */}
+                    {cancelledOrderHistory?.updatedAt}
                   </p>
                 </div>
               </div>
@@ -110,6 +123,14 @@ export default function CancelledOrderDetails({
       <div className='lg:col-span-4'>
         <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg'>
           <CancelledOrderTransactionTable history={cancelledOrderHistory?.orderProduct}/>
+        </div>
+
+        <div>
+            <p className='mt-8 text-lg text-gray-700'>Reason For Cancelling</p>
+            <div className='my-4 p-4 sm:p-6 border border-gray-200 bg-white rounded-lg'>
+            {/* <p>{returnRequestDetails?.reason}</p> */}
+            {"Wrong product"}
+            </div>
         </div>
       </div>
     </div>

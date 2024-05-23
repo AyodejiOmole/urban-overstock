@@ -19,9 +19,20 @@ import { PiCalendarCheck } from 'react-icons/pi';
 import { RiRefreshLine } from 'react-icons/ri';
 import { TbFileInvoice } from 'react-icons/tb';
 import OrderDetailsTable from './OrderDetailsTable';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import toast from 'react-hot-toast';
+import HTTPService from '@/services/http';
+import Cookies from 'universal-cookie';
+import ENDPOINTS from '@/config/ENDPOINTS';
+import { useRouter } from 'next/navigation';
+import DatePicker from '@/components/Shared/DatePicker';
+import { Calendar, CalendarProps } from 'primereact/calendar';
+import { FiCalendar } from 'react-icons/fi';
 
 export default function OrderDetails({ order }: { order: IOrder | null }) {
   const [modalOpen, setModalOpen] = useState(false);
+  const [orderShippedModal, setOrderShippedModal] = useState(false);
 
   function openModal() {
     setModalOpen(true);
@@ -29,6 +40,154 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
 
   function closeModal() {
     setModalOpen(false);
+  }
+
+  const cookies = new Cookies();
+  const token = cookies.get('urban-token');
+
+  const httpService = new HTTPService();
+
+  const { replace } = useRouter();
+
+  const formik = useFormik({
+    initialValues: {
+      estimateDeliveryDate: "",
+      trackingService: "",
+      trackingNumber: "",
+      trackingLink: ""
+    },
+    validationSchema: Yup.object({
+      estimateDeliveryDate: Yup.string().required().label('Estimated Delivery Date'),
+      trackingService: Yup.string().required().label('Tracking Service'),
+      trackingNumber: Yup.string().required().label('Tracking Number'),
+      trackingLink: Yup.string().required().label('Trackling Link'),
+    }),
+    onSubmit: async (values) => {
+        // try {
+        //     httpService
+        //       .patch(`${ENDPOINTS.ORDER_TRACKING_INFORMATION}/${order?.id}`, values, `Bearer ${token}`)
+        //       .then((apiRes) => {
+        //         console.log('Response: ', apiRes);
+
+        //         if (apiRes.status === 200) {
+        //           formik.resetForm();
+
+        //           toast.success('Order updated successfully.');
+
+        //           setTimeout(() => {
+        //             replace('/admin/orders');
+        //           }, 1000);
+        //         }
+        //       });
+        //       httpService
+        //         .patch(`${ENDPOINTS.ORDERS}/${order?.id}`, { status: "Shipping" }, `Bearer ${token}`)
+        //         .then((apiRes) => {
+        //           console.log('Response: ', apiRes);
+        
+        //           if (apiRes.status === 200) {
+        //             formik.resetForm();
+        
+        //             toast.success('Order successfully updated.');
+        
+        //             setTimeout(() => {
+        //               replace('/admin/orders');
+        //             }, 1000);
+        //           }
+        //         });
+        // } catch (error) {
+        //   console.log(error);
+        // }
+        
+      closeModal();
+      // toast.loading("Updating order...");
+      // setOrderShippedModal(false);
+
+      const promise1 = httpService
+        .patch(`${ENDPOINTS.ORDER_TRACKING_INFORMATION}/${order?.id}`, values, `Bearer ${token}`)
+        // .then((apiRes) => {
+        //   console.log('Response: ', apiRes);
+        //   if (apiRes.status === 200) {
+        //     formik.resetForm();
+        //     toast.success('Order updated successfully.');
+        //     setTimeout(() => {
+        //       replace('/admin/orders');
+        //     }, 1000);
+        //   }
+        // });
+
+      const promise2 = httpService
+        .patch(`${ENDPOINTS.ORDERS}/${order?.id}`, { status: "Shipping" }, `Bearer ${token}`)
+        // .then((apiRes) => {
+        //   console.log('Response: ', apiRes);
+        //   if (apiRes.status === 200) {
+        //     formik.resetForm();
+        //     toast.success('Order successfully updated.');
+        //     setTimeout(() => {
+        //       replace('/admin/orders');
+        //     }, 1000);
+        //   }
+        // });
+
+      Promise.all([promise1, promise2]).then((results) => {
+          console.log('Response: ', results);
+          // toast.dismiss();
+          if (results[0].status === 200 && results[1].status === 200) {
+            formik.resetForm();
+            toast.success('Order successfully updated.');
+            setTimeout(() => {
+              replace('/admin/orders');
+            }, 1000);
+          }
+          // toast.dismiss();
+      }).catch((error) => {
+        console.error('Error occurred:', error);
+      });
+    },
+    validateOnChange: true,
+  });
+
+  const updateOrder = (orderId?: number, orderStatus?: string,) => {
+    if(orderId) {
+      try {
+        toast.loading("Updating order...");
+        setOrderShippedModal(false);
+        closeModal();
+
+        const data = {
+          status: orderStatus
+        }
+  
+        httpService
+          .patch(`${ENDPOINTS.ORDERS}/${orderId}`, data, `Bearer ${token}`)
+          .then((apiRes) => {
+            console.log('Response: ', apiRes);
+  
+            if (apiRes.status === 200) {
+              formik.resetForm();
+  
+              toast.success('Order successfully updated.');
+
+              
+  
+              setTimeout(() => {
+                replace('/admin/orders');
+              }, 1000);
+            }
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {toast.error("Order not provided.")}
+  }
+
+  const activateModal = () => {
+    if(order?.status.toLowerCase() === "shipping") {
+      setOrderShippedModal(true);
+    } else if (order?.status.toLowerCase() !== "shipping" && order?.status.toLowerCase() !== "delivered") {
+      openModal();
+    } else if (order.status.toLowerCase() === "delivered") {
+      toast.error("This order has been delivered. You can no longer update this order.");
+    }
   }
 
   return (
@@ -99,7 +258,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
           </div>
 
           {/*  */}
-          <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
+          {/* <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
             <div className='flex items-center gap-2'>
               <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
                 <CiMail />
@@ -109,7 +268,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
               </div>
             </div>
             <p>josh_adam@mail.com</p>
-          </div>
+          </div> */}
           {/*  */}
           <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
             <div className='flex items-center gap-2'>
@@ -154,7 +313,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
           </div>
 
           {/*  */}
-          <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
+          {/* <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
             <div className='flex items-center gap-2'>
               <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
                 <HiOutlineBadgeCheck />
@@ -164,7 +323,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
               </div>
             </div>
             <p>40000 Points</p>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -259,7 +418,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                 <div
                   className={clsx(
                     'h-12 w-12 rounded-full flex items-center justify-center text-xl bg-gray-200 border-4 border-gray-100 text-neutral',
-                    order?.status.toLowerCase() === 'shipped' &&
+                    order?.status.toLowerCase() === 'shipping' &&
                       'border-[#f5f5ff] bg-[#eeeeff] text-primary'
                   )}
                 >
@@ -307,8 +466,9 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
             </div>
 
             <div className='flex items-center gap-2 flex-wrap'>
-              <Button onClick={openModal}>Update Status</Button>
-              <Button variant='outlined'>Cancel Order</Button>
+              <Button onClick={activateModal}>Update Status</Button>
+              {/* <Button variant='outlined' >Cancel Order</Button> */}
+              <Button variant='outlined' onClick={() => updateOrder(order?.id, "Cancelled")}>Cancel Order</Button>
             </div>
 
             {/* Update Status Modal */}
@@ -320,16 +480,16 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-4 items-center'>
                 <div className='mb-6'>
                   <label
-                    htmlFor='courierName'
+                    htmlFor='trackingService'
                     className='text-sm text-neutral mb-2 block'
                   >
-                    Courier Name
+                    Tracking service
                   </label>
                   <TextInput
-                    id='courierName'
-                    onChange={() => {}}
-                    value={''}
-                    error={''}
+                    id='trackingService'
+                    onChange={formik.handleChange}
+                    value={formik.values.trackingService}
+                    error={formik.errors.trackingService}
                   />
                 </div>
                 {/*  */}
@@ -342,43 +502,58 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                   </label>
                   <TextInput
                     id='trackingNumber'
-                    onChange={() => {}}
-                    value={''}
-                    error={''}
+                    onChange={formik.handleChange}
+                    value={formik.values.trackingNumber}
+                    error={formik.errors.trackingNumber}
                   />
                 </div>
               </div>
 
               <div className='mb-6'>
                 <label
-                  htmlFor='shippingUrl'
+                  htmlFor='trackingLink'
                   className='text-sm text-neutral mb-2 block'
                 >
-                  Shipping Tracking URL
+                  Shipping Tracking URL/Link
                 </label>
                 <TextInput
-                  id='shippingUrl'
-                  onChange={() => {}}
-                  value={''}
-                  error={''}
+                  id='trackingLink'
+                  onChange={formik.handleChange}
+                  value={formik.values.trackingLink}
+                  error={formik.errors.trackingLink}
                 />
               </div>
 
               <div className='mb-6'>
                 <label
-                  htmlFor='estimatedDeliveryDate'
+                  htmlFor='estimateDeliveryDate'
                   className='text-sm text-neutral mb-2 block'
                 >
                   Estimated Delivery Date
                 </label>
-                <TextInput
-                  id='estimatedDeliveryDate'
-                  onChange={() => {}}
-                  value={''}
-                  error={''}
+                {/* <TextInput
+                  id='estimateDeliveryDate'
+                  onChange={formik.handleChange}
+                  value={formik.values.estimateDeliveryDate}
+                  error={formik.values.estimateDeliveryDate}
+                /> */}
+                {/* <DatePicker handleSelectDate={handleSelectDate} /> */}
+                <Calendar
+                  id='estimateDeliveryDate'
+                  value={new Date(formik.values.estimateDeliveryDate)}
+                  onChange={formik.handleChange}
+                  // showTime
+                  hourFormat='24'
+                  placeholder='Select Dates'
+                  className='pl-[16px] text-[12px] bg-white rounded-[8px] h-[40px] w-[170px]'
+                  icon={<FiCalendar className='text-black h-[20px] w-[20px]'/>}
+                  showButtonBar
+                  showIcon
+                  iconPos='left'
+                  hideOnDateTimeSelect={true}
                 />
               </div>
-              <div className='mb-6'>
+              {/* <div className='mb-6'>
                 <label
                   htmlFor='note'
                   className='text-sm text-neutral mb-2 block'
@@ -386,12 +561,27 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                   Note
                 </label>
                 <textarea id='note' onChange={() => {}} value={''} />
-              </div>
+              </div> */}
 
               <div className='flex items-center gap-2'>
-                <Button>Update</Button>
+                <Button onClick={formik.submitForm}>Update</Button>
                 <Button variant='outlined' onClick={closeModal}>
                   Cancel
+                </Button>
+              </div>
+            </Modal>
+
+            {/* Cancel order Modal */}
+            <Modal
+              isOpen={orderShippedModal}
+              handleClose={() => setOrderShippedModal(false)}
+              title='Status Update'
+            > 
+              <h3 className='mb-4 text-lg text-black'> Has your order been delivered? </h3>
+              <div className='flex items-center gap-2 justify-between'>
+                <Button onClick={() => updateOrder(order?.id, "Delivered")}>Yes</Button>
+                <Button variant='outlined' onClick={() =>  setOrderShippedModal(false)}>
+                  No
                 </Button>
               </div>
             </Modal>
