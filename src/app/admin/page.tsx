@@ -45,6 +45,7 @@ const AdminDashboard = async () => {
             // }}
             selectedOrders={[]}
             searchValue=''
+            page="recent orders"
         />
         </section>
   );

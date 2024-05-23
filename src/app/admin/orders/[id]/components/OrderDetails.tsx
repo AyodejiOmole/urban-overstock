@@ -22,6 +22,7 @@ import OrderDetailsTable from './OrderDetailsTable';
 
 export default function OrderDetails({ order }: { order: IOrder | null }) {
   const [modalOpen, setModalOpen] = useState(false);
+  const [cancelOrderModal, setCancelOrderModal] = useState(false);
 
   function openModal() {
     setModalOpen(true);
@@ -99,7 +100,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
           </div>
 
           {/*  */}
-          <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
+          {/* <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
             <div className='flex items-center gap-2'>
               <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
                 <CiMail />
@@ -109,7 +110,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
               </div>
             </div>
             <p>josh_adam@mail.com</p>
-          </div>
+          </div> */}
           {/*  */}
           <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
             <div className='flex items-center gap-2'>
@@ -154,7 +155,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
           </div>
 
           {/*  */}
-          <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
+          {/* <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
             <div className='flex items-center gap-2'>
               <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
                 <HiOutlineBadgeCheck />
@@ -164,7 +165,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
               </div>
             </div>
             <p>40000 Points</p>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -308,7 +309,8 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
 
             <div className='flex items-center gap-2 flex-wrap'>
               <Button onClick={openModal}>Update Status</Button>
-              <Button variant='outlined'>Cancel Order</Button>
+              <Button variant='outlined' >Cancel Order</Button>
+              {/* <Button variant='outlined' onClick={() =>  setCancelOrderModal(false)}>Cancel Order</Button> */}
             </div>
 
             {/* Update Status Modal */}
@@ -392,6 +394,22 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                 <Button>Update</Button>
                 <Button variant='outlined' onClick={closeModal}>
                   Cancel
+                </Button>
+              </div>
+            </Modal>
+
+            {/* Cancel order Modal */}
+            <Modal
+              isOpen={cancelOrderModal}
+              handleClose={() => setCancelOrderModal(false)}
+              // title='Status Update'
+            >
+              
+              <h3 className='font-semibold text-md text-black'> Are you sure you want to cancel this order? </h3>
+              <div className='flex items-center gap-2'>
+                <Button>Yes</Button>
+                <Button variant='outlined' onClick={() =>  setCancelOrderModal(false)}>
+                  No
                 </Button>
               </div>
             </Modal>

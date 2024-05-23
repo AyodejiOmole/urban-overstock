@@ -26,7 +26,7 @@ export default function OrdersTable({
   orders: IOrder[] | null;
   searchValue: string;
   selectedDate?: number | null;
-  page?: 'orders' | 'return-request' | 'cancelled orders';
+  page?: 'orders' | 'return-request' | 'cancelled orders' | 'recent orders';
   handleChangeSelectedOrders?: (e: any) => void;
   selectedOrders: IOrder[];
   categoryNavigation?: any;
@@ -78,13 +78,16 @@ export default function OrdersTable({
         styles = 'bg-orange-100 text-orange-600';
         break;
       case 'shipped':
-        styles = 'bg-blue-100 text-blue-600';
+        styles = 'bg-[#E8F8FD] text-[#13B2E4]';
         break;
       case 'delivered':
         styles = 'bg-green-100 text-green-600';
         break;
       case 'cancelled' || 'refunded':
         styles = 'bg-red-100 text-red-600';
+        break;
+      case 'packed':
+        styles = 'bg-[#E8F8FD] text-[#13B2E4]';
         break;
       default:
         styles = 'bg-purple-50 text-purple-600';
@@ -180,19 +183,25 @@ export default function OrdersTable({
     
   }, [searchValue, getOrdersByDate]);
 
+  const checkBoxTemplate = () => {
+    return 
+  }
+
   return (
     <div className='card rounded-xl p-4 bg-white border border-gray-200'>
-      <div className='flex justify-between items-center mb-3'>
-        <p className="text-black text-md font-semibold">Recent orders</p>
-      
-        <Link
-          href="/admin/orders"
-        >
-          <Button className='text-black'>
-            See more
-          </Button>
-        </Link>
-      </div>
+      {page.toLowerCase() === "recent orders" && (
+        <div className='flex justify-between items-center mb-3'>
+          <p className="text-black text-md font-semibold">Recent orders</p>
+        
+          <Link
+            href="/admin/orders"
+          >
+            <Button className='text-black'>
+              See more
+            </Button>
+          </Link>
+        </div>
+      )}
       <DataTable
         value={matchedOrders ?? []}
         selectionMode={rowClick ? null : 'multiple'}
@@ -208,10 +217,12 @@ export default function OrdersTable({
         className='rounded-md text-sm'
         sortOrder={-1}
         sortField='createdAt'
+        showSelectAll
         sortIcon={<IoIosArrowDown />}
+        selectionAutoFocus={true}
       >
-        <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} />
-        <Column field='uuid' header='Order ID' />
+        <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} className='descendant:border descendant:border-gray-800'/>
+        <Column field='uuid' header='Order ID' className='text-[#F2C94C]'/>
         <Column body={productTemplate} header='Product' />
         <Column field='date' header='Date' body={dateTemplate} sortable />
         <Column

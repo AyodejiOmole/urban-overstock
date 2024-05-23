@@ -236,21 +236,21 @@ export default function ProductForm({
 
   const formik = useFormik({
     initialValues: {
-      name: '',
-      description: '',
-      tag: '',
-      brandId: 0,
-      quantity: 0,
-      amount: 0,
-      discountType: '',
-      discountPercentage: 0,
-      taxClass: '',
-      vatAmount: 0,
-      sku: '',
-      barcode: '',
-      status: '',
-      categoryId: 0,
-      costPrice: 0,
+      name: activeProduct?.name ?? " ",
+      description: activeProduct?.description ?? " ",
+      tag: activeProduct?.tag ?? " ",
+      brandId: activeProduct?.brandId ?? undefined,
+      quantity: activeProduct?.quantity ?? undefined,
+      amount: activeProduct?.amount ?? undefined,
+      discountType: activeProduct?.discountType ?? " ",
+      discountPercentage: activeProduct?.discountPercentage ?? " ",
+      taxClass: activeProduct?.taxClass ?? " ",
+      vatAmount: activeProduct?.vatAmount ?? undefined,
+      sku: activeProduct?.sku ?? " ",
+      barcode: activeProduct?.barcode ?? " ",
+      status: activeProduct?.status ?? " ",
+      categoryId: activeProduct?.categoryId ?? undefined,
+      costPrice: activeProduct?.costPrice ?? undefined,
     },
     validationSchema: Yup.object({
       name: Yup.string().required().label('Name'),
@@ -319,7 +319,7 @@ export default function ProductForm({
             const data = {
               id: activeProduct?.id,
               ...values,
-              categoryId: +values.categoryId,
+              categoryId: values.categoryId ?? 0,
               productVarations: getFormattedVariations(state),
               imageUrls: product_images,
             };
@@ -553,42 +553,42 @@ export default function ProductForm({
 
   useEffect(() => {
     if(activeProduct) {
-      console.log(activeProduct);
-      const {
-        name,
-        description,
-        tag,
-        brandId,
-        quantity,
-        amount,
-        discountType,
-        discountPercentage,
-        taxClass,
-        vatAmount,
-        sku,
-        barcode,
-        status,
-        categoryId,
-        costPrice,
-      } = activeProduct;
+      // console.log(activeProduct);
+      // const {
+      //   name,
+      //   description,
+      //   tag,
+      //   brandId,
+      //   quantity,
+      //   amount,
+      //   discountType,
+      //   discountPercentage,
+      //   taxClass,
+      //   vatAmount,
+      //   sku,
+      //   barcode,
+      //   status,
+      //   categoryId,
+      //   costPrice,
+      // } = activeProduct;
 
-      formik.setValues({
-        name,
-        description,
-        tag,
-        brandId,
-        quantity,
-        amount,
-        discountType,
-        discountPercentage,
-        taxClass,
-        vatAmount,
-        sku,
-        barcode,
-        status,
-        categoryId,
-        costPrice
-      });
+      // formik.setValues({
+      //   name,
+      //   description,
+      //   tag,
+      //   brandId,
+      //   quantity,
+      //   amount,
+      //   discountType,
+      //   discountPercentage,
+      //   taxClass,
+      //   vatAmount,
+      //   sku,
+      //   barcode,
+      //   status,
+      //   categoryId,
+      //   costPrice
+      // });
 
       const variations: IProductVariations[] = activeProduct.productVarations.map((variation) => {
         const { id, colorId, imageUrl } = variation;
