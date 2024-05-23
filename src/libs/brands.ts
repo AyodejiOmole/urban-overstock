@@ -11,12 +11,13 @@ export default async function getAllBrands() {
   const apiRes = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.BRAND_SETTINGS}`, {
     headers: {
       ...(token && { Authorization: `Bearer ${token}` }),
+      'Cache-Control': 'no-cache, max-age=0',
     },
 
     // cache: 'no-store',
-    next: {
-      revalidate: 10,
-    },
+    // next: {
+    //   revalidate: 10,
+    // },
   });
 
   const res = await apiRes.json();
