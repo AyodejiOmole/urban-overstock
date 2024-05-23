@@ -5,37 +5,6 @@ import AreaChart from '../Chart/AreaChart';
 import { IGraphDetails } from '@/interfaces/graph';
 import { Graph } from '@/interfaces/graph';
 
-<<<<<<< HEAD
-export const data = {
-  labels: months_labels,
-  datasets: [
-    {
-      fill: true,
-      label: 'Sales',
-      data: months_labels.map(() => {
-        return faker.number.int({ min: 15, max: 500 });
-      }),
-      borderColor: 'rgba(228, 106, 17, 1)',
-      backgroundColor: 'rgba(233, 136, 65, 0.1)',
-      borderWidth: 2,
-      interpolationMode: 'smooth',
-      lineTension: 0.5,
-    },
-    {
-      fill: true,
-      label: 'Revenue',
-      data: months_labels.map(() => {
-        return faker.number.int({ min: 10, max: 1000 });
-      }),
-      borderColor: 'rgba(242, 201, 76, 1)',
-      backgroundColor: 'rgba(125, 122, 237, 0.1)',
-      borderWidth: 2,
-      interpolationMode: 'smooth',
-      lineTension: 0.5,
-    },
-  ],
-};
-=======
 // export const data = {
 //   labels: months_labels,
 //   datasets: [
@@ -65,7 +34,6 @@ export const data = {
 //     },
 //   ],
 // };
->>>>>>> master
 
 export default function SalesChart({
   graph
@@ -115,11 +83,7 @@ export default function SalesChart({
             <span className='tooltip'>70%</span>
             <span className='graph'></span>
             <div className='absolute left-[50%] top-[60%] -translate-x-[50%] flex items-center justify-center flex-col'>
-<<<<<<< HEAD
-              <p className='font-bold text-2xl mb-1 text-gray-800'>75.55%</p>
-=======
               <p className='font-bold text-2xl mb-1 text-gray-800'>{graph?.revenueDifference.percentageDifference}</p>
->>>>>>> master
               {/* <span className='bg-green-100 text-green-600 p-1 px-4 text-[12px] rounded-full'>
                 +10%
               </span> */}
@@ -139,12 +103,8 @@ export default function SalesChart({
               <p className='text-[12px] text-neutral font-medium leading-[18px]'>Revenue</p>
               <div className='flex items-center'>
                 <p className='text-[#101828] text-[24px] leading-[32px]  font-medium'>
-<<<<<<< HEAD
-                  $30K{' '}
-=======
                   {/* $30K{' '} */}
                   {graph?.revenueDifference.todayRevenue}
->>>>>>> master
                 </p>
                 <GoArrowUp className='text-green-500 h-[20px] w-[20px] '/>
               </div>
@@ -154,12 +114,8 @@ export default function SalesChart({
               <p className='text-[12px] text-neutral font-medium leading-[18px]'>Today</p>
               <div className='flex items-center'>
                 <p className='text-[#101828] text-[24px] leading-[32px]  font-medium'>
-<<<<<<< HEAD
-                  $2.5K{' '}
-=======
                   {/* $2.5K{' '} */}
                   {graph?.revenueDifference.todayRevenue}
->>>>>>> master
                 </p>
                 <GoArrowUp className='text-green-500 h-[20px] w-[20px] '/>
               </div>

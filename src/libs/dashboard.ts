@@ -14,11 +14,7 @@ export default async function getTopChart() {
       'Cache-Control': 'no-cache, max-age=0',
     },
 
-<<<<<<< HEAD
-    // cache: 'no-store',
-=======
     cache: 'no-store',
->>>>>>> master
     // next: {
     //   revalidate: 10,
     // },
@@ -46,11 +42,7 @@ export async function getTopProductsAndUsers() {
       'Cache-Control': 'no-cache, max-age=0',
     },
 
-<<<<<<< HEAD
-    // cache: 'no-store',
-=======
     cache: 'no-store',
->>>>>>> master
     // next: {
     //   revalidate: 10,
     // },
@@ -66,8 +58,6 @@ export async function getTopProductsAndUsers() {
 
   return res.data;
 }
-<<<<<<< HEAD
-=======
 
 export async function getDashboardGraph() {
   const token = getCookie('urban-token', { cookies });
@@ -96,4 +86,3 @@ export async function getDashboardGraph() {
 
   return res.data;
 }
->>>>>>> master

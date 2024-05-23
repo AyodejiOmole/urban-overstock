@@ -12,11 +12,8 @@ import { ITopSellingProducts } from '@/interfaces/top-selling-products';
 import { getTopProductsAndUsers } from '@/libs/dashboard';
 import getOrders from '@/libs/orders';
 import { IOrder } from '@/interfaces/orders';
-<<<<<<< HEAD
-=======
 import { getDashboardGraph } from '@/libs/dashboard';
 import { IGraphDetails } from '@/interfaces/graph';
->>>>>>> master
 
 export interface IDashboardData {
     costomers: number
@@ -35,23 +32,16 @@ const AdminDashboard = async () => {
     const apiRes: Promise<IOrder[] | null> = getOrders();
     const orders = await apiRes;
 
-<<<<<<< HEAD
-=======
     const apiResGraph: Promise<IGraphDetails | null> = getDashboardGraph();
     const graph = await apiResGraph;
 
->>>>>>> master
     console.log(orders);
 
     return (
         <section>
         <Header />
         <StatCards dashboardData={dashboardData}/>
-<<<<<<< HEAD
-        <SalesChart />
-=======
         <SalesChart graph={graph}/>
->>>>>>> master
         <Sales products={topSellingProducts?.topProducts}/>
         <OrdersTable
             orders={orders?.sort((a: IOrder, b: IOrder) => Date.parse(b.createdAt) - Date.parse(a.createdAt)).slice(0, 10) ?? null}

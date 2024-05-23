@@ -31,10 +31,7 @@ const ENDPOINTS = {
   // Dashboard
   DASHBOARD_TOP_CHART: `dashboard/top-chart`,
   DASHBOARD_TOP_SELLERS: `dashboard/top-sellers`,
-<<<<<<< HEAD
-=======
   DASHBOARD_GRAPH: `dashboard/graph`,
->>>>>>> master
 };
 
 export default ENDPOINTS;
