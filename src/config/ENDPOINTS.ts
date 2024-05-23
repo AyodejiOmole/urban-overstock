@@ -14,8 +14,11 @@ const ENDPOINTS = {
   RESET_PASSWORD: `auth/reset`,
   RESEND_OTP: `auth/resend-otp`,
   SLIDER_IMAGE: `settings/slider-image`,
+
+  // Orders
   ORDERS: 'order',
   USER_ORDER_HISTORY: `order/user`,
+  ORDER_TRACKING_INFORMATION: `order/tacking-information`,
   DISCOUNT_CODE: `discount-code`,
 
   // Landing Page Settings

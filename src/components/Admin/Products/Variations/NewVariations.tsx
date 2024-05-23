@@ -456,22 +456,6 @@ const VariationItem = ({
         {variation.sizeOptions.map((option, index) => {
           return (
             <div className='items-start gap-4 w-full' key={index}>
-              {/* <div className='mb-4 w-full'>
-                  <label htmlFor='size' className='text-sm text-neutral mb-2 block'>
-                    Size:
-                  </label>
-                  <select id='size' value={option.sizeId} onChange={(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => updateVariationValue(e, index)}>
-                    <option value=''>Select Size</option>
-                    <option value='XS'>XS</option>
-                    <option value='S'>S</option>
-                    <option value='M'>M</option>
-                    <option value='L'>L</option>
-                    <option value='XL'>XL</option>
-                    <option value='XXL'>XXL</option>
-                    <option value='3XL'>3XL</option>
-                  </select>
-              </div> */}
-
               <div className='mb-4 w-full relative'>
                 <label htmlFor='size' className='text-sm text-neutral mb-2 block'>
                   Size:

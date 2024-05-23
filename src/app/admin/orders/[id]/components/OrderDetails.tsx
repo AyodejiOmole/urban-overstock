@@ -19,6 +19,16 @@ import { PiCalendarCheck } from 'react-icons/pi';
 import { RiRefreshLine } from 'react-icons/ri';
 import { TbFileInvoice } from 'react-icons/tb';
 import OrderDetailsTable from './OrderDetailsTable';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import toast from 'react-hot-toast';
+import HTTPService from '@/services/http';
+import Cookies from 'universal-cookie';
+import ENDPOINTS from '@/config/ENDPOINTS';
+import { useRouter } from 'next/navigation';
+import DatePicker from '@/components/Shared/DatePicker';
+import { Calendar, CalendarProps } from 'primereact/calendar';
+import { FiCalendar } from 'react-icons/fi';
 
 export default function OrderDetails({ order }: { order: IOrder | null }) {
   const [modalOpen, setModalOpen] = useState(false);
@@ -31,6 +41,50 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
   function closeModal() {
     setModalOpen(false);
   }
+
+  const cookies = new Cookies();
+  const token = cookies.get('urban-token');
+
+  const httpService = new HTTPService();
+
+  const { replace } = useRouter();
+
+  const formik = useFormik({
+    initialValues: {
+      estimateDeliveryDate: "",
+      trackingService: "",
+      trackingNumber: "",
+      trackingLink: ""
+    },
+    validationSchema: Yup.object({
+      estimateDeliveryDate: Yup.string().required().label('Estimated Delivery Date'),
+      trackingService: Yup.string().required().label('Tracking Service'),
+      trackingNumber: Yup.string().required().label('Tracking Number'),
+      trackingLink: Yup.string().required().label('Trackling Link'),
+    }),
+    onSubmit: async (values) => {
+        try {
+            httpService
+              .patch(`${ENDPOINTS.ORDER_TRACKING_INFORMATION}/${order?.id}`, values, `Bearer ${token}`)
+              .then((apiRes) => {
+                console.log('Response: ', apiRes);
+
+                if (apiRes.status === 200) {
+                  formik.resetForm();
+
+                  toast.success('Product updated successfully.');
+
+                  setTimeout(() => {
+                    replace('/admin/orders');
+                  }, 1000);
+                }
+              });
+        } catch (error) {
+          console.log(error);
+        }
+    },
+    validateOnChange: true,
+  });
 
   return (
     <div>
@@ -322,16 +376,16 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-4 items-center'>
                 <div className='mb-6'>
                   <label
-                    htmlFor='courierName'
+                    htmlFor='trackingService'
                     className='text-sm text-neutral mb-2 block'
                   >
-                    Courier Name
+                    Tracking service
                   </label>
                   <TextInput
-                    id='courierName'
-                    onChange={() => {}}
-                    value={''}
-                    error={''}
+                    id='trackingService'
+                    onChange={formik.handleChange}
+                    value={formik.values.trackingService}
+                    error={formik.errors.trackingService}
                   />
                 </div>
                 {/*  */}
@@ -344,43 +398,58 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                   </label>
                   <TextInput
                     id='trackingNumber'
-                    onChange={() => {}}
-                    value={''}
-                    error={''}
+                    onChange={formik.handleChange}
+                    value={formik.values.trackingNumber}
+                    error={formik.errors.trackingNumber}
                   />
                 </div>
               </div>
 
               <div className='mb-6'>
                 <label
-                  htmlFor='shippingUrl'
+                  htmlFor='trackingLink'
                   className='text-sm text-neutral mb-2 block'
                 >
-                  Shipping Tracking URL
+                  Shipping Tracking URL/Link
                 </label>
                 <TextInput
-                  id='shippingUrl'
-                  onChange={() => {}}
-                  value={''}
-                  error={''}
+                  id='trackingLink'
+                  onChange={formik.handleChange}
+                  value={formik.values.trackingLink}
+                  error={formik.errors.trackingLink}
                 />
               </div>
 
               <div className='mb-6'>
                 <label
-                  htmlFor='estimatedDeliveryDate'
+                  htmlFor='estimateDeliveryDate'
                   className='text-sm text-neutral mb-2 block'
                 >
                   Estimated Delivery Date
                 </label>
-                <TextInput
-                  id='estimatedDeliveryDate'
-                  onChange={() => {}}
-                  value={''}
-                  error={''}
+                {/* <TextInput
+                  id='estimateDeliveryDate'
+                  onChange={formik.handleChange}
+                  value={formik.values.estimateDeliveryDate}
+                  error={formik.values.estimateDeliveryDate}
+                /> */}
+                {/* <DatePicker handleSelectDate={handleSelectDate} /> */}
+                <Calendar
+                  id='estimateDeliveryDate'
+                  value={new Date(formik.values.estimateDeliveryDate)}
+                  onChange={formik.handleChange}
+                  // showTime
+                  hourFormat='24'
+                  placeholder='Select Dates'
+                  className='pl-[16px] text-[12px] bg-white rounded-[8px] h-[40px] w-[170px]'
+                  icon={<FiCalendar className='text-black h-[20px] w-[20px]'/>}
+                  showButtonBar
+                  showIcon
+                  iconPos='left'
+                  hideOnDateTimeSelect={true}
                 />
               </div>
-              <div className='mb-6'>
+              {/* <div className='mb-6'>
                 <label
                   htmlFor='note'
                   className='text-sm text-neutral mb-2 block'
@@ -388,10 +457,10 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                   Note
                 </label>
                 <textarea id='note' onChange={() => {}} value={''} />
-              </div>
+              </div> */}
 
               <div className='flex items-center gap-2'>
-                <Button>Update</Button>
+                <Button onClick={formik.submitForm}>Update</Button>
                 <Button variant='outlined' onClick={closeModal}>
                   Cancel
                 </Button>

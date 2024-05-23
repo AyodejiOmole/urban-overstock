@@ -251,6 +251,10 @@ export default function ProductForm({
       status: activeProduct?.status ?? " ",
       categoryId: activeProduct?.categoryId ?? undefined,
       costPrice: activeProduct?.costPrice ?? undefined,
+      weight: activeProduct?.weight ?? undefined,
+      height: activeProduct?.height ?? undefined,
+      length: activeProduct?.length ?? undefined,
+      width: activeProduct?.width ?? undefined,
     },
     validationSchema: Yup.object({
       name: Yup.string().required().label('Name'),
@@ -554,42 +558,7 @@ export default function ProductForm({
   useEffect(() => {
     if(activeProduct) {
       // console.log(activeProduct);
-      // const {
-      //   name,
-      //   description,
-      //   tag,
-      //   brandId,
-      //   quantity,
-      //   amount,
-      //   discountType,
-      //   discountPercentage,
-      //   taxClass,
-      //   vatAmount,
-      //   sku,
-      //   barcode,
-      //   status,
-      //   categoryId,
-      //   costPrice,
-      // } = activeProduct;
-
-      // formik.setValues({
-      //   name,
-      //   description,
-      //   tag,
-      //   brandId,
-      //   quantity,
-      //   amount,
-      //   discountType,
-      //   discountPercentage,
-      //   taxClass,
-      //   vatAmount,
-      //   sku,
-      //   barcode,
-      //   status,
-      //   categoryId,
-      //   costPrice
-      // });
-
+      
       const variations: IProductVariations[] = activeProduct.productVarations.map((variation) => {
         const { id, colorId, imageUrl } = variation;
         const sizeOptions = variation.sizeOptions.map((option) => {
@@ -864,8 +833,8 @@ export default function ProductForm({
                 ref={imageInputRef}
                 onChange={addNewImage}
               />
-              {productImages.length < 1 && <p>Click below to upload an image. Your image should not exceed 1MB and should be either a .jpeg or .png</p>}
-              {/* {productImages.length < 1 || (activeProduct && activeProduct.imageUrls.length > 0) && <p>Click below to upload an image. Your image should not exceed 1MB and should be either a .jpeg or .png</p>} */}
+              {/* {productImages.length < 1 || activeProduct?.imageUrls?.length < 1 && <p>Click below to upload an image. Your image should not exceed 1MB and should be either a .jpeg or .png</p>} */}
+              {productImages.length < 1 || (activeProduct && activeProduct.imageUrls.length > 0) && <p>Click below to upload an image. Your image should not exceed 1MB and should be either a .jpeg or .png</p>}
               <div className='flex items-center flex-wrap gap-2 mb-4'>
                 {productImages &&
                   productImages.map((img, index) => (
@@ -1151,7 +1120,7 @@ export default function ProductForm({
         </div>
 
         {/* Shipping */}
-        {/* <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4'>
+        <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4'>
           <p className='text-lg font-semibold text-gray-700 mb-8'>Shipping</p>
 
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-x-4 items-center'>
@@ -1161,10 +1130,11 @@ export default function ProductForm({
               </label>
               <TextInput
                 placeholder='Type product weight...'
-                id='sku'
+                id='weight'
                 onChange={formik.handleChange}
-                value={formik.values.sku}
-                error={formik.errors.sku}
+                value={formik.values.weight}
+                error={formik.errors.weight}
+                type='number'
               />
             </div>
             
@@ -1177,16 +1147,17 @@ export default function ProductForm({
               </label>
               <TextInput
                 placeholder='Type product length...'
-                id='barcode'
+                id='length'
                 onChange={formik.handleChange}
-                value={formik.values.barcode}
-                error={formik.errors.barcode}
+                value={formik.values.length}
+                error={formik.errors.length}
+                type='number'
               />
             </div>
             
             <div className='mb-6'>
               <label
-                htmlFor='amount'
+                htmlFor='height'
                 className='text-sm text-neutral mb-2 block'
               >
                 Height
@@ -1194,10 +1165,10 @@ export default function ProductForm({
               <TextInput
                 inputMode='numeric'
                 placeholder='Type product height...'
-                id='amount'
+                id='height'
                 onChange={formik.handleChange}
-                value={formik.values.amount}
-                error={formik.errors.amount}
+                value={formik.values.height}
+                error={formik.errors.height}
                 type='number'
               />
             </div>
@@ -1212,15 +1183,15 @@ export default function ProductForm({
               <TextInput
                 inputMode='numeric'
                 placeholder='Type product quantity...'
-                id='amount'
+                id='width'
                 onChange={formik.handleChange}
-                value={formik.values.amount}
-                error={formik.errors.amount}
-                type='number'
+                value={formik.values.width}
+                error={formik.errors.width}
+                type="number"
               />
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
 
       {/* Column 2 */}
