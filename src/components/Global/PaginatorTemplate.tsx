@@ -48,14 +48,14 @@ const paginatorTemplate = {
     },
     CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
         return (
-            <div style={{ color: 'var(--text-color)', userSelect: 'none', width: 'auto', textAlign: 'left'}} className='text-sm text-neutral items-center my-auto mr-auto'>
+            <div style={{ color: 'var(--text-color)', userSelect: 'none', width: 'auto', textAlign: 'left'}} className='text-sm rounded-none text-neutral items-center my-auto mr-auto'>
                 {`Showing ${options.first} - ${options.last} from ${options.totalRecords}`}
             </div>
         );
     },
     PrevPageLink: (options: PaginatorPrevPageLinkOptions) => {
         return (
-            <span className={classNames(options.className, 'bg-[#F2C94C] p-2')} onClick={options.onClick} >
+            <span className={classNames(options.className, 'rounded-none bg-[#F2C94C] p-2')} onClick={options.onClick} >
                 {/* <span className="p-3">Previous</span>
                 <Ripple /> */}
                 {/* <MdKeyboardArrowRight color="black"/> */}
@@ -65,7 +65,7 @@ const paginatorTemplate = {
     },
     NextPageLink: (options: PaginatorNextPageLinkOptions) => {
         return (
-            <span className={classNames(options.className, 'border-round bg-[#F2C94C] p-2')} onClick={options.onClick}>
+            <span className={classNames(options.className, 'rounded-none bg-[#F2C94C] p-2')} onClick={options.onClick}>
                 {/* <span className="p-3">Previous</span>
                 <Ripple /> */}
                 {/* <MdKeyboardArrowRight color="black"/> */}
