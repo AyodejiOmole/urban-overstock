@@ -183,8 +183,10 @@ export default function ProductForm({
   const [state, dispatch] = useReducer(reducerMethod, initialValues);
 
   const [brandPicker, setBrandPicker] = useState<boolean | null>(false);
+  const brandPickerRef = useRef<HTMLDivElement>(null);
   const [brandToAdd, setBrandToAdd] = useState<string | null | undefined | any>("");
   const [addBrandDisplay, setAddBrandDisplay] = useState<boolean | null>(false);
+  const addBrandPresetRef = useRef<HTMLDivElement>(null);
 
   const token = cookies.get('urban-token');
   // const [productVariations, setProductVariations] = useState<IProductVariations[]>([]);
@@ -261,7 +263,11 @@ export default function ProductForm({
       description: Yup.string().required().label('Description'),
       tag: Yup.string().required().label('Tag'),
       quantity: Yup.number().min(1).required().label('Quantity'),
-      amount: Yup.number().min(1).required().label('Price'),
+      // amount: Yup.number().min(1).required().label('Price'),
+      amount: Yup.number().min(1).required().label('Price').test('amount', 'Amount cannot exceed be less than cost price.', function () {
+        const { costPrice, amount } = this.parent;
+        return amount <= costPrice;
+      }),
       discountType: Yup.string().required().label('Discount Type'),
       discountPercentage: Yup.number().min(0).required().label('Discount Type'),
       taxClass: Yup.string().required().label('Tax Class'),
@@ -270,7 +276,11 @@ export default function ProductForm({
       sku: Yup.string().required().label('SKU'),
       barcode: Yup.string().required().label('Bar Code'),
       status: Yup.string().required().label('Status'),
-      costPrice: Yup.number().min(1).required().label('Cost Price'),
+      // costPrice: Yup.number().min(1).required().label('Cost Price'),
+      costPrice: Yup.number().min(1).required().label('Cost Price').test('costPrice', 'Cost Price cannot exceed Price', function () {
+        const { costPrice, amount } = this.parent;
+        return costPrice <= amount;
+      }),
     }),
     onSubmit: async (values) => {
       const variations = state;
@@ -653,6 +663,19 @@ export default function ProductForm({
     formik.setFieldValue("discountPercentage", discounts?.find(discount => discount.code === e.target.value)?.percentage);
   }
 
+  useEffect(() => {
+    document.body.addEventListener('click', (event) => {
+      
+      if (!brandPickerRef.current?.contains(event.target as Node) &&  !addBrandPresetRef.current?.contains(event.target as Node)) {
+        setAddBrandDisplay(false);
+        setBrandPicker(false);
+      }
+    });
+    return () => {
+      document.body.removeEventListener('click', () => {});
+    };
+  }, []);
+
   // const updateImageColor = (index: number, color: string) => {
   //   const updatedImages = productImages.filter((img, i) => i !== index);
   //   const current = productImages.find((img, i) => i === index);
@@ -704,6 +727,7 @@ export default function ProductForm({
               placeholder='Type product description here...'
               onChange={formik.handleChange}
               value={formik.values.description}
+              className='bg-[#E0E2E7]'
             ></textarea>
 
             <CustomError error={formik.errors.description} />
@@ -752,6 +776,7 @@ export default function ProductForm({
                 {brandPicker && (
                     <div
                       className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
+                      ref={brandPickerRef}
                     >   
                       <div
                         className="flex justify-between align-center mb-2"
@@ -796,6 +821,7 @@ export default function ProductForm({
                 {addBrandDisplay && (
                   <div
                     className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
+                    ref={addBrandPresetRef}
                   >  
                     <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
                         Input brand preset:
@@ -974,7 +1000,7 @@ export default function ProductForm({
                 <select
                   name='discountType'
                   id='discountType'
-                  className='text-neutral'
+                  className='text-neutral bg-[#E0E2E7]'
                   // onChange={formik.handleChange}
                   onChange={(e) => handleDiscountChange(e)}
                   value={formik.values.discountType}
@@ -1003,7 +1029,7 @@ export default function ProductForm({
                 <select
                   name='taxClass'
                   id='taxClass'
-                  className='text-neutral'
+                  className='text-neutral bg-[#E0E2E7]'
                   onChange={formik.handleChange}
                   value={formik.values.taxClass}
                 >
@@ -1202,14 +1228,14 @@ export default function ProductForm({
           <div className='mb-6'>
             <label
               htmlFor='categoryId'
-              className='text-sm text-neutral mb-2 block'
+              className='text-sm text-neutral mb-2 block '
             >
               Product Category
             </label>
             <select
               name='categoryId'
               id='categoryId'
-              className='text-neutral'
+              className='text-neutral bg-[#E0E2E7]'
               onChange={formik.handleChange}
               value={formik.values.categoryId}
             >
@@ -1222,6 +1248,7 @@ export default function ProductForm({
                 </option>
               ))}
             </select>
+            <IoIosArrowDown className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`} />
             <CustomError error={formik.errors.categoryId} />
           </div>
           {/* Product Tags */}
@@ -1261,7 +1288,7 @@ export default function ProductForm({
             <select
               name='status'
               id='status'
-              className='text-neutral'
+              className='text-neutral bg-[#E0E2E7] '
               onChange={formik.handleChange}
               value={formik.values.status}
             >
@@ -1274,6 +1301,7 @@ export default function ProductForm({
               <option value='out-of-stock'>Out of Stock</option>
             </select>
 
+            <IoIosArrowDown className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`} />
             <CustomError error={formik.errors.status} />
           </div>
         </div>
