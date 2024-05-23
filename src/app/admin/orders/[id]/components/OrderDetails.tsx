@@ -32,7 +32,7 @@ import { FiCalendar } from 'react-icons/fi';
 
 export default function OrderDetails({ order }: { order: IOrder | null }) {
   const [modalOpen, setModalOpen] = useState(false);
-  const [cancelOrderModal, setCancelOrderModal] = useState(false);
+  const [orderShippedModal, setOrderShippedModal] = useState(false);
 
   function openModal() {
     setModalOpen(true);
@@ -63,28 +63,132 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
       trackingLink: Yup.string().required().label('Trackling Link'),
     }),
     onSubmit: async (values) => {
-        try {
-            httpService
-              .patch(`${ENDPOINTS.ORDER_TRACKING_INFORMATION}/${order?.id}`, values, `Bearer ${token}`)
-              .then((apiRes) => {
-                console.log('Response: ', apiRes);
+        // try {
+        //     httpService
+        //       .patch(`${ENDPOINTS.ORDER_TRACKING_INFORMATION}/${order?.id}`, values, `Bearer ${token}`)
+        //       .then((apiRes) => {
+        //         console.log('Response: ', apiRes);
 
-                if (apiRes.status === 200) {
-                  formik.resetForm();
+        //         if (apiRes.status === 200) {
+        //           formik.resetForm();
 
-                  toast.success('Product updated successfully.');
+        //           toast.success('Order updated successfully.');
 
-                  setTimeout(() => {
-                    replace('/admin/orders');
-                  }, 1000);
-                }
-              });
-        } catch (error) {
-          console.log(error);
-        }
+        //           setTimeout(() => {
+        //             replace('/admin/orders');
+        //           }, 1000);
+        //         }
+        //       });
+        //       httpService
+        //         .patch(`${ENDPOINTS.ORDERS}/${order?.id}`, { status: "Shipping" }, `Bearer ${token}`)
+        //         .then((apiRes) => {
+        //           console.log('Response: ', apiRes);
+        
+        //           if (apiRes.status === 200) {
+        //             formik.resetForm();
+        
+        //             toast.success('Order successfully updated.');
+        
+        //             setTimeout(() => {
+        //               replace('/admin/orders');
+        //             }, 1000);
+        //           }
+        //         });
+        // } catch (error) {
+        //   console.log(error);
+        // }
+        
+      closeModal();
+      // toast.loading("Updating order...");
+      // setOrderShippedModal(false);
+
+      const promise1 = httpService
+        .patch(`${ENDPOINTS.ORDER_TRACKING_INFORMATION}/${order?.id}`, values, `Bearer ${token}`)
+        // .then((apiRes) => {
+        //   console.log('Response: ', apiRes);
+        //   if (apiRes.status === 200) {
+        //     formik.resetForm();
+        //     toast.success('Order updated successfully.');
+        //     setTimeout(() => {
+        //       replace('/admin/orders');
+        //     }, 1000);
+        //   }
+        // });
+
+      const promise2 = httpService
+        .patch(`${ENDPOINTS.ORDERS}/${order?.id}`, { status: "Shipping" }, `Bearer ${token}`)
+        // .then((apiRes) => {
+        //   console.log('Response: ', apiRes);
+        //   if (apiRes.status === 200) {
+        //     formik.resetForm();
+        //     toast.success('Order successfully updated.');
+        //     setTimeout(() => {
+        //       replace('/admin/orders');
+        //     }, 1000);
+        //   }
+        // });
+
+      Promise.all([promise1, promise2]).then((results) => {
+          console.log('Response: ', results);
+          // toast.dismiss();
+          if (results[0].status === 200 && results[1].status === 200) {
+            formik.resetForm();
+            toast.success('Order successfully updated.');
+            setTimeout(() => {
+              replace('/admin/orders');
+            }, 1000);
+          }
+          // toast.dismiss();
+      }).catch((error) => {
+        console.error('Error occurred:', error);
+      });
     },
     validateOnChange: true,
   });
+
+  const updateOrder = (orderId?: number, orderStatus?: string,) => {
+    if(orderId) {
+      try {
+        toast.loading("Updating order...");
+        setOrderShippedModal(false);
+        closeModal();
+
+        const data = {
+          status: orderStatus
+        }
+  
+        httpService
+          .patch(`${ENDPOINTS.ORDERS}/${orderId}`, data, `Bearer ${token}`)
+          .then((apiRes) => {
+            console.log('Response: ', apiRes);
+  
+            if (apiRes.status === 200) {
+              formik.resetForm();
+  
+              toast.success('Order successfully updated.');
+
+              
+  
+              setTimeout(() => {
+                replace('/admin/orders');
+              }, 1000);
+            }
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {toast.error("Order not provided.")}
+  }
+
+  const activateModal = () => {
+    if(order?.status.toLowerCase() === "shipping") {
+      setOrderShippedModal(true);
+    } else if (order?.status.toLowerCase() !== "shipping" && order?.status.toLowerCase() !== "delivered") {
+      openModal();
+    } else if (order.status.toLowerCase() === "delivered") {
+      toast.error("This order has been delivered. You can no longer update this order.");
+    }
+  }
 
   return (
     <div>
@@ -314,7 +418,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                 <div
                   className={clsx(
                     'h-12 w-12 rounded-full flex items-center justify-center text-xl bg-gray-200 border-4 border-gray-100 text-neutral',
-                    order?.status.toLowerCase() === 'shipped' &&
+                    order?.status.toLowerCase() === 'shipping' &&
                       'border-[#f5f5ff] bg-[#eeeeff] text-primary'
                   )}
                 >
@@ -362,9 +466,9 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
             </div>
 
             <div className='flex items-center gap-2 flex-wrap'>
-              <Button onClick={openModal}>Update Status</Button>
-              <Button variant='outlined' >Cancel Order</Button>
-              {/* <Button variant='outlined' onClick={() =>  setCancelOrderModal(false)}>Cancel Order</Button> */}
+              <Button onClick={activateModal}>Update Status</Button>
+              {/* <Button variant='outlined' >Cancel Order</Button> */}
+              <Button variant='outlined' onClick={() => updateOrder(order?.id, "Cancelled")}>Cancel Order</Button>
             </div>
 
             {/* Update Status Modal */}
@@ -469,15 +573,14 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
 
             {/* Cancel order Modal */}
             <Modal
-              isOpen={cancelOrderModal}
-              handleClose={() => setCancelOrderModal(false)}
-              // title='Status Update'
-            >
-              
-              <h3 className='font-semibold text-md text-black'> Are you sure you want to cancel this order? </h3>
-              <div className='flex items-center gap-2'>
-                <Button>Yes</Button>
-                <Button variant='outlined' onClick={() =>  setCancelOrderModal(false)}>
+              isOpen={orderShippedModal}
+              handleClose={() => setOrderShippedModal(false)}
+              title='Status Update'
+            > 
+              <h3 className='mb-4 text-lg text-black'> Has your order been delivered? </h3>
+              <div className='flex items-center gap-2 justify-between'>
+                <Button onClick={() => updateOrder(order?.id, "Delivered")}>Yes</Button>
+                <Button variant='outlined' onClick={() =>  setOrderShippedModal(false)}>
                   No
                 </Button>
               </div>
