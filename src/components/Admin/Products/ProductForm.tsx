@@ -264,9 +264,11 @@ export default function ProductForm({
       // tag: Yup.string().required().label('Tag'),
       quantity: Yup.number().min(1).required().label('Quantity'),
       // amount: Yup.number().min(1).required().label('Price'),
-      amount: Yup.number().min(1).required().label('Price').test('amount', 'Amount cannot exceed be less than cost price.', function () {
+      amount: Yup.number().min(1).required().label('Price').test('amount', 'Amount cannot be less than cost price.', function () {
+        // const { amount, costPrice } = this.parent;
+        // return costPrice > amount;
         const { costPrice, amount } = this.parent;
-        return amount <= costPrice;
+        return costPrice <= amount;
       }),
       discountType: Yup.string().required().label('Discount Type'),
       discountPercentage: Yup.number().min(0).required().label('Discount Type'),
