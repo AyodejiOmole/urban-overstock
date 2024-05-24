@@ -53,7 +53,7 @@ export default function OrdersTable({
     return (
       <div className='flex items-center gap-3'>
         <Link
-          href={page === "cancelled orders" ? `/admin/orders/cancelled-orders/${order.id}` : `/admin/${page}/${order.id}`}
+          href={page === "cancelled orders" ? `/admin/orders/cancelled-orders/${order.id}` : page === "recent orders" ? `/admin/orders/${order.id}` : `/admin/${page}/${order.id}`}
           className='text-xl text-neutral'
         >
           <FaEye />

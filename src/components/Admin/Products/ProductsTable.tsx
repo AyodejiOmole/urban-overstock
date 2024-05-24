@@ -25,17 +25,21 @@ export default function ProductsTable({
   selectedDate,
   searchValue,
   products,
+  handleChangeSelectedProducts,
+  selectedProducts,
 }: {
   searchValue: string;
   selectedDate: number | null;
   products: IProducts | undefined;
+  handleChangeSelectedProducts: (e: any) => void;
+  selectedProducts: IProducts;
 }) {
   const cookies = new Cookies();
   const httpService = new HTTPService();
 
-  const [selectedProducts, setSelectedProducts] = useState<IProduct[] | null>(
-    null
-  );
+  // const [selectedProducts, setSelectedProducts] = useState<IProduct[] | null>(
+  //   null
+  // );
   const [rowClick, setRowClick] = useState<boolean>(true);
 
   async function deleteProduct(id: number) {
@@ -135,9 +139,9 @@ export default function ProductsTable({
     return <p className="text-[#CFA31C]">{product.sku}</p>
   }
 
-  const dateChangeHandler = (e: any) => {
-    setSelectedProducts(e.value);
-  };
+  // const dateChangeHandler = (e: any) => {
+  //   handleChangeSelectedProducts(e.value);
+  // };
 
   const getProductsByDate = useMemo(() => {
     if (selectedDate) {
@@ -166,7 +170,8 @@ export default function ProductsTable({
         value={matchedProducts}
         selectionMode={rowClick ? null : 'multiple'}
         selection={selectedProducts!}
-        onSelectionChange={dateChangeHandler}
+        // onSelectionChange={dateChangeHandler}
+        onSelectionChange={handleChangeSelectedProducts}
         dataKey='id'
         tableStyle={{ minWidth: '50rem' }}
         paginator
