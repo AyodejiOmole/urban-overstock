@@ -222,7 +222,7 @@ export default function OldProductForm({
       quantity: undefined,
       amount: undefined,
       discountType: '',
-      discountPercentage: undefined,
+      discountPercentage: 0 ?? undefined,
       taxClass: '',
       vatAmount: undefined,
       sku: '',
@@ -449,6 +449,20 @@ export default function OldProductForm({
   const updateBrandToAdd = (e: ChangeEvent<HTMLInputElement>) => {
     // console.log(e);
     setBrandToAdd(e.target.value);
+  }
+
+  const handleDiscountChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const discount = discounts?.find(discount => discount.code === e.target.value);
+    const discountNumber = discount?.percentage;
+    // formik.setFieldValue("discountType", e.target.value);
+    // formik.setFieldValue("discountPercentage", discounts?.find(discount => discount.code === e.target.value)?.percentage);
+    // formik.setFieldValue("discountPercentage", discountNumber !== undefined ? Number(discountNumber) : 0);
+
+    //  formik.setValues({
+    //   discountType: e.target.value,
+    //   discountPercentage: discountNumber !== undefined ? Number(discountNumber) : 0,
+    //   ...formik.values
+    // });
   }
 
   useEffect(() => {
@@ -763,6 +777,7 @@ export default function OldProductForm({
                   id='discountType'
                   className='text-neutral bg-[#E0E2E7] '
                   onChange={formik.handleChange}
+                  // onChange={handleDiscountChange}
                   value={formik.values.discountType}
                 >
                   <option value='' defaultChecked disabled>
@@ -771,7 +786,7 @@ export default function OldProductForm({
                   <option value='free'>No Discount</option>
                   {discounts?.map((discount, index) => {
                     return (
-                        <option key={index} value={discount.code}>{`${discount.percentage}%`}</option>
+                        <option key={index} value={discount.code}>{`${discount.code}`}</option>
                         )
                     })}
                 </select>

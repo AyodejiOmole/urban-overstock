@@ -34,6 +34,8 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [orderShippedModal, setOrderShippedModal] = useState(false);
 
+  const [cancelOrderModal, setCancelOrderModal] = useState(false);
+
   function openModal() {
     setModalOpen(true);
   }
@@ -162,13 +164,11 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
           .then((apiRes) => {
             console.log('Response: ', apiRes);
   
+            toast.dismiss();
             if (apiRes.status === 200) {
               formik.resetForm();
   
               toast.success('Order successfully updated.');
-
-              
-  
               setTimeout(() => {
                 replace('/admin/orders');
               }, 1000);
@@ -468,7 +468,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
             <div className='flex items-center gap-2 flex-wrap'>
               <Button onClick={activateModal}>Update Status</Button>
               {/* <Button variant='outlined' >Cancel Order</Button> */}
-              <Button variant='outlined' onClick={() => updateOrder(order?.id, "Cancelled")}>Cancel Order</Button>
+              <Button variant='outlined' onClick={() => setCancelOrderModal(true)}>Cancel Order</Button>
             </div>
 
             {/* Update Status Modal */}
@@ -571,7 +571,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
               </div>
             </Modal>
 
-            {/* Cancel order Modal */}
+            {/* Order delivered Modal */}
             <Modal
               isOpen={orderShippedModal}
               handleClose={() => setOrderShippedModal(false)}
@@ -581,6 +581,21 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
               <div className='flex items-center gap-2 justify-between'>
                 <Button onClick={() => updateOrder(order?.id, "Delivered")}>Yes</Button>
                 <Button variant='outlined' onClick={() =>  setOrderShippedModal(false)}>
+                  No
+                </Button>
+              </div>
+            </Modal>
+
+            {/* Cancel Order Modal */}
+            <Modal
+              isOpen={cancelOrderModal}
+              handleClose={() => setCancelOrderModal(false)}
+              title='Cancel order'
+            > 
+              <h3 className='mb-4 text-lg text-black'> Are you sure you want to cancel this order? </h3>
+              <div className='flex items-center gap-2 justify-between'>
+                <Button onClick={() => updateOrder(order?.id, "Cancelled")}>Yes</Button>
+                <Button variant='outlined' onClick={() =>  setCancelOrderModal(false)}>
                   No
                 </Button>
               </div>
