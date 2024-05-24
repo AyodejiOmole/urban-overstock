@@ -33,14 +33,14 @@ const paginatorTemplate = {
             const className = classNames(options.className, { 'p-disabled': true });
 
             return (
-                <span className={classNames(options.className, 'border border-[#F2C94C]')} style={{ userSelect: 'none' }}>
+                <span className={classNames(options.className, 'border rounded-none border-[#F2C94C]')} style={{ userSelect: 'none' }}>
                     ...
                 </span>
             );
         }
 
         return (
-            <button type="button" className={classNames(options.className, `${options.page ? "bg-[#F2C94C]" : "bg-white"} border border-[#F2C94C] `)} onClick={options.onClick}>
+            <button type="button" className={classNames(options.className, `${options.page ? "bg-[#F2C94C]" : "bg-white"} rounded-none border border-[#F2C94C] `)} onClick={options.onClick}>
                 {options.page + 1}
                 {/* <Ripple /> */}
             </button>
@@ -48,7 +48,7 @@ const paginatorTemplate = {
     },
     CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
         return (
-            <div style={{ color: 'var(--text-color)', userSelect: 'none', width: 'auto', textAlign: 'left'}} className='text-sm rounded-none text-neutral items-center my-auto mr-auto'>
+            <div style={{ color: 'var(--text-color)', userSelect: 'none', width: 'auto', textAlign: 'left'}} className='text-sm text-neutral items-center my-auto mr-auto'>
                 {`Showing ${options.first} - ${options.last} from ${options.totalRecords}`}
             </div>
         );
