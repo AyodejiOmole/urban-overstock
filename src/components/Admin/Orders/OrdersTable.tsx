@@ -167,7 +167,8 @@ export default function OrdersTable({
     return getOrdersByDate?.filter(
       (order) =>
         order.uuid.toLowerCase().includes(searchValue) ||
-        order.shippingId.toLowerCase().includes(searchValue)
+        order.shippingId.toLowerCase().includes(searchValue) ||
+        order.orderProduct[0].productName.toLowerCase().includes(searchValue)
     );
     // if(selectedDate) {
       
