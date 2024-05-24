@@ -18,10 +18,10 @@ import { useRouter } from 'next/navigation';
 type SidebarProps = {
   isOpen: Boolean;
   toggleSidebar: () => void;
-  
+  setSidebarOpen: any;
 };
 
-export default function AdminSidebar({ isOpen, toggleSidebar}: SidebarProps) {
+export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen}: SidebarProps) {
   const pathname = usePathname();
   const [isExpanded, setIsExpanded] = useState<null | number>(null);
   const cookies = new Cookies();
@@ -30,6 +30,16 @@ export default function AdminSidebar({ isOpen, toggleSidebar}: SidebarProps) {
     cookies.remove("urban-token");
     router.push("/auth/admin/login");
   }
+
+  const expand = (index: number) => {
+    if(isExpanded === index) {
+      setIsExpanded(null);
+      setSidebarOpen(true);
+    } else {
+      setIsExpanded(index);               
+    }                    
+  }
+
   return (
     <>
     <div className='lg:hidden'>
@@ -125,11 +135,10 @@ export default function AdminSidebar({ isOpen, toggleSidebar}: SidebarProps) {
                   `}
                 >
                   <button
+                    // onClick={() => expand(index)}
                     onClick={() => {
-                      isExpanded === index
-                        ? setIsExpanded(null)
-                        : setIsExpanded(index);
-                    }}
+                      isExpanded === index ? setIsExpanded(null) : setIsExpanded(index);
+                    }}  
                     className={`flex gap-4 w-full h-10 items-center p-4
                     ${isOpen ? 'justify-between' : 'justify-center'}
                     ${
@@ -281,7 +290,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar}: SidebarProps) {
                             : 'white text-neutral hover:bg-gray-100'
                         } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
                         // onClick={handleNavItemClick}
-                        data-pr-tooltip={link.name}
+                        data-pr-tooltip={link.name.replace(/\b\w/g, (l) => {return l.toUpperCase()})}
                         data-pr-position="right"
                       >
                         
@@ -303,7 +312,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar}: SidebarProps) {
                   className={`rounded-lg  w-full duration-500 'bg-gray-50' 
                     
                   `}
-                  onClick={toggleSidebar}
+                  // onClick={toggleSidebar}
                 >
                   <button
                     onClick={() => {
@@ -325,7 +334,8 @@ export default function AdminSidebar({ isOpen, toggleSidebar}: SidebarProps) {
                           : 'text-gray-800 hover:bg-gray-100'
                       } 
                       `}
-                      data-pr-tooltip={link.name}
+                      // data-pr-tooltip={link.name}
+                      data-pr-tooltip={link.name.replace(/\b\w/g, (l) => {return l.toUpperCase()})}
                     data-pr-position="right"
                   >
                     <div className='flex items-center gap-2' 

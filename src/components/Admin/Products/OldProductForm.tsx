@@ -217,7 +217,7 @@ export default function OldProductForm({
     initialValues: {
       name: '',
       description: '',
-      tag: '',
+      // tag: 'null',
       brandId: 0,
       quantity: undefined,
       amount: undefined,
@@ -238,11 +238,13 @@ export default function OldProductForm({
     validationSchema: Yup.object({
       name: Yup.string().required().label('Name'),
       description: Yup.string().required().label('Description'),
-      tag: Yup.string().required().label('Tag'),
+      // tag: Yup.string().required().label('Tag'),
       quantity: Yup.number().min(1).required().label('Quantity'),
-      amount: Yup.number().min(1).required().label('Price').test('amount', 'Amount cannot exceed be less than cost price.', function () {
+      amount: Yup.number().min(1).required().label('Price').test('amount', 'Amount cannot be less than cost price.', function () {
+        // const { amount, costPrice } = this.parent;
+        // return costPrice > amount;
         const { costPrice, amount } = this.parent;
-        return amount <= costPrice;
+        return costPrice <= amount;
       }),
       discountType: Yup.string().required().label('Discount Type'),
       discountPercentage: Yup.number().min(0).required().label('Discount Type'),
@@ -252,7 +254,7 @@ export default function OldProductForm({
       sku: Yup.string().required().label('SKU'),
       barcode: Yup.string().required().label('Bar Code'),
       status: Yup.string().required().label('Status'),
-      costPrice: Yup.number().min(1).required().label('Cost Price').test('costPrice', 'Cost Price cannot exceed Price', function () {
+      costPrice: Yup.number().min(1).required().label('Cost Price').test('costPrice', 'Cost Price cannot exceed Price/Amount', function () {
         const { costPrice, amount } = this.parent;
         return costPrice <= amount;
       }),
@@ -348,7 +350,8 @@ export default function OldProductForm({
               categoryId: +values.categoryId,
               productVarations: getFormattedVariations(state, variationImages),
               // productImages: product_images,
-              imageUrls: product_images
+              imageUrls: product_images,
+              tag: "empty"
             };
 
             console.log('Request Body: ', data);
@@ -1019,7 +1022,7 @@ export default function OldProductForm({
           </div>
 
           {/* Product Tags */}
-          <div className='mb-6'>
+          {/* <div className='mb-6'>
             <label htmlFor='tag' className='text-sm text-neutral mb-2 block'>
               Product Tag
             </label>
@@ -1030,7 +1033,7 @@ export default function OldProductForm({
               value={formik.values.tag}
               error={formik.errors.tag}
             />
-          </div>
+          </div> */}
         </div>
 
         {/* Product Status */}
