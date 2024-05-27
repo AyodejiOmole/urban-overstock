@@ -18,7 +18,15 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-export default function Orders({ orders }: { orders: IOrder[] | null }) {
+export default function Orders(
+  { 
+    orders, 
+    cancelledOrdersCount
+  }: { 
+    orders: IOrder[] | null 
+    cancelledOrdersCount: number
+  }
+) {
   const [selectedOrders, setSelectedOrders] = useState<IOrder[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
@@ -111,7 +119,7 @@ export default function Orders({ orders }: { orders: IOrder[] | null }) {
               {/* <div className='bg-red-500 p-1 text-xs rounded-full flex justify-center items-center'></div> */}
               
               <div className='py-1 px-[6px] bg-red-500 rounded-full text-[10px] text-white'>
-                {orders?.filter(order => order.status.toLocaleLowerCase() === "cancelled").length}
+                {cancelledOrdersCount}
               </div>
             </Button>
           </Link>

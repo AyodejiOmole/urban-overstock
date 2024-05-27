@@ -65,85 +65,69 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
       trackingLink: Yup.string().required().label('Trackling Link'),
     }),
     onSubmit: async (values) => {
-        // try {
-        //     httpService
-        //       .patch(`${ENDPOINTS.ORDER_TRACKING_INFORMATION}/${order?.id}`, values, `Bearer ${token}`)
-        //       .then((apiRes) => {
-        //         console.log('Response: ', apiRes);
+        try {
+          const data = {
+            status: "Shipping",
+            ...values
+          }
+            httpService
+              .patch(`${ENDPOINTS.ORDERS}/${order?.id}`, data, `Bearer ${token}`)
+              .then((apiRes) => {
+                console.log('Response: ', apiRes);
 
-        //         if (apiRes.status === 200) {
-        //           formik.resetForm();
+                if (apiRes.status === 200) {
+                  formik.resetForm();
 
-        //           toast.success('Order updated successfully.');
+                  toast.success('Order successfully updated to shipping.');
 
-        //           setTimeout(() => {
-        //             replace('/admin/orders');
-        //           }, 1000);
-        //         }
-        //       });
-        //       httpService
-        //         .patch(`${ENDPOINTS.ORDERS}/${order?.id}`, { status: "Shipping" }, `Bearer ${token}`)
-        //         .then((apiRes) => {
-        //           console.log('Response: ', apiRes);
-        
-        //           if (apiRes.status === 200) {
-        //             formik.resetForm();
-        
-        //             toast.success('Order successfully updated.');
-        
-        //             setTimeout(() => {
-        //               replace('/admin/orders');
-        //             }, 1000);
-        //           }
-        //         });
-        // } catch (error) {
-        //   console.log(error);
-        // }
+                  setTimeout(() => {
+                    replace('/admin/orders');
+                  }, 1000);
+                }
+              });
+        } catch (error) {
+          console.log(error);
+        }
         
       closeModal();
       // toast.loading("Updating order...");
       // setOrderShippedModal(false);
+    },
+    validateOnChange: true,
+  });
 
-      const promise1 = httpService
-        .patch(`${ENDPOINTS.ORDER_TRACKING_INFORMATION}/${order?.id}`, values, `Bearer ${token}`)
-        // .then((apiRes) => {
-        //   console.log('Response: ', apiRes);
-        //   if (apiRes.status === 200) {
-        //     formik.resetForm();
-        //     toast.success('Order updated successfully.');
-        //     setTimeout(() => {
-        //       replace('/admin/orders');
-        //     }, 1000);
-        //   }
-        // });
-
-      const promise2 = httpService
-        .patch(`${ENDPOINTS.ORDERS}/${order?.id}`, { status: "Shipping" }, `Bearer ${token}`)
-        // .then((apiRes) => {
-        //   console.log('Response: ', apiRes);
-        //   if (apiRes.status === 200) {
-        //     formik.resetForm();
-        //     toast.success('Order successfully updated.');
-        //     setTimeout(() => {
-        //       replace('/admin/orders');
-        //     }, 1000);
-        //   }
-        // });
-
-      Promise.all([promise1, promise2]).then((results) => {
-          console.log('Response: ', results);
-          // toast.dismiss();
-          if (results[0].status === 200 && results[1].status === 200) {
-            formik.resetForm();
-            toast.success('Order successfully updated.');
-            setTimeout(() => {
-              replace('/admin/orders');
-            }, 1000);
+  const deliveredFormik = useFormik({
+    initialValues: {
+      deliveryDate: "",
+    },
+    validationSchema: Yup.object({
+      deliveryDate: Yup.string().required().label('Estimated Delivery Date'),
+    }),
+    onSubmit: async (values) => {
+        try {
+          const data = {
+            status: "Delivered",
+            ...values
           }
-          // toast.dismiss();
-      }).catch((error) => {
-        console.error('Error occurred:', error);
-      });
+            httpService
+              .patch(`${ENDPOINTS.ORDERS}/${order?.id}`, data, `Bearer ${token}`)
+              .then((apiRes) => {
+                console.log('Response: ', apiRes);
+
+                if (apiRes.status === 200) {
+                  formik.resetForm();
+
+                  toast.success('Order successfully updated to Delivered.');
+
+                  setTimeout(() => {
+                    replace('/admin/orders');
+                  }, 1000);
+                }
+              });
+        } catch (error) {
+          console.log(error);
+        }
+      setOrderShippedModal(false);
     },
     validateOnChange: true,
   });
@@ -578,10 +562,37 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
               title='Status Update'
             > 
               <h3 className='mb-4 text-lg text-black'> Has your order been delivered? </h3>
-              <div className='flex items-center gap-2 justify-between'>
+              {/* <div className='flex items-center gap-2 justify-between'>
                 <Button onClick={() => updateOrder(order?.id, "Delivered")}>Yes</Button>
                 <Button variant='outlined' onClick={() =>  setOrderShippedModal(false)}>
                   No
+                </Button>
+              </div> */}
+              <div className='mb-6'>
+                <label
+                  htmlFor='deliveryDate'
+                  className='text-sm text-neutral mb-2 block'
+                >
+                  Delivery Date
+                </label>
+                <Calendar
+                  id='deliveryDate'
+                  value={new Date(deliveredFormik.values.deliveryDate)}
+                  onChange={deliveredFormik.handleChange}
+                  hourFormat='24'
+                  placeholder='Select Dates'
+                  className='pl-[16px] text-[12px] bg-white rounded-[8px] h-[40px] w-[170px]'
+                  icon={<FiCalendar className='text-black h-[20px] w-[20px]'/>}
+                  showButtonBar
+                  showIcon
+                  iconPos='left'
+                  hideOnDateTimeSelect={true}
+                />
+              </div>
+              <div className='flex items-center gap-2'>
+                <Button onClick={deliveredFormik.submitForm}>Update</Button>
+                <Button variant='outlined' onClick={() => setOrderShippedModal(false)}>
+                  Cancel
                 </Button>
               </div>
             </Modal>

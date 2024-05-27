@@ -17,9 +17,11 @@ import Cookies from 'universal-cookie';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { RiDeleteBinLine } from "react-icons/ri";
+import { ICancelledOrders } from '@/interfaces/cancelled-orders';
+import CancelledOrdersTable from './CancelledOrdersTable';
 
-export default function CancelledOrdersDisplay({ orders }: { orders: IOrder[] | null }) {
-  const [selectedOrders, setSelectedOrders] = useState<IOrder[]>([]);
+export default function CancelledOrdersDisplay({ orders }: { orders: ICancelledOrders[] | null }) {
+  const [selectedOrders, setSelectedOrders] = useState<ICancelledOrders[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
 
@@ -176,7 +178,7 @@ export default function CancelledOrdersDisplay({ orders }: { orders: IOrder[] | 
       </div> */}
       {/* Orders Table */}
 
-      <OrdersTable
+      <CancelledOrdersTable
         orders={orders}
         handleChangeSelectedOrders={handleChangeSelectedOrders}
         selectedOrders={selectedOrders}

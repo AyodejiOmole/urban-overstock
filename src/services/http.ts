@@ -62,6 +62,12 @@ export default class HTTPService {
     return this.request(url, method, data, Authorization).then((res) => res.json());
   }
 
+  async patchById(url: string, Authorization?: string | null) {
+    const method = 'PATCH';
+
+    return this.request(url, method, null, Authorization).then((res) => res.json());
+  }
+
   async delete(url: string, id: string, Authorization: string | null) {
     const method = 'DELETE';
 
