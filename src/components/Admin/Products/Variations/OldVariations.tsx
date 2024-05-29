@@ -458,6 +458,7 @@ const VariationItem = ({
                 >  
                   <SketchPicker
                       // color={variationColor}
+                      color={colorToAdd}
                       onChange={(color) => {
                           console.log(color);
                           setColorToAdd(color.hex);

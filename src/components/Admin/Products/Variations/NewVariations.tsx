@@ -483,17 +483,30 @@ const VariationItem = ({
                   ref={displayAddColorRef}
                 >  
                   <SketchPicker
-                      // color={variationColor}
+                      color={colorToAdd}
                       onChange={(color) => {
                           console.log(color);
                           setColorToAdd(color.hex);
                       }}
                       className='relative z-20 mb-3'
                   /> 
+                  
+                  <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
+                      Color name:
+                  </label>
+                  
+                  <div 
+                      className = {
+                          clsx('h-[48px] bg-white px-4 py-2 mb-3 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                      }
+                  >
+                      {GetColorName(colorToAdd) === "" ? "Select a color..." : GetColorName(colorToAdd) }
+                  </div>
 
                   <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
-                      Color:
+                      Color code:
                   </label>
+                  
                   <div 
                       className = {
                           clsx('h-[48px] bg-white px-4 py-2 mb-3 rounded-lg border border-dark-100 flex gap-2 items-center',)
