@@ -383,7 +383,8 @@ const VariationItem = ({
                 }
                 onClick={() => setActiveColorPicker(true)}
             >
-                {variationColor === "" ? "Select a color..." : variationColor}
+                {/* {variationColor === "" ? "Select a color..." : variationColor} */}
+                {colors?.find((color: IColor) => color.id == variation.colorId)?.name ? colors?.find((color: IColor) => color.id == variation.colorId)?.name : "Select a color..."}
                 <IoIosArrowDown className='absolute right-4 top-auto bottom-auto'/>
             </div>
 
