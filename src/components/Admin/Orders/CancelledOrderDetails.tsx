@@ -82,8 +82,8 @@ export default function CancelledOrderDetails({
 
       <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8'>
         <div>
-          <p className='text-xl font-bold text-gray-700'>Return Request</p>
-          <Pagination />
+          <p className='text-xl font-bold text-gray-700'>Cancelled Orders</p>
+          <Pagination lastPage={"Cancelled Order Details"}/>
         </div>
 
         <div className='flex items-center gap-4'>
