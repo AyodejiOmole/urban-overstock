@@ -94,12 +94,12 @@ export default function Customers({
         </div>
 
         <div className='flex items-center gap-4'>
-          <Button variant='outlined' color='#F2C94C' onClick={() => updateCustomer(selectedCustomers, "SUSPENDED")}>
+          <Button variant='outlined' color='#F2C94C' onClick={() => updateCustomer(selectedCustomers, "ACTIVATED")}>
             {/* <PiExportBold /> */}
             Activate
           </Button>
           
-          <Button variant='outlined' color='#F2C94C' onClick={() => updateCustomer(selectedCustomers, "ACTIVATED")}>
+          <Button variant='outlined' color='#F2C94C' onClick={() => updateCustomer(selectedCustomers, "SUSPENDED")}>
             {/* <FaPlus /> */}
             Deactivate
           </Button>
