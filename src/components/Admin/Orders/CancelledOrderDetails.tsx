@@ -91,7 +91,7 @@ export default function CancelledOrderDetails({
             {/* <PiExportBold /> */}
             Approve
           </Button>
-          <Button onClick={() => cancelOrderRequest(cancelledOrderHistory?.id)}>
+          <Button variant='outlined' onClick={() => cancelOrderRequest(cancelledOrderHistory?.id)}>
             {/* <RiDeleteBin6Line /> */}
             Decline
           </Button>
