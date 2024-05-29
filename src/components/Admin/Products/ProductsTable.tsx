@@ -81,13 +81,13 @@ export default function ProductsTable({
     return (
       <div className='flex items-center gap-3'>
         <Link
-          href={`/admin/products/${product.id}?edit=false`}
+          href={`/admin/products/${product.id}`}
           className='text-xl text-neutral'
         >
           <FaEye />
         </Link>
         <Link
-          href={`/admin/products/${product.id}?edit=true`}
+          href={`/admin/products/${product.id}/edit`}
           className='text-xl text-neutral'
         >
           {/* <RxPencil2 /> */}
