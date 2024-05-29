@@ -133,9 +133,21 @@ function getGroupedVariations(variations: IProductVariations[]) {
 //   return newVariations;
 // }
 
-function getFormattedVariations(variations: IProductVariations[]) {
-  const newVariations = variations.map((variation: IProductVariations) => {
+// function getFormattedVariations(variations: IProductVariations[]) {
+//   const newVariations = variations.map((variation: IProductVariations) => {
+//     let { id, colorId, imageUrl, sizeOptions } = variation;
+//     return { id, colorId, imageUrl, sizeOptions };
+//   });
+
+//   return newVariations;
+// }
+
+function getFormattedVariations(variations: IProductVariations[], variationImages: {variation: IProductVariations, imageUrl: string}[]) {
+  const newVariations = variations.map((variation: IProductVariations, index) => {
     let { id, colorId, imageUrl, sizeOptions } = variation;
+    if(imageUrl === "") {
+      imageUrl = variationImages[index].imageUrl;
+    }
     return { id, colorId, imageUrl, sizeOptions };
   });
 
@@ -179,12 +191,17 @@ export default function ProductForm({
   console.log(activeProduct);
 
   const [activeImage, setActiveImage] = useState<null | number>(null);
+
   const [productImages, setProductImages] = useState<ProductImage[]>([]);
+  const [existingImages, setExistingImages] = useState<string[]>(activeProduct!.imageUrls);
+
   const [state, dispatch] = useReducer(reducerMethod, initialValues);
 
   const [brandPicker, setBrandPicker] = useState<boolean | null>(false);
+  const brandPickerRef = useRef<HTMLDivElement>(null);
   const [brandToAdd, setBrandToAdd] = useState<string | null | undefined | any>("");
   const [addBrandDisplay, setAddBrandDisplay] = useState<boolean | null>(false);
+  const addBrandPresetRef = useRef<HTMLDivElement>(null);
 
   const token = cookies.get('urban-token');
   // const [productVariations, setProductVariations] = useState<IProductVariations[]>([]);
@@ -236,28 +253,38 @@ export default function ProductForm({
 
   const formik = useFormik({
     initialValues: {
-      name: '',
-      description: '',
-      tag: '',
-      brandId: 0,
-      quantity: 0,
-      amount: 0,
-      discountType: '',
-      discountPercentage: 0,
-      taxClass: '',
-      vatAmount: 0,
-      sku: '',
-      barcode: '',
-      status: '',
-      categoryId: 0,
-      costPrice: 0,
+      name: activeProduct?.name ?? " ",
+      description: activeProduct?.description ?? " ",
+      // tag: activeProduct?.tag ?? " ",
+      brandId: activeProduct?.brandId ?? undefined,
+      quantity: activeProduct?.quantity ?? undefined,
+      amount: activeProduct?.amount ?? undefined,
+      discountType: activeProduct?.discountType ?? " ",
+      discountPercentage: activeProduct?.discountPercentage ?? " ",
+      taxClass: activeProduct?.taxClass ?? " ",
+      vatAmount: activeProduct?.vatAmount ?? undefined,
+      sku: activeProduct?.sku ?? " ",
+      barcode: activeProduct?.barcode ?? " ",
+      status: activeProduct?.status ?? " ",
+      categoryId: activeProduct?.categoryId ?? undefined,
+      costPrice: activeProduct?.costPrice ?? undefined,
+      weight: activeProduct?.weight ?? undefined,
+      height: activeProduct?.height ?? undefined,
+      length: activeProduct?.length ?? undefined,
+      width: activeProduct?.width ?? undefined,
     },
     validationSchema: Yup.object({
       name: Yup.string().required().label('Name'),
       description: Yup.string().required().label('Description'),
-      tag: Yup.string().required().label('Tag'),
+      // tag: Yup.string().required().label('Tag'),
       quantity: Yup.number().min(1).required().label('Quantity'),
-      amount: Yup.number().min(1).required().label('Price'),
+      // amount: Yup.number().min(1).required().label('Price'),
+      amount: Yup.number().min(1).required().label('Price').test('amount', 'Amount cannot be less than cost price.', function () {
+        // const { amount, costPrice } = this.parent;
+        // return costPrice > amount;
+        const { costPrice, amount } = this.parent;
+        return costPrice <= amount;
+      }),
       discountType: Yup.string().required().label('Discount Type'),
       discountPercentage: Yup.number().min(0).required().label('Discount Type'),
       taxClass: Yup.string().required().label('Tax Class'),
@@ -266,7 +293,11 @@ export default function ProductForm({
       sku: Yup.string().required().label('SKU'),
       barcode: Yup.string().required().label('Bar Code'),
       status: Yup.string().required().label('Status'),
-      costPrice: Yup.number().min(1).required().label('Cost Price'),
+      // costPrice: Yup.number().min(1).required().label('Cost Price'),
+      costPrice: Yup.number().min(1).required().label('Cost Price').test('costPrice', 'Cost Price cannot exceed Price', function () {
+        const { costPrice, amount } = this.parent;
+        return costPrice <= amount;
+      }),
     }),
     onSubmit: async (values) => {
       const variations = state;
@@ -276,9 +307,9 @@ export default function ProductForm({
       const promises: Promise<Response>[] = [];
       const variationPromises: Promise<Response>[] = [];
 
-      if (productImages.length < 1 || variations.length < 1) {
-        toast.error('Please add product images or variations.');
-      } else {
+      // if (productImages.length < 1 || variations.length < 1 || activeProduct!.imageUrls.length < 1 ) {
+      //   toast.error('Please add product images or variations.');
+      // } else {
         try {
           productImages.forEach((image: ProductImage) => {
             const formdata = new FormData();
@@ -314,14 +345,47 @@ export default function ProductForm({
               console.log(error);
             });
 
-          if (product_images && product_images.length > 0) {
+          // const uploaded = await uploadVariationImages();
+          if(variations.length > 0 && variations.some(variation => variation.imageFile !== null)) {
+            for (const variation of variations) {
+              const variationFormdata = new FormData();
+              if(variation.imageFile !== null) {
+                variationFormdata.append('file', variation.imageFile);
+              }
+              
+              const requestOptions = {
+                method: 'POST',
+                body: variationFormdata,
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              };
+      
+              const response = await fetch(
+                `${process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
+                requestOptions
+              );
+      
+              const jsonRes = await response.json();
+              console.log(jsonRes);
+      
+              // if(jsonRes) {
+                variationImages.push({ variation, imageUrl: jsonRes.url });
+                
+              // }
+            };
+          }
+
+          if (product_images && product_images.length > 0 || activeProduct?.imageUrls && activeProduct.imageUrls.length > 0) {
 
             const data = {
               id: activeProduct?.id,
               ...values,
-              categoryId: +values.categoryId,
-              productVarations: getFormattedVariations(state),
-              imageUrls: product_images,
+              categoryId: values.categoryId ?? 0,
+              // productVarations: getFormattedVariations(state),
+              productVarations: getFormattedVariations(state, variationImages),
+              imageUrls: [...product_images!, ...existingImages],
+              tag: "empty",
             };
 
             console.log('Request Body: ', data);
@@ -346,7 +410,7 @@ export default function ProductForm({
         } catch (error) {
           console.log(error);
         }
-      }
+      // }
     },
     // onSubmit: async (values) => {
     //   const variations = state;
@@ -553,43 +617,8 @@ export default function ProductForm({
 
   useEffect(() => {
     if(activeProduct) {
-      console.log(activeProduct);
-      const {
-        name,
-        description,
-        tag,
-        brandId,
-        quantity,
-        amount,
-        discountType,
-        discountPercentage,
-        taxClass,
-        vatAmount,
-        sku,
-        barcode,
-        status,
-        categoryId,
-        costPrice,
-      } = activeProduct;
-
-      formik.setValues({
-        name,
-        description,
-        tag,
-        brandId,
-        quantity,
-        amount,
-        discountType,
-        discountPercentage,
-        taxClass,
-        vatAmount,
-        sku,
-        barcode,
-        status,
-        categoryId,
-        costPrice
-      });
-
+      // console.log(activeProduct);
+      
       const variations: IProductVariations[] = activeProduct.productVarations.map((variation) => {
         const { id, colorId, imageUrl } = variation;
         const sizeOptions = variation.sizeOptions.map((option) => {
@@ -622,6 +651,11 @@ export default function ProductForm({
     const updatedImages = productImages.filter((img, i) => i !== index);
     setProductImages(updatedImages);
   };
+
+  const removeAlreadyUploadedImage = (image: string) => {
+    const updatedImages = activeProduct?.imageUrls.filter(img => img !== image);
+    setExistingImages(updatedImages!);
+  }
 
   const addNewImage = (e: ChangeEvent<HTMLInputElement>) => {
     const imagesCopy: ProductImage[] = [...productImages];
@@ -684,6 +718,19 @@ export default function ProductForm({
     formik.setFieldValue("discountPercentage", discounts?.find(discount => discount.code === e.target.value)?.percentage);
   }
 
+  useEffect(() => {
+    document.body.addEventListener('click', (event) => {
+      
+      if (!brandPickerRef.current?.contains(event.target as Node) &&  !addBrandPresetRef.current?.contains(event.target as Node)) {
+        setAddBrandDisplay(false);
+        setBrandPicker(false);
+      }
+    });
+    return () => {
+      document.body.removeEventListener('click', () => {});
+    };
+  }, []);
+
   // const updateImageColor = (index: number, color: string) => {
   //   const updatedImages = productImages.filter((img, i) => i !== index);
   //   const current = productImages.find((img, i) => i === index);
@@ -735,6 +782,7 @@ export default function ProductForm({
               placeholder='Type product description here...'
               onChange={formik.handleChange}
               value={formik.values.description}
+              className='bg-[#E0E2E7]'
             ></textarea>
 
             <CustomError error={formik.errors.description} />
@@ -783,6 +831,7 @@ export default function ProductForm({
                 {brandPicker && (
                     <div
                       className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
+                      ref={brandPickerRef}
                     >   
                       <div
                         className="flex justify-between align-center mb-2"
@@ -827,6 +876,7 @@ export default function ProductForm({
                 {addBrandDisplay && (
                   <div
                     className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
+                    ref={addBrandPresetRef}
                   >  
                     <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
                         Input brand preset:
@@ -864,8 +914,8 @@ export default function ProductForm({
                 ref={imageInputRef}
                 onChange={addNewImage}
               />
-              {productImages.length < 1 && <p>Click below to upload an image. Your image should not exceed 1MB and should be either a .jpeg or .png</p>}
-              {/* {productImages.length < 1 || (activeProduct && activeProduct.imageUrls.length > 0) && <p>Click below to upload an image. Your image should not exceed 1MB and should be either a .jpeg or .png</p>} */}
+              {/* {productImages.length < 1 || activeProduct?.imageUrls?.length < 1 && <p>Click below to upload an image. Your image should not exceed 1MB and should be either a .jpeg or .png</p>} */}
+              {productImages.length < 1 || (activeProduct && activeProduct.imageUrls.length > 0) && <p>Click below to upload an image. Your image should not exceed 1MB and should be either a .jpeg or .png</p>}
               <div className='flex items-center flex-wrap gap-2 mb-4'>
                 {productImages &&
                   productImages.map((img, index) => (
@@ -917,10 +967,10 @@ export default function ProductForm({
                     </div>
                   ))}
 
-                  {/* {activeProduct && activeProduct.imageUrls.length > 0 &&
-                    activeProduct.imageUrls.map((img, index) => (
+                  {activeProduct && activeProduct.imageUrls.length > 0 &&
+                    existingImages?.map((img, index) => (
                     <div
-                      key={`${index}-${img.image.name}`}
+                      key={index}
                       className='h-28 w-28 relative rounded-xl'
                     >
                       <span className='text-xs absolute top-2 left-2 text-dark bg-green-100 py-1 px-2 rounded-md'>
@@ -936,12 +986,12 @@ export default function ProductForm({
                       />
                       <button
                         className='absolute bottom-4 right-4 text-dark rounded-md p-1 bg-green-100'
-                        onClick={() => removeImage(index)}
+                        onClick={() => removeAlreadyUploadedImage(img)}
                       >
                         <RiDeleteBin6Fill />
                       </button>
                     </div>
-                  ))} */}
+                  ))}
               </div>
               <Button
                 size='small'
@@ -1005,7 +1055,7 @@ export default function ProductForm({
                 <select
                   name='discountType'
                   id='discountType'
-                  className='text-neutral'
+                  className='text-neutral bg-[#E0E2E7]'
                   // onChange={formik.handleChange}
                   onChange={(e) => handleDiscountChange(e)}
                   value={formik.values.discountType}
@@ -1034,7 +1084,7 @@ export default function ProductForm({
                 <select
                   name='taxClass'
                   id='taxClass'
-                  className='text-neutral'
+                  className='text-neutral bg-[#E0E2E7]'
                   onChange={formik.handleChange}
                   value={formik.values.taxClass}
                 >
@@ -1151,7 +1201,7 @@ export default function ProductForm({
         </div>
 
         {/* Shipping */}
-        {/* <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4'>
+        <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4'>
           <p className='text-lg font-semibold text-gray-700 mb-8'>Shipping</p>
 
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-x-4 items-center'>
@@ -1161,10 +1211,11 @@ export default function ProductForm({
               </label>
               <TextInput
                 placeholder='Type product weight...'
-                id='sku'
+                id='weight'
                 onChange={formik.handleChange}
-                value={formik.values.sku}
-                error={formik.errors.sku}
+                value={formik.values.weight}
+                error={formik.errors.weight}
+                type='number'
               />
             </div>
             
@@ -1177,16 +1228,17 @@ export default function ProductForm({
               </label>
               <TextInput
                 placeholder='Type product length...'
-                id='barcode'
+                id='length'
                 onChange={formik.handleChange}
-                value={formik.values.barcode}
-                error={formik.errors.barcode}
+                value={formik.values.length}
+                error={formik.errors.length}
+                type='number'
               />
             </div>
             
             <div className='mb-6'>
               <label
-                htmlFor='amount'
+                htmlFor='height'
                 className='text-sm text-neutral mb-2 block'
               >
                 Height
@@ -1194,10 +1246,10 @@ export default function ProductForm({
               <TextInput
                 inputMode='numeric'
                 placeholder='Type product height...'
-                id='amount'
+                id='height'
                 onChange={formik.handleChange}
-                value={formik.values.amount}
-                error={formik.errors.amount}
+                value={formik.values.height}
+                error={formik.errors.height}
                 type='number'
               />
             </div>
@@ -1212,15 +1264,15 @@ export default function ProductForm({
               <TextInput
                 inputMode='numeric'
                 placeholder='Type product quantity...'
-                id='amount'
+                id='width'
                 onChange={formik.handleChange}
-                value={formik.values.amount}
-                error={formik.errors.amount}
-                type='number'
+                value={formik.values.width}
+                error={formik.errors.width}
+                type="number"
               />
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
 
       {/* Column 2 */}
@@ -1231,14 +1283,14 @@ export default function ProductForm({
           <div className='mb-6'>
             <label
               htmlFor='categoryId'
-              className='text-sm text-neutral mb-2 block'
+              className='text-sm text-neutral mb-2 block '
             >
               Product Category
             </label>
             <select
               name='categoryId'
               id='categoryId'
-              className='text-neutral'
+              className='text-neutral bg-[#E0E2E7]'
               onChange={formik.handleChange}
               value={formik.values.categoryId}
             >
@@ -1251,10 +1303,11 @@ export default function ProductForm({
                 </option>
               ))}
             </select>
+            <IoIosArrowDown className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`} />
             <CustomError error={formik.errors.categoryId} />
           </div>
           {/* Product Tags */}
-          <div className='mb-6'>
+          {/* <div className='mb-6'>
             <label htmlFor='tag' className='text-sm text-neutral mb-2 block'>
               Product Tag
             </label>
@@ -1265,7 +1318,7 @@ export default function ProductForm({
               value={formik.values.tag}
               error={formik.errors.tag}
             />
-          </div>
+          </div> */}
         </div>
 
         {/* Product Status */}
@@ -1290,7 +1343,7 @@ export default function ProductForm({
             <select
               name='status'
               id='status'
-              className='text-neutral'
+              className='text-neutral bg-[#E0E2E7] '
               onChange={formik.handleChange}
               value={formik.values.status}
             >
@@ -1303,21 +1356,22 @@ export default function ProductForm({
               <option value='out-of-stock'>Out of Stock</option>
             </select>
 
+            <IoIosArrowDown className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`} />
             <CustomError error={formik.errors.status} />
           </div>
         </div>
       </div>
 
       <div className='fixed right-0 bottom-0 w-full p-4 bg-white flex items-center justify-end'>
-        {!searchParams.get("edit") && (
+        {/* {!searchParams.get("edit") && (
           <div className='max-w-md w-full'>
             <Button type='submit' block loading={formik.isSubmitting}>
               Add Product
             </Button>
           </div>
-        )}
+        )} */}
         
-        {searchParams.get('edit') && (
+        
           <div className='flex items-center gap-4'>
             <Link href='/admin/products'>
               <Button variant='outlined' color='dark'>
@@ -1332,7 +1386,6 @@ export default function ProductForm({
               Save Product
             </Button>
           </div>
-        )}
       </div>
     </form>
   );

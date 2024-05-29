@@ -90,18 +90,18 @@ export default function Customers({
       <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8'>
         <div>
           <p className='text-xl font-bold text-gray-700'>Customers</p>
-          <Pagination />
+          <Pagination lastPage='Customer details'/>
         </div>
 
         <div className='flex items-center gap-4'>
           <Button variant='outlined' color='#F2C94C' onClick={() => updateCustomer(selectedCustomers, "ACTIVATED")}>
             {/* <PiExportBold /> */}
-            Block
+            Activate
           </Button>
           
           <Button variant='outlined' color='#F2C94C' onClick={() => updateCustomer(selectedCustomers, "SUSPENDED")}>
             {/* <FaPlus /> */}
-            Unblock
+            Deactivate
           </Button>
         </div>
       </div>

@@ -1,6 +1,11 @@
 import ClientProvider from '@/components/ClientProvider';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import Script from 'next/script';
+// import function to register Swiper custom elements
+import { register } from 'swiper/element/bundle';
+// register Swiper custom elements
+register();
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,6 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
+      <Script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></Script>
       <body className={inter.className}>
         <ClientProvider>{children}</ClientProvider>
       </body>

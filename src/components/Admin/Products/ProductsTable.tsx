@@ -13,6 +13,8 @@ import { DataTable } from 'primereact/datatable';
 import React, { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { FaEye } from 'react-icons/fa';
+import {MdOutlineEdit } from 'react-icons/md';
+import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineDelete, MdOutlineModeEdit } from 'react-icons/md';
 import { RxPencil2 } from 'react-icons/rx';
 import Cookies from 'universal-cookie';
@@ -23,17 +25,21 @@ export default function ProductsTable({
   selectedDate,
   searchValue,
   products,
+  handleChangeSelectedProducts,
+  selectedProducts,
 }: {
   searchValue: string;
   selectedDate: number | null;
   products: IProducts | undefined;
+  handleChangeSelectedProducts: (e: any) => void;
+  selectedProducts: IProducts;
 }) {
   const cookies = new Cookies();
   const httpService = new HTTPService();
 
-  const [selectedProducts, setSelectedProducts] = useState<IProduct[] | null>(
-    null
-  );
+  // const [selectedProducts, setSelectedProducts] = useState<IProduct[] | null>(
+  //   null
+  // );
   const [rowClick, setRowClick] = useState<boolean>(true);
 
   async function deleteProduct(id: number) {
@@ -75,20 +81,20 @@ export default function ProductsTable({
     return (
       <div className='flex items-center gap-3'>
         <Link
-          href={`/admin/products/${product.id}?edit=false`}
+          href={`/admin/products/${product.id}`}
           className='text-xl text-neutral'
         >
           <FaEye />
         </Link>
         <Link
-          href={`/admin/products/${product.id}?edit=true`}
+          href={`/admin/products/${product.id}/edit`}
           className='text-xl text-neutral'
         >
           {/* <RxPencil2 /> */}
           <MdOutlineModeEdit />
         </Link>
         <button onClick={() => deleteProduct(product.id)}>
-          <MdOutlineDelete className='text-xl' />
+          <RiDeleteBin6Line className='text-xl' />
         </button>
       </div>
     );
@@ -133,9 +139,9 @@ export default function ProductsTable({
     return <p className="text-[#CFA31C]">{product.sku}</p>
   }
 
-  const dateChangeHandler = (e: any) => {
-    setSelectedProducts(e.value);
-  };
+  // const dateChangeHandler = (e: any) => {
+  //   handleChangeSelectedProducts(e.value);
+  // };
 
   const getProductsByDate = useMemo(() => {
     if (selectedDate) {
@@ -164,7 +170,8 @@ export default function ProductsTable({
         value={matchedProducts}
         selectionMode={rowClick ? null : 'multiple'}
         selection={selectedProducts!}
-        onSelectionChange={dateChangeHandler}
+        // onSelectionChange={dateChangeHandler}
+        onSelectionChange={handleChangeSelectedProducts}
         dataKey='id'
         tableStyle={{ minWidth: '50rem' }}
         paginator

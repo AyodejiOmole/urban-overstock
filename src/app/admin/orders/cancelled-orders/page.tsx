@@ -1,15 +1,12 @@
 import Orders from '@/components/Admin/Orders/Orders';
-import { IOrder } from '@/interfaces/orders';
-import getOrders from '@/libs/orders';
+import { ICancelledOrders } from '@/interfaces/cancelled-orders';
 import React from 'react';
 import CancelledOrdersDisplay from '@/components/Admin/Orders/CancelledOrders';
+import { getCancelledOrders } from '@/libs/orders';
 
 export default async function CancelledOrders() {
-  const apiRes: Promise<IOrder[] | null> = getOrders();
-  const orders = await apiRes;
-
-  console.log(orders);
-  const filteredOrders: IOrder[] | undefined = orders?.filter((order: IOrder) => order.status.toLowerCase() === "cancelled");
+  const apiCancelRes: Promise<ICancelledOrders[] | null> = getCancelledOrders();
+  const cancelledOrders = await apiCancelRes;
 
   return (
     <section>
@@ -23,7 +20,7 @@ export default async function CancelledOrders() {
           />
         </div>
       </div> */}
-      <CancelledOrdersDisplay orders={filteredOrders!} />
+      <CancelledOrdersDisplay orders={cancelledOrders!} />
     </section>
   );
 }

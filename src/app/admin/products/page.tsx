@@ -13,7 +13,7 @@ export default async function AdminProducts() {
 
   return (
     <section>
-      <PageHeading />
+      {/* <PageHeading /> */}
 
       {/* Products */}
       <Products products={products} />

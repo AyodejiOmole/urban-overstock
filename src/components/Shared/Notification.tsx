@@ -15,7 +15,7 @@ export default function Notification({ number, icon }: IProps) {
   }, [number]);
 
   return (
-    <Link href="admin/notifications">
+    <Link href="/admin/notifications">
       <button className='relative'>
         <span className='text-xl text-gray-600'>{icon}</span>
 

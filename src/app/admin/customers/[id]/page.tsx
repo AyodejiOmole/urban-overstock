@@ -32,7 +32,7 @@ export default async function AdminCustomerDetails({
       <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8'>
         <div>
           <p className='text-xl font-bold text-gray-700'>Customer Details</p>
-          <Pagination />
+          <Pagination lastPage='Customer Details'/>
         </div>
 
         <div className='flex items-center gap-4'>

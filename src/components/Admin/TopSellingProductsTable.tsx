@@ -1,72 +1,56 @@
 'use client';
 
-// import Button from '@/components/Global/Button';
 import { formatCurrency } from '@/helpers';
-import { IOrder, OrderProductItem } from '@/interfaces/orders';
-import { IProducts } from '@/interfaces/products';
-import moment from 'moment';
 import Image from 'next/image';
-// import Link from 'next/link';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import React, { useState } from 'react';
-// import { FaEye } from 'react-icons/fa';
-// import { RxPencil2 } from 'react-icons/rx';
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { productStatusTemplate } from '@/helpers/products';
 import { IProduct } from '@/interfaces/products';
-import paginatorTemplate from '../Global/PaginatorTemplate';
+import { ITopProduct } from '@/interfaces/top-selling-products';
+import { useMemo } from 'react';
 
 export default function TopSellingProductsTable({
   products,
+  // categoryNavigation,
 }: {
-  products: IProducts | null | undefined;
+  products: ITopProduct[] | null | undefined;
+  // categoryNavigation: any;
 }) {
-//   const [rowClick, setRowClick] = useState<boolean>(true);
 
-  // const dateTemplate = (order: IOrder) => {
-  //   const { createdAt } = order;
-
-  //   return moment(createdAt).format('MMM Do YYYY, h:mm a');
-  // };
-
-  function amountTemplate(product: IProduct) {
-    return formatCurrency(+product.amount);
+  function amountTemplate(product: ITopProduct) {
+    return formatCurrency(+product.product.amount);
   }
 
-//   function productTemplate(order: IOrder) {
-//     return (
-//       <div className='flex items-center gap-4'>
-//         <Image
-//           src={order.orderProduct[0].image}
-//           alt='image'
-//           width={20}
-//           height={20}
-//           className='h-12 w-12 bg-[#1b1b1b] rounded-md'
-//         />
-
-//         <div className='div capitalize'>
-//           <p className='text-sm flex-1 font-medium'>
-//             {order.orderProduct[0].productName}
-//           </p>
-//           {order.orderProduct.length > 1 && (
-//             <p className='text-xs text-neutral'>
-//               +{order.orderProduct.length} other products
-//             </p>
-//           )}
-//         </div>
-//       </div>
-//     );
-//   }
-
-  // function customerTemplate(order: IOrder) {
-  //   return (
-  //     <div className='flex flex-col gap-2 capitalize'>
-  //       <p className='text-sm flex-1 font-medium'>{order.receiverName}</p>
-  //       <p className='text-xs text-neutral'>{order.receiverPhone}</p>
-  //     </div>
-  //   );
-  // }
+  function productStatusTemplate(product: ITopProduct) {
+    let styles = '';
+  
+    switch (product?.product.status.toLocaleLowerCase()) {
+      case 'draft':
+        styles = 'bg-gray-100 text-gray-600';
+        break;
+      case 'low-stock':
+        styles = 'bg-orange-100 text-orange-600';
+        break;
+      case 'published':
+        styles = 'bg-green-100 text-green-600';
+        break;
+      case 'out-of-stock':
+        styles = 'bg-red-100 text-red-600';
+        break;
+      default:
+        styles = 'bg-blue-100 text-blue-600';
+    }
+  
+    return (
+      <span
+        className={`p-2 px-4 text-xs font-semibold rounded-full capitalize ${styles}`}
+      >
+        {product?.product.status}
+      </span>
+    );
+  }
+  
 
   function checkIfUrl(imageUrl: string) {
     if (!/^https?:\/\//.test(imageUrl) && !/^\/ /.test(imageUrl)) {
@@ -78,13 +62,13 @@ export default function TopSellingProductsTable({
     return true;
   }
 
-  function productTemplate(product: IProduct) {
+  function productTemplate(product: ITopProduct) {
     return (
       <div className='flex items-center gap-4'>
-        {product.imageUrls?.length > 0 && checkIfUrl(product?.imageUrls[0]) ? (
+        {product.product.imageUrls?.length > 0 && checkIfUrl(product?.product.imageUrls[0]) ? (
           <Image
-            src={product.imageUrls[0]}
-            alt={product.description}
+            src={product.product.imageUrls[0]}
+            alt={product.product.name}
             width={20}
             height={20}
             className='h-12 w-12 bg-[#1b1b1b] rounded-md'
@@ -94,51 +78,53 @@ export default function TopSellingProductsTable({
         )}
         {/* <p className='text-sm flex-1'>{product?.name}</p> */}
         <div className='flex-1'>
-          <p className='text-sm font-medium'>{product?.name}</p>
+          <p className='text-sm font-medium'>{product?.product.name}</p>
           <p className='text-neutral text-sm font-light'>
-            {`SKU: ${product?.sku}`}
+            {`SKU: ${product?.product.sku}`}
           </p>
         </div>
       </div>
     );
   }
 
+  // const getOrdersByDate = useMemo(() => {
+  //   if(categoryNavigation) {
+  //     return products?.filter((item) => {
+  //       const itemDate = new Date(item.);
+  //       return itemDate >= categoryNavigation.startDate && itemDate <= categoryNavigation.endDate;
+  //     });
+  //   } else return orders;
+
+  // }, [categoryNavigation]);
+
   return (
     <div className='card rounded-xl p-4 bg-white border border-gray-200'>
       <DataTable
         value={products ?? []}
-        // selectionMode={rowClick ? null : 'multiple'}
-        // selection={selectedOrders!}
-        // onSelectionChange={handleChangeSelectedOrders}
-        dataKey='uuid'
+        dataKey='productId'
         tableStyle={{ minWidth: '50rem' }}
-        paginator
-        paginatorTemplate={paginatorTemplate}
-        paginatorClassName='flex'
-        rows={20}
+        rows={10}
         rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-md text-sm'
         sortOrder={-1}
         sortField='createdAt'
         sortIcon={<IoIosArrowDown />}
       >
-        {/* <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} /> */}
-        {/* <Column field='uuid' header='Order ID' /> */}
         <Column body={productTemplate} header='Product' />
-        <Column field='sales' header='Sales' sortable />
+        <Column field='totalCount' header='Sales' sortable />
         <Column
-          field='amount'
+          field='product.amount'
           body={amountTemplate}
           header='Amount'
         />
         <Column
-          field='amount'
+          field='product.amount'
           header='Price'
           body={amountTemplate}
           sortable
         />
         {/* <Column body='Mastercard' header='Payment' /> */}
-        <Column field='status' header='Status' sortable body={productStatusTemplate} />
+        <Column field='product.status' header='Status' sortable body={productStatusTemplate} />
       </DataTable>
     </div>
   );

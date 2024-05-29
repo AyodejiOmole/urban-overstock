@@ -50,13 +50,13 @@ export default function CustomersTable({
         >
           <FaEye />
         </Link>
-        <Link
+        {/* <Link
           href={`/admin/customers/${customer.id}?edit=true`}
           className='text-xl text-neutral'
         >
-          {/* <RxPencil2 /> */}
+          <RxPencil2 />
           <MdOutlineModeEdit />
-        </Link>
+        </Link> */}
         <button>
           {/* <MdOutlineDelete className='text-xl' /> */}
           <RiDeleteBin6Line className='text-xl'/>
