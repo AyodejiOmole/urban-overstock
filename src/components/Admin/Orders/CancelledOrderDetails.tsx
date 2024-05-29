@@ -14,13 +14,12 @@ import HTTPService from '@/services/http';
 import toast from 'react-hot-toast';
 import ENDPOINTS from '@/config/ENDPOINTS';
 import { useRouter } from 'next/navigation';
+import { ICancelledOrders } from '@/interfaces/cancelled-orders';
 
 export default function CancelledOrderDetails({
   cancelledOrderHistory,
-  cancelledOrdersDetails,
 }: {
-    cancelledOrderHistory: IOrder | undefined;
-    cancelledOrdersDetails: any;
+    cancelledOrderHistory: ICancelledOrders | null;
 }) {
   console.log(cancelledOrderHistory);
 
@@ -82,8 +81,8 @@ export default function CancelledOrderDetails({
 
       <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8'>
         <div>
-          <p className='text-xl font-bold text-gray-700'>Return Request</p>
-          <Pagination />
+          <p className='text-xl font-bold text-gray-700'>Cancelled Orders</p>
+          <Pagination lastPage='Cancelled Orders Details'/>
         </div>
 
         <div className='flex items-center gap-4'>
@@ -107,7 +106,7 @@ export default function CancelledOrderDetails({
             </div>
             <div className='w-48 h-48 bg-gray-200 rounded-full absolute left-1/2 -translate-x-1/2 top-32'>
               <Image
-                src={cancelledOrderHistory?.orderProduct[0].image ?? " "}
+                src={cancelledOrderHistory?.order.orderProduct[0].image ?? " "}
                 alt={"Damaged image"}
                 // objectFit="cover"
                 layout="fill"
@@ -119,11 +118,11 @@ export default function CancelledOrderDetails({
               <div className='p-4 text-center'>
                 <p className='font-semibold text-gray-700 text-xl'>
                   {/* Isaiah Ernest */}
-                  {cancelledOrderHistory?.receiverName}
+                  {cancelledOrderHistory?.order.receiverName}
                 </p>
                 <p className='text-neutral'>
                   {/* @isaiah_ernest */}
-                  {cancelledOrderHistory?.receiverPhone}
+                  {cancelledOrderHistory?.order.receiverPhone}
                 </p>
               </div>
 
@@ -151,8 +150,8 @@ export default function CancelledOrderDetails({
                   <div className='flex-1'>
                     <p className='text-neutral font-medium'>Billing Email</p>
                     <p className='text-gray-800 font-light text-sm'>
-                      johndoe@gmail.com
-                      {/* {customerDetails?.email} */}
+                      {/* johndoe@gmail.com */}
+                      {cancelledOrderHistory?.user.email}
                     </p>
                   </div>
                 </div>
@@ -165,7 +164,7 @@ export default function CancelledOrderDetails({
                     <p className='text-neutral font-medium'>Phone Number</p>
                     <p className='text-gray-800 font-light text-sm'>
                       {/* 0908 9898 990 */}
-                      {cancelledOrderHistory?.receiverPhone}
+                      {cancelledOrderHistory?.order.receiverPhone}
                       {/* {customerDetails?.shippingAddress?.phoneNumber} */}
                     </p>
                   </div>
@@ -179,7 +178,7 @@ export default function CancelledOrderDetails({
                     <p className='text-neutral font-medium'>Delivery Address</p>
                     <p className='text-gray-800 font-light text-sm'>
                       {/* 1833 Bel Meadow Drive, Fontana, California 92335, USA */}
-                      {cancelledOrderHistory?.address}
+                      {cancelledOrderHistory?.order.address}
                       {/* {customerDetails?.shippingAddress?.streetAddress + " " + customerDetails?.shippingAddress?.city + " " + customerDetails?.shippingAddress?.state + " " + customerDetails?.shippingAddress?.country} */}
                     </p>
                   </div>
@@ -204,13 +203,13 @@ export default function CancelledOrderDetails({
         {/* Column 2 */}
         <div className='lg:col-span-4'>
           <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg'>
-            <CancelledOrderTransactionTable history={cancelledOrderHistory?.orderProduct}/>
+            <CancelledOrderTransactionTable history={cancelledOrderHistory?.order.orderProduct}/>
           </div>
 
           <div>
               <p className='mt-8 text-lg text-gray-700'>Reason For Cancelling</p>
               <div className='my-4 p-4 sm:p-6 border border-gray-200 bg-white rounded-lg'>
-              {/* <p>{returnRequestDetails?.reason}</p> */}
+              {/* <p>{cancelledOrderHistory?.order.orderProduct.reason}</p> */}
               {"Wrong product"}
               </div>
           </div>

@@ -25,14 +25,6 @@ export default function CancelledOrdersDisplay({ orders }: { orders: ICancelledO
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
 
-//   const [categoryNavigation, setCategoryNavigation] = useState<any>();
-//   const [defaultFilterOption, setDefaultFilterOption] = useState(0);
-
-  // const handleFilterOptionChange = (newIndex: number) =>
-  //   setDefaultFilterOption(newIndex);
-
-  // const [updateTo, setUpdateTo] = useState<string>("");
-//   const [cardOpen, setCardOpen] = useState<boolean>(false);
 
   const httpService = new HTTPService();
   const cookies = new Cookies();
@@ -44,58 +36,6 @@ export default function CancelledOrdersDisplay({ orders }: { orders: ICancelledO
 
     setSelectedOrders(e.value);
   };
-
-//   async function bulkUpdateOrders(orders: IOrder[], status: string) {
-//       setCardOpen(prev => !prev);
-//       const token = cookies.get('urban-token');
-  
-//       toast.loading('Updating orders...');
-
-//       const data = orders.map((order) => {
-//         const { id } = order;
-//         return { id: id, status: status }
-//       }); 
-
-//       const res = await httpService.patch(
-//         `${ENDPOINTS.ORDERS}`,
-//         data,
-//         `Bearer ${token}`
-//       );
-
-//       toast.dismiss();
-//       if (res.status === 200) {
-//         console.log(res);
-//         toast.success('Orders successfully updated!');
-//         router.refresh();
-//       } else toast.error('Cannot update orders at this time!');
-//   }
-
-  // async function updateOrders(to: string) {
-
-  // }
-
-//   const debouncedSearch = useMemo(() => {
-//     let timer: NodeJS.Timeout;
-
-//     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-//       clearTimeout(timer);
-//       timer = setTimeout(() => {
-//         setSearchValue(e.target.value);
-//       }, 500);
-//     };
-
-//     return handleSearchChange;
-//   }, []);
-
-//   const handleSelectDate = (
-//     date: Date | (Date | null)[] | Date[] | null | undefined
-//   ) => {
-//     if (date) {
-//       const formatted = new Date(date as Date).getTime();
-
-//       setSelectedDate(formatted);
-//     } else setSelectedDate(null);
-//   };
 
   return (
     <>

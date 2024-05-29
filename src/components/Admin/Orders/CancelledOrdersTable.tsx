@@ -96,30 +96,30 @@ export default function CancelledOrdersTable({
     );
   }
 
-//   function productTemplate(order: ICancelledOrders) {
-//     return (
-//       <div className='flex items-center gap-4'>
-//         <Image
-//           src={order.orderProduct[0].image}
-//           alt='image'
-//           width={20}
-//           height={20}
-//           className='h-12 w-12 bg-[#1b1b1b] rounded-md'
-//         />
+  function productTemplate(order: ICancelledOrders) {
+    return (
+      <div className='flex items-center gap-4'>
+        <Image
+          src={order.order.orderProduct[0].image}
+          alt='image'
+          width={20}
+          height={20}
+          className='h-12 w-12 bg-[#1b1b1b] rounded-md'
+        />
 
-//         <div className='div capitalize'>
-//           <p className='text-sm flex-1 font-medium'>
-//             {order.orderProduct[0].productName}
-//           </p>
-//           {order.orderProduct.length > 1 && (
-//             <p className='text-xs text-neutral'>
-//               +{order.orderProduct.length} other products
-//             </p>
-//           )}
-//         </div>
-//       </div>
-//     );
-//   }
+        <div className='div capitalize'>
+          <p className='text-sm flex-1 font-medium'>
+            {order.order.orderProduct[0].productName}
+          </p>
+          {order.order.orderProduct.length > 1 && (
+            <p className='text-xs text-neutral'>
+              +{order.order.orderProduct.length} other products
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   function customerTemplate(order: ICancelledOrders) {
     return (
@@ -219,7 +219,7 @@ export default function CancelledOrdersTable({
       >
         <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} className='descendant:border descendant:border-gray-800'/>
         <Column field='orderId' header='Order ID' className='text-[#F2C94C]'/>
-        {/* <Column body={productTemplate} header='Product' /> */}
+        <Column body={productTemplate} header='Product' />
         <Column field='date' header='Date' body={dateTemplate} sortable />
         <Column
           field='customer.email'

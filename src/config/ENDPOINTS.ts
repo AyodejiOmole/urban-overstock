@@ -17,6 +17,7 @@ const ENDPOINTS = {
 
   // Orders
   ORDERS: 'order',
+  CANCEL_REQUEST: `order/cancel-request`,
   USER_ORDER_HISTORY: `order/user`,
   ORDER_TRACKING_INFORMATION: `order/tacking-information`,
   DISCOUNT_CODE: `discount-code`,

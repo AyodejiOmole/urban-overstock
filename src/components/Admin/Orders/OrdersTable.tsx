@@ -223,7 +223,7 @@ export default function OrdersTable({
         sortIcon={<IoIosArrowDown />}
         selectionAutoFocus={true}
       >
-        <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} className='descendant:border descendant:border-gray-800'/>
+        {page !== "recent orders" && <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} className='descendant:border descendant:border-gray-800'/>}
         <Column field='uuid' header='Order ID' className='text-[#F2C94C]'/>
         <Column body={productTemplate} header='Product' />
         <Column field='date' header='Date' body={dateTemplate} sortable />

@@ -90,7 +90,7 @@ export default function Customers({
       <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8'>
         <div>
           <p className='text-xl font-bold text-gray-700'>Customers</p>
-          <Pagination lastPage='Customer details'/>
+          <Pagination />
         </div>
 
         <div className='flex items-center gap-4'>
