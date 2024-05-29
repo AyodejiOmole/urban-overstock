@@ -133,9 +133,21 @@ function getGroupedVariations(variations: IProductVariations[]) {
 //   return newVariations;
 // }
 
-function getFormattedVariations(variations: IProductVariations[]) {
-  const newVariations = variations.map((variation: IProductVariations) => {
+// function getFormattedVariations(variations: IProductVariations[]) {
+//   const newVariations = variations.map((variation: IProductVariations) => {
+//     let { id, colorId, imageUrl, sizeOptions } = variation;
+//     return { id, colorId, imageUrl, sizeOptions };
+//   });
+
+//   return newVariations;
+// }
+
+function getFormattedVariations(variations: IProductVariations[], variationImages: {variation: IProductVariations, imageUrl: string}[]) {
+  const newVariations = variations.map((variation: IProductVariations, index) => {
     let { id, colorId, imageUrl, sizeOptions } = variation;
+    if(imageUrl === "") {
+      imageUrl = variationImages[index].imageUrl;
+    }
     return { id, colorId, imageUrl, sizeOptions };
   });
 
@@ -179,7 +191,10 @@ export default function ProductForm({
   console.log(activeProduct);
 
   const [activeImage, setActiveImage] = useState<null | number>(null);
+
   const [productImages, setProductImages] = useState<ProductImage[]>([]);
+  const [existingImages, setExistingImages] = useState<string[]>(activeProduct!.imageUrls);
+
   const [state, dispatch] = useReducer(reducerMethod, initialValues);
 
   const [brandPicker, setBrandPicker] = useState<boolean | null>(false);
@@ -292,9 +307,9 @@ export default function ProductForm({
       const promises: Promise<Response>[] = [];
       const variationPromises: Promise<Response>[] = [];
 
-      if (productImages.length < 1 || variations.length < 1) {
-        toast.error('Please add product images or variations.');
-      } else {
+      // if (productImages.length < 1 || variations.length < 1 || activeProduct!.imageUrls.length < 1 ) {
+      //   toast.error('Please add product images or variations.');
+      // } else {
         try {
           productImages.forEach((image: ProductImage) => {
             const formdata = new FormData();
@@ -330,14 +345,46 @@ export default function ProductForm({
               console.log(error);
             });
 
-          if (product_images && product_images.length > 0) {
+          // const uploaded = await uploadVariationImages();
+          if(variations.length > 0 && variations.some(variation => variation.imageFile !== null)) {
+            for (const variation of variations) {
+              const variationFormdata = new FormData();
+              if(variation.imageFile !== null) {
+                variationFormdata.append('file', variation.imageFile);
+              }
+              
+              const requestOptions = {
+                method: 'POST',
+                body: variationFormdata,
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              };
+      
+              const response = await fetch(
+                `${process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
+                requestOptions
+              );
+      
+              const jsonRes = await response.json();
+              console.log(jsonRes);
+      
+              // if(jsonRes) {
+                variationImages.push({ variation, imageUrl: jsonRes.url });
+                
+              // }
+            };
+          }
+
+          if (product_images && product_images.length > 0 || activeProduct?.imageUrls && activeProduct.imageUrls.length > 0) {
 
             const data = {
               id: activeProduct?.id,
               ...values,
               categoryId: values.categoryId ?? 0,
-              productVarations: getFormattedVariations(state),
-              imageUrls: product_images,
+              // productVarations: getFormattedVariations(state),
+              productVarations: getFormattedVariations(state, variationImages),
+              imageUrls: [...product_images!, ...existingImages],
               tag: "empty",
             };
 
@@ -363,7 +410,7 @@ export default function ProductForm({
         } catch (error) {
           console.log(error);
         }
-      }
+      // }
     },
     // onSubmit: async (values) => {
     //   const variations = state;
@@ -604,6 +651,11 @@ export default function ProductForm({
     const updatedImages = productImages.filter((img, i) => i !== index);
     setProductImages(updatedImages);
   };
+
+  const removeAlreadyUploadedImage = (image: string) => {
+    const updatedImages = activeProduct?.imageUrls.filter(img => img !== image);
+    setExistingImages(updatedImages!);
+  }
 
   const addNewImage = (e: ChangeEvent<HTMLInputElement>) => {
     const imagesCopy: ProductImage[] = [...productImages];
@@ -915,10 +967,10 @@ export default function ProductForm({
                     </div>
                   ))}
 
-                  {/* {activeProduct && activeProduct.imageUrls.length > 0 &&
-                    activeProduct.imageUrls.map((img, index) => (
+                  {activeProduct && activeProduct.imageUrls.length > 0 &&
+                    existingImages?.map((img, index) => (
                     <div
-                      key={`${index}-${img.image.name}`}
+                      key={index}
                       className='h-28 w-28 relative rounded-xl'
                     >
                       <span className='text-xs absolute top-2 left-2 text-dark bg-green-100 py-1 px-2 rounded-md'>
@@ -934,12 +986,12 @@ export default function ProductForm({
                       />
                       <button
                         className='absolute bottom-4 right-4 text-dark rounded-md p-1 bg-green-100'
-                        onClick={() => removeImage(index)}
+                        onClick={() => removeAlreadyUploadedImage(img)}
                       >
                         <RiDeleteBin6Fill />
                       </button>
                     </div>
-                  ))} */}
+                  ))}
               </div>
               <Button
                 size='small'

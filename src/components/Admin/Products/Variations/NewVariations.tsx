@@ -214,6 +214,14 @@ const VariationItem = ({
     }); 
   }
 
+  const removeAlreadyUploadedImage = () => {
+    dispatch({
+      type: 'UPDATE',
+      payload: { ...variation, imageUrl: "" },
+      newState: [],
+    });
+  }
+
   const removeImage = () => {
     // const updatedImages = variationImage.filter((img, i) => i !== index);
     // setVariationImage(null);
@@ -370,6 +378,29 @@ const VariationItem = ({
                       <button
                         className='absolute bottom-4 right-4 text-dark rounded-md p-1 bg-green-100'
                         onClick={() => removeImage()}
+                      >
+                        <RiDeleteBin6Fill />
+                      </button>
+                    </div>
+                }
+
+                {variation.imageUrl &&
+                    <div
+                      className='h-28 w-28 relative rounded-xl'
+                    >
+                      {/* <span className='text-xs absolute top-2 left-2 text-dark bg-green-100 py-1 px-2 rounded-md'>
+                        {index + 1}
+                      </span> */}
+                      <Image
+                        src={variation.imageUrl}
+                        alt="Variation image"
+                        width={100}
+                        height={100}
+                        className='rounded-lg w-full h-full object-cover'
+                      />
+                      <button
+                        className='absolute bottom-4 right-4 text-dark rounded-md p-1 bg-green-100'
+                        onClick={() => removeAlreadyUploadedImage()}
                       >
                         <RiDeleteBin6Fill />
                       </button>
