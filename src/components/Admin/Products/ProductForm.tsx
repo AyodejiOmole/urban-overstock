@@ -1363,15 +1363,15 @@ export default function ProductForm({
       </div>
 
       <div className='fixed right-0 bottom-0 w-full p-4 bg-white flex items-center justify-end'>
-        {!searchParams.get("edit") && (
+        {/* {!searchParams.get("edit") && (
           <div className='max-w-md w-full'>
             <Button type='submit' block loading={formik.isSubmitting}>
               Add Product
             </Button>
           </div>
-        )}
+        )} */}
         
-        {searchParams.get('edit') && (
+        
           <div className='flex items-center gap-4'>
             <Link href='/admin/products'>
               <Button variant='outlined' color='dark'>
@@ -1386,7 +1386,6 @@ export default function ProductForm({
               Save Product
             </Button>
           </div>
-        )}
       </div>
     </form>
   );
