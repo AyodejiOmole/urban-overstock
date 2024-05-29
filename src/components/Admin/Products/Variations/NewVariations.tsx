@@ -1,6 +1,7 @@
 import Button from '@/components/Global/Button';
 import TextInput from '@/components/Global/TextInput';
 import React, { ChangeEvent, useReducer, useState, useRef, useEffect } from 'react';
+import React, { ChangeEvent, useReducer, useState, useRef, useEffect } from 'react';
 import { IoClose } from 'react-icons/io5';
 import Image from 'next/image';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
@@ -618,7 +619,20 @@ const VariationItem = ({
                       <label htmlFor='sizeCode' className='text-sm text-neutral mb-2 block'>
                           Input size code:
                       </label>
+                      <label htmlFor='sizeCode' className='text-sm text-neutral mb-2 block'>
+                          Input size code:
+                      </label>
 
+                      <TextInput
+                        type='string'
+                        // id='sizeToAdd'
+                        value={sizeCode}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                          console.log(e);
+                          setSizeCode((prev: any) => prev = e.target.value);
+                        }}
+                        className='mb-3'
+                      />
                       <TextInput
                         type='string'
                         // id='sizeToAdd'

@@ -15,6 +15,7 @@ export default async function getOrders() {
     },
 
     cache: 'no-store',
+    cache: 'no-store',
     // next: {
     //   revalidate: 10,
     // },

@@ -50,13 +50,14 @@ export default function CustomersTable({
         >
           <FaEye />
         </Link>
+       {/*  <Link
         {/* <Link
           href={`/admin/customers/${customer.id}?edit=true`}
           className='text-xl text-neutral'
         >
-          <RxPencil2 />
+          <RxPencil2 /> 
           <MdOutlineModeEdit />
-        </Link> */}
+        </Link>*/}
         <button>
           {/* <MdOutlineDelete className='text-xl' /> */}
           <RiDeleteBin6Line className='text-xl'/>
@@ -92,7 +93,7 @@ export default function CustomersTable({
       case 'ACTIVATED':
         styles = 'bg-green-100 text-green-600';
         break;
-      case 'BLOCKED':
+      case 'SUSPENDED':
         styles = 'bg-red-100 text-red-600';
         break;
       default:
@@ -103,7 +104,7 @@ export default function CustomersTable({
       <span
         className={`p-2 px-4 text-xs font-semibold rounded-full capitalize ${styles}`}
       >
-        {customer.status}
+        {customer.status.toLowerCase() === "activated" ? "Active" : customer.status.toLowerCase() === "suspended" ? "Blocked" : customer.status}
       </span>
     );
   }
