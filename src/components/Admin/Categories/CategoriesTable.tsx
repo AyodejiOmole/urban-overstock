@@ -72,7 +72,7 @@ export default function CategoriesTable({
   }
 
   const dateTemplate = (category: ICategory) =>
-    moment(category.createdAt).format('MMM Do YYYY, h:mm a');
+    moment(category.createdAt).format('MMM Do YYYY');
 
   function actionTemplate(category: ICategory) {
     return (
@@ -170,7 +170,7 @@ export default function CategoriesTable({
         selection={selectedCategories!}
         onSelectionChange={selectChangeHandler}
         dataKey='id'
-        tableStyle={{ minWidth: '50rem' }}
+        tableStyle={{ minWidth: '50rem'}}
         paginator
         paginatorTemplate={paginatorTemplate}
         // paginatorClassName='flex'

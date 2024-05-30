@@ -74,7 +74,7 @@ export default function ProductsTable({
   }
 
   const dateTemplate = (product: IProduct) =>
-    moment(product.createdAt).format('MMM Do YYYY, h:mm a');
+    moment(product.createdAt).format('MMM Do YYYY');
 
   function amountTemplate(product: IProduct) {
     return formatCurrency(+product.amount);
