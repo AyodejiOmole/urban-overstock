@@ -125,6 +125,28 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
                       >
                         <span>{link.icon}</span>
                         {isOpen && <p className={`capitalize`}>{link.name}</p>}
+                        {link.name.toLowerCase() === "notification" && (
+                            <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
+                              {notifications?.data.count ?? 0}
+                              {/* {10} */}
+                            </div>
+                          )}
+
+                          {link.name.toLowerCase() === "orders" && (
+                            <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
+                              {/* {notifications} */}
+                              {orders?.data.length ?? 0}
+                              {/* {10} */}
+                            </div>
+                          )}
+
+                          {link.name.toLowerCase() === "return request" && (
+                            <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
+                              {/* {notifications} */}
+                              {returnRequests?.data.length ?? 0}
+                              {/* {10} */}
+                            </div>
+                          )}
                       </div>
                     </Link>
                 )              
@@ -192,7 +214,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
                               `}
                               href={el.page}
                             >
-                              <span className='flex items-center justify-between'>
+                              <span className='flex items-center justify-between pl-4'>
                                 {el.name}
                                 {el.children && (
                                   <span className='text-xl'>
@@ -401,7 +423,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
                               `}
                               href={el.page}
                             >
-                              <span className='flex items-center justify-between'>
+                              <span className='flex items-center justify-between pl-4'>
                                 {el.name}
                                 {el.children && (
                                   <span className='text-xl'>
