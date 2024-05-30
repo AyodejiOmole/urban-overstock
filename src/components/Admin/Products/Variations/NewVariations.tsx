@@ -109,6 +109,8 @@ const VariationItem = ({
   dispatch,
   sizes,
   colors,
+  quantity,
+  allVariations,
 }: {
   variation: ProductVariationData;
   onVariationChange?: (
@@ -126,6 +128,8 @@ const VariationItem = ({
   }>;
   sizes: ISizes | undefined;
   colors: IColors | undefined;
+  quantity?: number | undefined;
+  allVariations: ProductVariationData[];
 }) => {
   const imageInputRef = useRef<HTMLInputElement | null>(null);
   // const [variationImage, setVariationImage] = useState<ProductImage | null>();
@@ -149,6 +153,15 @@ const VariationItem = ({
   const [sizeCode, setSizeCode] = useState<string | null | any>('');
 
   const updateVariationQuantity = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+    const variationQuantitySum: number = allVariations.reduce((acc, current) => acc + current.sizeOptions.reduce((accum, cur) => accum + cur.quantity, 0), 0);
+
+    if(quantity) {
+      if(Number(e.target.value) + variationQuantitySum > quantity) {
+        toast.error("Your variation quantities must not exceed actual product quantity");
+        return;
+      }
+    }
+  
     const newSizeOptions = variation.sizeOptions.map((option, idx) => {
       if(idx === index) {
         return {...option, quantity: Number(e.target.value) };
@@ -790,7 +803,8 @@ const ProductVariations = ({
   state,
   colors,
   sizes,
-  productId
+  productId,
+  amount,
 }: {
   dispatch: React.Dispatch<{
     type: 'ADD' | 'DELETE' | 'UPDATE' | "RESET_STATE";
@@ -801,6 +815,7 @@ const ProductVariations = ({
   colors?: IColors | undefined;
   sizes?: ISizes | undefined;
   productId?: number;
+  amount?: number | undefined
 }) => {
   const addVariation = () => {
     const newVariation: ProductVariationData = {
@@ -893,6 +908,15 @@ const ProductVariations = ({
   const [sizeCode, setSizeCode] = useState<string | null | any>('');
 
   const updateVariationQuantity = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+    const variationQuantitySum: number = state.reduce((acc, current) => acc + current.sizeOptions.reduce((accum, cur) => accum + cur.quantity, 0), 0);
+
+    if(amount) {
+      if(Number(e.target.value) + variationQuantitySum > amount) {
+        toast.error("Your variation quantities must not exceed actual product quantity");
+        return;
+      }
+    }
+
     const newSizeOptions = newVariation.sizeOptions.map((option, idx) => {
       if(idx === index) {
         return {...option, quantity: Number(e.target.value) };
@@ -1011,6 +1035,15 @@ const ProductVariations = ({
   }
 
   const createNewProductVariation = async (variation: ProductVariationData) => {
+    const variationQuantitySum: number = state.reduce((acc, current) => acc + current.sizeOptions.reduce((accum, cur) => accum + cur.quantity, 0), 0);
+
+    if(amount) {
+      if(variation.sizeOptions.reduce((accum, cur) => accum + cur.quantity, 0) + variationQuantitySum > amount) {
+        toast.error("Your variation quantities must not exceed actual product quantity.");
+        return;
+      }
+    }
+
     try {
       const cookies = new Cookies();
       const token = cookies.get('urban-token');
@@ -1080,6 +1113,15 @@ const ProductVariations = ({
             return (
                 <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4' key={index}>
                     <p className='text-lg font-semibold text-gray-700 mb-8'>Variation</p>
+                    <div className='flex items-center gap-2'>
+                      <button
+                        className='bg-red-100 text-red-600 p-3.5 rounded-md text-xl'
+                        onClick={() => deleteVariation(variation.id)}
+                      >
+                        <IoClose />
+                      </button>
+                      <p>Delete variation</p>
+                    </div>
                     <VariationItem
                         key={variation.id}
                         variation={variation}
@@ -1088,6 +1130,8 @@ const ProductVariations = ({
                         dispatch={dispatch}
                         sizes={sizes}
                         colors={colors}
+                        quantity={amount}
+                        allVariations={state}
                     />
                 </div>
             );

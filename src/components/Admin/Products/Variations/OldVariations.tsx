@@ -93,6 +93,8 @@ const VariationItem = ({
   dispatch,
   sizes,
   colors,
+  quantity,
+  allVariations,
 }: {
   variation: ProductVariationData;
   onVariationChange?: (
@@ -109,6 +111,8 @@ const VariationItem = ({
   }>;
   sizes: ISizes | undefined;
   colors: IColors | undefined;
+  quantity?: number | undefined;
+  allVariations: ProductVariationData[];
 }) => {
   const imageInputRef = useRef<HTMLInputElement | null>(null);
   // const [variationImage, setVariationImage] = useState<ProductImage | null>();
@@ -132,6 +136,15 @@ const VariationItem = ({
   const [sizeCode, setSizeCode] = useState<string | null | any>('');
 
   const updateVariationQuantity = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+    const variationQuantitySum: number = allVariations.reduce((acc, current) => acc + current.sizeOptions.reduce((accum, cur) => accum + cur.quantity, 0), 0);
+
+    if(quantity) {
+      if(Number(e.target.value) + variationQuantitySum > quantity) {
+        toast.error("Your variation quantities must not exceed actual product quantity");
+        return;
+      }
+    }
+
     const newSizeOptions = variation.sizeOptions.map((option, idx) => {
       if(idx === index) {
         return {...option, quantity: Number(e.target.value) };
@@ -403,6 +416,7 @@ const VariationItem = ({
 
   return (
     <div className='flex items-start gap-4 w-full flex-col sm:items-center py-4 border-b border-b-gray-100'>
+
         {/* Media Upload */}
         <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4'>
           <p className='text-lg font-semibold text-gray-700 mb-8'>Media</p>
@@ -737,6 +751,7 @@ const VariationItem = ({
                 
                 <button
                   className='bg-red-100 text-red-600 px-3.5 rounded-md my-5 text-xl'
+                  type='submit'
                   onClick={() => deleteVariationQuantity(index)}
                 >
                   <IoClose />
@@ -769,6 +784,7 @@ const ProductVariations = ({
   state,
   colors,
   sizes,
+  amount,
 }: {
   dispatch: React.Dispatch<{
     type: 'ADD' | 'DELETE' | 'UPDATE';
@@ -777,6 +793,7 @@ const ProductVariations = ({
   state: ProductVariationData[];
   colors?: IColors | undefined;
   sizes?: ISizes | undefined;
+  amount?: number | undefined
 }) => {
   const addVariation = () => {
     const newVariation: ProductVariationData = {
@@ -822,6 +839,15 @@ const ProductVariations = ({
             return (
                 <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4' key={index}>
                     <p className='text-lg font-semibold text-gray-700 mb-8'>Variation</p>
+                    <div className='flex items-center gap-2'>
+                      <button
+                        className='bg-red-100 text-red-600 p-3.5 rounded-md text-xl'
+                        onClick={() => deleteVariation(variation.id)}
+                      >
+                        <IoClose />
+                      </button>
+                      <p>Delete variation</p>
+                    </div>
                     <VariationItem
                         key={variation.id}
                         variation={variation}
@@ -830,6 +856,8 @@ const ProductVariations = ({
                         dispatch={dispatch}
                         sizes={sizes}
                         colors={colors}
+                        quantity={amount}
+                        allVariations={state}
                     />
                 </div>
             );
