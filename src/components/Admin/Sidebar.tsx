@@ -338,7 +338,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen}: S
                       data-pr-tooltip={link.name.replace(/\b\w/g, (l) => {return l.toUpperCase()})}
                     data-pr-position="right"
                   >
-                    <div className='flex items-center gap-2' 
+                    <div className='flex items-center ' 
                     
                     >
                         <p>{link.icon}</p>

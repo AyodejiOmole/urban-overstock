@@ -15,6 +15,7 @@ import moment from 'moment';
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { IoIosArrowDown } from 'react-icons/io';
+import { useRouter } from 'next/navigation';
 
 export default function CustomersTable({
   selectedDate,
@@ -121,6 +122,8 @@ export default function CustomersTable({
     );
   }, [searchValue, customers]);
 
+  const router = useRouter();
+
   return (
     <div className='card rounded-md p-4 bg-white border border-gray-200'>
       <div className='px-4 flex flex-col w-full justify-between lg:flex-row lg:items-center gap-8 mb-8'>
@@ -142,6 +145,7 @@ export default function CustomersTable({
         sortOrder={-1}
         sortField='dateAdded'
         sortIcon={<IoIosArrowDown />}
+        onRowClick={(e) => router.push(`/admin/customers/${e.data.id}`)}
       >
         <Column
           selectionMode='multiple'

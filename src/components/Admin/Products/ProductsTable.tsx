@@ -8,6 +8,7 @@ import HTTPService from '@/services/http';
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import React, { useMemo, useState } from 'react';
@@ -36,6 +37,8 @@ export default function ProductsTable({
 }) {
   const cookies = new Cookies();
   const httpService = new HTTPService();
+
+  const router = useRouter();
 
   // const [selectedProducts, setSelectedProducts] = useState<IProduct[] | null>(
   //   null
@@ -183,6 +186,8 @@ export default function ProductsTable({
         sortOrder={-1}
         sortField='createdAt'
         sortIcon={<IoIosArrowDown />}
+        alwaysShowPaginator={true}
+        onRowClick={(e) => router.push(`/admin/products/${e.data.id}`)}
       >
         <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} />
         <Column field='product.item' header='Product' body={productTemplate} />

@@ -16,6 +16,7 @@ import ENDPOINTS from '@/config/ENDPOINTS';
 import { GetColorName } from 'hex-color-to-color-name';
 import { FaHeartPulse } from 'react-icons/fa6';
 import { IoIosArrowDown } from 'react-icons/io';
+import { AiOutlineClose } from 'react-icons/ai';
 
 interface ProductVariationProps {
   value: string;
@@ -193,7 +194,7 @@ const VariationItem = ({
     setSizePicker(null);
   }
 
-  const deleteVariationQuantity = (index: number, value?: number | undefined) => {
+  const deleteVariationQuantity = (index: number) => {
     const newSizeOptions = variation.sizeOptions.map((option, idx) => {
       if(idx === index) {
         return {...option, quantity: 0 };
@@ -335,6 +336,71 @@ const VariationItem = ({
     }
   }
 
+  const deleteSizePreset = async (variationIndex: number, sizeId: number) => {
+    const cookies = new Cookies();
+    const token = cookies.get('urban-token');
+
+    toast.loading("Deleting size preset...");
+
+    const httpService = new HTTPService();
+
+    try {
+      httpService
+        .deleteById(`${ENDPOINTS.SIZE_SETTINGS}/${sizeId}`,`Bearer ${token}`)
+        .then((apiRes) => {
+          console.log('Response: ', apiRes);
+          toast.dismiss();
+
+          if (apiRes.status === 200) {
+            // sizes?.push(apiRes.data);
+            let index = sizes?.findIndex(obj => obj.id === sizeId);
+            if (index) {
+              sizes?.splice(index, 1);
+            }
+            toast.success('Size preset deleted successfully.');
+            setDisplayAddSize(-1);
+            setSizePicker(-1);
+            updateSizeVariationValue(variationIndex, 0)
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteColorPreset = async (colorId: number) => {
+    const cookies = new Cookies();
+    const token = cookies.get('urban-token');
+
+    const httpService = new HTTPService();
+    toast.loading("Deleting color preset...");
+
+    try {
+      httpService
+        .deleteById(`${ENDPOINTS.COLOR_SETTINGS}/${colorId}`,`Bearer ${token}`)
+        .then((apiRes) => {
+          console.log('Response: ', apiRes);
+
+          toast.dismiss();
+
+          if (apiRes.status === 200) {
+            // sizes?.push(apiRes.data);
+            let index = colors?.findIndex(obj => obj.id === colorId);
+            if (index) {
+              colors?.splice(index, 1);
+            }
+            toast.success('Color preset deleted successfully.');
+            setDisplayAddColor(false);
+            setActiveColorPicker(false);
+            updateColorVaritionValue(0);
+            // toast.dismiss();
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className='flex items-start gap-4 w-full flex-col sm:items-center py-4 border-b border-b-gray-100'>
         {/* Media Upload */}
@@ -387,116 +453,146 @@ const VariationItem = ({
           </div>
         </div>
 
-        <div className='mb-4 w-full relative'>
-            <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
-                Color:
-            </label>
-            <div 
-                className = {
-                    clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
-                }
-                onClick={() => setActiveColorPicker(true)}
-            >
-                {/* {variationColor === "" ? "Select a color..." : variationColor} */}
-                {colors?.find((color: IColor) => color.id == variation.colorId)?.name ? colors?.find((color: IColor) => color.id == variation.colorId)?.name : "Select a color..."}
-                <IoIosArrowDown className='absolute right-4 top-auto bottom-auto'/>
-            </div>
+        <div className='w-full flex justify-between gap-2'>
+            <div className='mb-4 w-full relative'>
+                <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
+                    Color:
+                </label>
+                <div 
+                    className = {
+                        clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                    }
+                    onClick={() => setActiveColorPicker(true)}
+                >
+                    {/* {variationColor === "" ? "Select a color..." : variationColor} */}
+                    {colors?.find((color: IColor) => color.id == variation.colorId)?.name ? colors?.find((color: IColor) => color.id == variation.colorId)?.name : "Select a color..."}
+                    <IoIosArrowDown className='absolute right-4 top-auto bottom-auto'/>
+                </div>
 
-              {activeColorPicker && (
-                <div
-                  className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
-                  ref={activeColorPickerRef}
-                >   
-                  <div
-                    className="flex justify-between align-center mb-2"
-                  >
-                    <p>Cant find your color?</p>
-                    <Button 
-                      onClick={() => {
-                        setDisplayAddColor(true);
-                        setActiveColorPicker(false);
-                      }}
-                    >
-                      <FaPlus />
-                      Add Color
-                    </Button>
-                  </div>
-
-                  <div className='w-full'>
-                      <p className='text-sm text-neutral mb-2'>Presets</p>
-
-                      <div className='flex flex-wrap gap-1'>
-                        {colors?.map((color: IColor, colorIndex: number) => {
-                          return (
-                              <Button 
-                                variant='outlined' 
-                                color='grey' 
-                                key={colorIndex} 
-                                onClick={() => {
-                                  setVariationColor(color?.name);
-                                  updateColorVaritionValue(color.id);
-                                  setActiveColorPicker(false);
-                                }}
-                              >
-                                <p className='text-xs text-neutral'>{color?.name}</p>
-                              </Button>
-                          )
-                        })}
+                  {activeColorPicker && (
+                    <div
+                      className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
+                      ref={activeColorPickerRef}
+                    >   
+                      <div
+                        className="flex justify-between align-center mb-2"
+                      >
+                        <p>Cant find your color?</p>
+                        <Button 
+                          onClick={() => {
+                            setDisplayAddColor(true);
+                            setActiveColorPicker(false);
+                          }}
+                        >
+                          <FaPlus />
+                          Add Color
+                        </Button>
                       </div>
-                      {/* <div>
-                        {colors?.map((color: IColor, colorIndex: number) => {
-                            return (
-                                <Button 
-                                  variant='outlined' 
-                                  color='grey' 
-                                  key={colorIndex} 
-                                  onClick={() => {
-                                    setVariationColor(color?.name);
-                                    updateColorVaritionValue(color.id);
-                                    setActiveColorPicker(false);
-                                  }}
-                                >
-                                  <p className='text-xs text-neutral'>{color?.name}</p>
-                                </Button>
-                            )
-                          })}
-                      </div> */}
-                  </div>
-                </div>
-              )}
 
-              {displayAddColor && (
-                <div
-                  className='absolute top-2 z-20 right-2 p-4 border border-gray-200 bg-white rounded-lg'
-                  ref={displayAddColorRef}
-                >  
-                  <SketchPicker
-                      // color={variationColor}
-                      color={colorToAdd}
-                      onChange={(color) => {
-                          console.log(color);
-                          setColorToAdd(color.hex);
-                      }}
-                      className='relative z-20 mb-3'
-                  /> 
+                      <div className='w-full'>
+                          <p className='text-sm text-neutral mb-2'>Presets</p>
 
-                  <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
-                      Color:
-                  </label>
-                  <div 
-                      className = {
-                          clsx('h-[48px] bg-white px-4 py-2 mb-3 rounded-lg border border-dark-100 flex gap-2 items-center',)
-                      }
-                  >
-                      {colorToAdd === "" ? "Select a color..." : colorToAdd}
-                  </div>
+                          <div className='flex flex-wrap gap-1'>
+                            {colors?.map((color: IColor, colorIndex: number) => {
+                              return (
+                                  <Button 
+                                    variant='outlined' 
+                                    color='grey' 
+                                    key={colorIndex} 
+                                    className='relative'
+                                    onClick={() => {
+                                      setVariationColor(color?.name);
+                                      updateColorVaritionValue(color.id);
+                                      setActiveColorPicker(false);
+                                    }}
+                                  >
+                                    <p className='text-xs text-neutral'>{color?.name}</p>
+                                    <button
+                                      className='absolute  p-1  bg-gray-100 text-xl rounded-full text-secondary-text'
+                                      onClick={() => deleteColorPreset(color.id)}
+                                      style={{
+                                        transform: 'translate(-190%, -70%)'
+                                      }}
+                                    >
+                                      <AiOutlineClose size={15}/>
+                                    </button>
+                                  </Button>
+                              )
+                            })}
+                          </div>
+                          {/* <div>
+                            {colors?.map((color: IColor, colorIndex: number) => {
+                                return (
+                                    <Button 
+                                      variant='outlined' 
+                                      color='grey' 
+                                      key={colorIndex} 
+                                      onClick={() => {
+                                        setVariationColor(color?.name);
+                                        updateColorVaritionValue(color.id);
+                                        setActiveColorPicker(false);
+                                      }}
+                                    >
+                                      <p className='text-xs text-neutral'>{color?.name}</p>
+                                    </Button>
+                                )
+                              })}
+                          </div> */}
+                      </div>
+                    </div>
+                  )}
 
-                  <Button className='w-full' onClick={() => createNewColorPreset(colorToAdd)}>
-                      <FaPlus />
-                      Update color presets
-                  </Button>
-                </div>
-              )}
+                  {displayAddColor && (
+                    <div
+                      className='absolute top-2 z-20 right-2 p-4 border border-gray-200 bg-white rounded-lg'
+                      ref={displayAddColorRef}
+                    >  
+                      <SketchPicker
+                          // color={variationColor}
+                          color={colorToAdd}
+                          onChange={(color) => {
+                              console.log(color);
+                              setColorToAdd(color.hex);
+                          }}
+                          className='relative z-20 mb-3'
+                      /> 
+
+                    <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
+                        Color name:
+                    </label>
+                    
+                    <div 
+                        className = {
+                            clsx('h-[48px] bg-white px-4 py-2 mb-3 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                        }
+                    >
+                        {GetColorName(colorToAdd) === "" ? "Select a color..." : GetColorName(colorToAdd) }
+                    </div>
+
+                      <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
+                          Color code:
+                      </label>
+                      <div 
+                          className = {
+                              clsx('h-[48px] bg-white px-4 py-2 mb-3 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                          }
+                      >
+                          {colorToAdd === "" ? "Select a color..." : colorToAdd}
+                      </div>
+
+                      <Button className='w-full' onClick={() => createNewColorPreset(colorToAdd)}>
+                          <FaPlus />
+                          Update color presets
+                      </Button>
+                    </div>
+                  )} 
+            </div>
+            <button
+              className='bg-red-100 text-red-600 px-3.5 rounded-md my-5 text-xl'
+              onClick={() => updateColorVaritionValue(0)}
+            >
+              <IoClose />
+            </button>
         </div>
 
         {variation.sizeOptions.map((option, index) => {
@@ -514,9 +610,6 @@ const VariationItem = ({
                       onClick={() => setSizePicker(index)}
                   >
                       {sizes?.find((size: ISize) => size.id == option?.sizeId)?.code ? sizes?.find((size: ISize) => size.id == option?.sizeId)?.code : "Select a variation size..."}
-                      {/* {brands?.filter((brand) => brand.id === formik.values.brandId)[0]?.name ? brands?.filter((brand) => brand.id === formik.values.brandId)[0]?.name : "Select a brand..."} */}
-                      {/* {option?.sizeId} */}
-                      {/* {} */}
                       <IoIosArrowDown className='absolute right-4 top-auto bottom-auto'/>
                   </div>
                   
@@ -546,8 +639,17 @@ const VariationItem = ({
                           <div className='flex flex-wrap gap-1'>
                             {sizes?.map((size: any, sizeIndex: number) => {
                               return (
-                                  <Button variant='outlined' color='grey' key={sizeIndex} onClick={() => updateSizeVariationValue(index, size?.id)}>
+                                  <Button variant='outlined' className='relative' color='grey' key={sizeIndex} onClick={() => updateSizeVariationValue(index, size?.id)}>
                                     <p className='text-xs text-neutral'>{size?.code}</p>
+                                    <button
+                                      className='absolute  p-1  bg-gray-100 text-xl rounded-full text-secondary-text'
+                                      onClick={() => deleteSizePreset(index, size.id)}
+                                      style={{
+                                        transform: 'translate(-190%, -70%)'
+                                      }}
+                                    >
+                                      <AiOutlineClose size={15}/>
+                                    </button>
                                   </Button>
                               )
                             })}
@@ -613,7 +715,7 @@ const VariationItem = ({
                 </div>
 
                 <button
-                  className='bg-red-100 text-red-600 p-3.5 rounded-md mt-2 text-xl'
+                  className='bg-red-100 text-red-600 px-3.5 rounded-md my-5 text-xl'
                   onClick={() => updateSizeVariationValue(index, 0)}
                 >
                   <IoClose />
@@ -634,8 +736,8 @@ const VariationItem = ({
                 </div>
                 
                 <button
-                  className='bg-red-100 text-red-600 p-3.5 rounded-md mt-2 text-xl'
-                  onClick={() => deleteVariationQuantity(index, 0)}
+                  className='bg-red-100 text-red-600 px-3.5 rounded-md my-5 text-xl'
+                  onClick={() => deleteVariationQuantity(index)}
                 >
                   <IoClose />
                 </button>

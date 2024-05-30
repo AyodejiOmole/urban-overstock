@@ -14,6 +14,7 @@ import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 import { IoIosArrowDown } from 'react-icons/io';
 import { IReturnRequests } from '@/interfaces/return-requests';
 import { ICancelledOrders } from '@/interfaces/cancelled-orders';
+import { useRouter } from 'next/navigation';
 
 export default function CancelledOrdersTable({
   orders,
@@ -183,6 +184,8 @@ export default function CancelledOrdersTable({
     return 
   }
 
+  const router = useRouter();
+
   return (
     <div className='card rounded-xl p-4 bg-white border border-gray-200'>
       {page.toLowerCase() === "recent orders" && (
@@ -216,6 +219,7 @@ export default function CancelledOrdersTable({
         showSelectAll
         sortIcon={<IoIosArrowDown />}
         selectionAutoFocus={true}
+        onRowClick={(e) => router.push(`/admin/orders/cancelled-orders/${e.data.id}`)}
       >
         <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} className='descendant:border descendant:border-gray-800'/>
         <Column field='orderId' header='Order ID' className='text-[#F2C94C]'/>

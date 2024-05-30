@@ -55,7 +55,7 @@ const paginatorTemplate = {
     },
     PrevPageLink: (options: PaginatorPrevPageLinkOptions) => {
         return (
-            <span className={classNames(options.className, 'rounded-none bg-[#F2C94C] p-2')} onClick={options.onClick} >
+            <span className={classNames(options.className, 'rounded-none bg-[#F2C94C]')} onClick={options.onClick} >
                 {/* <span className="p-3">Previous</span>
                 <Ripple /> */}
                 {/* <MdKeyboardArrowRight color="black"/> */}
@@ -65,7 +65,7 @@ const paginatorTemplate = {
     },
     NextPageLink: (options: PaginatorNextPageLinkOptions) => {
         return (
-            <span className={classNames(options.className, 'rounded-none bg-[#F2C94C] p-2')} onClick={options.onClick}>
+            <span className={classNames(options.className, 'rounded-none bg-[#F2C94C]')} onClick={options.onClick}>
                 {/* <span className="p-3">Previous</span>
                 <Ripple /> */}
                 {/* <MdKeyboardArrowRight color="black"/> */}

@@ -13,6 +13,7 @@ import { RxPencil2 } from 'react-icons/rx';
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 import { IoIosArrowDown } from 'react-icons/io';
 import { IReturnRequests } from '@/interfaces/return-requests';
+import { useRouter } from 'next/navigation';
 import { ICancelledOrders } from '@/interfaces/cancelled-orders';
 
 export default function OrdersTable({
@@ -189,6 +190,8 @@ export default function OrdersTable({
     return 
   }
 
+  const router = useRouter();
+
   return (
     <div className='card rounded-xl p-4 bg-white border border-gray-200'>
       {page.toLowerCase() === "recent orders" && (
@@ -222,6 +225,7 @@ export default function OrdersTable({
         showSelectAll
         sortIcon={<IoIosArrowDown />}
         selectionAutoFocus={true}
+        onRowClick={(e) => router.push(`/admin/orders/${e.data.id}`)}
       >
         {page !== "recent orders" && <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} className='descendant:border descendant:border-gray-800'/>}
         <Column field='uuid' header='Order ID' className='text-[#F2C94C]'/>

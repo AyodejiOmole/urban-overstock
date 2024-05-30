@@ -31,6 +31,8 @@ import { Suspense } from 'react';
 import { Size } from '@/interfaces/products';
 import { IDiscountCodes } from '@/interfaces/discount-codes';
 import { IoIosArrowDown } from 'react-icons/io';
+import { AiOutlineClose } from 'react-icons/ai';
+import { IoClose } from 'react-icons/io5';
 
 interface ProductImage {
   // color: string;
@@ -731,6 +733,40 @@ export default function ProductForm({
     };
   }, []);
 
+  const deleteBrandPreset = async (brandId: number) => {
+    const cookies = new Cookies();
+    const token = cookies.get('urban-token');
+
+    toast.loading("Deleting brand preset...");
+
+    const httpService = new HTTPService();
+
+    try {
+      httpService
+        .deleteById(`${ENDPOINTS.BRAND_SETTINGS}/${brandId}`,`Bearer ${token}`)
+        .then((apiRes) => {
+          console.log('Response: ', apiRes);
+
+          toast.dismiss();
+
+          if (apiRes.status === 200) {
+            // sizes?.push(apiRes.data);
+            let index = brands?.findIndex(obj => obj.id === brandId);
+            if (index) {
+              brands?.splice(index, 1);
+            }
+            toast.success('Brand preset deleted successfully.');
+            setBrandPicker(false);
+            setAddBrandDisplay(false);
+            formik.setFieldValue("brandId", 0);
+            // toast.dismiss();
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // const updateImageColor = (index: number, color: string) => {
   //   const updatedImages = productImages.filter((img, i) => i !== index);
   //   const current = productImages.find((img, i) => i === index);
@@ -788,32 +824,7 @@ export default function ProductForm({
             <CustomError error={formik.errors.description} />
           </div>
 
-          {/* <div className='mb-6'>
-              <label
-                htmlFor='brandId'
-                className='text-sm text-neutral mb-2 block'
-              >
-                Brand
-              </label>
-              <select
-                name='brandId'
-                id='brandId'
-                className='text-neutral'
-                onChange={formik.handleChange}
-                value={formik.values.brandId}
-              >
-                <option value='' defaultChecked disabled>
-                    Select a brand type....
-                </option>
-                {brands?.map((brand: IBrand, index: number) => {
-                  return (
-                    <option value={brand?.id} key={index}>{brand?.name}</option>
-                  )
-                })}
-              </select>
-              <CustomError error={formik.errors.brandId} />
-          </div> */}
-
+          <div className='w-full flex justify-between gap-2'>
             <div className='mb-4 w-full relative'>
                 <label htmlFor='brandId' className='text-sm text-neutral mb-2 block'>
                   Brand:
@@ -858,12 +869,22 @@ export default function ProductForm({
                                     variant='outlined' 
                                     color='grey' 
                                     key={index} 
+                                    className='relative'
                                     onClick={() => {
                                       formik.setFieldValue("brandId", brand.id);
                                       setBrandPicker(false);
                                     }}
                                   >
                                     <p className='text-xs text-neutral'>{brand?.name}</p>
+                                    <button
+                                      className='absolute p-1 bg-gray-100 text-xl rounded-full text-secondary-text'
+                                      onClick={() => deleteBrandPreset(brand.id)}
+                                      style={{
+                                        transform: 'translate(-190%, -70%)'
+                                      }}
+                                    >
+                                      <AiOutlineClose size={15}/>
+                                    </button>
                                   </Button>
                               )
                             })}
@@ -897,6 +918,13 @@ export default function ProductForm({
                   </div>
                 )}
             </div>
+            <button
+              className='bg-red-100 text-red-600 px-3.5 rounded-md my-5 text-xl'
+              onClick={() => formik.setFieldValue("brandId", undefined)}
+            >
+              <IoClose />
+            </button>
+          </div>
         </div>
 
         {/* Media Upload */}
