@@ -38,7 +38,7 @@ export default function UserAvatar({ name, title = '' }: PropTypes) {
 
       {
         dropDown && 
-        <div className='absolute cursor-pointer py-4 px-2 rounded bg-white text-md top-14 w-full flex justify-center items-center' onClick={() => logOut()}>
+        <div className='absolute cursor-pointer py-2 px-2 rounded bg-white text-md top-14 w-full flex justify-center items-center' onClick={() => logOut()}>
           {/* <CiLogout /> */}
           <p>Logout</p>
         </div>

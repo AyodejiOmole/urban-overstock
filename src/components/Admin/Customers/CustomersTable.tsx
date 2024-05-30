@@ -36,7 +36,7 @@ export default function CustomersTable({
   const [rowClick, setRowClick] = useState<boolean>(true);
 
   const dateTemplate = (customer: ICustomer) =>
-    moment(customer.createdAt).format('MMM Do YYYY, h:mm a');
+    moment(customer.createdAt).format('MMM Do YYYY');
 
   function amountTemplate(customer: ICustomer) {
     return formatCurrency(customer.orderBalance);
