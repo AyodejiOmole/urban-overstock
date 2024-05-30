@@ -27,10 +27,9 @@ import { IBrand } from '@/interfaces/brands';
 import { IBrands } from '@/interfaces/brands';
 import { IColors } from '@/interfaces/colors';
 import { ISizes } from '@/interfaces/sizes';
-import { Suspense } from 'react';
 import { Size } from '@/interfaces/products';
 import { IDiscountCodes } from '@/interfaces/discount-codes';
-import { IoIosArrowDown } from 'react-icons/io';
+import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineClose } from 'react-icons/ai';
 import { IoClose } from 'react-icons/io5';
 
@@ -831,7 +830,7 @@ export default function ProductForm({
                 </label>
                 <div 
                     className = {
-                        clsx('h-[48px] bg-white px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                        clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
                     }
                     onClick={() => setBrandPicker(true)}
                 >
@@ -1098,6 +1097,7 @@ export default function ProductForm({
                     )
                   })}
                 </select>
+                <IoIosArrowDown className={`absolute right-4 ${formik.errors.discountType ? "top-10" : "bottom-4"}`} />
 
                 <CustomError error={formik.errors.discountType} />
               </div>
@@ -1122,6 +1122,7 @@ export default function ProductForm({
                   <option value='none'>Tax Free</option>
                 </select>
 
+                <IoIosArrowDown className={`absolute right-4 ${formik.errors.taxClass ? "top-10" : "bottom-4"}`} />
                 <CustomError error={formik.errors.taxClass} />
               </div>
             </div>
@@ -1225,7 +1226,7 @@ export default function ProductForm({
           <Variations dispatch={dispatch} state={state} />
         </div> */}
         <div>
-          <NewVariations dispatch={dispatch} productId={activeProduct?.id} state={state} colors={colors} sizes={sizes}/>
+          <NewVariations amount={formik.values.quantity} dispatch={dispatch} productId={activeProduct?.id} state={state} colors={colors} sizes={sizes}/>
         </div>
 
         {/* Shipping */}

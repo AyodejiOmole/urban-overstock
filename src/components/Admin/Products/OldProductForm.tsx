@@ -273,6 +273,15 @@ export default function OldProductForm({
       const promises: Promise<Response>[] = [];
       const variationPromises: Promise<Response>[] = [];
 
+      const variationQuantitySum: number = variations.reduce((acc, current) => acc + current.sizeOptions.reduce((accum, cur) => accum + cur.quantity, 0), 0);
+
+      if(values.quantity) {
+        if(variationQuantitySum > values?.quantity) {
+          toast.error("Your variation quantities must not exceed actual product quantity.");
+          return;
+        }
+      }
+
       if (productImages.length < 1 || variations.length < 1) {
         toast.error('Please add product images or variations.');
       } else {
@@ -342,10 +351,6 @@ export default function OldProductForm({
             };
           }
 
-          // if(variationImages.length > 0) {
-            
-          // }
-
           if (product_images && product_images.length > 0) {
             const data = {
               ...values,
@@ -379,14 +384,6 @@ export default function OldProductForm({
           console.log(error);
         }
       }
-
-      // const data = {
-      //   ...values,
-      //   categoryId: +values.categoryId,
-      //   productVarations: groupedVariations,
-      //   productImages: product_images,
-      // };
-      // console.log(data);
     },
     validateOnChange: true,
   });
@@ -950,7 +947,7 @@ export default function OldProductForm({
           <Variations dispatch={dispatch} state={state} />
         </div> */}
         <div>
-          <OldVariations dispatch={dispatch} state={state} colors={colors} sizes={sizes}/>
+          <OldVariations amount={formik.values.quantity} dispatch={dispatch} state={state} colors={colors} sizes={sizes}/>
         </div>
 
         {/* Shipping */}
