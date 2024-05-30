@@ -261,7 +261,7 @@ export default function ProductForm({
       quantity: activeProduct?.quantity ?? undefined,
       amount: activeProduct?.amount ?? undefined,
       discountType: activeProduct?.discountType ?? " ",
-      discountPercentage: activeProduct?.discountPercentage ?? " ",
+      // discountPercentage: activeProduct?.discountPercentage ?? " ",
       taxClass: activeProduct?.taxClass ?? " ",
       vatAmount: activeProduct?.vatAmount ?? undefined,
       sku: activeProduct?.sku ?? " ",
@@ -287,7 +287,7 @@ export default function ProductForm({
         return costPrice <= amount;
       }),
       discountType: Yup.string().required().label('Discount Type'),
-      discountPercentage: Yup.number().min(0).required().label('Discount Type'),
+      // discountPercentage: Yup.number().min(0).required().label('Discount Type'),
       taxClass: Yup.string().required().label('Tax Class'),
       categoryId: Yup.number().min(1).required().label('Category'),
       vatAmount: Yup.number().min(0).required().label('VAT Amount'),
@@ -384,6 +384,7 @@ export default function ProductForm({
               ...values,
               categoryId: values.categoryId ?? 0,
               // productVarations: getFormattedVariations(state),
+              discountPercentage: discounts?.find((discount) => discount.code === values.discountType)?.percentage,
               productVarations: getFormattedVariations(state, variationImages),
               imageUrls: [...product_images!, ...existingImages],
               tag: "empty",
@@ -1129,7 +1130,7 @@ export default function ProductForm({
             {/*  */}
             <div>
               <div className='mb-6'>
-                <label
+                {/* <label
                   htmlFor='discountPercentage'
                   className='text-sm text-neutral mb-2 block'
                 >
@@ -1143,7 +1144,21 @@ export default function ProductForm({
                   value={formik.values.discountPercentage}
                   error={formik.errors.discountPercentage}
                   type='number'
-                />
+                  disabled
+                /> */}
+                <div className='w-full'>
+                    <label htmlFor='brandId' className='text-sm text-neutral mb-2 block'>
+                      Discount Percentage (%)
+                    </label>
+                    <div 
+                        className = {
+                            clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 relative rounded-lg border border-dark-100 flex gap-2 items-center',)
+                        }
+                    >
+                        {discounts?.find((discount) => discount.code === formik.values.discountType)?.percentage ? discounts?.find((discount) => discount.code === formik.values.discountType)?.percentage : "Select a discount percentage..."}
+                        {/* <IoIosArrowDown className='absolute right-4 top-auto bottom-auto'/> */}
+                    </div>
+                </div>
               </div>
               {/*  */}
               <div className='mb-6'>

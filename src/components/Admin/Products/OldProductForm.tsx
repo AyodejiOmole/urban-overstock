@@ -224,7 +224,7 @@ export default function OldProductForm({
       quantity: undefined,
       amount: undefined,
       discountType: '',
-      discountPercentage: 0 ?? undefined,
+      // discountPercentage: 0 ?? undefined,
       taxClass: '',
       vatAmount: undefined,
       sku: '',
@@ -249,7 +249,7 @@ export default function OldProductForm({
         return costPrice <= amount;
       }),
       discountType: Yup.string().required().label('Discount Type'),
-      discountPercentage: Yup.number().min(0).required().label('Discount Type'),
+      // discountPercentage: Yup.number().min(0).required().label('Discount Type'),
       taxClass: Yup.string().required().label('Tax Class'),
       categoryId: Yup.number().min(1).required().label('Category'),
       vatAmount: Yup.number().min(0).required().label('VAT Amount'),
@@ -355,6 +355,7 @@ export default function OldProductForm({
             const data = {
               ...values,
               categoryId: +values.categoryId,
+              discountPercentage: discounts?.find((discount) => discount.code === values.discountType)?.percentage,
               productVarations: getFormattedVariations(state, variationImages),
               // productImages: product_images,
               imageUrls: product_images,
@@ -850,7 +851,7 @@ export default function OldProductForm({
             {/*  */}
             <div>
               <div className='mb-6'>
-                <label
+                {/* <label
                   htmlFor='discountPercentage'
                   className='text-sm text-neutral mb-2 block'
                 >
@@ -864,7 +865,20 @@ export default function OldProductForm({
                   value={formik.values.discountPercentage}
                   error={formik.errors.discountPercentage}
                   type='number'
-                />
+                /> */}
+                <div className='w-full'>
+                    <label htmlFor='brandId' className='text-sm text-neutral mb-2 block'>
+                      Discount Percentage (%)
+                    </label>
+                    <div 
+                        className = {
+                            clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 relative rounded-lg border border-dark-100 flex gap-2 items-center',)
+                        }
+                    >
+                        {discounts?.find((discount) => discount.code === formik.values.discountType)?.percentage ? discounts?.find((discount) => discount.code === formik.values.discountType)?.percentage : "Select a discount percentage..."}
+                        {/* <IoIosArrowDown className='absolute right-4 top-auto bottom-auto'/> */}
+                    </div>
+                </div>
               </div>
               {/*  */}
               <div className='mb-6'>
