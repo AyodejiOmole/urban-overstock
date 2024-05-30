@@ -25,7 +25,7 @@ export default async function AdminCustomerDetails({
 
   return (
     <section>
-      <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8'>
+      {/* <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8'>
         <div>
           <p className='text-xl font-bold text-gray-700'>Customer Details</p>
           <Pagination lastPage='Customer Details'/>
@@ -37,7 +37,7 @@ export default async function AdminCustomerDetails({
             Delete account
           </Button>
         </div>
-      </div>
+      </div> */}
 
       {/* Customer Details Section */}
       <CustomerDetails customerOrderHistory={customerOrderHistory} customerDetails={customerDetails}/>
