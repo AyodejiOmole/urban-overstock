@@ -125,14 +125,15 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
                       >
                         <span>{link.icon}</span>
                         {isOpen && <p className={`capitalize`}>{link.name}</p>}
-                        {link.name.toLowerCase() === "notification" && (
+                        
+                        {link.name.toLowerCase() === "notification" && isOpen && (
                             <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
                               {notifications?.data.count ?? 0}
                               {/* {10} */}
                             </div>
                           )}
 
-                          {link.name.toLowerCase() === "orders" && (
+                          {link.name.toLowerCase() === "orders" && isOpen && (
                             <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
                               {/* {notifications} */}
                               {orders?.data.length ?? 0}
@@ -140,7 +141,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
                             </div>
                           )}
 
-                          {link.name.toLowerCase() === "return request" && (
+                          {link.name.toLowerCase() === "return request" && isOpen && (
                             <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
                               {/* {notifications} */}
                               {returnRequests?.data.length ?? 0}
@@ -327,14 +328,14 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
             
                           {isOpen && <p className={`capitalize`}>{link.name}</p>}
 
-                          {link.name.toLowerCase() === "notification" && (
+                          {link.name.toLowerCase() === "notification" && isOpen && (
                             <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
                               {notifications?.data.count ?? 0}
                               {/* {10} */}
                             </div>
                           )}
 
-                          {link.name.toLowerCase() === "orders" && (
+                          {link.name.toLowerCase() === "orders" && isOpen && (
                             <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
                               {/* {notifications} */}
                               {orders?.data.length ?? 0}
@@ -342,7 +343,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
                             </div>
                           )}
 
-                          {link.name.toLowerCase() === "return request" && (
+                          {link.name.toLowerCase() === "return request" && isOpen && (
                             <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
                               {/* {notifications} */}
                               {returnRequests?.data.length ?? 0}
