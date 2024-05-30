@@ -30,6 +30,37 @@ import DatePicker from '@/components/Shared/DatePicker';
 import { Calendar, CalendarProps } from 'primereact/calendar';
 import { FiCalendar } from 'react-icons/fi';
 
+function StatusTemplate ({ status }: { status: string | undefined}) {
+  let styles = '';
+
+  switch (status?.toLowerCase()) {
+    case 'processing':
+      styles = 'bg-orange-100 text-orange-600';
+      break;
+    case 'shipped':
+      styles = 'bg-[#E8F8FD] text-[#13B2E4]';
+      break;
+    case 'delivered':
+      styles = 'bg-green-100 text-green-600';
+      break;
+    case 'cancelled' || 'refunded':
+      styles = 'bg-red-100 text-red-600';
+      break;
+    case 'packed':
+      styles = 'bg-[#E8F8FD] text-[#13B2E4]';
+      break;
+    default:
+      styles = 'bg-purple-50 text-purple-600';
+      break;
+  }
+
+  return (
+    <span className={`p-2 px-4 text-xs font-medium rounded-full ${styles}`}>
+      {status}
+    </span>
+  );
+}
+
 export default function OrderDetails({ order }: { order: IOrder | null }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [orderShippedModal, setOrderShippedModal] = useState(false);
@@ -174,6 +205,8 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
     }
   }
 
+  console.log(order);
+
   return (
     <div>
       {/* Grid 1 */}
@@ -181,10 +214,11 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
         {/* Order Details */}
         <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-xl'>
           <p className='text-lg font-medium text-gray-700 mb-8 flex items-center justify-between'>
-            <span>Order #302011</span>
-            <span className='p-2 px-4 text-xs bg-blue-100 rounded-full'>
+            <span>Order #{order?.id}</span>
+            {/* <span className='p-2 px-4 text-xs bg-blue-100 rounded-full'>
               {order?.status}
-            </span>
+            </span> */}
+            <StatusTemplate status={order?.status}/>
           </p>
           {/*  */}
           <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
@@ -402,7 +436,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                 <div
                   className={clsx(
                     'h-12 w-12 rounded-full flex items-center justify-center text-xl bg-gray-200 border-4 border-gray-100 text-neutral',
-                    order?.status.toLowerCase() === 'shipping' &&
+                    order?.status.toLowerCase() === 'shipping' || order?.status.toLowerCase() === 'delivered' &&
                       'border-[#f5f5ff] bg-[#eeeeff] text-primary'
                   )}
                 >

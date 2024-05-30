@@ -99,7 +99,7 @@ export default function CancelledOrderTransactionTable({
       <DataTable
         value={history}
         dataKey='id'
-        tableStyle={{ minWidth: '50rem' }}
+        tableStyle={{ minWidth: '20rem' }}
         paginator
         rows={5}
         paginatorTemplate={paginatorTemplate}

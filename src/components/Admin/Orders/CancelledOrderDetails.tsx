@@ -16,6 +16,8 @@ import toast from 'react-hot-toast';
 import ENDPOINTS from '@/config/ENDPOINTS';
 import { useRouter } from 'next/navigation';
 import { ICancelledOrders } from '@/interfaces/cancelled-orders';
+import { useState } from 'react';
+import Modal from '@/components/Global/Modal';
 
 export default function CancelledOrderDetails({
   cancelledOrderHistory,
@@ -27,17 +29,17 @@ export default function CancelledOrderDetails({
   const cookies = new Cookies();
   const httpService = new HTTPService();
 
+  const [approveModal, setApproveModal] = useState(false);
+  const [declineModal, setDeclineModal] = useState(false);
+
   const router = useRouter();
 
   async function approveOrderRequest(id: any) {
     const token = cookies.get('urban-token');
 
+    setApproveModal(false);
+
     if(id) {
-      if (
-        confirm(
-          'Are you sure you want to approve this cancel order request?'
-        )
-      ) {
         toast.loading('Approving cancel order request...');
   
         const res = await httpService.patchById(
@@ -48,33 +50,30 @@ export default function CancelledOrderDetails({
         if (res.status === 200) {
           console.log(res);
           toast.success('Cancel order request approved');
+          
           router.refresh();
         } else toast.error('Cannot approve order request at this time.');
-      }
+      
     }
   }
 
   async function cancelOrderRequest(id: any) {
     const token = cookies.get('urban-token');
 
-    if (
-      confirm(
-        'Are you sure you want to decline this cancel order request?'
-      )
-    ) {
-      toast.loading('Declining cancel order request...');
+    setDeclineModal(false);
+   
+    toast.loading('Declining cancel order request...');
 
-      const res = await httpService.patchById(
-        `${ENDPOINTS.ORDERS}/cancel-request/approved/${id}`,
-        `Bearer ${token}`
-      );
-      toast.dismiss();
-      if (res.status === 200) {
-        console.log(res);
-        toast.success('Cancel order request denied');
-        router.refresh();
-      } else toast.error('Cannot decline order request at this time');
-    }
+    const res = await httpService.patchById(
+      `${ENDPOINTS.ORDERS}/cancel-request/approved/${id}`,
+      `Bearer ${token}`
+    );
+    toast.dismiss();
+    if (res.status === 200) {
+      console.log(res);
+      toast.success('Cancel order request denied');
+      router.refresh();
+    } else toast.error('Cannot decline order request at this time');
   }
 
   return (
@@ -87,11 +86,11 @@ export default function CancelledOrderDetails({
         </div>
 
         <div className='flex items-center gap-4'>
-          <Button variant='outlined' onClick={() => approveOrderRequest(cancelledOrderHistory?.id)}>
+          <Button variant='outlined' onClick={() => setApproveModal(true)}>
             {/* <PiExportBold /> */}
             Approve
           </Button>
-          <Button onClick={() => cancelOrderRequest(cancelledOrderHistory?.id)}>
+          <Button variant='outlined' onClick={() => setDeclineModal(true)}>
             {/* <RiDeleteBin6Line /> */}
             Decline
           </Button>
@@ -217,6 +216,37 @@ export default function CancelledOrderDetails({
           </div>
         </div>
       </div>
+
+      {/* Approve Cancel Order Modal */}
+      <Modal
+        isOpen={approveModal}
+        handleClose={() => setApproveModal(false)}
+        title='Approve cancel order request'
+      > 
+        <h3 className='mb-4 text-lg text-black'> Are you sure you want to approve this cancel request? </h3>
+        <div className='flex items-center gap-2 justify-between'>
+          <Button onClick={() => approveOrderRequest(cancelledOrderHistory?.id)}>Yes</Button>
+          <Button variant='outlined' onClick={() =>  setApproveModal(false)}>
+            No
+          </Button>
+        </div>
+      </Modal>
+
+      {/* Decline Cancel Order Modal */}
+      <Modal
+        isOpen={declineModal}
+        handleClose={() => setDeclineModal(false)}
+        title='Approve cancel order request'
+      > 
+        <h3 className='mb-4 text-lg text-black'> Are you sure you want to decline this cancel request? </h3>
+        <div className='flex items-center gap-2 justify-between'>
+          <Button onClick={() => cancelOrderRequest(cancelledOrderHistory?.id)}>Yes</Button>
+          <Button variant='outlined' onClick={() =>  setDeclineModal(false)}>
+            No
+          </Button>
+        </div>
+      </Modal>
+
     </section>
   );
 }
