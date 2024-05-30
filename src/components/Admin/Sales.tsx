@@ -16,7 +16,7 @@ const Sales = async ({
         <section className='grid grid-cols-1 xl:grid-cols-6 gap-4 my-8'>
             <div className='rounded-lg bg-white border border-neural p-6 xl:col-span-4'>
                 <div className='mb-8'>
-                    <p className='text-neutral font-semibold text-xl'>Top selling products</p>
+                    <p className='text-neutral font-semibold text-xl'>Top 10 selling products</p>
                 </div>
 
                 <div>

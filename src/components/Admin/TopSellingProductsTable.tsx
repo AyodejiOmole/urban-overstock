@@ -102,10 +102,10 @@ export default function TopSellingProductsTable({
       <DataTable
         value={products ?? []}
         dataKey='productId'
-        tableStyle={{ minWidth: '50rem' }}
+        tableStyle={{ minWidth: '30rem' }}
         rows={10}
         rowsPerPageOptions={[20, 50, 100, 250]}
-        className='rounded-md text-sm'
+        className='rounded-md text-sm overflow-hidden'
         sortOrder={-1}
         sortField='createdAt'
         sortIcon={<IoIosArrowDown />}

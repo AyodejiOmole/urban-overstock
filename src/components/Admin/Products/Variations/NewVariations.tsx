@@ -1,7 +1,6 @@
 import Button from '@/components/Global/Button';
 import TextInput from '@/components/Global/TextInput';
 import React, { ChangeEvent, useReducer, useState, useRef, useEffect } from 'react';
-import React, { ChangeEvent, useReducer, useState, useRef, useEffect } from 'react';
 import { IoClose } from 'react-icons/io5';
 import Image from 'next/image';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
