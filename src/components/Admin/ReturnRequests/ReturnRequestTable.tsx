@@ -12,6 +12,7 @@ import { FaEye } from 'react-icons/fa';
 import { RxPencil2 } from 'react-icons/rx';
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 import { IoIosArrowDown } from 'react-icons/io';
+import { useRouter } from 'next/navigation';
 import { IReturnRequest, IReturnRequests } from '@/interfaces/return-requests';
 
 export default function ReturnRequestTable({
@@ -32,6 +33,8 @@ export default function ReturnRequestTable({
   categoryNavigation?: any;
 }) {
   const [rowClick, setRowClick] = useState<boolean>(true);
+
+  const router = useRouter();
 
   const dateTemplate = (order: IReturnRequest) => {
     const { createdAt } = order;
@@ -186,6 +189,7 @@ export default function ReturnRequestTable({
         sortOrder={-1}
         sortField='createdAt'
         sortIcon={<IoIosArrowDown />}
+        onRowClick={(e) => router.push(`/admin/return-request/${e.data.id}`)}
       >
         <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} />
         <Column field='order.uuid' header='Order ID' className='text-[#F2C94C]'/>
