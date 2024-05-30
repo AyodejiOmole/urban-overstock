@@ -72,7 +72,7 @@ const ProductDetails = ({
                 <div className='lg:w-1/2 w-full px-3'>
                     <div className='mg-4'>
                         {/* Product name */}
-                        <h2 className='font-semibold text-black text-xl mb-3'>{productDetails?.name}</h2>
+                        <h2 className='font-semibold text-black text-2xl mb-3'>{productDetails?.name}</h2>
 
                         {/* Brand name */}
                         <div className='flex gap-1 mb-3'>
@@ -80,14 +80,17 @@ const ProductDetails = ({
                             <p className='text-black text-md'>{productDetails?.brand.name}</p>
                         </div>
 
-                        <p className='text-black font-semibold text-lg mb-3'>${productDetails?.amount}</p>
+                        <div className='flex gap-1 mb-3'>
+                            <p className='font-semibold text-black text-lg'>Price:</p>
+                            <p className='text-black text-lg mb-3'>${productDetails?.amount}</p>
+                        </div>
                     </div>
 
                     <div className='mt-4 mb-8'>
                         {/* Quantity */}
                         <div className='flex gap-1'>
-                            <p className='text-black text-md'>Quantity:</p>
-                            <p className='text-black text-md font-semibold'>{productDetails?.quantity}</p>
+                            <p className='text-black text-md font-semibold'>Quantity:</p>
+                            <p className='text-black text-md'>{productDetails?.quantity}</p>
                         </div>
 
                         {/* Size */}
@@ -99,14 +102,17 @@ const ProductDetails = ({
 
                     <div className=''>
                         {/* Description */}
-                        <p className='w-full text-md text-black mb-3 text-left border-b-2 border-gray-300 pb-4'>{productDetails?.description}</p>
+                        <div className='flex flex-col gap-1'>
+                            <p className='text-black text-md font-semibold'>Description:</p>
+                            <p className='w-full text-md text-black mb-3 text-left border-b-2 border-gray-300 pb-4'>{productDetails?.description}</p>
+                        </div>
                         
                         {/* Colors */}
                         <div className='flex flex-start gap-2'>
                             {productDetails?.productVarations.map((variation: ProductVarationSingle, index) => {
                                 const color = variation.color.code;
                                 return (
-                                    <div key={index} style={{ backgroundColor: color }}  className={` rounded-full p-6`}>
+                                    <div key={index} style={{ backgroundColor: color }}  className={` rounded-full p-4`}>
                                         {/* this */}
                                         
                                     </div>
