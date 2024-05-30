@@ -118,7 +118,7 @@ export default function CustomerTransactionsTable({
         rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-xl text-sm'
         sortOrder={-1}
-        sortField='date'
+        // sortField='date'
         sortIcon={<IoIosArrowDown />}
       >
         <Column field='id' header='Order ID' sortable></Column>
