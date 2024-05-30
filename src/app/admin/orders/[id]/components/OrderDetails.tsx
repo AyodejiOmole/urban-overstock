@@ -380,7 +380,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                 <div
                   className={clsx(
                     'h-12 w-12 rounded-full flex items-center justify-center text-xl border-4',
-                    order?.status.toLowerCase() === 'confirmed'
+                    order?.status.toLowerCase() === 'confirmed' || order?.status.toLowerCase() === 'processing' || order?.status.toLowerCase() === 'shipping' || order?.status.toLowerCase() === 'delivered'
                       ? 'border-[#f5f5ff] bg-[#eeeeff] text-primary'
                       : 'bg-gray-200 border-gray-100 text-neutral'
                   )}
@@ -449,11 +449,13 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
               </div>
             </div>
 
-            <div className='flex items-center gap-2 flex-wrap'>
-              <Button onClick={activateModal}>Update Status</Button>
-              {/* <Button variant='outlined' >Cancel Order</Button> */}
-              <Button variant='outlined' onClick={() => setCancelOrderModal(true)}>Cancel Order</Button>
-            </div>
+            {
+              order?.status.toLowerCase() !== 'delivered' && 
+              <div className='flex items-center gap-2 flex-wrap'>
+                <Button onClick={activateModal}>Update Status</Button>
+                <Button variant='outlined' onClick={() => setCancelOrderModal(true)}>Cancel Order</Button>
+              </div>
+            }
 
             {/* Update Status Modal */}
             <Modal
