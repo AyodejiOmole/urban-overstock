@@ -150,11 +150,11 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen}: S
                         // isSimilar(pathname, link.root) > 50
                         pathname.trim() === link.page
                           ? 'text-neutral'
-                          : 'text-gray-800'
+                          : 'text-neutral'
                       } 
                       `}
                   >
-                    <div className='flex items-center gap-2'>
+                    <div className='flex items-center gap-4'>
                       <p>{link.icon}</p>
                       {isOpen && <p className='capitalize'>{link.name}</p>}
                     </div>
@@ -179,8 +179,8 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen}: S
                               key={el.name}
                               className={`capitalize my-3 rounded-[8px] block ${
                                 pathname.trim() === el.page
-                                ? 'bg-primary px-[10px] py-[10px]'
-                                : ''
+                                ? 'bg-primary text-white px-[10px] py-[10px]'
+                                : 'text-neutral'
                                 } 
                               `}
                               href={el.page}
@@ -331,14 +331,14 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen}: S
                         // isSimilar(pathname, link.root) > 50
                         pathname.trim() === link.page
                           ? 'text-neutral'
-                          : 'text-gray-800 hover:bg-gray-100'
+                          : 'text-neutral hover:bg-gray-100'
                       } 
                       `}
                       // data-pr-tooltip={link.name}
                       data-pr-tooltip={link.name.replace(/\b\w/g, (l) => {return l.toUpperCase()})}
                     data-pr-position="right"
                   >
-                    <div className='flex items-center ' 
+                    <div className='flex items-center gap-4 ' 
                     
                     >
                         <p>{link.icon}</p>
@@ -359,14 +359,14 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen}: S
                   {isOpen && isExpanded === index && (
                     <div className={`py-2 duration-500`}>
                       {link.children && (
-                        <div className='pl-12 text-sm'>
+                        <div className='pl-10 text-sm'>
                           {link?.children?.map((el) => (
                             <Link
                               key={el.name}
                               className={`capitalize my-3 rounded-[8px] block ${
                                 pathname.trim() === el.page
-                                ? 'bg-primary px-[10px] py-[10px]'
-                                : ''
+                                ? 'bg-primary text-white px-[10px] py-[10px]'
+                                : 'text-neutral'
                                 } 
                               `}
                               href={el.page}

@@ -14,7 +14,6 @@ export default function StatCards({
 }) {
   const card_icon_style =
     'h-10 w-10 text-xl flex items-center justify-center rounded-full';
-
   return (
     <section className='my-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4'>
       {/*  */}

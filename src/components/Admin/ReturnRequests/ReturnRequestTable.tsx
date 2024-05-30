@@ -39,7 +39,7 @@ export default function ReturnRequestTable({
   const dateTemplate = (order: IReturnRequest) => {
     const { createdAt } = order;
 
-    return moment(createdAt).format('MMM Do YYYY, h:mm a');
+    return moment(createdAt).format('MMM Do YYYY');
   };
 
   function amountTemplate(order: IReturnRequest) {

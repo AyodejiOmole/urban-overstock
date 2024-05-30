@@ -38,7 +38,7 @@ export default function OrdersTable({
   const dateTemplate = (order: IOrder) => {
     const { createdAt } = order;
 
-    return moment(createdAt).format('MMM Do YYYY, h:mm a');
+    return moment(createdAt).format('MMM Do YYYY');
   };
 
   function amountTemplate(order: IOrder) {

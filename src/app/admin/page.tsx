@@ -37,7 +37,7 @@ const AdminDashboard = async () => {
     const graph = await apiResGraph;
 
     console.log(orders);
-
+    console.log("dashd",dashboardData)
     return (
         <section>
             {/* <AdminPage dashboardData={dashboardData} graph={graph} topSellingProducts={topSellingProducts} orders={orders}/> */}
