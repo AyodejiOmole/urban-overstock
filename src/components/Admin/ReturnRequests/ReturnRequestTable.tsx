@@ -191,7 +191,7 @@ export default function ReturnRequestTable({
         sortIcon={<IoIosArrowDown />}
         onRowClick={(e) => router.push(`/admin/return-request/${e.data.id}`)}
       >
-        <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} />
+        {/* <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} /> */}
         <Column field='order.uuid' header='Order ID' className='text-[#F2C94C]'/>
         <Column body={productTemplate} header='Product' />
         <Column field='date' header='Date' body={dateTemplate} sortable />

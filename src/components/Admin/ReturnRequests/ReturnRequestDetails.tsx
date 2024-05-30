@@ -92,7 +92,7 @@ const ReturnRequestDetails = ({
         <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8'>
             <div>
             <p className='text-xl font-bold text-gray-700'>Return Request</p>
-            <Pagination />
+            <Pagination lastPage='Return Request Details'/>
             </div>
 
             <div className='flex items-center gap-4'>

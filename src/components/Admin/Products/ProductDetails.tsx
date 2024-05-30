@@ -20,12 +20,12 @@ const ProductDetails = ({
     const changeImage = (action: string) => {
         if(action.toLowerCase() === "next") {
             const newImageCount = currentImageCount + 1;
-            setCurrentImageCount(newImageCount >= productDetails!.imageUrls.length ? currentImageCount : newImageCount);
+            setCurrentImageCount(newImageCount >= productDetails!.imageUrls.length ? 0 : newImageCount);
         }
 
         if(action.toLowerCase() === "previous") {
             const newImageCount = currentImageCount - 1;
-            setCurrentImageCount(newImageCount < 0 ? currentImageCount : newImageCount);
+            setCurrentImageCount(newImageCount < 0 ? productDetails!.imageUrls.length - 1 : newImageCount);
         }
     }
     
@@ -34,46 +34,37 @@ const ProductDetails = ({
             <section className='w-full flex lg:flex-row md:flex-row flex-col lg:gap-0 md:gap-0 gap-3 justify-between'>
                 {/* Image Carousel */}
                 <div className='relative lg:w-1/2 w-full mb-3'>
-                    <Image
-                        width={200}
-                        height={200}
-                        // layout="fill"
-                        // objectFit="cover"
-                        // objectPosition="center"
-                        className="mx-auto rounded transition-500 transition-all"
-                        alt="product image"
-                        src={productDetails?.imageUrls[currentImageCount] || ''}
-                    />
-
-                    <div className="absolute top-0 justify-between h-full hidden md:flex w-[100%] lg:w-[100%] xl:w-[100%] items-center z-10">
-                        <MdKeyboardArrowLeft 
-                            // width={50}
-							// height={50}
-                            size={50}
-                            className='cursor-pointer'
-                            onClick={() => changeImage("previous")}
+                    <div className='w-full h-[200px]'>
+                        <Image
+                            // width={200}
+                            // height={200}
+                            layout="fill"
+                            objectFit="cover"
+                            objectPosition="center"
+                            className="mx-auto rounded transition-500 transition-all"
+                            alt="product image"
+                            src={productDetails?.imageUrls[currentImageCount] || ''}
                         />
-                        <MdKeyboardArrowRight 
-                            // width={100}
-							// height={100}
-                            size={50}
-                            className='cursor-pointer'
-                            onClick={() => changeImage("next")}
-                        />
-                        
-					</div>
 
-                    <div className='flex flex-start h-14 mt-3 gap-2'>
-                        {productDetails?.imageUrls.map((image: string, index: number) => (
-                            <Image
-                                width={50}
-                                height={50}
-                                className={`rounded border border-gray-300 ${currentImageCount === index ? "opacity-100" : "opacity-20"}`}
-                                alt="product image"
-                                src={image || ''}
-                                key={index}
+                        <div className="absolute top-0 justify-between h-full hidden md:flex w-[100%] lg:w-[100%] xl:w-[100%] items-center z-10">
+                            <MdKeyboardArrowLeft 
+                                // width={50}
+                                // height={50}
+                                size={50}
+                                className='cursor-pointer'
+                                color='white'
+                                onClick={() => changeImage("previous")}
                             />
-                        ))}
+                            <MdKeyboardArrowRight 
+                                // width={100}
+                                // height={100}
+                                size={50}
+                                color='white'
+                                className='cursor-pointer'
+                                onClick={() => changeImage("next")}
+                            />
+                            
+                        </div>
                     </div>
                 </div>
 
@@ -125,6 +116,19 @@ const ProductDetails = ({
                     </div>
                 </div>
             </section>
+
+            <div className='flex flex-start h-14 my-2 gap-2'>
+                {productDetails?.imageUrls.map((image: string, index: number) => (
+                    <Image
+                        width={80}
+                        height={50}
+                        className={`rounded border border-gray-300 ${currentImageCount === index ? "opacity-100" : "opacity-20"}`}
+                        alt="product image"
+                        src={image || ''}
+                        key={index}
+                    />
+                ))}
+            </div>
 
 
             {/* Shipping details: Weight, Height, Length, & Width */}
