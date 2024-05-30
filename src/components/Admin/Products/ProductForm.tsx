@@ -1396,8 +1396,8 @@ export default function ProductForm({
               </option>
               <option value='draft'>Draft</option>
               <option value='published'>Published</option>
-              <option value='low-stock'>Low Stock</option>
-              <option value='out-of-stock'>Out of Stock</option>
+              <option value='low stock'>Low Stock</option>
+              <option value='out of stock'>Out of Stock</option>
             </select>
 
             <IoIosArrowDown className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`} />
