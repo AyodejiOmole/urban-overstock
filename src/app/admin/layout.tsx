@@ -43,10 +43,12 @@ export default function DashboardLayout({
           sidebarOpen ? 'lg:col-span-2' : 'lg:col-span-1'
         } `}
       >
+        
         <AdminSidebar
           isOpen={sidebarOpen}
           toggleSidebar={handleToggleSidebar}
           setSidebarOpen={setSidebarOpen}
+          notifications={unreadNotifications}
         />
       </div>
       <div

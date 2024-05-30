@@ -15,9 +15,9 @@ export default async function getAllNotifications() {
     },
 
     // cache: 'no-store',
-    // next: {
-    //   revalidate: 10,
-    // },
+    next: {
+      revalidate: 10,
+    },
   });
 
   console.log(apiRes);

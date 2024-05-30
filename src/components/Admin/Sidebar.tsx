@@ -19,9 +19,10 @@ type SidebarProps = {
   isOpen: Boolean;
   toggleSidebar: () => void;
   setSidebarOpen: any;
+  notifications: number;
 };
 
-export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen}: SidebarProps) {
+export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, notifications}: SidebarProps) {
   const pathname = usePathname();
   const [isExpanded, setIsExpanded] = useState<null | number>(null);
   const cookies = new Cookies();
@@ -296,7 +297,25 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen}: S
                         
                           <span>{link.icon}</span>
             
-                        {isOpen && <p className={`capitalize`}>{link.name}</p>}
+                          {isOpen && <p className={`capitalize`}>{link.name}</p>}
+
+                          {link.name.toLowerCase() === "notification" && (
+                            <div className='py-1 px-[6px] bg-red-500 rounded-full text-[10px] text-white'>
+                              {/* {notifications} */}{10}
+                            </div>
+                          )}
+
+                          {link.name.toLowerCase() === "orders" && (
+                            <div className='py-1 px-[6px] bg-red-500 rounded-full text-[10px] text-white'>
+                              {/* {notifications} */}{10}
+                            </div>
+                          )}
+
+                          {link.name.toLowerCase() === "return request" && (
+                            <div className='py-1 px-[6px] bg-red-500 rounded-full text-[10px] text-white'>
+                              {/* {notifications} */}{10}
+                            </div>
+                          )}
                       </div>
                     </Link>
                 )              

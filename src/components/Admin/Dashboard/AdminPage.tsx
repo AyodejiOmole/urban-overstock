@@ -108,6 +108,7 @@ export default function AdminPage ({
             <SalesChart graph={graph}/>
             <Sales 
                 products={topSellingProducts?.topProducts} 
+                salesByLocation={topSellingProducts?.topOrdersLocation}
                 // categoryNavigation={categoryNavigation}
             />
             <OrdersTable
