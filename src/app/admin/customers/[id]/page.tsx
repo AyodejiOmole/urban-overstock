@@ -2,13 +2,9 @@ import CustomerDetails from '@/components/Admin/Customers/CustomerDetails/Custom
 import Button from '@/components/Global/Button';
 
 import React from 'react';
-import { FaPlus } from 'react-icons/fa';
 import { getSingleCustomerOrderHistory, getSingleCustomer } from '@/libs/customers';
-
-import { PiExportBold } from 'react-icons/pi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IOrder } from '@/interfaces/orders';
-import { ICustomer } from '@/interfaces/customers';
 import { ISingleCustomer } from '@/interfaces/customers';
 import Pagination from '@/components/Shared/Pagination';
 
@@ -36,12 +32,7 @@ export default async function AdminCustomerDetails({
         </div>
 
         <div className='flex items-center gap-4'>
-          {/* <Button variant='outlined' color='dark'>
-            <PiExportBold />
-            Export
-          </Button> */}
           <Button>
-            {/* <FaPlus /> */}
             <RiDeleteBin6Line />
             Delete account
           </Button>

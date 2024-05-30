@@ -99,10 +99,10 @@ export default function CustomerTransactionsTable({
     <div className='text-sm'>
       <div className='px-4 flex flex-col w-full justify-between lg:flex-row lg:items-center gap-8 mb-8'>
         <p className='text-xl text-gray-700 font-medium'>Transaction History</p>
-        <Button variant='outlined' color='dark' size='small'>
+        {/* <Button variant='outlined' color='dark' size='small'>
           <CiCalendarDate />
           Select Date
-        </Button>
+        </Button> */}
       </div>
       <DataTable
         value={history}

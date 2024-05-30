@@ -14,13 +14,15 @@ export default function CustomerDetails({
   customerOrderHistory: IOrder[] | undefined,
   customerDetails: ISingleCustomer | undefined,
 }) {
+  console.log(customerOrderHistory);
+  console.log(customerDetails);
   return (
     <div className='grid grid-cols-1 lg:grid-cols-6 gap-6'>
       {/* Column 1 */}
       <div className='lg:col-span-2'>
         <div className='p-2 border border-gray-200 bg-white rounded-lg pb-16 relative'>
-          {/* <div className='bg-gray-800 p-4 h-52 rounded-lg'></div> */}
-          {/* <div className='w-48 h-48 bg-gray-200 rounded-full absolute left-1/2 -translate-x-1/2 top-32'></div> */}
+          <div className='bg-blue-800 p-4 h-52 rounded-lg'></div>
+          <div className='w-48 h-48 bg-gray-200 rounded-full absolute left-1/2 -translate-x-1/2 top-32'></div>
 
           <div className='pt-32 px-4'>
             <div className='p-4 text-center'>
@@ -97,7 +99,9 @@ export default function CustomerDetails({
                 <div className='flex-1'>
                   <p className='text-neutral font-medium'>Latest Transaction</p>
                   <p className='text-gray-800 font-light text-sm'>
-                    12 December 2023
+                    {/* 12 December 2023 */}
+                    {/* {customerOrderHistory?[0].createdAt} */}
+                    {customerDetails?.createdAt}
                   </p>
                 </div>
               </div>

@@ -15,7 +15,6 @@ export default async function getOrders() {
     },
 
     cache: 'no-store',
-    cache: 'no-store',
     // next: {
     //   revalidate: 10,
     // },
@@ -39,7 +38,7 @@ export async function getSingleOrder(orderId: string) {
       'Cache-Control': 'no-cache, max-age=0',
     },
 
-    // cache: 'no-store',
+    cache: 'no-store',
     // next: {
     //   revalidate: 10,
     // },
