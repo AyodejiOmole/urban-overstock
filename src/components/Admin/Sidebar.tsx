@@ -19,10 +19,12 @@ type SidebarProps = {
   isOpen: Boolean;
   toggleSidebar: () => void;
   setSidebarOpen: any;
-  notifications: number;
+  notifications: any;
+  orders: any;
+  returnRequests: any;
 };
 
-export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, notifications}: SidebarProps) {
+export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, notifications, orders, returnRequests}: SidebarProps) {
   const pathname = usePathname();
   const [isExpanded, setIsExpanded] = useState<null | number>(null);
   const cookies = new Cookies();
@@ -31,6 +33,10 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
     cookies.remove("urban-token");
     router.push("/auth/admin/login");
   }
+
+  console.log(notifications);
+  console.log(orders);
+  console.log(returnRequests);
 
   const expand = (index: number) => {
     if(isExpanded === index) {
@@ -300,20 +306,25 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
                           {isOpen && <p className={`capitalize`}>{link.name}</p>}
 
                           {link.name.toLowerCase() === "notification" && (
-                            <div className='py-1 px-[6px] bg-red-500 rounded-full text-[10px] text-white'>
-                              {/* {notifications} */}{10}
+                            <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
+                              {notifications?.data.count ?? 0}
+                              {/* {10} */}
                             </div>
                           )}
 
                           {link.name.toLowerCase() === "orders" && (
-                            <div className='py-1 px-[6px] bg-red-500 rounded-full text-[10px] text-white'>
-                              {/* {notifications} */}{10}
+                            <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
+                              {/* {notifications} */}
+                              {orders?.data.length ?? 0}
+                              {/* {10} */}
                             </div>
                           )}
 
                           {link.name.toLowerCase() === "return request" && (
-                            <div className='py-1 px-[6px] bg-red-500 rounded-full text-[10px] text-white'>
-                              {/* {notifications} */}{10}
+                            <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
+                              {/* {notifications} */}
+                              {returnRequests?.data.length ?? 0}
+                              {/* {10} */}
                             </div>
                           )}
                       </div>
