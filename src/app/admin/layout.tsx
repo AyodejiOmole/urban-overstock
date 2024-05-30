@@ -46,6 +46,7 @@ export default function DashboardLayout({
         <AdminSidebar
           isOpen={sidebarOpen}
           toggleSidebar={handleToggleSidebar}
+          setSidebarOpen={setSidebarOpen}
         />
       </div>
       <div

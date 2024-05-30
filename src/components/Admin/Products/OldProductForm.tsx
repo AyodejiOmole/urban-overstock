@@ -30,6 +30,8 @@ import { IColors } from '@/interfaces/colors';
 import { ISizes } from '@/interfaces/sizes';
 import { IDiscountCodes } from '@/interfaces/discount-codes';
 import { IoIosArrowDown } from "react-icons/io";
+import { AiOutlineClose } from 'react-icons/ai';
+import { IoClose } from 'react-icons/io5';
 
 interface ProductImage {
   // color: string;
@@ -217,12 +219,12 @@ export default function OldProductForm({
     initialValues: {
       name: '',
       description: '',
-      tag: '',
+      // tag: 'null',
       brandId: 0,
       quantity: undefined,
       amount: undefined,
       discountType: '',
-      discountPercentage: undefined,
+      discountPercentage: 0 ?? undefined,
       taxClass: '',
       vatAmount: undefined,
       sku: '',
@@ -238,11 +240,13 @@ export default function OldProductForm({
     validationSchema: Yup.object({
       name: Yup.string().required().label('Name'),
       description: Yup.string().required().label('Description'),
-      tag: Yup.string().required().label('Tag'),
+      // tag: Yup.string().required().label('Tag'),
       quantity: Yup.number().min(1).required().label('Quantity'),
-      amount: Yup.number().min(1).required().label('Price').test('amount', 'Amount cannot exceed be less than cost price.', function () {
+      amount: Yup.number().min(1).required().label('Price').test('amount', 'Amount cannot be less than cost price.', function () {
+        // const { amount, costPrice } = this.parent;
+        // return costPrice > amount;
         const { costPrice, amount } = this.parent;
-        return amount <= costPrice;
+        return costPrice <= amount;
       }),
       discountType: Yup.string().required().label('Discount Type'),
       discountPercentage: Yup.number().min(0).required().label('Discount Type'),
@@ -252,7 +256,7 @@ export default function OldProductForm({
       sku: Yup.string().required().label('SKU'),
       barcode: Yup.string().required().label('Bar Code'),
       status: Yup.string().required().label('Status'),
-      costPrice: Yup.number().min(1).required().label('Cost Price').test('costPrice', 'Cost Price cannot exceed Price', function () {
+      costPrice: Yup.number().min(1).required().label('Cost Price').test('costPrice', 'Cost Price cannot exceed Price/Amount', function () {
         const { costPrice, amount } = this.parent;
         return costPrice <= amount;
       }),
@@ -348,7 +352,8 @@ export default function OldProductForm({
               categoryId: +values.categoryId,
               productVarations: getFormattedVariations(state, variationImages),
               // productImages: product_images,
-              imageUrls: product_images
+              imageUrls: product_images,
+              tag: "empty"
             };
 
             console.log('Request Body: ', data);
@@ -448,6 +453,20 @@ export default function OldProductForm({
     setBrandToAdd(e.target.value);
   }
 
+  const handleDiscountChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const discount = discounts?.find(discount => discount.code === e.target.value);
+    const discountNumber = discount?.percentage;
+    // formik.setFieldValue("discountType", e.target.value);
+    // formik.setFieldValue("discountPercentage", discounts?.find(discount => discount.code === e.target.value)?.percentage);
+    // formik.setFieldValue("discountPercentage", discountNumber !== undefined ? Number(discountNumber) : 0);
+
+    //  formik.setValues({
+    //   discountType: e.target.value,
+    //   discountPercentage: discountNumber !== undefined ? Number(discountNumber) : 0,
+    //   ...formik.values
+    // });
+  }
+
   useEffect(() => {
     document.body.addEventListener('click', (event) => {
       
@@ -460,6 +479,39 @@ export default function OldProductForm({
       document.body.removeEventListener('click', () => {});
     };
   }, []);
+
+  const deleteBrandPreset = async (brandId: number) => {
+    const cookies = new Cookies();
+    const token = cookies.get('urban-token');
+
+    toast.loading("Deleting brand preset...");
+
+    const httpService = new HTTPService();
+
+    try {
+      httpService
+        .deleteById(`${ENDPOINTS.BRAND_SETTINGS}/${brandId}`,`Bearer ${token}`)
+        .then((apiRes) => {
+          console.log('Response: ', apiRes);
+          toast.dismiss();
+
+          if (apiRes.status === 200) {
+            // brands.filter
+            let index = brands?.findIndex(obj => obj.id === brandId);
+            if (index) {
+              brands?.splice(index, 1);
+            }
+            toast.success('Brand preset deleted successfully.');
+            setBrandPicker(false);
+            setAddBrandDisplay(false);
+            formik.setFieldValue("brandId", 0);
+            // toast.dismiss();
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // const updateImageColor = (index: number, color: string) => {
   //   const updatedImages = productImages.filter((img, i) => i !== index);
@@ -518,32 +570,7 @@ export default function OldProductForm({
             <CustomError error={formik.errors.description} />
           </div>
 
-          {/* <div className='mb-6'>
-              <label
-                htmlFor='brandId'
-                className='text-sm text-neutral mb-2 block'
-              >
-                Brand
-              </label>
-              <select
-                name='brandId'
-                id='brandId'
-                className='text-neutral'
-                onChange={formik.handleChange}
-                value={formik.values.brandId}
-              >
-                <option value='' defaultChecked disabled>
-                    Select a brand type....
-                </option>
-                {brands?.map((brand: IBrand, index: number) => {
-                  return (
-                    <option value={brand?.id} key={index}>{brand?.name}</option>
-                  )
-                })}
-              </select>
-              <CustomError error={formik.errors.brandId} />
-          </div> */}
-
+          <div className='w-full flex justify-between gap-2'>
             <div className='mb-4 w-full relative'>
                 <label htmlFor='brandId' className='text-sm text-neutral mb-2 block'>
                   Brand:
@@ -588,12 +615,22 @@ export default function OldProductForm({
                                     variant='outlined' 
                                     color='grey' 
                                     key={index} 
+                                    className='relative'
                                     onClick={() => {
                                       formik.setFieldValue("brandId", brand.id);
                                       setBrandPicker(false);
                                     }}
                                   >
                                     <p className='text-xs text-neutral'>{brand?.name}</p>
+                                    <button
+                                      className='absolute p-1 bg-gray-100 text-xl rounded-full text-secondary-text'
+                                      onClick={() => deleteBrandPreset(brand.id)}
+                                      style={{
+                                        transform: 'translate(-190%, -70%)'
+                                      }}
+                                    >
+                                      <AiOutlineClose size={15}/>
+                                    </button>
                                   </Button>
                               )
                             })}
@@ -627,6 +664,14 @@ export default function OldProductForm({
                   </div>
                 )}
             </div>
+
+            <button
+              className='bg-red-100 text-red-600 px-3.5 rounded-md my-5 text-xl'
+              onClick={() => formik.setFieldValue("brandId", undefined)}
+            >
+              <IoClose />
+            </button>
+          </div>
         </div>
 
         {/* Media Upload */}
@@ -760,6 +805,7 @@ export default function OldProductForm({
                   id='discountType'
                   className='text-neutral bg-[#E0E2E7] '
                   onChange={formik.handleChange}
+                  // onChange={handleDiscountChange}
                   value={formik.values.discountType}
                 >
                   <option value='' defaultChecked disabled>
@@ -768,7 +814,7 @@ export default function OldProductForm({
                   <option value='free'>No Discount</option>
                   {discounts?.map((discount, index) => {
                     return (
-                        <option key={index} value={discount.code}>{`${discount.percentage}%`}</option>
+                        <option key={index} value={discount.code}>{`${discount.code}`}</option>
                         )
                     })}
                 </select>
@@ -1019,7 +1065,7 @@ export default function OldProductForm({
           </div>
 
           {/* Product Tags */}
-          <div className='mb-6'>
+          {/* <div className='mb-6'>
             <label htmlFor='tag' className='text-sm text-neutral mb-2 block'>
               Product Tag
             </label>
@@ -1030,7 +1076,7 @@ export default function OldProductForm({
               value={formik.values.tag}
               error={formik.errors.tag}
             />
-          </div>
+          </div> */}
         </div>
 
         {/* Product Status */}

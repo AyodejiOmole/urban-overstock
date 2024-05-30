@@ -1,59 +1,14 @@
 "use client";
-
-// import { useRouter, usePathname } from 'next/navigation';
-// import { FaAngleRight } from "react-icons/fa";
-
-// import React from 'react'
-// import Link from 'next/link';
-// import { BiCurrentLocation } from 'react-icons/bi';
-
-// const Pagination = (  ) => {
-//     const router = useRouter();
-//     // const { pathname } = router;
-//     const pathname = usePathname();
-//     let paginationLinks: React.JSX.Element[] = [];
-
-//     const formatString = (currentRoute: string) => {
-//       return currentRoute.charAt(0).toUpperCase() + currentRoute.slice(1).replace(/-/g, ' ');
-//     } 
-
-//     pathname.split("/").reduce((acc, current, index, array) => {
-//         if(index > 0) {
-//             const link = `${acc}/${current}`;
-//             console.log(link);
-//             paginationLinks.push(
-//                 <li key={link}>
-//                     <Link href={link}>
-//                         <div className='flex gap-1 items-center justify-center'>
-//                           <p className={`text-sm ${current === acc.split("/")[-1] ? "text-neutral" : "text-[#CFA31C]" }`}>{current === "admin" ? "Dashboard" : current === "new" ? `Add ${acc.split("/").slice(-1)}` : formatString(current)}</p>
-//                           <FaAngleRight className='' color='gray'/>
-//                         </div> 
-//                     </Link>
-//                 </li>
-//             );
-//         }
-//         console.log(acc);
-//         return acc;
-//     }, '');
-
-//     return (
-//         <nav className="">
-//           <ul className='flex w-full gap-2'>
-//             {paginationLinks.map((link, index) => (
-//               <React.Fragment key={index}>{link}</React.Fragment>
-//             ))}
-//           </ul>
-//         </nav>
-//       );
-// }
-
-// export default Pagination;
 import { useRouter, usePathname } from 'next/navigation';
 import { FaAngleRight } from "react-icons/fa";
 import React from 'react';
 import Link from 'next/link';
 
-const Pagination = () => {
+interface IPaginationProps {
+    lastPage?: string;
+}
+
+const Pagination: React.FC<IPaginationProps> = ({ lastPage }) => {
     const router = useRouter();
     const pathname = usePathname();
 
@@ -78,7 +33,7 @@ const Pagination = () => {
                 <Link href={link}>
                     <div className='flex gap-1 items-center justify-center'>
                         <p className={`text-sm ${index === segments.length - 1 ? "text-neutral" : "text-[#CFA31C]" }`}>
-                            {index === segments.length - 1 ? formatString(segment) : formatString(segment) + ' '}
+                            {index === segments.length - 1 ? formatString(lastPage ?? segment) : formatString(segment) + ' '}
                         </p>
                         {index < segments.length - 1 && <FaAngleRight className='' color='gray'/>}
                     </div> 

@@ -17,6 +17,7 @@ import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 import { OrderProduct } from '@/interfaces/return-requests';
 import { formatCurrency } from '@/helpers';
 import moment from 'moment';
+import { useRouter } from 'next/navigation';
 
 const ReturnRequestDetails = ({
     returnRequestDetails,
@@ -28,6 +29,8 @@ const ReturnRequestDetails = ({
 
     const cookies = new Cookies();
     const httpService = new HTTPService();
+
+    const router = useRouter();
   
     async function updateReturnRequest(returnId: string, status: string) {
       const token = cookies.get('urban-token');
@@ -48,6 +51,7 @@ const ReturnRequestDetails = ({
         console.log(res);
         toast.success('Return request successfully updated!');
         // router.refresh();
+        router.push("/admin/return-request");
       } else toast.error('Cannot update return request at this time!');
     };
 
@@ -88,7 +92,7 @@ const ReturnRequestDetails = ({
         <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8'>
             <div>
             <p className='text-xl font-bold text-gray-700'>Return Request</p>
-            <Pagination />
+            <Pagination lastPage='Return Request Details'/>
             </div>
 
             <div className='flex items-center gap-4'>
@@ -96,7 +100,7 @@ const ReturnRequestDetails = ({
                 {/* <PiExportBold /> */}
                 Approve
             </Button>
-            <Button variant='outlined' >
+            <Button variant='outlined' onClick={() => updateReturnRequest(id, "Denied")}>
                 {/* <FaPlus /> */}
                 {/* <RiDeleteBin6Line /> */}
                 Disapprove
@@ -108,10 +112,16 @@ const ReturnRequestDetails = ({
             {/* Column 1 */}
             <div className='lg:col-span-2'>
                 <div className='p-2 border border-gray-200 bg-white rounded-xl pb-16 relative'>
-                    {/* <div className='bg-gray-800 p-4 h-52 rounded-lg'></div>
+                    <div className='bg-blue-800 p-4 h-52 rounded-lg'></div>
                     <div className='w-48 h-48 bg-gray-200 rounded-full absolute left-1/2 -translate-x-1/2 top-32'>
-
-                    </div> */}
+                    <Image
+                        src={returnRequestDetails?.orderProduct.image ?? " "}
+                        alt={"Damaged image"}
+                        // objectFit="cover"
+                        layout="fill"
+                        className='rounded-full'
+                        />
+                    </div>
 
                     <div className='pt-32 px-4'>
                     <div className='p-4 text-center'>

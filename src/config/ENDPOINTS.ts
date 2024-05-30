@@ -14,8 +14,12 @@ const ENDPOINTS = {
   RESET_PASSWORD: `auth/reset`,
   RESEND_OTP: `auth/resend-otp`,
   SLIDER_IMAGE: `settings/slider-image`,
+
+  // Orders
   ORDERS: 'order',
+  CANCEL_REQUEST: `order/cancel-request`,
   USER_ORDER_HISTORY: `order/user`,
+  ORDER_TRACKING_INFORMATION: `order/tacking-information`,
   DISCOUNT_CODE: `discount-code`,
 
   // Landing Page Settings
@@ -28,6 +32,7 @@ const ENDPOINTS = {
   // Dashboard
   DASHBOARD_TOP_CHART: `dashboard/top-chart`,
   DASHBOARD_TOP_SELLERS: `dashboard/top-sellers`,
+  DASHBOARD_GRAPH: `dashboard/graph`,
 };
 
 export default ENDPOINTS;

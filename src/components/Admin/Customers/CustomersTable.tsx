@@ -15,6 +15,7 @@ import moment from 'moment';
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { IoIosArrowDown } from 'react-icons/io';
+import { useRouter } from 'next/navigation';
 
 export default function CustomersTable({
   selectedDate,
@@ -50,13 +51,14 @@ export default function CustomersTable({
         >
           <FaEye />
         </Link>
-        <Link
+       {/*  <Link
+        {/* <Link
           href={`/admin/customers/${customer.id}?edit=true`}
           className='text-xl text-neutral'
         >
-          {/* <RxPencil2 /> */}
+          <RxPencil2 /> 
           <MdOutlineModeEdit />
-        </Link>
+        </Link>*/}
         <button>
           {/* <MdOutlineDelete className='text-xl' /> */}
           <RiDeleteBin6Line className='text-xl'/>
@@ -92,7 +94,7 @@ export default function CustomersTable({
       case 'ACTIVATED':
         styles = 'bg-green-100 text-green-600';
         break;
-      case 'BLOCKED':
+      case 'SUSPENDED':
         styles = 'bg-red-100 text-red-600';
         break;
       default:
@@ -103,7 +105,7 @@ export default function CustomersTable({
       <span
         className={`p-2 px-4 text-xs font-semibold rounded-full capitalize ${styles}`}
       >
-        {customer.status}
+        {customer.status.toLowerCase() === "activated" ? "Active" : customer.status.toLowerCase() === "suspended" ? "Blocked" : customer.status}
       </span>
     );
   }
@@ -119,6 +121,8 @@ export default function CustomersTable({
         customer.uuid.toLowerCase().includes(searchValue)
     );
   }, [searchValue, customers]);
+
+  const router = useRouter();
 
   return (
     <div className='card rounded-md p-4 bg-white border border-gray-200'>
@@ -141,6 +145,7 @@ export default function CustomersTable({
         sortOrder={-1}
         sortField='dateAdded'
         sortIcon={<IoIosArrowDown />}
+        onRowClick={(e) => router.push(`/admin/customers/${e.data.id}`)}
       >
         <Column
           selectionMode='multiple'

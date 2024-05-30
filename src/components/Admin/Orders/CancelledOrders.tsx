@@ -17,20 +17,14 @@ import Cookies from 'universal-cookie';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { RiDeleteBinLine } from "react-icons/ri";
+import { ICancelledOrders } from '@/interfaces/cancelled-orders';
+import CancelledOrdersTable from './CancelledOrdersTable';
 
-export default function CancelledOrdersDisplay({ orders }: { orders: IOrder[] | null }) {
-  const [selectedOrders, setSelectedOrders] = useState<IOrder[]>([]);
+export default function CancelledOrdersDisplay({ orders }: { orders: ICancelledOrders[] | null }) {
+  const [selectedOrders, setSelectedOrders] = useState<ICancelledOrders[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
 
-//   const [categoryNavigation, setCategoryNavigation] = useState<any>();
-//   const [defaultFilterOption, setDefaultFilterOption] = useState(0);
-
-  // const handleFilterOptionChange = (newIndex: number) =>
-  //   setDefaultFilterOption(newIndex);
-
-  // const [updateTo, setUpdateTo] = useState<string>("");
-//   const [cardOpen, setCardOpen] = useState<boolean>(false);
 
   const httpService = new HTTPService();
   const cookies = new Cookies();
@@ -43,63 +37,11 @@ export default function CancelledOrdersDisplay({ orders }: { orders: IOrder[] | 
     setSelectedOrders(e.value);
   };
 
-//   async function bulkUpdateOrders(orders: IOrder[], status: string) {
-//       setCardOpen(prev => !prev);
-//       const token = cookies.get('urban-token');
-  
-//       toast.loading('Updating orders...');
-
-//       const data = orders.map((order) => {
-//         const { id } = order;
-//         return { id: id, status: status }
-//       }); 
-
-//       const res = await httpService.patch(
-//         `${ENDPOINTS.ORDERS}`,
-//         data,
-//         `Bearer ${token}`
-//       );
-
-//       toast.dismiss();
-//       if (res.status === 200) {
-//         console.log(res);
-//         toast.success('Orders successfully updated!');
-//         router.refresh();
-//       } else toast.error('Cannot update orders at this time!');
-//   }
-
-  // async function updateOrders(to: string) {
-
-  // }
-
-//   const debouncedSearch = useMemo(() => {
-//     let timer: NodeJS.Timeout;
-
-//     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-//       clearTimeout(timer);
-//       timer = setTimeout(() => {
-//         setSearchValue(e.target.value);
-//       }, 500);
-//     };
-
-//     return handleSearchChange;
-//   }, []);
-
-//   const handleSelectDate = (
-//     date: Date | (Date | null)[] | Date[] | null | undefined
-//   ) => {
-//     if (date) {
-//       const formatted = new Date(date as Date).getTime();
-
-//       setSelectedDate(formatted);
-//     } else setSelectedDate(null);
-//   };
-
   return (
     <>
       <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-4 py-4'>
         <div>
-          <p className='text-xl font-medium text-gray-700'>Cancelled  Orders</p>
+          <p className='text-xl font-medium text-gray-700'>Order</p>
           <Pagination /> 
         </div>
         
@@ -176,7 +118,7 @@ export default function CancelledOrdersDisplay({ orders }: { orders: IOrder[] | 
       </div> */}
       {/* Orders Table */}
 
-      <OrdersTable
+      <CancelledOrdersTable
         orders={orders}
         handleChangeSelectedOrders={handleChangeSelectedOrders}
         selectedOrders={selectedOrders}

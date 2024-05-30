@@ -2,13 +2,9 @@ import CustomerDetails from '@/components/Admin/Customers/CustomerDetails/Custom
 import Button from '@/components/Global/Button';
 
 import React from 'react';
-import { FaPlus } from 'react-icons/fa';
 import { getSingleCustomerOrderHistory, getSingleCustomer } from '@/libs/customers';
-
-import { PiExportBold } from 'react-icons/pi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IOrder } from '@/interfaces/orders';
-import { ICustomer } from '@/interfaces/customers';
 import { ISingleCustomer } from '@/interfaces/customers';
 import Pagination from '@/components/Shared/Pagination';
 
@@ -29,24 +25,19 @@ export default async function AdminCustomerDetails({
 
   return (
     <section>
-      <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8'>
+      {/* <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8'>
         <div>
           <p className='text-xl font-bold text-gray-700'>Customer Details</p>
-          <Pagination />
+          <Pagination lastPage='Customer Details'/>
         </div>
 
         <div className='flex items-center gap-4'>
-          {/* <Button variant='outlined' color='dark'>
-            <PiExportBold />
-            Export
-          </Button> */}
           <Button>
-            {/* <FaPlus /> */}
             <RiDeleteBin6Line />
             Delete account
           </Button>
         </div>
-      </div>
+      </div> */}
 
       {/* Customer Details Section */}
       <CustomerDetails customerOrderHistory={customerOrderHistory} customerDetails={customerDetails}/>

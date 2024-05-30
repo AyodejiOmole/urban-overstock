@@ -41,7 +41,7 @@ export interface ISingleProduct {
   categoryId: number
   brandId: number
   tag: string
-  imageUrls: string
+  imageUrls: string[]
   amount: number
   discountType: string
   costPrice: number
@@ -58,6 +58,10 @@ export interface ISingleProduct {
   productVarations: ProductVarationSingle[]
   brand: Brand
   category: Category
+  weight: number      
+  height: number
+  length: number,
+  width: number
 }
 
 export interface ProductVarationSingle {

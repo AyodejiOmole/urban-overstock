@@ -8,6 +8,7 @@ import HTTPService from '@/services/http';
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import React, { useMemo, useState } from 'react';
@@ -25,17 +26,23 @@ export default function ProductsTable({
   selectedDate,
   searchValue,
   products,
+  handleChangeSelectedProducts,
+  selectedProducts,
 }: {
   searchValue: string;
   selectedDate: number | null;
   products: IProducts | undefined;
+  handleChangeSelectedProducts: (e: any) => void;
+  selectedProducts: IProducts;
 }) {
   const cookies = new Cookies();
   const httpService = new HTTPService();
 
-  const [selectedProducts, setSelectedProducts] = useState<IProduct[] | null>(
-    null
-  );
+  const router = useRouter();
+
+  // const [selectedProducts, setSelectedProducts] = useState<IProduct[] | null>(
+  //   null
+  // );
   const [rowClick, setRowClick] = useState<boolean>(true);
 
   async function deleteProduct(id: number) {
@@ -77,13 +84,13 @@ export default function ProductsTable({
     return (
       <div className='flex items-center gap-3'>
         <Link
-          href={`/admin/products/${product.id}?edit=false`}
+          href={`/admin/products/${product.id}`}
           className='text-xl text-neutral'
         >
           <FaEye />
         </Link>
         <Link
-          href={`/admin/products/${product.id}?edit=true`}
+          href={`/admin/products/${product.id}/edit`}
           className='text-xl text-neutral'
         >
           {/* <RxPencil2 /> */}
@@ -135,9 +142,9 @@ export default function ProductsTable({
     return <p className="text-[#CFA31C]">{product.sku}</p>
   }
 
-  const dateChangeHandler = (e: any) => {
-    setSelectedProducts(e.value);
-  };
+  // const dateChangeHandler = (e: any) => {
+  //   handleChangeSelectedProducts(e.value);
+  // };
 
   const getProductsByDate = useMemo(() => {
     if (selectedDate) {
@@ -166,7 +173,8 @@ export default function ProductsTable({
         value={matchedProducts}
         selectionMode={rowClick ? null : 'multiple'}
         selection={selectedProducts!}
-        onSelectionChange={dateChangeHandler}
+        // onSelectionChange={dateChangeHandler}
+        onSelectionChange={handleChangeSelectedProducts}
         dataKey='id'
         tableStyle={{ minWidth: '50rem' }}
         paginator
@@ -178,6 +186,8 @@ export default function ProductsTable({
         sortOrder={-1}
         sortField='createdAt'
         sortIcon={<IoIosArrowDown />}
+        alwaysShowPaginator={true}
+        onRowClick={(e) => router.push(`/admin/products/${e.data.id}`)}
       >
         <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} />
         <Column field='product.item' header='Product' body={productTemplate} />

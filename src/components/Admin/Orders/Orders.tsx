@@ -18,7 +18,15 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-export default function Orders({ orders }: { orders: IOrder[] | null }) {
+export default function Orders(
+  { 
+    orders, 
+    cancelledOrdersCount
+  }: { 
+    orders: IOrder[] | null 
+    cancelledOrdersCount: number
+  }
+) {
   const [selectedOrders, setSelectedOrders] = useState<IOrder[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
@@ -68,10 +76,6 @@ export default function Orders({ orders }: { orders: IOrder[] | null }) {
       } else toast.error('Cannot update orders at this time!');
   }
 
-  // async function updateOrders(to: string) {
-
-  // }
-
   const debouncedSearch = useMemo(() => {
     let timer: NodeJS.Timeout;
 
@@ -111,7 +115,7 @@ export default function Orders({ orders }: { orders: IOrder[] | null }) {
               {/* <div className='bg-red-500 p-1 text-xs rounded-full flex justify-center items-center'></div> */}
               
               <div className='py-1 px-[6px] bg-red-500 rounded-full text-[10px] text-white'>
-                {orders?.filter(order => order.status.toLocaleLowerCase() === "cancelled").length}
+                {cancelledOrdersCount}
               </div>
             </Button>
           </Link>
@@ -126,11 +130,11 @@ export default function Orders({ orders }: { orders: IOrder[] | null }) {
                 <div className='absolute card z-20 rounded-xl p-4 bg-white border border-gray-200'>
                   <p onClick={() => bulkUpdateOrders(selectedOrders, "Cancelled")} className='text-sm cursor-pointer p-2 text-black hover:bg-[#CFA31C] flex justify-center items-center'>Cancelled</p>
                   <p onClick={() => bulkUpdateOrders(selectedOrders, "Processing")} className='text-sm cursor-pointer p-2 text-black hover:bg-[#CFA31C] flex justify-center items-center'>Processing</p>
-                  <p onClick={() => bulkUpdateOrders(selectedOrders, "Shipping")} className='text-sm p-2 cursor-pointer text-black hover:bg-[#CFA31C] flex justify-center items-center'>Shipping</p>
+                  <p onClick={() => bulkUpdateOrders(selectedOrders, "Shipping")} className='text-sm p-2 cursor-pointer text-black hover:bg-[#CFA31C] flex justify-center items-center'>Shipped</p>
                   <p onClick={() => bulkUpdateOrders(selectedOrders, "Delivered")} className='text-sm p-2 cursor-pointer text-black hover:bg-[#CFA31C] flex justify-center items-center'>Delivered</p>
-                  <p onClick={() => bulkUpdateOrders(selectedOrders, "Placed")} className='text-sm p-2 cursor-pointer text-black hover:bg-[#CFA31C] flex justify-center items-center'>Placed</p>
+                  {/* <p onClick={() => bulkUpdateOrders(selectedOrders, "Placed")} className='text-sm p-2 cursor-pointer text-black hover:bg-[#CFA31C] flex justify-center items-center'>Placed</p>
                   <p onClick={() => bulkUpdateOrders(selectedOrders, "Packed")} className='text-sm p-2 cursor-pointer text-black hover:bg-[#CFA31C] flex justify-center items-center'>Packed</p>
-                  <p onClick={() => bulkUpdateOrders(selectedOrders, "Confirmed")} className='text-sm p-2 cursor-pointer text-black hover:bg-[#CFA31C] flex justify-center items-center'>Confirmed</p>
+                  <p onClick={() => bulkUpdateOrders(selectedOrders, "Confirmed")} className='text-sm p-2 cursor-pointer text-black hover:bg-[#CFA31C] flex justify-center items-center'>Confirmed</p> */}
                   {/* [Placed, Processing, Packed, Shipping, Delivered, Cancelled, Confirmed] */}
                 </div>
               }

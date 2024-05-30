@@ -8,11 +8,14 @@ import React, { useState } from 'react';
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IProduct } from '@/interfaces/products';
 import { ITopProduct } from '@/interfaces/top-selling-products';
+import { useMemo } from 'react';
 
 export default function TopSellingProductsTable({
   products,
+  // categoryNavigation,
 }: {
   products: ITopProduct[] | null | undefined;
+  // categoryNavigation: any;
 }) {
 
   function amountTemplate(product: ITopProduct) {
@@ -84,15 +87,25 @@ export default function TopSellingProductsTable({
     );
   }
 
+  // const getOrdersByDate = useMemo(() => {
+  //   if(categoryNavigation) {
+  //     return products?.filter((item) => {
+  //       const itemDate = new Date(item.);
+  //       return itemDate >= categoryNavigation.startDate && itemDate <= categoryNavigation.endDate;
+  //     });
+  //   } else return orders;
+
+  // }, [categoryNavigation]);
+
   return (
     <div className='card rounded-xl p-4 bg-white border border-gray-200'>
       <DataTable
         value={products ?? []}
         dataKey='productId'
-        tableStyle={{ minWidth: '50rem' }}
+        tableStyle={{ minWidth: '30rem' }}
         rows={10}
         rowsPerPageOptions={[20, 50, 100, 250]}
-        className='rounded-md text-sm'
+        className='rounded-md text-sm overflow-hidden'
         sortOrder={-1}
         sortField='createdAt'
         sortIcon={<IoIosArrowDown />}

@@ -98,11 +98,8 @@ export default function CancelledOrderTransactionTable({
       </div>
       <DataTable
         value={history}
-        // selectionMode={rowClick ? null : 'multiple'}
-        // selection={selectedOrders!}
-        // onSelectionChange={dateChangeHandler}
         dataKey='id'
-        tableStyle={{ minWidth: '50rem' }}
+        tableStyle={{ minWidth: '20rem' }}
         paginator
         rows={5}
         paginatorTemplate={paginatorTemplate}
@@ -113,7 +110,7 @@ export default function CancelledOrderTransactionTable({
         sortField='date'
         sortIcon={<IoIosArrowDown />}
       >
-        <Column field='id' header='Order ID' sortable></Column>
+        <Column field='orderId' header='Order ID' sortable className="text-[#F2C94C]"></Column>
         <Column
           field='order.item'
           header='Products'

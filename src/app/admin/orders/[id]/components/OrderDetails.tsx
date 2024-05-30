@@ -19,9 +19,53 @@ import { PiCalendarCheck } from 'react-icons/pi';
 import { RiRefreshLine } from 'react-icons/ri';
 import { TbFileInvoice } from 'react-icons/tb';
 import OrderDetailsTable from './OrderDetailsTable';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import toast from 'react-hot-toast';
+import HTTPService from '@/services/http';
+import Cookies from 'universal-cookie';
+import ENDPOINTS from '@/config/ENDPOINTS';
+import { useRouter } from 'next/navigation';
+import DatePicker from '@/components/Shared/DatePicker';
+import { Calendar, CalendarProps } from 'primereact/calendar';
+import { FiCalendar } from 'react-icons/fi';
+
+function StatusTemplate ({ status }: { status: string | undefined}) {
+  let styles = '';
+
+  switch (status?.toLowerCase()) {
+    case 'processing':
+      styles = 'bg-orange-100 text-orange-600';
+      break;
+    case 'shipped':
+      styles = 'bg-[#E8F8FD] text-[#13B2E4]';
+      break;
+    case 'delivered':
+      styles = 'bg-green-100 text-green-600';
+      break;
+    case 'cancelled' || 'refunded':
+      styles = 'bg-red-100 text-red-600';
+      break;
+    case 'packed':
+      styles = 'bg-[#E8F8FD] text-[#13B2E4]';
+      break;
+    default:
+      styles = 'bg-purple-50 text-purple-600';
+      break;
+  }
+
+  return (
+    <span className={`p-2 px-4 text-xs font-medium rounded-full ${styles}`}>
+      {status}
+    </span>
+  );
+}
 
 export default function OrderDetails({ order }: { order: IOrder | null }) {
   const [modalOpen, setModalOpen] = useState(false);
+  const [orderShippedModal, setOrderShippedModal] = useState(false);
+
+  const [cancelOrderModal, setCancelOrderModal] = useState(false);
 
   function openModal() {
     setModalOpen(true);
@@ -31,6 +75,138 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
     setModalOpen(false);
   }
 
+  const cookies = new Cookies();
+  const token = cookies.get('urban-token');
+
+  const httpService = new HTTPService();
+
+  const { replace } = useRouter();
+
+  const formik = useFormik({
+    initialValues: {
+      estimateDeliveryDate: "",
+      trackingService: "",
+      trackingNumber: "",
+      trackingLink: ""
+    },
+    validationSchema: Yup.object({
+      estimateDeliveryDate: Yup.string().required().label('Estimated Delivery Date'),
+      trackingService: Yup.string().required().label('Tracking Service'),
+      trackingNumber: Yup.string().required().label('Tracking Number'),
+      trackingLink: Yup.string().required().label('Trackling Link'),
+    }),
+    onSubmit: async (values) => {
+        try {
+          const data = {
+            status: "Shipping",
+            ...values
+          }
+            httpService
+              .patch(`${ENDPOINTS.ORDERS}/${order?.id}`, data, `Bearer ${token}`)
+              .then((apiRes) => {
+                console.log('Response: ', apiRes);
+
+                if (apiRes.status === 200) {
+                  formik.resetForm();
+
+                  toast.success('Order successfully updated to shipping.');
+
+                  setTimeout(() => {
+                    replace('/admin/orders');
+                  }, 1000);
+                }
+              });
+        } catch (error) {
+          console.log(error);
+        }
+        
+      closeModal();
+      // toast.loading("Updating order...");
+      // setOrderShippedModal(false);
+    },
+    validateOnChange: true,
+  });
+
+  const deliveredFormik = useFormik({
+    initialValues: {
+      deliveryDate: "",
+    },
+    validationSchema: Yup.object({
+      deliveryDate: Yup.string().required().label('Estimated Delivery Date'),
+    }),
+    onSubmit: async (values) => {
+        try {
+          const data = {
+            status: "Delivered",
+            ...values
+          }
+            httpService
+              .patch(`${ENDPOINTS.ORDERS}/${order?.id}`, data, `Bearer ${token}`)
+              .then((apiRes) => {
+                console.log('Response: ', apiRes);
+
+                if (apiRes.status === 200) {
+                  formik.resetForm();
+
+                  toast.success('Order successfully updated to Delivered.');
+
+                  setTimeout(() => {
+                    replace('/admin/orders');
+                  }, 1000);
+                }
+              });
+        } catch (error) {
+          console.log(error);
+        }
+      setOrderShippedModal(false);
+    },
+    validateOnChange: true,
+  });
+
+  const updateOrder = (orderId?: number, orderStatus?: string,) => {
+    if(orderId) {
+      try {
+        toast.loading("Updating order...");
+        setOrderShippedModal(false);
+        closeModal();
+
+        const data = {
+          status: orderStatus
+        }
+  
+        httpService
+          .patch(`${ENDPOINTS.ORDERS}/${orderId}`, data, `Bearer ${token}`)
+          .then((apiRes) => {
+            console.log('Response: ', apiRes);
+  
+            toast.dismiss();
+            if (apiRes.status === 200) {
+              formik.resetForm();
+  
+              toast.success('Order successfully updated.');
+              setTimeout(() => {
+                replace('/admin/orders');
+              }, 1000);
+            }
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {toast.error("Order not provided.")}
+  }
+
+  const activateModal = () => {
+    if(order?.status.toLowerCase() === "shipping") {
+      setOrderShippedModal(true);
+    } else if (order?.status.toLowerCase() !== "shipping" && order?.status.toLowerCase() !== "delivered") {
+      openModal();
+    } else if (order.status.toLowerCase() === "delivered") {
+      toast.error("This order has been delivered. You can no longer update this order.");
+    }
+  }
+
+  console.log(order);
+
   return (
     <div>
       {/* Grid 1 */}
@@ -38,10 +214,11 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
         {/* Order Details */}
         <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-xl'>
           <p className='text-lg font-medium text-gray-700 mb-8 flex items-center justify-between'>
-            <span>Order #302011</span>
-            <span className='p-2 px-4 text-xs bg-blue-100 rounded-full'>
+            <span>Order #{order?.id}</span>
+            {/* <span className='p-2 px-4 text-xs bg-blue-100 rounded-full'>
               {order?.status}
-            </span>
+            </span> */}
+            <StatusTemplate status={order?.status}/>
           </p>
           {/*  */}
           <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
@@ -99,7 +276,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
           </div>
 
           {/*  */}
-          <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
+          {/* <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
             <div className='flex items-center gap-2'>
               <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
                 <CiMail />
@@ -109,7 +286,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
               </div>
             </div>
             <p>josh_adam@mail.com</p>
-          </div>
+          </div> */}
           {/*  */}
           <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
             <div className='flex items-center gap-2'>
@@ -154,7 +331,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
           </div>
 
           {/*  */}
-          <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
+          {/* <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
             <div className='flex items-center gap-2'>
               <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
                 <HiOutlineBadgeCheck />
@@ -164,7 +341,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
               </div>
             </div>
             <p>40000 Points</p>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -237,7 +414,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                 <div
                   className={clsx(
                     'h-12 w-12 rounded-full flex items-center justify-center text-xl border-4',
-                    order?.status.toLowerCase() === 'confirmed'
+                    order?.status.toLowerCase() === 'confirmed' || order?.status.toLowerCase() === 'processing' || order?.status.toLowerCase() === 'shipping' || order?.status.toLowerCase() === 'delivered'
                       ? 'border-[#f5f5ff] bg-[#eeeeff] text-primary'
                       : 'bg-gray-200 border-gray-100 text-neutral'
                   )}
@@ -259,7 +436,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                 <div
                   className={clsx(
                     'h-12 w-12 rounded-full flex items-center justify-center text-xl bg-gray-200 border-4 border-gray-100 text-neutral',
-                    order?.status.toLowerCase() === 'shipped' &&
+                    order?.status.toLowerCase() === 'shipping' || order?.status.toLowerCase() === 'delivered' &&
                       'border-[#f5f5ff] bg-[#eeeeff] text-primary'
                   )}
                 >
@@ -306,10 +483,13 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
               </div>
             </div>
 
-            <div className='flex items-center gap-2 flex-wrap'>
-              <Button onClick={openModal}>Update Status</Button>
-              <Button variant='outlined'>Cancel Order</Button>
-            </div>
+            {
+              order?.status.toLowerCase() !== 'delivered' && 
+              <div className='flex items-center gap-2 flex-wrap'>
+                <Button onClick={activateModal}>Update Status</Button>
+                <Button variant='outlined' onClick={() => setCancelOrderModal(true)}>Cancel Order</Button>
+              </div>
+            }
 
             {/* Update Status Modal */}
             <Modal
@@ -320,16 +500,16 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-4 items-center'>
                 <div className='mb-6'>
                   <label
-                    htmlFor='courierName'
+                    htmlFor='trackingService'
                     className='text-sm text-neutral mb-2 block'
                   >
-                    Courier Name
+                    Tracking service
                   </label>
                   <TextInput
-                    id='courierName'
-                    onChange={() => {}}
-                    value={''}
-                    error={''}
+                    id='trackingService'
+                    onChange={formik.handleChange}
+                    value={formik.values.trackingService}
+                    error={formik.errors.trackingService}
                   />
                 </div>
                 {/*  */}
@@ -342,43 +522,58 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                   </label>
                   <TextInput
                     id='trackingNumber'
-                    onChange={() => {}}
-                    value={''}
-                    error={''}
+                    onChange={formik.handleChange}
+                    value={formik.values.trackingNumber}
+                    error={formik.errors.trackingNumber}
                   />
                 </div>
               </div>
 
               <div className='mb-6'>
                 <label
-                  htmlFor='shippingUrl'
+                  htmlFor='trackingLink'
                   className='text-sm text-neutral mb-2 block'
                 >
-                  Shipping Tracking URL
+                  Shipping Tracking URL/Link
                 </label>
                 <TextInput
-                  id='shippingUrl'
-                  onChange={() => {}}
-                  value={''}
-                  error={''}
+                  id='trackingLink'
+                  onChange={formik.handleChange}
+                  value={formik.values.trackingLink}
+                  error={formik.errors.trackingLink}
                 />
               </div>
 
               <div className='mb-6'>
                 <label
-                  htmlFor='estimatedDeliveryDate'
+                  htmlFor='estimateDeliveryDate'
                   className='text-sm text-neutral mb-2 block'
                 >
                   Estimated Delivery Date
                 </label>
-                <TextInput
-                  id='estimatedDeliveryDate'
-                  onChange={() => {}}
-                  value={''}
-                  error={''}
+                {/* <TextInput
+                  id='estimateDeliveryDate'
+                  onChange={formik.handleChange}
+                  value={formik.values.estimateDeliveryDate}
+                  error={formik.values.estimateDeliveryDate}
+                /> */}
+                {/* <DatePicker handleSelectDate={handleSelectDate} /> */}
+                <Calendar
+                  id='estimateDeliveryDate'
+                  value={new Date(formik.values.estimateDeliveryDate)}
+                  onChange={formik.handleChange}
+                  // showTime
+                  hourFormat='24'
+                  placeholder='Select Dates'
+                  className='pl-[16px] text-[12px] bg-white rounded-[8px] h-[40px] w-[170px]'
+                  icon={<FiCalendar className='text-black h-[20px] w-[20px]'/>}
+                  showButtonBar
+                  showIcon
+                  iconPos='left'
+                  hideOnDateTimeSelect={true}
                 />
               </div>
-              <div className='mb-6'>
+              {/* <div className='mb-6'>
                 <label
                   htmlFor='note'
                   className='text-sm text-neutral mb-2 block'
@@ -386,12 +581,69 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                   Note
                 </label>
                 <textarea id='note' onChange={() => {}} value={''} />
-              </div>
+              </div> */}
 
               <div className='flex items-center gap-2'>
-                <Button>Update</Button>
+                <Button onClick={formik.submitForm}>Update</Button>
                 <Button variant='outlined' onClick={closeModal}>
                   Cancel
+                </Button>
+              </div>
+            </Modal>
+
+            {/* Order delivered Modal */}
+            <Modal
+              isOpen={orderShippedModal}
+              handleClose={() => setOrderShippedModal(false)}
+              title='Status Update'
+            > 
+              <h3 className='mb-4 text-lg text-black'> Has your order been delivered? </h3>
+              {/* <div className='flex items-center gap-2 justify-between'>
+                <Button onClick={() => updateOrder(order?.id, "Delivered")}>Yes</Button>
+                <Button variant='outlined' onClick={() =>  setOrderShippedModal(false)}>
+                  No
+                </Button>
+              </div> */}
+              <div className='mb-6'>
+                <label
+                  htmlFor='deliveryDate'
+                  className='text-sm text-neutral mb-2 block'
+                >
+                  Delivery Date
+                </label>
+                <Calendar
+                  id='deliveryDate'
+                  value={new Date(deliveredFormik.values.deliveryDate)}
+                  onChange={deliveredFormik.handleChange}
+                  hourFormat='24'
+                  placeholder='Select Dates'
+                  className='pl-[16px] text-[12px] bg-white rounded-[8px] h-[40px] w-[170px]'
+                  icon={<FiCalendar className='text-black h-[20px] w-[20px]'/>}
+                  showButtonBar
+                  showIcon
+                  iconPos='left'
+                  hideOnDateTimeSelect={true}
+                />
+              </div>
+              <div className='flex items-center gap-2'>
+                <Button onClick={deliveredFormik.submitForm}>Update</Button>
+                <Button variant='outlined' onClick={() => setOrderShippedModal(false)}>
+                  Cancel
+                </Button>
+              </div>
+            </Modal>
+
+            {/* Cancel Order Modal */}
+            <Modal
+              isOpen={cancelOrderModal}
+              handleClose={() => setCancelOrderModal(false)}
+              title='Cancel order'
+            > 
+              <h3 className='mb-4 text-lg text-black'> Are you sure you want to cancel this order? </h3>
+              <div className='flex items-center gap-2 justify-between'>
+                <Button onClick={() => updateOrder(order?.id, "Cancelled")}>Yes</Button>
+                <Button variant='outlined' onClick={() =>  setCancelOrderModal(false)}>
+                  No
                 </Button>
               </div>
             </Modal>
