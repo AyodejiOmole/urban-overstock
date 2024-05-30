@@ -7,6 +7,7 @@ import { DataTable } from 'primereact/datatable';
 import React, { useState } from 'react';
 import { IProduct } from '@/interfaces/products';
 import { IoIosArrowDown } from 'react-icons/io';
+import { ITopOrdersLocation } from '@/interfaces/top-selling-products';
 
 export const sales = [
     {
@@ -89,15 +90,13 @@ export const sales = [
     },
 ];  
 
-// {
-//     sales,
-//   }: {
-//     sales: any;
-//   }
-
-export default function SalesByLocationTable() {
-    function amountTemplate(sales: any) {
-        return formatCurrency(sales.amount);
+export default function SalesByLocationTable({
+    salesByLocation,
+}: {
+    salesByLocation: ITopOrdersLocation[] | null | undefined;
+}) {
+    function amountTemplate(sales: ITopOrdersLocation) {
+        return formatCurrency(sales?.totalAmount);
     }
 
     function checkIfUrl(imageUrl: string) {
@@ -110,10 +109,10 @@ export default function SalesByLocationTable() {
         return true;
     }
 
-    function productTemplate(sale: any) {
+    function productTemplate(sale: ITopOrdersLocation) {
         return (
         <div className='flex items-center gap-4'>
-            {sale.imageUrls?.length > 0 && checkIfUrl(sale?.imageUrls[0]) ? (
+            {/* {sale.imageUrls?.length > 0 && checkIfUrl(sale?.imageUrls[0]) ? (
             <Image
                 src={sale.imageUrls[0]}
                 alt={sale.description}
@@ -123,13 +122,13 @@ export default function SalesByLocationTable() {
             />
             ) : (
             <div className='h-12 w-12 bg-[#1b1b1b] rounded-md'></div>
-            )}
+            )} */}
             {/* <p className='text-sm flex-1'>{product?.name}</p> */}
             <div className='flex-1'>
-            <p className='text-sm font-medium'>{sale?.location}</p>
-            <p className='text-neutral text-sm font-light'>
-                {`${sale?.sales} sales`}
-            </p>
+                <p className='text-sm font-medium'>{!sale?.orderShippingState ? "Alabama" : sale?.orderShippingState?.toLowerCase()}</p>
+                <p className='text-neutral text-sm font-light'>
+                    {`${sale?.orderCount} sales`}
+                </p>
             </div>
         </div>
         );
@@ -166,28 +165,30 @@ export default function SalesByLocationTable() {
   return (
     <div className='card rounded-xl p-4 bg-white border border-gray-200'>
       <DataTable
-        value={sales}
-        dataKey='uuid'
-        // tableStyle={{ minWidth: '10rem' }}
+        value={salesByLocation ?? []}
+        // dataKey='orderShippingState'
+        tableStyle={{ minWidth: '5rem' }}
         // paginator
-        rows={20}
-        rowsPerPageOptions={[20, 50, 100, 250]}
+        // rows={20}
+        // rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-md text-sm'
         sortOrder={-1}
-        sortField='createdAt'
-        sortIcon={<IoIosArrowDown />}
+        showHeaders={false}
+        // sortField='createdAt'
+        // sortIcon={<IoIosArrowDown />}
       >
         <Column 
+            // field=""
             body={productTemplate} 
             // header={null}
         />
         <Column 
-            field='sales' 
+            // field='totalAmount' 
             body={amountTemplate}
             // header='Sales' 
             // sortable 
         />
-        <Column field='status' body={salesStatusTemplate} />
+        {/* <Column field='status' body={salesStatusTemplate} /> */}
       </DataTable>
     </div>
   );

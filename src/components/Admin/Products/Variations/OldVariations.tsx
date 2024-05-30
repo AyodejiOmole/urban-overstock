@@ -506,7 +506,7 @@ const VariationItem = ({
                       <div className='w-full'>
                           <p className='text-sm text-neutral mb-2'>Presets</p>
 
-                          <div className='flex flex-wrap gap-1'>
+                          <div className='flex flex-wrap gap-2'>
                             {colors?.map((color: IColor, colorIndex: number) => {
                               return (
                                   <Button 

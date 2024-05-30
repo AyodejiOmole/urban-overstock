@@ -46,6 +46,7 @@ const AdminDashboard = async () => {
             <SalesChart graph={graph}/>
             <Sales 
                 products={topSellingProducts?.topProducts} 
+                salesByLocation={topSellingProducts?.topOrdersLocation}
                 // categoryNavigation={categoryNavigation}
             />
             <OrdersTable
