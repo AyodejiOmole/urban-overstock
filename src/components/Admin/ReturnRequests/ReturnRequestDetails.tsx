@@ -103,7 +103,7 @@ const ReturnRequestDetails = ({
             <Button variant='outlined' onClick={() => updateReturnRequest(id, "Denied")}>
                 {/* <FaPlus /> */}
                 {/* <RiDeleteBin6Line /> */}
-                Disapprove
+                Decline
             </Button>
             </div>
         </div>
@@ -214,15 +214,15 @@ const ReturnRequestDetails = ({
                     <DataTable
                         value={[{...returnRequestDetails?.orderProduct}]}
                         dataKey='id'
-                        tableStyle={{ minWidth: '50rem' }}
-                        paginator
+                        tableStyle={{ minWidth: '30rem' }}
+                        // paginator
                         rows={5}
-                        paginatorTemplate={paginatorTemplate}
-                        paginatorClassName='flex justify-between'
+                        // paginatorTemplate={paginatorTemplate}
+                        // paginatorClassName='flex justify-between'
                         rowsPerPageOptions={[20, 50, 100, 250]}
                         className='rounded-xl text-sm'
                         sortOrder={-1}
-                        sortField='date'
+                        // sortField='date'
                         sortIcon={<IoIosArrowDown />}
                     >
                         <Column field='id' header='Order ID' sortable></Column>
