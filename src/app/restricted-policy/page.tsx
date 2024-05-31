@@ -5,7 +5,7 @@ import React from 'react';
 export default function ProtectedPolicy() {
   return (
     <section className='p-6 sm:px-8 xl:px-16 2xl:px-32 pt-16 pb-16 bg-white mx-auto max-w-7xl'>
-      <p className='text-primary-2 font-semibold text-lg'>Restricted products Policy</p>
+      <p className='text-primary-2 font-semibold text-lg'>Restricted Products Policy</p>
 
       {/* Privacy Policy */}
       <div className='mt-8 text-gray-700 font-light text-sm leading-6'>
