@@ -91,7 +91,7 @@ export default function SalesChart({
           </div>
 
           <p className='text-neutral text-center'>
-            You succeeded in earning <span className='font-bold'>{graph?.revenueDifference.todayRevenue}</span>{' '}
+            You succeeded in earning <span className='font-bold'>{graph?.revenueDifference.todayRevenue.toFixed(2)}</span>{' '}
             today, it`s {(graph?.revenueDifference.todayRevenue && graph.revenueDifference.yesterdayRevenue) && graph?.revenueDifference.todayRevenue > graph?.revenueDifference.yesterdayRevenue ? "higher" : "lower"} than yesterday.
           </p>
 
@@ -104,7 +104,7 @@ export default function SalesChart({
               <div className='flex items-center'>
                 <p className='text-[#101828] text-[24px] leading-[32px]  font-medium'>
                   {/* $30K{' '} */}
-                  {graph?.revenueDifference.todayRevenue}
+                  {graph?.revenueDifference.todayRevenue.toFixed(2)}
                 </p>
                 <GoArrowUp className='text-green-500 h-[20px] w-[20px] '/>
               </div>
@@ -115,7 +115,7 @@ export default function SalesChart({
               <div className='flex items-center'>
                 <p className='text-[#101828] text-[24px] leading-[32px]  font-medium'>
                   {/* $2.5K{' '} */}
-                  {graph?.revenueDifference.todayRevenue}
+                  {graph?.revenueDifference.todayRevenue.toFixed(2)}
                 </p>
                 <GoArrowUp className='text-green-500 h-[20px] w-[20px] '/>
               </div>
