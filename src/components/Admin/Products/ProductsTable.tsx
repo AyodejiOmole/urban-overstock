@@ -69,6 +69,7 @@ export default function ProductsTable({
       if (res.status === 200) {
         console.log(res);
         toast.success('Product successfully deleted');
+        router.refresh();
       } else toast.error('Cannot delete product at this time');
     }
   }
