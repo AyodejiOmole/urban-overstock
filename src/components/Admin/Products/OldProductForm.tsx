@@ -256,7 +256,7 @@ export default function OldProductForm({
       sku: Yup.string().required().label('SKU'),
       barcode: Yup.string().required().label('Bar Code'),
       status: Yup.string().required().label('Status'),
-      costPrice: Yup.number().min(1).required().label('Cost Price').test('costPrice', 'Cost Price cannot exceed Price/Amount', function () {
+      costPrice: Yup.number().min(1).required().label('Cost Price').test('costPrice', 'Cost Price cannot exceed Base Price/Amount', function () {
         const { costPrice, amount } = this.parent;
         return costPrice <= amount;
       }),
@@ -1029,7 +1029,7 @@ export default function OldProductForm({
               </label>
               <TextInput
                 inputMode='numeric'
-                placeholder='Type product quantity...'
+                placeholder='Type product width...'
                 id='width'
                 onChange={formik.handleChange}
                 value={formik.values.width}

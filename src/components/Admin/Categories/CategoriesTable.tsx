@@ -166,9 +166,9 @@ export default function CategoriesTable({
       </div>
       <DataTable
         value={matchedCategories}
-        selectionMode={rowClick ? null : 'multiple'}
-        selection={selectedCategories!}
-        onSelectionChange={selectChangeHandler}
+        // selectionMode={rowClick ? null : 'multiple'}
+        // selection={selectedCategories!}
+        // onSelectionChange={selectChangeHandler}
         dataKey='id'
         tableStyle={{ minWidth: '50rem'}}
         paginator
@@ -183,10 +183,10 @@ export default function CategoriesTable({
         sortField='createdAt'
         sortIcon={<IoIosArrowDown />}
       >
-        <Column
+       {/*  <Column
           selectionMode='multiple'
           headerStyle={{ width: '3rem' }}
-        ></Column>
+        ></Column> */}
         {/* <Column field='id' header='ID' sortable></Column> */}
         <Column body={template} header='Category'></Column>
         <Column

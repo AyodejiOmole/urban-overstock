@@ -1308,7 +1308,7 @@ export default function ProductForm({
               </label>
               <TextInput
                 inputMode='numeric'
-                placeholder='Type product quantity...'
+                placeholder='Type product width...'
                 id='width'
                 onChange={formik.handleChange}
                 value={formik.values.width}
