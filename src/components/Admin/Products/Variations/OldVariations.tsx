@@ -695,9 +695,7 @@ const VariationItem = ({
                       <label htmlFor='sizeCode' className='text-sm text-neutral mb-2 block'>
                           Input size code:
                       </label>
-                      <label htmlFor='sizeCode' className='text-sm text-neutral mb-2 block'>
-                          Input size code:
-                      </label>
+                  
 
                       <TextInput
                         type='string'
@@ -709,16 +707,7 @@ const VariationItem = ({
                         }}
                         className='mb-3'
                       />
-                      <TextInput
-                        type='string'
-                        // id='sizeToAdd'
-                        value={sizeCode}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                          console.log(e);
-                          setSizeCode((prev: any) => prev = e.target.value);
-                        }}
-                        className='mb-3'
-                      />
+                      
 
                       <Button className='w-full' onClick={() => createNewSizePreset(sizeToAdd, sizeCode)}>
                           {/* <FaPlus /> */}
