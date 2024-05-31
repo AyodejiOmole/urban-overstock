@@ -103,7 +103,7 @@ export default function TopSellingProductsTable({
         value={products ?? []}
         dataKey='productId'
         tableStyle={{ minWidth: '30rem' }}
-        rows={10}
+        rows={12}
         rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-md text-sm overflow-hidden'
         sortOrder={-1}
