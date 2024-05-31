@@ -119,7 +119,7 @@ export default function AdminLogin() {
             placeholder='* * * * * *'
             type={showPassword ? 'text' : 'password'}
             id='password'
-            rightIcon={showPassword ? <IoEyeOff /> : <IoEye />}
+            rightIcon={showPassword ?  <IoEye /> : <IoEyeOff />}
             rightIconClick={() => setShowPassword((prev) => !prev)}
             rounded
             value={formik.values.password}
