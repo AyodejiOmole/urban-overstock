@@ -5,7 +5,7 @@ import React from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { PiExportBold } from 'react-icons/pi';
 import getAllCustomers from '@/libs/customers';
-import { ICustomers } from '@/interfaces/customers';
+import { ICustomer, ICustomers } from '@/interfaces/customers';
 
 export default async function AdminCustomers() {
   const apiRes: Promise<ICustomers | undefined> = getAllCustomers();
@@ -18,7 +18,10 @@ export default async function AdminCustomers() {
       
 
       {/* Categories Table */}
-      <Customers customers={customers}/>
+      <Customers 
+        // customers={customers}
+        customers={customers?.sort((a: ICustomer, b: ICustomer) => Date.parse(b.createdAt) - Date.parse(a.createdAt))}
+      />
     </section>
   );
 }

@@ -123,6 +123,7 @@ export default function CustomersTable({
   }, [searchValue, customers]);
 
   const router = useRouter();
+  console.log(customers);
 
   return (
     <div className='card rounded-md p-4 bg-white border border-gray-200'>
@@ -143,7 +144,7 @@ export default function CustomersTable({
         rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-md'
         sortOrder={-1}
-        sortField='dateAdded'
+        sortField='createdAt'
         sortIcon={<IoIosArrowDown />}
         onRowClick={(e) => router.push(`/admin/customers/${e.data.id}`)}
       >

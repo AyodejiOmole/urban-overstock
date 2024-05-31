@@ -13,14 +13,8 @@ export default function AdminDiscountCodeDetails() {
   const [discountPer, setDiscountPer] = useState<any>(null);
 
   useEffect(() => {
-    // if (params.has('code') && params.has('percentage')) {
-      
-    // }
-
     setDiscountCode(params.get("code"));
     setDiscountPer(params.get("percentage"));
-    // setDiscountCode(params.get("code"));
-    // setDiscountPer(params.get("percentage"));
   }, [params]);
 
   return (

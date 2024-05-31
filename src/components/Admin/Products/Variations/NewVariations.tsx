@@ -444,7 +444,7 @@ const VariationItem = ({
 
           <div>
             <p className='text-neutral mb-4 text-sm'>Photo</p>
-            <div className='p-8 bg-gray-100 rounded-lg flex items-center justify-center flex-col border border-gray-200'>
+            <div className='p-8 bg-[#F0F1F3] rounded-lg flex items-center justify-center flex-col border border-gray-200'>
               <input
                 type='file'
                 accept='.jpg,.png,.jpeg'
@@ -511,6 +511,7 @@ const VariationItem = ({
           </div>
         </div>
 
+        {/* Color */}
         <div className='w-full flex justify-between gap-2'>
           <div className='mb-4 w-full relative'>
               <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
@@ -518,7 +519,7 @@ const VariationItem = ({
               </label>
               <div 
                   className = {
-                      clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                      clsx('h-[48px] text-black bg-[#F0F1F3] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
                   }
                   onClick={() => setActiveColorPicker(true)}
               >
@@ -635,6 +636,7 @@ const VariationItem = ({
           </button>
         </div>
 
+        {/* Size Options */}
         {variation.sizeOptions.map((option, index) => {
           return (
             <div className='items-start gap-4 w-full' key={index}>
@@ -645,14 +647,12 @@ const VariationItem = ({
                   </label>
                   <div 
                       className = {
-                          clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                          clsx('h-[48px] bg-[#F0F1F3] text-black px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
                       }
                       onClick={() => setSizePicker(index)}
                   >
-                      {/* {sizes?.filter((size: any) => size.id == option?.sizeId)} */}
-                      {/* {option?.sizeId} */}
+                      
                       {sizes?.find((size: ISize) => size.id == option?.sizeId)?.code ? sizes?.find((size: ISize) => size.id == option?.sizeId)?.code : "Select a variation size..."}
-                      {/* {} */}
                       <IoIosArrowDown className='absolute right-4 top-auto bottom-auto' />
                   </div>
                   
@@ -1100,6 +1100,17 @@ const ProductVariations = ({
     }
   }
 
+  function CloseButton({ handleClick }: {handleClick: () => void;}) {
+    return (
+      <button
+        className='p-2 bg-gray-100 text-xl rounded-full text-secondary-text'
+        onClick={handleClick}
+      >
+        <AiOutlineClose />
+      </button>
+    );
+  }
+
   return (
     <div>
         <div className='flex items-center gap-4 mt-8'>
@@ -1112,7 +1123,7 @@ const ProductVariations = ({
         {state.map((variation, index) => {
             return (
                 <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4' key={index}>
-                    <p className='text-lg font-semibold text-gray-700 mb-8'>Variation</p>
+                    {/* <p className='text-lg font-semibold text-gray-700 mb-8'>Variation</p>
                     <div className='flex items-center gap-2'>
                       <button
                         className='bg-red-100 text-red-600 p-3.5 rounded-md text-xl'
@@ -1121,6 +1132,10 @@ const ProductVariations = ({
                         <IoClose />
                       </button>
                       <p>Delete variation</p>
+                    </div> */}
+                    <div className='flex items-center justify-between mb-3'>
+                      <p className='text-lg font-semibold text-gray-700'>Variation</p>
+                      <CloseButton handleClick={() => deleteVariation(variation.id)} />
                     </div>
                     <VariationItem
                         key={variation.id}

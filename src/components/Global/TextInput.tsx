@@ -39,7 +39,7 @@ export default function TextInput(props: InputType) {
   } = props;
 
   const inputStyles = clsx(
-    'h-[48px] bg-[#E0E2E7] px-4 py-2 border border-dark-100 flex gap-2 items-center',
+    'h-[48px] bg-[#F0F1F3] px-4 py-2 border border-dark-100 flex gap-2 items-center',
     disabled && 'pointer-events-none opacity-60',
     rounded ? 'rounded-full' : 'rounded-lg',
     className
@@ -102,7 +102,7 @@ export default function TextInput(props: InputType) {
           onChange={handleInputChange}
           onFocus={onFocus}
           onBlur={onBlur}
-          className={`h-full text-sm w-full bg-[#E0E2E7] font-light  caret-primary text-gray-600 leading-2 focus:outline-none block appearance-none`}
+          className={`h-full text-sm w-full bg-[#F0F1F3] font-light  caret-primary text-black leading-2 focus:outline-none block appearance-none`}
           placeholder={placeholder}
         />
         {rightIcon && (

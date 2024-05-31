@@ -34,11 +34,11 @@ export default function AddDiscountCodeDetails() {
     const formik = useFormik({
         initialValues: {
           code: "",
-          percentage: 0,
+          percentage: undefined,
         },
         validationSchema: Yup.object({
           code: Yup.string().required().label('Code'),
-          percentage: Yup.number().min(0).required().label('Percentage'),
+          percentage: Yup.number().min(1).required().label('Percentage'),
         }),
         onSubmit: async (values) => {
           const token = cookies.get('urban-token');
@@ -62,7 +62,6 @@ export default function AddDiscountCodeDetails() {
             }
             console.log(apiRes);
         },
-    
         validateOnChange: true,
     });
 

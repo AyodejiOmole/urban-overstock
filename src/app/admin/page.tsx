@@ -38,6 +38,7 @@ const AdminDashboard = async () => {
 
     console.log(orders);
     console.log("dashd",dashboardData)
+
     return (
         <section>
             {/* <AdminPage dashboardData={dashboardData} graph={graph} topSellingProducts={topSellingProducts} orders={orders}/> */}
@@ -49,12 +50,13 @@ const AdminDashboard = async () => {
                 salesByLocation={topSellingProducts?.topOrdersLocation}
                 // categoryNavigation={categoryNavigation}
             />
+            {/* orders?.sort((a: IOrder, b: IOrder) => Date.parse(b.createdAt) - Date.parse(a.createdAt)) */}
             <OrdersTable
                 orders={orders?.sort((a: IOrder, b: IOrder) => Date.parse(b.createdAt) - Date.parse(a.createdAt)).slice(0, 10) ?? null}
                 selectedOrders={[]}
                 searchValue=''
                 page="recent orders"
-                categoryNavigation={[]}
+                // categoryNavigation={[]}
             />
         </section>
   );

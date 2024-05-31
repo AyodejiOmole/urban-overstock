@@ -40,7 +40,7 @@ export interface ProductVariationData {
   colorId: number,
   imageFile: File | null,
   imageUrl: string
-  sizeOptions: { sizeId: number, quantity: number }[],
+  sizeOptions: { sizeId: number, quantity: number | undefined }[],
 }
 
 interface SizeVariationProps extends ProductVariationProps {
@@ -136,7 +136,7 @@ const VariationItem = ({
   const [sizeCode, setSizeCode] = useState<string | null | any>('');
 
   const updateVariationQuantity = (e: ChangeEvent<HTMLInputElement>, index: number) => {
-    const variationQuantitySum: number = allVariations.reduce((acc, current) => acc + current.sizeOptions.reduce((accum, cur) => accum + cur.quantity, 0), 0);
+    const variationQuantitySum: number = allVariations.reduce((acc, current) => acc + current.sizeOptions.reduce((accum, cur) => accum + (cur?.quantity ?? 0), 0), 0);
 
     if(quantity) {
       if(Number(e.target.value) + variationQuantitySum > quantity) {
@@ -210,7 +210,7 @@ const VariationItem = ({
   const deleteVariationQuantity = (index: number) => {
     const newSizeOptions = variation.sizeOptions.map((option, idx) => {
       if(idx === index) {
-        return {...option, quantity: 0 };
+        return {...option, quantity: undefined };
       }
       return option;
     });
@@ -229,7 +229,7 @@ const VariationItem = ({
   }
 
   const addNewSizeOptions = () => {
-    const newSizeOptions = [...variation.sizeOptions, { sizeId: 0, quantity: 0 }]
+    const newSizeOptions = [...variation.sizeOptions, { sizeId: 0, quantity: undefined }]
 
     dispatch({
       type: 'UPDATE',
@@ -467,14 +467,14 @@ const VariationItem = ({
           </div>
         </div>
 
-        <div className='w-full flex justify-between gap-2'>
-            <div className='mb-4 w-full relative'>
+        <div className='w-full flex border border-red-500 justify-between gap-2 align-center justify-center'>
+            <div className='w-full border border-red-500 relative'>
                 <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
                     Color:
                 </label>
                 <div 
                     className = {
-                        clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                        clsx('h-[48px] bg-[#F0F1F3] text-black px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
                     }
                     onClick={() => setActiveColorPicker(true)}
                 >
@@ -601,6 +601,7 @@ const VariationItem = ({
                     </div>
                   )} 
             </div>
+
             <button
               className='bg-red-100 text-red-600 px-3.5 rounded-md my-5 text-xl'
               onClick={() => updateColorVaritionValue(0)}
@@ -619,7 +620,7 @@ const VariationItem = ({
                   </label>
                   <div 
                       className = {
-                          clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                          clsx('h-[48px] bg-[#F0F1F3] text-black px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
                       }
                       onClick={() => setSizePicker(index)}
                   >
@@ -744,6 +745,7 @@ const VariationItem = ({
                   <TextInput
                     type='number'
                     id='quantity'
+                    placeholder='Enter quantity...'
                     value={option.quantity}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => updateVariationQuantity(e, index)}
                   />
@@ -827,6 +829,17 @@ const ProductVariations = ({
       });
   };
 
+  function CloseButton({ handleClick }: {handleClick: () => void;}) {
+    return (
+      <button
+        className='p-2 bg-gray-100 text-xl rounded-full text-secondary-text'
+        onClick={handleClick}
+      >
+        <AiOutlineClose />
+      </button>
+    );
+  }
+
   return (
     <div>
         <div className='flex items-center gap-4 mt-8'>
@@ -838,8 +851,8 @@ const ProductVariations = ({
         {state.map((variation, index) => {
             return (
                 <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4' key={index}>
-                    <p className='text-lg font-semibold text-gray-700 mb-8'>Variation</p>
-                    <div className='flex items-center gap-2'>
+                    {/* <p className='text-lg font-semibold text-gray-700 mb-8'>Variation</p> */}
+                    {/* <div className='flex items-center gap-2'>
                       <button
                         className='bg-red-100 text-red-600 p-3.5 rounded-md text-xl'
                         onClick={() => deleteVariation(variation.id)}
@@ -847,6 +860,10 @@ const ProductVariations = ({
                         <IoClose />
                       </button>
                       <p>Delete variation</p>
+                    </div> */}
+                    <div className='flex items-center justify-between mb-3'>
+                      <p className='text-lg font-semibold text-gray-700'>Variation</p>
+                      <CloseButton handleClick={() => deleteVariation(variation.id)} />
                     </div>
                     <VariationItem
                         key={variation.id}

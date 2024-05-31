@@ -48,7 +48,7 @@ interface IProductVariations {
     imageFile: File | null,
     colorId: number,
     imageUrl: string,
-    sizeOptions: { sizeId: number, quantity: number }[],
+    sizeOptions: { sizeId: number, quantity: number | undefined }[],
 }
 
 const reducerMethod = (
@@ -273,7 +273,7 @@ export default function OldProductForm({
       const promises: Promise<Response>[] = [];
       const variationPromises: Promise<Response>[] = [];
 
-      const variationQuantitySum: number = variations.reduce((acc, current) => acc + current.sizeOptions.reduce((accum, cur) => accum + cur.quantity, 0), 0);
+      const variationQuantitySum: number = variations.reduce((acc, current) => acc + current.sizeOptions.reduce((accum, cur) => accum + (cur.quantity ?? 0), 0), 0);
 
       if(values.quantity) {
         if(variationQuantitySum > values?.quantity) {
@@ -438,6 +438,7 @@ export default function OldProductForm({
               toast.success('Brand preset added successfully.');
               brands?.push(apiRes.data);
               setAddBrandDisplay(false);
+              setBrandPicker(true);
             }
           });
       } catch (error) {
@@ -562,7 +563,7 @@ export default function OldProductForm({
               placeholder='Type product description here...'
               onChange={formik.handleChange}
               value={formik.values.description}
-              className='bg-[#E0E2E7] '
+              className='bg-[#F0F1F3] text-black'
             ></textarea>
 
             <CustomError error={formik.errors.description} />
@@ -575,12 +576,12 @@ export default function OldProductForm({
                 </label>
                 <div 
                     className = {
-                        clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 relative rounded-lg border border-dark-100 flex gap-2 items-center',)
+                        clsx('h-[48px] bg-[#F0F1F3] text-black px-4 py-2 relative rounded-lg border border-dark-100 flex gap-2 items-center',)
                     }
                     onClick={() => setBrandPicker(true)}
                 >
                     {brands?.filter((brand) => brand.id === formik.values.brandId)[0]?.name ? brands?.filter((brand) => brand.id === formik.values.brandId)[0]?.name : "Select a brand..."}
-                    <IoIosArrowDown className='absolute right-4 top-auto bottom-auto'/>
+                    <IoIosArrowDown className='absolute right-4 top-auto bottom-auto' onClick={() => setBrandPicker(true)}/>
                 </div>
 
                 {brandPicker && (
@@ -589,10 +590,11 @@ export default function OldProductForm({
                       ref={brandPickerRef}
                     >   
                       <div
-                        className="flex justify-between align-center mb-2"
+                        className="flex justify-between gap-2 items-center align-center mb-2"
                       >
                         <p>Cant find brand?</p>
                         <Button 
+                          size='small'
                           onClick={() => {
                             setBrandPicker(false);
                             setAddBrandDisplay(true);
@@ -663,12 +665,12 @@ export default function OldProductForm({
                 )}
             </div>
 
-            <button
+            {/* <button
               className='bg-red-100 text-red-600 px-3.5 rounded-md my-5 text-xl'
               onClick={() => formik.setFieldValue("brandId", undefined)}
             >
               <IoClose />
-            </button>
+            </button> */}
           </div>
         </div>
 
@@ -678,7 +680,7 @@ export default function OldProductForm({
 
           <div>
             <p className='text-neutral mb-4 text-sm'>Photo</p>
-            <div className='p-8 bg-gray-100 rounded-lg flex items-center justify-center flex-col border border-gray-200'>
+            <div className='p-8 bg-[#F0F1F3] rounded-lg flex items-center justify-center flex-col border border-gray-200'>
               <input
                 type='file'
                 accept='.jpg,.png,.jpeg'
@@ -801,7 +803,7 @@ export default function OldProductForm({
                 <select
                   name='discountType'
                   id='discountType'
-                  className='text-neutral bg-[#E0E2E7] '
+                  className='text-black bg-[#F0F1F3] '
                   onChange={formik.handleChange}
                   // onChange={handleDiscountChange}
                   value={formik.values.discountType}
@@ -831,7 +833,7 @@ export default function OldProductForm({
                 <select
                   name='taxClass'
                   id='taxClass'
-                  className='text-neutral relative bg-[#E0E2E7] '
+                  className='text-black relative bg-[#F0F1F3] '
                   onChange={formik.handleChange}
                   value={formik.values.taxClass}
                   
@@ -872,10 +874,10 @@ export default function OldProductForm({
                     </label>
                     <div 
                         className = {
-                            clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 relative rounded-lg border border-dark-100 flex gap-2 items-center',)
+                            clsx('h-[48px] bg-[#F0F1F3] text-black px-4 py-2 relative rounded-lg border border-dark-100 flex gap-2 items-center',)
                         }
                     >
-                        {discounts?.find((discount) => discount.code === formik.values.discountType)?.percentage ? discounts?.find((discount) => discount.code === formik.values.discountType)?.percentage : "Select a discount percentage..."}
+                        {discounts?.find((discount) => discount.code === formik.values.discountType)?.percentage ? discounts?.find((discount) => discount.code === formik.values.discountType)?.percentage : "Discount percent..."}
                         {/* <IoIosArrowDown className='absolute right-4 top-auto bottom-auto'/> */}
                     </div>
                 </div>
@@ -1055,7 +1057,7 @@ export default function OldProductForm({
             <select
               name='categoryId'
               id='categoryId'
-              className='text-neutral bg-[#E0E2E7] '
+              className='text-black bg-[#F0F1F3] '
               onChange={formik.handleChange}
               // value={formik.values.categoryId}
               value={formik.values.categoryId === 0 ? '' : formik.values.categoryId}
@@ -1112,7 +1114,7 @@ export default function OldProductForm({
             <select
               name='status'
               id='status'
-              className='text-neutral bg-[#E0E2E7] '
+              className='text-black bg-[#F0F1F3] '
               onChange={formik.handleChange}
               value={formik.values.status}
             >

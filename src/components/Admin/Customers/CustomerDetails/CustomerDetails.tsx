@@ -150,7 +150,7 @@ export default function CustomerDetails({
       <Modal
               isOpen={deleteAccountModal}
               handleClose={() => setDeleteAccountModal(false)}
-              title='Cancel order'
+              title='Delete customer'
             > 
               <h3 className='mb-4 text-lg text-black'> Are you sure you want to delete this customer? </h3>
               <div className='flex items-center gap-2 justify-between'>

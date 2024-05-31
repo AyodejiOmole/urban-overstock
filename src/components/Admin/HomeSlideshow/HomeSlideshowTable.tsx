@@ -70,13 +70,13 @@ export default function HomeSlideshowTable({
         >
           <FaEye />
         </Link> */}
-        <Link
+        {/* <Link
           href={`/admin/home-slideshow/${slideshow.id}?edit=true`}
           className='text-xl text-neutral'
         >
-          {/* <RxPencil2 /> */}
+          <RxPencil2 />
           <MdOutlineModeEdit />
-        </Link>
+        </Link> */}
         <button onClick={() => deleteSliderImage(slideshow.id)}>
           <MdOutlineDelete className='text-xl' />
         </button>
