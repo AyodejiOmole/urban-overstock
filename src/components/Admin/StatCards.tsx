@@ -17,27 +17,29 @@ export default function StatCards({
   return (
     <section className='my-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4'>
       {/*  */}
-      <div className='rounded-lg bg-white border border-neural p-6'>
-        {/* <span className={`${card_icon_style} bg-purple-30 text-purple-700`}> */}
-          <span className={`${card_icon_style} bg-[#DEDEFA] text-purple-700`}>
-            <CiMoneyBill className='text-2xl fill-[#F2C94C]' />
-          </span>
-        {/* </span> */}
-        <p className='my-3 text-neutral text-sm'>Total Revenue</p>
+      <Link href="/admin/orders">
+        <div className='rounded-lg bg-white border border-neural p-6'>
+          {/* <span className={`${card_icon_style} bg-purple-30 text-purple-700`}> */}
+            <span className={`${card_icon_style} bg-[#DEDEFA] text-purple-700`}>
+              <CiMoneyBill className='text-2xl fill-[#F2C94C]' />
+            </span>
+          {/* </span> */}
+          <p className='my-3 text-neutral text-sm'>Total Revenue</p>
 
-        <div className='flex items-center gap-4'>
-          <p className='text-gray-700 text-3xl font-medium'>
-            {/* ${(59000).toLocaleString()} */}
-            ${dashboardData?.revenue ? (dashboardData?.revenue).toLocaleString() : (0).toLocaleString()}
-          </p>
+          <div className='flex items-center gap-4'>
+            <p className='text-gray-700 text-3xl font-medium'>
+              {/* ${(59000).toLocaleString()} */}
+              ${dashboardData?.revenue ? (dashboardData?.revenue).toLocaleString() : (0).toLocaleString()}
+            </p>
 
-          {/* <span className='py-1 px-2 bg-green-100 text-green-600 text-xs rounded-full font-semibold'>
-            +10%
-          </span> */}
+            {/* <span className='py-1 px-2 bg-green-100 text-green-600 text-xs rounded-full font-semibold'>
+              +10%
+            </span> */}
+          </div>
         </div>
-      </div>
+      </Link>
       {/*  */}
-      <Link href="admin/orders">
+      <Link href="/admin/orders">
         <div className='rounded-lg bg-white border border-neural p-6'>
           {/* <span className={`${card_icon_style} bg-green-20`}> */}
           <span className={`${card_icon_style} bg-[#CFE7DC] text-green-800`}>
@@ -59,7 +61,7 @@ export default function StatCards({
         </div>
       </Link>
       {/*  */}
-      <Link href="admin/products">
+      <Link href="/admin/products">
         <div className='rounded-lg bg-white border border-neural p-6'>
           <span className={`${card_icon_style} bg-[#FCDAD7] text-pink-700`}>
             <TbLineScan className="fill-[#F04438]"/>
@@ -79,7 +81,7 @@ export default function StatCards({
         </div>
       </Link>
       {/*  */}
-      <Link href="admin/customers">
+      <Link href="/admin/customers">
         <div className='rounded-lg bg-white border border-neural p-6'>
           <span className={`${card_icon_style} bg-[#FAE1CF] text-blue-700`}>
             <BiWallet className='fill-[#E46A11]'/>

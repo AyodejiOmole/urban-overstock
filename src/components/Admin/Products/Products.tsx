@@ -62,6 +62,11 @@ export default function Products({
 
   async function updateProduct(products: IProducts, status: string) {
     if(products) {
+      if(products.length === 0) {
+        toast.error('Please select a product');
+        return;
+      }
+
       const token = cookies.get('urban-token');
 
       toast.loading('Updating product status...');

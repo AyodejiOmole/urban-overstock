@@ -125,10 +125,10 @@ export default function DiscountCodesTable({
     <div className='card rounded-md p-4 bg-white border border-gray-200'>
       <DataTable
         value={discounts}
-        // selectionMode={rowClick ? null : 'multiple'}
-        // selection={selectedCode!}
-        // onSelectionChange={selectRowHandler}
-        dataKey='_id'
+        selectionMode={rowClick ? null : 'multiple'}
+        selection={selectedCode!}
+        onSelectionChange={selectRowHandler}
+        dataKey='id'
         tableStyle={{ minWidth: '50rem' }}
         paginator
         rows={5}
@@ -140,10 +140,10 @@ export default function DiscountCodesTable({
         sortField='id'
         sortIcon={<IoIosArrowDown />}
       >
-        {/* <Column
+        <Column
           selectionMode='multiple'
           headerStyle={{ width: '3rem' }}
-        ></Column> */}
+        ></Column>
         <Column
           field='code'
           header='Code'
