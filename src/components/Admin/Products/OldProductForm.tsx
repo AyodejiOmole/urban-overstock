@@ -30,6 +30,7 @@ import { IColors } from '@/interfaces/colors';
 import { ISizes } from '@/interfaces/sizes';
 import { IDiscountCodes } from '@/interfaces/discount-codes';
 import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowUp } from 'react-icons/io';
 import { AiOutlineClose } from 'react-icons/ai';
 import { IoClose } from 'react-icons/io5';
 
@@ -167,6 +168,20 @@ export default function OldProductForm({
 
   const [addBrandDisplay, setAddBrandDisplay] = useState<boolean | null>(false);
   const addBrandPresetRef = useRef<HTMLDivElement>(null);
+
+  const productCategorySelectRef = useRef<HTMLSelectElement>(null);
+  const handleSelectProductCategoryClick = () => {
+    if (productCategorySelectRef && productCategorySelectRef.current) {
+      productCategorySelectRef.current.focus();
+    }
+  };
+
+  const productStatusSelectRef = useRef<HTMLSelectElement>(null);
+  const handleSelectProductStatusClick = () => {
+    if (productStatusSelectRef && productStatusSelectRef.current) {
+      productStatusSelectRef.current.focus();
+    }
+  };
 
   const token = cookies.get('urban-token');
   // const [productVariations, setProductVariations] = useState<IProductVariations[]>([]);
@@ -503,7 +518,7 @@ export default function OldProductForm({
             toast.success('Brand preset deleted successfully.');
             setBrandPicker(false);
             setAddBrandDisplay(false);
-            formik.setFieldValue("brandId", 0);
+            // formik.setFieldValue("brandId", 0);
             // toast.dismiss();
           }
         });
@@ -586,7 +601,7 @@ export default function OldProductForm({
 
                 {brandPicker && (
                     <div
-                      className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
+                      className='absolute top-[48px] right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
                       ref={brandPickerRef}
                     >   
                       <div
@@ -608,30 +623,31 @@ export default function OldProductForm({
                       <div className='w-full'>
                           <p className='text-sm text-neutral mb-2'>Presets</p>
     
-                          <div className='flex flex-wrap gap-1'>
+                          <div className='flex flex-col gap-2'>
                             {brands?.map((brand: IBrand, index: number) => {
                               return (
+                                <div key={index} className='flex gap-2'>
                                   <Button 
                                     variant='outlined' 
                                     color='grey' 
-                                    key={index} 
-                                    className='relative'
+                                    size='small'
+                                    className=''
                                     onClick={() => {
                                       formik.setFieldValue("brandId", brand.id);
                                       setBrandPicker(false);
                                     }}
                                   >
                                     <p className='text-xs text-neutral'>{brand?.name}</p>
-                                    <button
-                                      className='absolute p-1 bg-gray-100 text-xl rounded-full text-secondary-text'
-                                      onClick={() => deleteBrandPreset(brand.id)}
-                                      style={{
-                                        transform: 'translate(-190%, -70%)'
-                                      }}
-                                    >
-                                      <AiOutlineClose size={15}/>
-                                    </button>
+                                    
                                   </Button>
+
+                                  <div
+                                    className='bg-red-100 px-6 py-3 text-xs text-red-600 text-center flex items-center justify-center gap-2 rounded-md'
+                                    onClick={() => deleteBrandPreset(brand.id)}
+                                  >
+                                    <IoClose />
+                                  </div>
+                                </div>
                               )
                             })}
                           </div>
@@ -642,7 +658,7 @@ export default function OldProductForm({
 
                 {addBrandDisplay && (
                   <div
-                    className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
+                    className='absolute top-[48px] right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
                     ref={addBrandPresetRef}
                   >  
                     <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
@@ -1059,6 +1075,7 @@ export default function OldProductForm({
               id='categoryId'
               className='text-black bg-[#F0F1F3] '
               onChange={formik.handleChange}
+              ref={productCategorySelectRef}
               // value={formik.values.categoryId}
               value={formik.values.categoryId === 0 ? '' : formik.values.categoryId}
             >
@@ -1073,7 +1090,7 @@ export default function OldProductForm({
                 )
               })}
             </select>
-            <IoIosArrowDown className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`} />
+            <IoIosArrowDown onClick={handleSelectProductCategoryClick} className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`} />
             <CustomError error={formik.errors.categoryId} />
           </div>
 
@@ -1114,6 +1131,7 @@ export default function OldProductForm({
             <select
               name='status'
               id='status'
+              ref={productStatusSelectRef}
               className='text-black bg-[#F0F1F3] '
               onChange={formik.handleChange}
               value={formik.values.status}
@@ -1127,8 +1145,22 @@ export default function OldProductForm({
               <option value='out of stock'>Out of Stock</option>
             </select>
 
-            <IoIosArrowDown className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`} />
+            <IoIosArrowDown 
+            // onClick={ () => {
+            //   productStatusSelectRef.current?.focus()
+            //   console.log("this");
+            // } }  
+              onClick={handleSelectProductStatusClick}
+              className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`} />
+            {/* {productStatusSelectRef.current?.focus && 
+              <IoIosArrowUp 
+                onClick={handleSelectProductStatusClick}
+                className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`} 
+              />
+            } */}
             <CustomError error={formik.errors.status} />
+
+            {/* <div onClick={handleSelectProductStatusClick}>stuff</div> */}
           </div>
         </div>
       </div>

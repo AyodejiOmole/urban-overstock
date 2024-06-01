@@ -51,7 +51,7 @@ export interface IProductVariations {
     sizeOptions: { 
       // id?: number,
       sizeId: number | undefined, 
-      quantity: number,
+      quantity: number | undefined,
       // size?: Size, 
     }[],
 }
@@ -842,7 +842,7 @@ export default function ProductForm({
 
                 {brandPicker && (
                     <div
-                      className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
+                      className='absolute top-[48px] right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
                       ref={brandPickerRef}
                     >   
                       <div
@@ -863,30 +863,30 @@ export default function ProductForm({
                       <div className='w-full'>
                           <p className='text-sm text-neutral mb-2'>Presets</p>
     
-                          <div className='flex flex-wrap gap-1'>
+                          <div className='flex flex-col gap-2'>
                             {brands?.map((brand: IBrand, index: number) => {
                               return (
+                                <div key={index} className='flex gap-2'>
                                   <Button 
                                     variant='outlined' 
                                     color='grey' 
-                                    key={index} 
-                                    className='relative'
+                                    size='small'
+                                    className=''
                                     onClick={() => {
                                       formik.setFieldValue("brandId", brand.id);
                                       setBrandPicker(false);
                                     }}
                                   >
                                     <p className='text-xs text-neutral'>{brand?.name}</p>
-                                    <button
-                                      className='absolute p-1 bg-gray-100 text-xl rounded-full text-secondary-text'
-                                      onClick={() => deleteBrandPreset(brand.id)}
-                                      style={{
-                                        transform: 'translate(-190%, -70%)'
-                                      }}
-                                    >
-                                      <AiOutlineClose size={15}/>
-                                    </button>
                                   </Button>
+
+                                  <div
+                                    className='bg-red-100 px-6 py-3 text-xs text-red-600 text-center flex items-center justify-center gap-2 rounded-md'
+                                    onClick={() => deleteBrandPreset(brand.id)}
+                                  >
+                                    <IoClose />
+                                  </div>
+                                </div>
                               )
                             })}
                           </div>
@@ -897,7 +897,7 @@ export default function ProductForm({
 
                 {addBrandDisplay && (
                   <div
-                    className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
+                    className='absolute top-[48px] right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
                     ref={addBrandPresetRef}
                   >  
                     <label htmlFor='color' className='text-sm text-neutral mb-2 block'>

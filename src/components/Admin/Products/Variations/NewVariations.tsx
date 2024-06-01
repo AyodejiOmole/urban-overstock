@@ -44,7 +44,7 @@ export interface ProductVariationData {
   imageUrl: string
   sizeOptions: { 
     sizeId: number | undefined, 
-    quantity: number 
+    quantity: number | undefined, 
   }[],
 }
 
@@ -153,7 +153,7 @@ const VariationItem = ({
   const [sizeCode, setSizeCode] = useState<string | null | any>('');
 
   const updateVariationQuantity = (e: ChangeEvent<HTMLInputElement>, index: number) => {
-    const variationQuantitySum: number = allVariations.reduce((acc, current) => acc + current.sizeOptions.reduce((accum, cur) => accum + cur.quantity, 0), 0);
+    const variationQuantitySum: number = allVariations.reduce((acc, current) => acc + current.sizeOptions.reduce((accum, cur) => accum + (cur.quantity ?? 0), 0), 0);
 
     if(quantity) {
       if(Number(e.target.value) + variationQuantitySum > quantity) {
@@ -379,7 +379,7 @@ const VariationItem = ({
             toast.success('Size preset deleted successfully.');
             setDisplayAddSize(-1);
             setSizePicker(-1);
-            updateSizeVariationValue(variaitionIndex, 0);
+            // updateSizeVariationValue(variaitionIndex, 0);
             // toast.dismiss();
           }
         });
@@ -411,7 +411,7 @@ const VariationItem = ({
             toast.success('Color preset deleted successfully.');
             setDisplayAddColor(false);
             setActiveColorPicker(false);
-            updateColorVaritionValue(0);
+            // updateColorVaritionValue(0);
             // toast.dismiss();
           }
         });
@@ -513,7 +513,7 @@ const VariationItem = ({
 
         {/* Color */}
         <div className='w-full flex justify-between gap-2'>
-          <div className='mb-4 w-full relative'>
+          <div className='w-full relative'>
               <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
                   Color:
               </label>
@@ -534,10 +534,11 @@ const VariationItem = ({
                     ref={activeColorPickerRef}
                   >   
                     <div
-                      className="flex justify-between align-center mb-2"
+                      className="flex justify-between align-center mb-2 gap-2"
                     >
                       <p>Cant find your color?</p>
                       <Button 
+                        size='small'
                         onClick={() => {
                           setDisplayAddColor(true);
                           setActiveColorPicker(false);
@@ -554,11 +555,12 @@ const VariationItem = ({
                         <div className='flex flex-wrap gap-1'>
                           {colors?.map((color: IColor, colorIndex: number) => {
                             return (
+                              <div key={colorIndex} className='flex gap-2'>
                                 <Button 
                                   variant='outlined' 
                                   color='grey' 
-                                  key={colorIndex} 
-                                  className='relative'
+                                  size='small'
+                                  className=''
                                   onClick={() => {
                                     setVariationColor(color?.name);
                                     updateColorVaritionValue(color.id);
@@ -566,7 +568,7 @@ const VariationItem = ({
                                   }}
                                 >
                                   <p className='text-xs text-neutral'>{color?.name}</p>
-                                  <button
+                                  {/* <button
                                       className='absolute  p-1  bg-gray-100 text-xl rounded-full text-secondary-text'
                                       onClick={() => deleteColorPreset(color.id)}
                                       style={{
@@ -574,8 +576,15 @@ const VariationItem = ({
                                       }}
                                     >
                                       <AiOutlineClose size={15}/>
-                                    </button>
+                                    </button> */}
                                 </Button>
+                                <div
+                                  className='bg-red-100 px-6 py-3 text-xs text-red-600 text-center flex items-center justify-center gap-2 rounded-md'
+                                  onClick={() => deleteColorPreset(color.id)}
+                                >
+                                  <IoClose />
+                                </div>
+                              </div>
                             )
                           })}
                         </div>
@@ -628,12 +637,18 @@ const VariationItem = ({
                   </div>
                 )}
           </div>
-          <button
+          {/* <button
             className='bg-red-100 text-red-600 px-3.5 rounded-md my-5 text-xl'
             onClick={() => updateColorVaritionValue(0)}
           >
             <IoClose />
-          </button>
+          </button> */}
+          <div
+            className='bg-red-100 px-6 h-[48px] text-xs text-red-600 text-center flex items-center justify-center mt-auto gap-2 rounded-md'
+            onClick={() => updateColorVaritionValue(0)}
+          >
+            <IoClose />
+          </div>
         </div>
 
         {/* Size Options */}
@@ -641,7 +656,7 @@ const VariationItem = ({
           return (
             <div className='items-start gap-4 w-full' key={index}>
               <div className='flex justify-between w-full gap-2'>
-                <div className='mb-4 w-full relative'>
+                <div className='w-full relative'>
                   <label htmlFor='size' className='text-sm text-neutral mb-2 block'>
                     Size:
                   </label>
@@ -662,10 +677,11 @@ const VariationItem = ({
                       ref={sizePickerRef}
                     >   
                       <div
-                        className="flex justify-between align-center mb-2"
+                        className="flex justify-between align-center mb-2 gap-2"
                       >
                         <p>Cant find size?</p>
                         <Button 
+                          size='small'
                           onClick={() => {
                             setDisplayAddSize(index);
                             setSizePicker(-1);
@@ -679,12 +695,13 @@ const VariationItem = ({
                       <div className='w-full'>
                           <p className='text-sm text-neutral mb-2'>Presets</p>
 
-                          <div className='flex flex-wrap gap-1'>
+                          <div className='flex flex-wrap gap-2'>
                             {sizes?.map((size: any, sizeIndex: number) => {
                               return (
-                                  <Button variant='outlined' color='grey' className='relative' key={sizeIndex} onClick={() => updateSizeVariationValue(index, size?.id)}>
+                                <div key={sizeIndex} className='flex gap-2'>
+                                  <Button variant='outlined' color='grey' className='' onClick={() => updateSizeVariationValue(index, size?.id)}>
                                     <p className='text-xs text-neutral'>{size?.code}</p>
-                                    <button
+                                    {/* <button
                                       className='absolute  p-1  bg-gray-100 text-xl rounded-full text-secondary-text'
                                       onClick={() => deleteSizePreset(index, size.id)}
                                       style={{
@@ -692,8 +709,15 @@ const VariationItem = ({
                                       }}
                                     >
                                       <AiOutlineClose size={15}/>
-                                    </button>
+                                    </button> */}
                                   </Button>
+                                  <div
+                                    className='bg-red-100 px-6 py-3 text-xs text-red-600 text-center flex items-center justify-center gap-2 rounded-md'
+                                    onClick={() => deleteSizePreset(index, size.id)}
+                                  >
+                                    <IoClose />
+                                  </div>
+                                </div>
                               )
                             })}
                           </div>
@@ -745,12 +769,18 @@ const VariationItem = ({
                     </div>
                   )}
                 </div>
-                <button
+                {/* <button
                   className='bg-red-100 text-red-600 p-3.5 rounded-md my-5 text-xl'
                   onClick={() => updateSizeVariationValue(index, 0)}
                 >
                   <IoClose />
-                </button>
+                </button> */}
+                <div
+                  className='bg-red-100 px-6 h-[48px] text-xs text-red-600 text-center flex items-center justify-center mt-auto gap-2 rounded-md'
+                  onClick={() => updateSizeVariationValue(index, 0)}
+                >
+                  <IoClose />
+                </div>
               </div>
               
               <div className='flex justify-between w-full gap-2'>
@@ -765,12 +795,18 @@ const VariationItem = ({
                     onChange={(e: ChangeEvent<HTMLInputElement>) => updateVariationQuantity(e, index)}
                   />
                 </div>
-                <button
+                {/* <button
                   className='bg-red-100 text-red-600 p-3.5 rounded-md my-5 text-xl'
                   onClick={() => deleteVariationQuantity(index, 0)}
                 >
                   <IoClose />
-                </button>
+                </button> */}
+                <div
+                  className='bg-red-100 px-6 h-[48px] text-xs text-red-600 text-center flex items-center justify-center mt-auto gap-2 rounded-md'
+                  onClick={() => deleteVariationQuantity(index, 0)}
+                >
+                  <IoClose />
+                </div>
               </div>
             </div>
           );
@@ -897,7 +933,7 @@ const ProductVariations = ({
   const [sizeCode, setSizeCode] = useState<string | null | any>('');
 
   const updateVariationQuantity = (e: ChangeEvent<HTMLInputElement>, index: number) => {
-    const variationQuantitySum: number = state.reduce((acc, current) => acc + current.sizeOptions.reduce((accum, cur) => accum + cur.quantity, 0), 0);
+    const variationQuantitySum: number = state.reduce((acc, current) => acc + current.sizeOptions.reduce((accum, cur) => accum + (cur.quantity ?? 0), 0), 0);
 
     if(amount) {
       if(Number(e.target.value) + variationQuantitySum > amount) {
@@ -1024,10 +1060,10 @@ const ProductVariations = ({
   }
 
   const createNewProductVariation = async (variation: ProductVariationData) => {
-    const variationQuantitySum: number = state.reduce((acc, current) => acc + current.sizeOptions.reduce((accum, cur) => accum + cur.quantity, 0), 0);
+    const variationQuantitySum: number = state.reduce((acc, current) => acc + current.sizeOptions.reduce((accum, cur) => accum + (cur.quantity ?? 0), 0), 0);
 
     if(amount) {
-      if(variation.sizeOptions.reduce((accum, cur) => accum + cur.quantity, 0) + variationQuantitySum > amount) {
+      if(variation.sizeOptions.reduce((accum, cur) => accum + (cur.quantity ?? 0), 0) + variationQuantitySum > amount) {
         toast.error("Your variation quantities must not exceed actual product quantity.");
         return;
       }
@@ -1099,6 +1135,86 @@ const ProductVariations = ({
       </button>
     );
   }
+
+  const deleteSizePreset = async (variationIndex: number, sizeId: number) => {
+    const cookies = new Cookies();
+    const token = cookies.get('urban-token');
+
+    toast.loading("Deleting size preset...");
+
+    const httpService = new HTTPService();
+
+    try {
+      httpService
+        .deleteById(`${ENDPOINTS.SIZE_SETTINGS}/${sizeId}`,`Bearer ${token}`)
+        .then((apiRes) => {
+          console.log('Response: ', apiRes);
+          toast.dismiss();
+
+          if (apiRes.status === 200) {
+            // sizes?.push(apiRes.data);
+            let index = sizes?.findIndex(obj => obj.id === sizeId);
+            if (index) {
+              sizes?.splice(index, 1);
+            }
+            toast.success('Size preset deleted successfully.');
+            setDisplayAddSize(-1);
+            setSizePicker(-1);
+            // updateSizeVariationValue(variationIndex, 0)
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteColorPreset = async (colorId: number) => {
+    const cookies = new Cookies();
+    const token = cookies.get('urban-token');
+
+    const httpService = new HTTPService();
+    toast.loading("Deleting color preset...");
+
+    try {
+      httpService
+        .deleteById(`${ENDPOINTS.COLOR_SETTINGS}/${colorId}`,`Bearer ${token}`)
+        .then((apiRes) => {
+          console.log('Response: ', apiRes);
+
+          toast.dismiss();
+
+          if (apiRes.status === 200) {
+            // sizes?.push(apiRes.data);
+            let index = colors?.findIndex(obj => obj.id === colorId);
+            if (index) {
+              colors?.splice(index, 1);
+            }
+            toast.success('Color preset deleted successfully.');
+            setDisplayAddColor(false);
+            setActiveColorPicker(false);
+            // updateColorVaritionValue(0);
+            // toast.dismiss();
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteVariationQuantity = (index: number) => {
+    const newSizeOptions = newVariation.sizeOptions.map((option, idx) => {
+      if(idx === index) {
+        return {...option, quantity: undefined };
+      }
+      return option;
+    });
+
+    // dispatch({
+    //   type: 'UPDATE',
+    //   payload: { ...variation, sizeOptions: newSizeOptions },
+    // });
+    setNewVariation({ ...newVariation, sizeOptions: newSizeOptions });
+  };
 
   return (
     <div>
@@ -1197,144 +1313,68 @@ const ProductVariations = ({
                 </div>
               </div>
 
-              <div className='mb-4 w-full relative'>
-                  <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
-                      Color:
-                  </label>
-                  <div 
-                      className = {
-                          clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
-                      }
-                      onClick={() => setActiveColorPicker(true)}
-                  >
-                      {variationColor === "" ? "Select a color..." : variationColor}
-                      <IoIosArrowDown className='absolute right-4 top-auto bottom-auto' />
-                  </div>
+              {/* Add color variaiton */}
+              <div className='w-full flex justify-between gap-2 align-center justify-center'>
+                <div className='mb-4 w-full relative'>
+                    <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
+                        Color:
+                    </label>
+                    <div 
+                        className = {
+                            clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                        }
+                        onClick={() => setActiveColorPicker(true)}
+                    >
+                        {variationColor === "" ? "Select a color..." : variationColor}
+                        <IoIosArrowDown className='absolute right-4 top-auto bottom-auto' />
+                    </div>
 
-                    {activeColorPicker && (
-                      <div
-                        className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
-                      >   
-                        <div
-                          className="flex justify-between align-center mb-2"
-                        >
-                          <p>Cant find your color?</p>
-                          <Button 
-                            onClick={() => {
-                              setDisplayAddColor(true);
-                              setActiveColorPicker(false);
-                            }}
-                          >
-                            <FaPlus />
-                            Add Color
-                          </Button>
-                        </div>
-
-                        <div className='w-full'>
-                            <p className='text-sm text-neutral mb-2'>Presets</p>
-
-                            <div className='flex flex-wrap gap-1'>
-                              {colors?.map((color: IColor, colorIndex: number) => {
-                                return (
-                                    <Button 
-                                      variant='outlined' 
-                                      color='grey' 
-                                      key={colorIndex} 
-                                      onClick={() => {
-                                        setVariationColor(color?.name);
-                                        updateColorVaritionValue(color.id);
-                                        setActiveColorPicker(false);
-                                      }}
-                                    >
-                                      <p className='text-xs text-neutral'>{color?.name}</p>
-                                    </Button>
-                                )
-                              })}
-                            </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {displayAddColor && (
-                      <div
-                        className='absolute top-2 z-20 right-2 p-4 border border-gray-200 bg-white rounded-lg'
-                      >  
-                        <SketchPicker
-                            // color={variationColor}
-                            onChange={(color) => {
-                                console.log(color);
-                                setColorToAdd(color.hex);
-                            }}
-                            className='relative z-20 mb-3'
-                        /> 
-
-                        <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
-                            Color:
-                        </label>
-                        <div 
-                            className = {
-                                clsx('h-[48px] bg-white px-4 py-2 mb-3 rounded-lg border border-dark-100 flex gap-2 items-center',)
-                            }
-                        >
-                            {colorToAdd === "" ? "Select a color..." : colorToAdd}
-                        </div>
-
-                        <Button className='w-full' onClick={() => createNewColorPreset(colorToAdd)}>
-                            <FaPlus />
-                            Update color presets
-                        </Button>
-                      </div>
-                    )}
-              </div>
-
-              {newVariation.sizeOptions?.map((option, index) => {
-                return (
-                  <div className='items-start gap-4 w-full' key={index}>
-                    <div className='mb-4 w-full relative'>
-                      <label htmlFor='size' className='text-sm text-neutral mb-2 block'>
-                        Size:
-                      </label>
-                      <div 
-                          className = {
-                              clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
-                          }
-                          onClick={() => setSizePicker(index)}
-                      >
-                          {/* {sizes?.filter((size: any) => size.id == option?.sizeId)} */}
-                          {/* {option?.sizeId} */}
-                          {sizes?.find((size: ISize) => size.id == option?.sizeId)?.code ? sizes?.find((size: ISize) => size.id == option?.sizeId)?.code : "Select a variation size..."}
-                          {/* {} */}
-                          <IoIosArrowDown className='absolute right-4 top-auto bottom-auto' />
-                      </div>
-                      
-                      {sizePicker === index && (
+                      {activeColorPicker && (
                         <div
                           className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
                         >   
                           <div
-                            className="flex justify-between align-center mb-2"
+                            className="flex justify-between align-center mb-2 gap-2"
                           >
-                            <p>Cant find size?</p>
+                            <p>Cant find your color?</p>
                             <Button 
+                              size='small'
                               onClick={() => {
-                                setDisplayAddSize(index);
-                                setSizePicker(-1);
+                                setDisplayAddColor(true);
+                                setActiveColorPicker(false);
                               }}
                             >
                               <FaPlus />
-                              Add Size
+                              Add Color
                             </Button>
                           </div>
 
                           <div className='w-full'>
                               <p className='text-sm text-neutral mb-2'>Presets</p>
 
-                              <div className='flex flex-wrap gap-1'>
-                                {sizes?.map((size: any, sizeIndex: number) => {
+                              <div className='flex flex-wrap gap-2'>
+                                {colors?.map((color: IColor, colorIndex: number) => {
                                   return (
-                                      <Button variant='outlined' color='grey' key={sizeIndex} onClick={() => updateSizeVariationValue(index, size?.id)}>
-                                        <p className='text-xs text-neutral'>{size?.code}</p>
+                                    <div key={colorIndex} className='flex gap-2'>
+                                      <Button 
+                                        variant='outlined' 
+                                        color='grey' 
+                                        size='small'
+                                        onClick={() => {
+                                          setVariationColor(color?.name);
+                                          updateColorVaritionValue(color.id);
+                                          setActiveColorPicker(false);
+                                        }}
+                                      >
+                                        <p className='text-xs text-neutral'>{color?.name}</p>
                                       </Button>
+                                      <div
+                                        className='bg-red-100 px-6 py-3 text-xs text-red-600 text-center flex items-center justify-center gap-2 rounded-md'
+                                        onClick={() => deleteColorPreset(color.id)}
+                                      >
+                                        <IoClose />
+                                      </div>
+                                    </div>
                                   )
                                 })}
                               </div>
@@ -1342,58 +1382,179 @@ const ProductVariations = ({
                         </div>
                       )}
 
-                      {displayAddSize === index && (
+                      {displayAddColor && (
                         <div
-                          className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
+                          className='absolute top-2 z-20 right-2 p-4 border border-gray-200 bg-white rounded-lg'
                         >  
-                          <label htmlFor='size' className='text-sm text-neutral mb-2 block'>
-                              Input size presets:
+                          <SketchPicker
+                              // color={variationColor}
+                              onChange={(color) => {
+                                  console.log(color);
+                                  setColorToAdd(color.hex);
+                              }}
+                              className='relative z-20 mb-3'
+                          /> 
+
+                          <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
+                              Color:
                           </label>
+                          <div 
+                              className = {
+                                  clsx('h-[48px] bg-white px-4 py-2 mb-3 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                              }
+                          >
+                              {colorToAdd === "" ? "Select a color..." : colorToAdd}
+                          </div>
 
-                          <TextInput
-                            type='string'
-                            // id='sizeToAdd'
-                            value={sizeToAdd}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                              console.log(e);
-                              setSizeToAdd((prev: any) => prev = e.target.value);
-                            }}
-                            className='mb-3'
-                          />
-
-                          <label htmlFor='sizeCode' className='text-sm text-neutral mb-2 block'>
-                              Input size code:
-                          </label>
-
-                          <TextInput
-                            type='string'
-                            // id='sizeToAdd'
-                            value={sizeCode}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                              console.log(e);
-                              setSizeCode((prev: any) => prev = e.target.value);
-                            }}
-                            className='mb-3'
-                          />
-
-                          <Button className='w-full' onClick={() => createNewSizePreset(sizeToAdd, sizeCode)}>
-                              {/* <FaPlus /> */}
-                              Update Size preset
+                          <Button className='w-full' onClick={() => createNewColorPreset(colorToAdd)}>
+                              <FaPlus />
+                              Update color presets
                           </Button>
                         </div>
                       )}
+                </div>
+
+                <div
+                  className='bg-red-100 px-6 h-[48px] text-xs text-red-600 text-center flex items-center justify-center mt-auto gap-2 rounded-md'
+                  onClick={() => updateColorVaritionValue(0)}
+                >
+                  <IoClose />
+                </div>
+              </div>
+
+              {newVariation.sizeOptions?.map((option, index) => {
+                return (
+                  <div className='items-start gap-4 w-full' key={index}>
+                    <div className='w-full flex justify-between gap-2 mb-4'>
+                      <div className='w-full relative'>
+                        <label htmlFor='size' className='text-sm text-neutral mb-2 block'>
+                          Size:
+                        </label>
+                        <div 
+                            className = {
+                                clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                            }
+                            onClick={() => setSizePicker(index)}
+                        >
+                            
+                            {sizes?.find((size: ISize) => size.id == option?.sizeId)?.code ? sizes?.find((size: ISize) => size.id == option?.sizeId)?.code : "Select a variation size..."}
+                            
+                            <IoIosArrowDown className='absolute right-4 top-auto bottom-auto' />
+                        </div>
+                        
+                        {sizePicker === index && (
+                          <div
+                            className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
+                          >   
+                            <div
+                              className="flex justify-between align-center mb-2 gap-2"
+                            >
+                              <p>Cant find size?</p>
+                              <Button 
+                                size='small'
+                                onClick={() => {
+                                  setDisplayAddSize(index);
+                                  setSizePicker(-1);
+                                }}
+                              >
+                                <FaPlus />
+                                Add Size
+                              </Button>
+                            </div>
+
+                            <div className='w-full'>
+                                <p className='text-sm text-neutral mb-2'>Presets</p>
+
+                                <div className='flex flex-wrap gap-2'>
+                                  {sizes?.map((size: any, sizeIndex: number) => {
+                                    return (
+                                      <div className='flex gap-2' key={sizeIndex} >
+                                        <Button variant='outlined' color='grey' onClick={() => updateSizeVariationValue(index, size?.id)}>
+                                          <p className='text-xs text-neutral'>{size?.code}</p>
+                                        </Button>
+                                        <div
+                                          className='bg-red-100 px-6 py-3 text-xs text-red-600 text-center flex items-center justify-center gap-2 rounded-md'
+                                          onClick={() => deleteSizePreset(index, size.id)}
+                                        >
+                                          <IoClose />
+                                        </div>
+                                      </div>
+                                    )
+                                  })}
+                                </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {displayAddSize === index && (
+                          <div
+                            className='absolute top-2 right-2 p-4 border border-gray-200 bg-white rounded-lg z-20'
+                          >  
+                            <label htmlFor='size' className='text-sm text-neutral mb-2 block'>
+                                Input size presets:
+                            </label>
+
+                            <TextInput
+                              type='string'
+                              // id='sizeToAdd'
+                              value={sizeToAdd}
+                              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                console.log(e);
+                                setSizeToAdd((prev: any) => prev = e.target.value);
+                              }}
+                              className='mb-3'
+                            />
+
+                            <label htmlFor='sizeCode' className='text-sm text-neutral mb-2 block'>
+                                Input size code:
+                            </label>
+
+                            <TextInput
+                              type='string'
+                              // id='sizeToAdd'
+                              value={sizeCode}
+                              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                console.log(e);
+                                setSizeCode((prev: any) => prev = e.target.value);
+                              }}
+                              className='mb-3'
+                            />
+
+                            <Button className='w-full' onClick={() => createNewSizePreset(sizeToAdd, sizeCode)}>
+                                {/* <FaPlus /> */}
+                                Update Size preset
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+
+                      <div
+                        className='bg-red-100 px-6 h-[48px] text-xs text-red-600 text-center flex items-center justify-center mt-auto gap-2 rounded-md'
+                        onClick={() => updateSizeVariationValue(index, 0)}
+                      >
+                        <IoClose />
+                      </div>
                     </div>
                     
-                    <div className='mb-4 w-full'>
-                      <label htmlFor='quantity' className='text-sm text-neutral mb-2 block'>
-                        Quantity:
-                      </label>
-                      <TextInput
-                        type='number'
-                        id='quantity'
-                        value={option.quantity}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => updateVariationQuantity(e, index)}
-                      />
+                    <div className='w-full flex justify-between gap-2'>
+                      <div className='w-full'>
+                        <label htmlFor='quantity' className='text-sm text-neutral mb-2 block'>
+                          Quantity:
+                        </label>
+                        <TextInput
+                          type='number'
+                          id='quantity'
+                          value={option.quantity}
+                          onChange={(e: ChangeEvent<HTMLInputElement>) => updateVariationQuantity(e, index)}
+                        />
+                      </div>
+
+                      <div
+                        className='bg-red-100 px-6 h-[48px] text-xs text-red-600 text-center flex items-center justify-center mt-auto gap-2 rounded-md'
+                        onClick={() => deleteVariationQuantity(index)}
+                      >
+                        <IoClose />
+                      </div>
                     </div>
                   </div>
                 );

@@ -373,7 +373,7 @@ const VariationItem = ({
             toast.success('Size preset deleted successfully.');
             setDisplayAddSize(-1);
             setSizePicker(-1);
-            updateSizeVariationValue(variationIndex, 0)
+            // updateSizeVariationValue(variationIndex, 0)
           }
         });
     } catch (error) {
@@ -405,7 +405,7 @@ const VariationItem = ({
             toast.success('Color preset deleted successfully.');
             setDisplayAddColor(false);
             setActiveColorPicker(false);
-            updateColorVaritionValue(0);
+            // updateColorVaritionValue(0);
             // toast.dismiss();
           }
         });
@@ -467,8 +467,8 @@ const VariationItem = ({
           </div>
         </div>
 
-        <div className='w-full flex border border-red-500 justify-between gap-2 align-center justify-center'>
-            <div className='w-full border border-red-500 relative'>
+        <div className='w-full flex justify-between gap-2 align-center justify-center'>
+            <div className='w-full relative'>
                 <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
                     Color:
                 </label>
@@ -489,10 +489,11 @@ const VariationItem = ({
                       ref={activeColorPickerRef}
                     >   
                       <div
-                        className="flex justify-between align-center mb-2"
+                        className="flex justify-between align-center mb-2 items-center gap-2"
                       >
                         <p>Cant find your color?</p>
                         <Button 
+                          size='small'
                           onClick={() => {
                             setDisplayAddColor(true);
                             setActiveColorPicker(false);
@@ -509,10 +510,12 @@ const VariationItem = ({
                           <div className='flex flex-wrap gap-2'>
                             {colors?.map((color: IColor, colorIndex: number) => {
                               return (
+                                <div key={colorIndex} className='flex gap-2'>
                                   <Button 
                                     variant='outlined' 
                                     color='grey' 
-                                    key={colorIndex} 
+                                    size='small'
+                                    
                                     className='relative'
                                     onClick={() => {
                                       setVariationColor(color?.name);
@@ -521,7 +524,7 @@ const VariationItem = ({
                                     }}
                                   >
                                     <p className='text-xs text-neutral'>{color?.name}</p>
-                                    <button
+                                    {/* <button
                                       className='absolute  p-1  bg-gray-100 text-xl rounded-full text-secondary-text'
                                       onClick={() => deleteColorPreset(color.id)}
                                       style={{
@@ -529,29 +532,19 @@ const VariationItem = ({
                                       }}
                                     >
                                       <AiOutlineClose size={15}/>
-                                    </button>
+                                    </button> */}
                                   </Button>
+                                  <div
+                                    className='bg-red-100 px-6 py-3 text-xs text-red-600 text-center flex items-center justify-center gap-2 rounded-md'
+                                    onClick={() => deleteColorPreset(color.id)}
+                                  >
+                                    <IoClose />
+                                  </div>
+                                </div>
                               )
                             })}
                           </div>
-                          {/* <div>
-                            {colors?.map((color: IColor, colorIndex: number) => {
-                                return (
-                                    <Button 
-                                      variant='outlined' 
-                                      color='grey' 
-                                      key={colorIndex} 
-                                      onClick={() => {
-                                        setVariationColor(color?.name);
-                                        updateColorVaritionValue(color.id);
-                                        setActiveColorPicker(false);
-                                      }}
-                                    >
-                                      <p className='text-xs text-neutral'>{color?.name}</p>
-                                    </Button>
-                                )
-                              })}
-                          </div> */}
+                          
                       </div>
                     </div>
                   )}
@@ -602,19 +595,20 @@ const VariationItem = ({
                   )} 
             </div>
 
-            <button
-              className='bg-red-100 text-red-600 px-3.5 rounded-md my-5 text-xl'
+            
+            <div
+              className='bg-red-100 px-6 h-[48px] text-xs text-red-600 text-center flex items-center justify-center mt-auto gap-2 rounded-md'
               onClick={() => updateColorVaritionValue(0)}
             >
               <IoClose />
-            </button>
+            </div>
         </div>
 
         {variation.sizeOptions.map((option, index) => {
           return (
             <div className='items-start gap-4 w-full' key={index}>
-              <div className='w-full flex justify-between gap-2'>
-                <div className='mb-4 w-full relative'>
+              <div className='w-full flex justify-between gap-2 mb-4'>
+                <div className='w-full relative'>
                   <label htmlFor='size' className='text-sm text-neutral mb-2 block'>
                     Size:
                   </label>
@@ -634,10 +628,11 @@ const VariationItem = ({
                       ref={sizePickerRef}
                     >   
                       <div
-                        className="flex justify-between align-center mb-2"
+                        className="flex justify-between align-center mb-2 gap-2"
                       >
                         <p>Cant find size?</p>
                         <Button 
+                          size='small'
                           onClick={() => {
                             setDisplayAddSize(index);
                             setSizePicker(-1);
@@ -651,12 +646,13 @@ const VariationItem = ({
                       <div className='w-full'>
                           <p className='text-sm text-neutral mb-2'>Presets</p>
 
-                          <div className='flex flex-wrap gap-1'>
+                          <div className='flex flex-wrap gap-2'>
                             {sizes?.map((size: any, sizeIndex: number) => {
                               return (
-                                  <Button variant='outlined' className='relative' color='grey' key={sizeIndex} onClick={() => updateSizeVariationValue(index, size?.id)}>
+                                <div key={sizeIndex} className='flex gap-2'>
+                                  <Button variant='outlined' size='small' className='relative' color='grey' onClick={() => updateSizeVariationValue(index, size?.id)}>
                                     <p className='text-xs text-neutral'>{size?.code}</p>
-                                    <button
+                                    {/* <button
                                       className='absolute  p-1  bg-gray-100 text-xl rounded-full text-secondary-text'
                                       onClick={() => deleteSizePreset(index, size.id)}
                                       style={{
@@ -664,8 +660,15 @@ const VariationItem = ({
                                       }}
                                     >
                                       <AiOutlineClose size={15}/>
-                                    </button>
+                                    </button> */}
                                   </Button>
+                                  <div
+                                    className='bg-red-100 px-6 py-3 text-xs text-red-600 text-center flex items-center justify-center gap-2 rounded-md'
+                                    onClick={() => deleteSizePreset(index, size.id)}
+                                  >
+                                    <IoClose />
+                                  </div>
+                                </div>
                               )
                             })}
                           </div>
@@ -718,16 +721,22 @@ const VariationItem = ({
                   )}
                 </div>
 
-                <button
+                {/* <button
                   className='bg-red-100 text-red-600 px-3.5 rounded-md my-5 text-xl'
                   onClick={() => updateSizeVariationValue(index, 0)}
                 >
                   <IoClose />
-                </button>
+                </button> */}
+                <div
+                  className='bg-red-100 px-6 h-[48px] text-xs text-red-600 text-center flex items-center justify-center mt-auto gap-2 rounded-md'
+                  onClick={() => updateSizeVariationValue(index, 0)}
+                >
+                  <IoClose />
+                </div>
               </div>
               
               <div className='w-full flex justify-between gap-2'>
-                <div className='mb-4 w-full'>
+                <div className='w-full'>
                   <label htmlFor='quantity' className='text-sm text-neutral mb-2 block'>
                     Quantity:
                   </label>
@@ -740,13 +749,19 @@ const VariationItem = ({
                   />
                 </div>
                 
-                <button
+                {/* <button
                   className='bg-red-100 text-red-600 px-3.5 rounded-md my-5 text-xl'
                   type='submit'
                   onClick={() => deleteVariationQuantity(index)}
                 >
                   <IoClose />
-                </button>
+                </button> */}
+                <div
+                  className='bg-red-100 px-6 h-[48px] text-xs text-red-600 text-center flex items-center justify-center mt-auto gap-2 rounded-md'
+                  onClick={() => deleteVariationQuantity(index)}
+                >
+                  <IoClose />
+                </div>
               </div>
             </div>
           );
