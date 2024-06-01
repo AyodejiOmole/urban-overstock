@@ -91,4 +91,10 @@ export default class HTTPService {
       res.json()
     );
   }
+
+  async deleteLikePatch(url: string, data: IData, Authorization?: string | null) {
+    const method = 'DELETE';
+
+    return this.request(url, method, data, Authorization).then((res) => res.json());
+  }
 }

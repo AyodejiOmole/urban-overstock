@@ -12,6 +12,11 @@ import Button from '@/components/Global/Button';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import Modal from '@/components/Global/Modal';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
+import HTTPService from '@/services/http';
+import ENDPOINTS from '@/config/ENDPOINTS';
+import Cookies from 'universal-cookie';
+import { useRouter } from 'next/navigation';
 
 export default function CustomerDetails({
   customerOrderHistory,
@@ -24,6 +29,43 @@ export default function CustomerDetails({
   console.log(customerDetails);
 
   const [deleteAccountModal, setDeleteAccountModal] = useState(false);
+
+  const httpService = new HTTPService();
+
+  const cookies = new Cookies();
+  const token = cookies.get('urban-token');
+
+  const { replace } = useRouter();
+
+  const deleteCustomer = (customerId?: number) => {
+    if(customerId) {
+      try {
+        toast.loading("Deleting customer...");
+        setDeleteAccountModal(false);
+
+        const data = {
+          status: "SUSPENDED"
+        }
+  
+        httpService
+          .deleteLikePatch(`${ENDPOINTS.CUSTOMERS}/${customerId}`, data, `Bearer ${token}`)
+          .then((apiRes) => {
+            console.log('Response: ', apiRes);
+  
+            toast.dismiss();
+            if (apiRes.status === 200) {
+  
+              toast.success('Customer successfully deleted.');
+              setTimeout(() => {
+                replace('/admin/customers');
+              }, 1000);
+            }
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {toast.error("Customer not provided.")}
+  }
 
   return (
     <div>
@@ -148,22 +190,23 @@ export default function CustomerDetails({
 
       {/* Delete Account Modal */}
       <Modal
-              isOpen={deleteAccountModal}
-              handleClose={() => setDeleteAccountModal(false)}
-              title='Delete customer'
-            > 
-              <h3 className='mb-4 text-lg text-black'> Are you sure you want to delete this customer? </h3>
-              <div className='flex items-center gap-2 justify-between'>
-                <Button 
-                  // onClick={() => updateOrder(order?.id, "Cancelled")}
-                >
-                  Yes
-                </Button>
-                <Button variant='outlined' onClick={() => setDeleteAccountModal(false)}>
-                  No
-                </Button>
-              </div>
-            </Modal>
+        isOpen={deleteAccountModal}
+        handleClose={() => setDeleteAccountModal(false)}
+        title='Delete customer'
+      > 
+        <h3 className='mb-4 text-lg text-black'> Are you sure you want to delete this customer? </h3>
+        <div className='flex items-center gap-2 justify-between'>
+          <Button 
+            onClick={() => deleteCustomer(customerDetails?.id)}
+          >
+            Yes
+          </Button>
+          
+          <Button variant='outlined' onClick={() => setDeleteAccountModal(false)}>
+            No
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }
