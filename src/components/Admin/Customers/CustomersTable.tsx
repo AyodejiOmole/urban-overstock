@@ -16,6 +16,10 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import HTTPService from '@/services/http';
+import Cookies from 'universal-cookie';
+import ENDPOINTS from '@/config/ENDPOINTS';
 
 export default function CustomersTable({
   selectedDate,
@@ -34,6 +38,37 @@ export default function CustomersTable({
   //   ICustomer[] | null
   // >(null);
   const [rowClick, setRowClick] = useState<boolean>(true);
+
+  const httpService = new HTTPService();
+
+  const cookies = new Cookies();
+  const token = cookies.get('urban-token');
+
+  const deleteCustomer = (customerId?: number) => {
+    if(customerId) {
+      try {
+        toast.loading("Deleting customer...");
+
+        const data = {
+          status: "SUSPENDED"
+        }
+  
+        httpService
+          .deleteLikePatch(`${ENDPOINTS.CUSTOMERS}/${customerId}`, data, `Bearer ${token}`)
+          .then((apiRes) => {
+            console.log('Response: ', apiRes);
+  
+            toast.dismiss();
+            if (apiRes.status === 200) {
+  
+              toast.success('Customer successfully deleted.');
+            }
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {toast.error("Could not delete customer.")}
+  }
 
   const dateTemplate = (customer: ICustomer) =>
     moment(customer.createdAt).format('MMM Do YYYY');
@@ -59,8 +94,9 @@ export default function CustomersTable({
           <RxPencil2 /> 
           <MdOutlineModeEdit />
         </Link>*/}
-        <button>
-          {/* <MdOutlineDelete className='text-xl' /> */}
+        <button
+          onClick={() => deleteCustomer(customer?.id)}
+        >
           <RiDeleteBin6Line className='text-xl'/>
         </button>
       </div>
