@@ -8,6 +8,7 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { MdKeyboardArrowLeft } from "react-icons/md";
+import clsx from 'clsx';
 
 const ProductDetails = ({
     productDetails
@@ -102,7 +103,7 @@ const ProductDetails = ({
 
                     <div className=''>
                         {/* Description */}
-                        <div className='flex flex-col gap-1'>
+                        <div className='flex gap-1'>
                             <p className='text-black text-md font-semibold'>Description:</p>
                             <p className='w-full text-md text-black mb-3 text-left border-b-2 border-gray-300 pb-4'>{productDetails?.description}</p>
                         </div>
@@ -141,7 +142,6 @@ const ProductDetails = ({
             <section>
                 <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4'>
                     <p className='text-lg font-semibold text-gray-700 mb-8'>Inventory</p>
-
                     <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-5 2xl:grid-cols-3 gap-x-4 items-center'>
                         <div className='mb-6'>
                             <label htmlFor='sku' className='text-sm text-neutral mb-2 block'>
@@ -225,6 +225,101 @@ const ProductDetails = ({
                         </div>
                     </div>
                 </div>
+            </section>
+
+            {/* Product Variation */}
+            <section>
+                {
+                    productDetails?.productVarations.map((variation, index) => {
+                        return (
+                            <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4' key={index}>
+                                <div className='flex items-start gap-4 w-full flex-col sm:items-center py-4 border-b border-b-gray-100'>
+                                    {/* Media Upload */}
+                                    <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4'>
+                                        <p className='text-lg font-semibold text-gray-700 mb-8'>Media</p>
+
+                                        <div>
+                                            <p className='text-neutral mb-4 text-sm'>Photo</p>
+                                            <div className='p-8 bg-[#F0F1F3] rounded-lg flex items-center justify-center flex-col border border-gray-200'>
+                                                <div className='flex items-center flex-wrap gap-2 mb-4'>
+                                                    {variation.imageUrl &&
+                                                        <div
+                                                        className='h-28 w-28 relative rounded-xl'
+                                                        >
+                                                            <Image
+                                                                src={variation.imageUrl}
+                                                                alt="Variation image"
+                                                                width={100}
+                                                                height={100}
+                                                                className='rounded-lg w-full h-full object-cover'
+                                                            />
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Color */}
+                                    <div className='w-full flex justify-between gap-2'>
+                                        <div className='w-full relative'>
+                                            <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
+                                                Color:
+                                            </label>
+                                            <div 
+                                                className = {
+                                                    clsx('h-[48px] text-black bg-[#F0F1F3] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                                                }
+                                            >
+                                                {variation.color.name}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Size Options */}
+                                    {variation.sizeOptions.map((option, index) => {
+                                        return (
+                                            <div className='items-start gap-4 w-full' key={index}>
+                                                <div className='flex justify-between w-full gap-2'>
+                                                    <div className='w-full relative'>
+                                                        <label htmlFor='size' className='text-sm text-neutral mb-2 block'>
+                                                            Size:
+                                                        </label>
+                                                        <div 
+                                                            className = {
+                                                                clsx('h-[48px] bg-[#F0F1F3] text-black px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                                                            }
+                                                            
+                                                        >
+                                                            
+                                                            {option.sizeId}
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            
+                                                <div className='flex justify-between w-full gap-2'>
+                                                    <div className='mb-4 w-full'>
+                                                        <label htmlFor='quantity' className='text-sm text-neutral mb-2 block'>
+                                                            Quantity:
+                                                        </label>
+                                                        <TextInput
+                                                            type='number'
+                                                            id='quantity'
+                                                            value={option.quantity}
+                                                            // onChange={(e: ChangeEvent<HTMLInputElement>) => updateVariationQuantity(e, index)}
+                                                            disabled
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )
+                    })
+                }
             </section>
 
             {/* Footer */}
