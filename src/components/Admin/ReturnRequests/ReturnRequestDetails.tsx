@@ -26,6 +26,8 @@ const ReturnRequestDetails = ({
     returnRequestDetails: IReturnRequest | null
     id: string
 }) => {
+    console.log(returnRequestDetails);
+
     function canApproveRequest(requestDate: string): boolean {
         const oneMonthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000); // 30 days ago
         return new Date(requestDate) > oneMonthAgo;
@@ -105,15 +107,22 @@ const ReturnRequestDetails = ({
             </div>
 
             <div className='flex items-center gap-4'>
-            <Button variant='outlined' onClick={() => updateReturnRequest(id, "Confirmed")}>
-                {/* <PiExportBold /> */}
-                Approve
-            </Button>
-            <Button variant='outlined' onClick={() => updateReturnRequest(id, "Denied")}>
-                {/* <FaPlus /> */}
-                {/* <RiDeleteBin6Line /> */}
-                Decline
-            </Button>
+                {
+                    returnRequestDetails?.status.toLowerCase() === "denied" && 
+                    <Button variant='outlined' onClick={() => updateReturnRequest(id, "Confirmed")}>
+                        {/* <PiExportBold /> */}
+                        Approve
+                    </Button>
+                }
+                
+                {
+                    returnRequestDetails?.status.toLowerCase() === "confirmed" && 
+                    <Button variant='outlined' onClick={() => updateReturnRequest(id, "Denied")}>
+                        {/* <FaPlus /> */}
+                        {/* <RiDeleteBin6Line /> */}
+                        Decline
+                    </Button>
+                }
             </div>
         </div>
 
@@ -136,7 +145,8 @@ const ReturnRequestDetails = ({
                     <div className='p-4 text-center'>
                         <p className='font-semibold text-gray-700 text-xl'>
                         {/* Isaiah Ernest */}
-                        {!returnRequestDetails?.user.firstname && !returnRequestDetails?.user.lastname ? "Not provided" : returnRequestDetails?.user.firstname + " " + returnRequestDetails?.user.lastname }
+                        {returnRequestDetails?.order.receiverName}
+                        {/* {!returnRequestDetails?.user.firstname && !returnRequestDetails?.user.lastname ? "Not provided" : returnRequestDetails?.user.firstname + " " + returnRequestDetails?.user.lastname } */}
                         </p>
                         <p className='text-neutral'>
                         {/* @isaiah_ernest */}
@@ -181,7 +191,8 @@ const ReturnRequestDetails = ({
                         <div className='flex-1'>
                             <p className='text-neutral font-medium'>Phone Number</p>
                             <p className='text-gray-800 font-light text-sm'>
-                            0908 9898 990
+                            {/* 0908 9898 990 */}
+                            {returnRequestDetails?.order.receiverPhone}
                             </p>
                         </div>
                         </div>
@@ -193,7 +204,8 @@ const ReturnRequestDetails = ({
                         <div className='flex-1'>
                             <p className='text-neutral font-medium'>Delivery Address</p>
                             <p className='text-gray-800 font-light text-sm'>
-                            1833 Bel Meadow Drive, Fontana, California 92335, USA
+                            {/* 1833 Bel Meadow Drive, Fontana, California 92335, USA */}
+                            {returnRequestDetails?.order.address}
                             </p>
                         </div>
                         </div>
