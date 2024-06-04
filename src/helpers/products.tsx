@@ -9,13 +9,13 @@ export function productStatusTemplate(product: IProduct) {
     case 'draft':
       styles = 'bg-gray-100 text-gray-600';
       break;
-    case 'low-stock':
+    case 'low stock':
       styles = 'bg-orange-100 text-orange-600';
       break;
     case 'published':
       styles = 'bg-green-100 text-green-600';
       break;
-    case 'out-of-stock':
+    case 'out of stock':
       styles = 'bg-red-100 text-red-600';
       break;
     default:
