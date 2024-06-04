@@ -67,6 +67,7 @@ export default function DiscountCodesTable({
 }: {
   discounts: IDiscountCodes | undefined,
 }) {
+  console.log(discounts);
   const [selectedCode, setSelectedCode] = useState<IDiscountCode[] | null>(
     null
   );
@@ -143,6 +144,8 @@ export default function DiscountCodesTable({
         <Column
           selectionMode='multiple'
           headerStyle={{ width: '3rem' }}
+          className='group'
+          
         ></Column>
         <Column
           field='code'

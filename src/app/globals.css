@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.group input[type="checkbox"] {
+  border: 2px solid black;
+}
+
 :root {
   --bg-overlay: #0000004f;
 }

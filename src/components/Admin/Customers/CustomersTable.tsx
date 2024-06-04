@@ -187,7 +187,7 @@ export default function CustomersTable({
         <Column
           selectionMode='multiple'
           headerStyle={{ width: '3rem' }}
-          // className='border-red-500'
+          className='rin'
         ></Column>
         <Column
           field='customer.item'

@@ -227,7 +227,7 @@ export default function OrdersTable({
         selectionAutoFocus={true}
         onRowClick={(e) => router.push(`/admin/orders/${e.data.id}`)}
       >
-        {page !== "recent orders" && <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} className='descendant:border descendant:border-gray-800'/>}
+        {page !== "recent orders" && <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} className='group'/>}
         <Column field='uuid' header='Order ID' className='text-[#F2C94C]'/>
         <Column body={productTemplate} header='Product' />
         <Column field='date' header='Date' body={dateTemplate} sortable />

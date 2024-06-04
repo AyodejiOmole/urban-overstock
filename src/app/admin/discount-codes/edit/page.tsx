@@ -19,7 +19,47 @@ export default function AddDiscountCodeDetails() {
     const httpService = new HTTPService();
     const params = useSearchParams();
 
+    const token = cookies.get('urban-token');
+
     const router = useRouter();
+
+    const activateDiscountCode = async () => {
+      toast.loading("Activating discount code...");
+      try {
+        const apiRes = await httpService.patchById(`${ENDPOINTS.DISCOUNT_CODE}/activate/${params.get("id")}`, `Bearer ${token}`)
+        
+        toast.dismiss();
+        if(apiRes.status === 200) {
+          toast.success("Discount code activated.");
+
+          setTimeout(() => {
+            router.push('/admin/discount-codes');
+          }, 1000);
+        } else toast.error('Cannot update discount codes at this time!');
+      } catch (error) {
+        console.log(error);
+        toast.error('Cannot update discount codes at this time!');
+      }
+    };
+    
+    const deactivateDiscountCode = async () => {
+      toast.loading("Deactivating discount code...");
+      try {
+        const apiRes = await httpService.patchById(`${ENDPOINTS.DISCOUNT_CODE}/deactivate/${params.get("id")}`, `Bearer ${token}`)
+        
+        toast.dismiss();
+        if(apiRes.status === 200) {
+          toast.success("Discount code deactivated.");
+
+          setTimeout(() => {
+            router.push('/admin/discount-codes');
+          }, 1000);
+        } else toast.error('Cannot update discount codes at this time!');
+      } catch (error) {
+        console.log(error);
+        toast.error('Cannot update discount codes at this time!');
+      }
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -31,7 +71,7 @@ export default function AddDiscountCodeDetails() {
           percentage: Yup.number().min(0).required().label('Percentage'),
         }),
         onSubmit: async (values) => {
-          const token = cookies.get('urban-token');
+          
         
             const apiRes = await httpService.patch(
               `${ENDPOINTS.DISCOUNT_CODE}/${params.get("id")}`,
@@ -66,10 +106,10 @@ export default function AddDiscountCodeDetails() {
         <Card>
             <div className='p-4'>
             <div className='flex items-center justify-end gap-4 mb-8'>
-                <Button variant='outlined'>
+                <Button variant='outlined' onClick={deactivateDiscountCode}>
                     Deactivate
                 </Button>
-                <Button variant='outlined'>Activate</Button>
+                <Button variant='outlined' onClick={activateDiscountCode}>Activate</Button>
                 <Button onClick={formik.submitForm} loading={formik.isSubmitting}>Update discount</Button>
             </div>
 

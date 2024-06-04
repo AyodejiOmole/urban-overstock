@@ -484,7 +484,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
             </div>
 
             {
-              order?.status.toLowerCase() !== 'delivered' || order?.status.toLowerCase() !== 'cancelled' || order?.status.toLowerCase() !== 'refunded' && 
+              order?.status.toLowerCase() !== 'delivered' && order?.status.toLowerCase() !== 'cancelled' && order?.status.toLowerCase() !== 'refunded' && 
               <div className='flex items-center gap-2 flex-wrap'>
                 <Button onClick={activateModal}>Update Status</Button>
                 <Button variant='outlined' onClick={() => setCancelOrderModal(true)}>Cancel Order</Button>
