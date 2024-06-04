@@ -79,7 +79,7 @@ export default function CancelledOrderDetails({
   return (
     <section>
 
-      console.log(cancelledOrderHistory);
+      {/* console.log(cancelledOrderHistory); */}
 
       <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8'>
         <div>
