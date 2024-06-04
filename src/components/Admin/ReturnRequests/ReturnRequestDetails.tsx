@@ -26,6 +26,10 @@ const ReturnRequestDetails = ({
     returnRequestDetails: IReturnRequest | null
     id: string
 }) => {
+    function canApproveRequest(requestDate: string): boolean {
+        const oneMonthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000); // 30 days ago
+        return new Date(requestDate) > oneMonthAgo;
+    }
 
     const cookies = new Cookies();
     const httpService = new HTTPService();
@@ -33,26 +37,31 @@ const ReturnRequestDetails = ({
     const router = useRouter();
   
     async function updateReturnRequest(returnId: string, status: string) {
-      const token = cookies.get('urban-token');
+        if (canApproveRequest(returnRequestDetails!.createdAt)) {
+            const token = cookies.get('urban-token');
   
-      toast.loading('Updating...');
-      const data = {
-        status,
-      }
-  
-      const res = await httpService.patch(
-        `${ENDPOINTS.RETURN_REQUEST}/${returnId}`,
-        data,
-        `Bearer ${token}`
-      );
-  
-      toast.dismiss();
-      if (res.status === 200) {
-        console.log(res);
-        toast.success('Return request successfully updated!');
-        // router.refresh();
-        router.push("/admin/return-request");
-      } else toast.error('Cannot update return request at this time!');
+            toast.loading('Updating...');
+            const data = {
+              status,
+            }
+        
+            const res = await httpService.patch(
+              `${ENDPOINTS.RETURN_REQUEST}/${returnId}`,
+              data,
+              `Bearer ${token}`
+            );
+        
+            toast.dismiss();
+            if (res.status === 200) {
+              console.log(res);
+              toast.success('Return request successfully updated!');
+              // router.refresh();
+              router.push("/admin/return-request");
+            } else toast.error('Cannot update return request at this time!');
+            
+        } else {
+            toast.error("This return request was made over a month ago. You can no longer approve or decline this request.");
+        }
     };
 
     const productsTemplate = (order: OrderProduct) => {

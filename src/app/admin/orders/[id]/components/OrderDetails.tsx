@@ -163,35 +163,43 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
     validateOnChange: true,
   });
 
+
+  function hasDeliveryTimeExceeded(deliveryDate: string): boolean {
+    const fortyEightHoursAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000); // 48 hours ago
+    return new Date(deliveryDate) < fortyEightHoursAgo;
+  }
+
   const updateOrder = (orderId?: number, orderStatus?: string,) => {
     if(orderId) {
-      try {
-        toast.loading("Updating order...");
-        setOrderShippedModal(false);
-        closeModal();
-
-        const data = {
-          status: orderStatus
+      
+        try {
+          toast.loading("Updating order...");
+          setOrderShippedModal(false);
+          closeModal();
+  
+          const data = {
+            status: orderStatus
+          }
+    
+          httpService
+            .patch(`${ENDPOINTS.ORDERS}/${orderId}`, data, `Bearer ${token}`)
+            .then((apiRes) => {
+              console.log('Response: ', apiRes);
+    
+              toast.dismiss();
+              if (apiRes.status === 200) {
+                formik.resetForm();
+    
+                toast.success('Order successfully updated.');
+                setTimeout(() => {
+                  replace('/admin/orders');
+                }, 1000);
+              }
+            });
+        } catch (error) {
+          console.log(error);
         }
-  
-        httpService
-          .patch(`${ENDPOINTS.ORDERS}/${orderId}`, data, `Bearer ${token}`)
-          .then((apiRes) => {
-            console.log('Response: ', apiRes);
-  
-            toast.dismiss();
-            if (apiRes.status === 200) {
-              formik.resetForm();
-  
-              toast.success('Order successfully updated.');
-              setTimeout(() => {
-                replace('/admin/orders');
-              }, 1000);
-            }
-          });
-      } catch (error) {
-        console.log(error);
-      }
+      
     } else {toast.error("Order not provided.")}
   }
 

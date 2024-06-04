@@ -21,6 +21,8 @@ import { RxPencil2 } from 'react-icons/rx';
 import Cookies from 'universal-cookie';
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 import { IoIosArrowDown } from 'react-icons/io';
+import Modal from '@/components/Global/Modal';
+import Button from '@/components/Global/Button';
 
 export default function ProductsTable({
   selectedDate,
@@ -45,21 +47,19 @@ export default function ProductsTable({
   // );
   const [rowClick, setRowClick] = useState<boolean>(true);
 
-  async function deleteProduct(id: number) {
+  const [deleteProductModal, setDeleteProductModal] = useState<boolean>(false);
+  const [productToBeDeleted, setProductToBeDeleted] = useState<number>();
+
+  async function deleteProduct(id: number | undefined) {
     const token = cookies.get('urban-token');
 
-    if (
-      confirm(
-        'Are you sure you want to delete this product? This action cannot be undone'
-      )
-    ) {
+    // if (
+    //   confirm(
+    //     'Are you sure you want to delete this product? This action cannot be undone'
+    //   )
+    // ) {
       toast.loading('Deleting product...');
 
-      // const res = await httpService.delete(
-      //   ENDPOINTS.PRODUCTS,
-      //   String(id),
-      //   `Bearer ${token}`
-      // );
       const res = await httpService.deleteById(
         `${ENDPOINTS.PRODUCTS}?id=${String(id)}`,
         `Bearer ${token}`
@@ -69,9 +69,10 @@ export default function ProductsTable({
       if (res.status === 200) {
         console.log(res);
         toast.success('Product successfully deleted');
+        setDeleteProductModal(false);
         router.refresh();
       } else toast.error('Cannot delete product at this time');
-    }
+    // }
   }
 
   const dateTemplate = (product: IProduct) =>
@@ -97,7 +98,12 @@ export default function ProductsTable({
           {/* <RxPencil2 /> */}
           <MdOutlineModeEdit />
         </Link>
-        <button onClick={() => deleteProduct(product.id)}>
+        <button onClick={() => {
+          // deleteProduct(product.id);
+          setDeleteProductModal(true);
+          setProductToBeDeleted(product.id);
+
+        }}>
           <RiDeleteBin6Line className='text-xl' />
         </button>
       </div>
@@ -166,6 +172,7 @@ export default function ProductsTable({
   }, [getProductsByDate, searchValue]);
 
   return (
+    <div>
     <div className='card rounded-xl p-4 bg-white border border-gray-200'>
       <div className='px-4 flex flex-col w-full justify-between lg:flex-row lg:items-center gap-8 mb-8'>
         <p className='font-bold text-xl text-gray-700'>Products Table</p>
@@ -210,6 +217,21 @@ export default function ProductsTable({
         <Column field='createdAt' header='Added' body={dateTemplate} sortable />
         <Column field='action' header='Action' body={actionTemplate} />
       </DataTable>
+      {/* Cancel Order Modal */}
+      <Modal
+        isOpen={deleteProductModal}
+        handleClose={() => setDeleteProductModal(false)}
+        title='Delete product'
+      > 
+        <h3 className='mb-4 text-lg text-black'> Are you sure you want to delete this product? </h3>
+        <div className='flex items-center gap-2 justify-between'>
+          <Button onClick={() => deleteProduct(productToBeDeleted)}>Yes</Button>
+          <Button variant='outlined' onClick={() =>  setDeleteProductModal(false)}>
+            No
+          </Button>
+        </div>
+      </Modal>
+    </div>
     </div>
   );
 }

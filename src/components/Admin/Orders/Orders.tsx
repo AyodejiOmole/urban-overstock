@@ -51,29 +51,50 @@ export default function Orders(
     setSelectedOrders(e.value);
   };
 
+  function hasDeliveryTimeExceeded(deliveryDate: string): boolean {
+    const fortyEightHoursAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000); // 48 hours ago
+    return new Date(deliveryDate) < fortyEightHoursAgo;
+  }
+
   async function bulkUpdateOrders(orders: IOrder[], status: string) {
       setCardOpen(prev => !prev);
-      const token = cookies.get('urban-token');
+
+      // Checks if there's an order that's been delivered and whose deivery date exceeds 48 hours
+      let deliveredOrder: boolean = false;
+
+      if(status.toLowerCase() === "cancelled") {
+        const checkingOrders = orders.map((order) => {
+          if(order.status.toLowerCase() === "delivered" && hasDeliveryTimeExceeded(order.deliveryDate)) {
+            toast.error("You cannot cancel an order that has been delivered for more than 48 hours.");
+            deliveredOrder = true;
+            return;
+          }
+        }); 
+      }
+      
+      if(!deliveredOrder) {
+        const token = cookies.get('urban-token');
   
-      toast.loading('Updating orders...');
+        toast.loading('Updating orders...');
 
-      const data = orders.map((order) => {
-        const { id } = order;
-        return { id: id, status: status }
-      }); 
+        const data = orders.map((order) => {
+          const { id } = order;
+          return { id: id, status: status }
+        }); 
 
-      const res = await httpService.patch(
-        `${ENDPOINTS.ORDERS}`,
-        data,
-        `Bearer ${token}`
-      );
+        const res = await httpService.patch(
+          `${ENDPOINTS.ORDERS}`,
+          data,
+          `Bearer ${token}`
+        );
 
-      toast.dismiss();
-      if (res.status === 200) {
-        console.log(res);
-        toast.success('Orders successfully updated!');
-        router.refresh();
-      } else toast.error('Cannot update orders at this time!');
+        toast.dismiss();
+        if (res.status === 200) {
+          console.log(res);
+          toast.success('Orders successfully updated!');
+          router.refresh();
+        } else toast.error('Cannot update orders at this time!');
+      }
   }
 
   const debouncedSearch = useMemo(() => {
