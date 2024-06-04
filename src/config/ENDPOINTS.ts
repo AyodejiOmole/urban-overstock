@@ -28,6 +28,7 @@ const ENDPOINTS = {
   COLOR_SETTINGS: `settings/color`,
   BRAND_SETTINGS: `settings/brand`,
   SIZE_SETTINGS: `settings/size`,
+  ADMIN_SHIPPING_ADDRESS: `admin-shipping-address`,
 
   // Dashboard
   DASHBOARD_TOP_CHART: `dashboard/top-chart`,

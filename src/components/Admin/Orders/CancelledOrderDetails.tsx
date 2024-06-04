@@ -79,21 +79,31 @@ export default function CancelledOrderDetails({
   return (
     <section>
 
+      console.log(cancelledOrderHistory);
+
       <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8'>
         <div>
           <p className='text-xl font-bold text-gray-700'>Cancelled Orders</p>
-          <Pagination lastPage='Cancelled Orders Details'/>
+          <Pagination lastPage='Details'/>
         </div>
 
         <div className='flex items-center gap-4'>
-          <Button variant='outlined' onClick={() => setApproveModal(true)}>
-            {/* <PiExportBold /> */}
-            Approve
-          </Button>
-          <Button variant='outlined' onClick={() => setDeclineModal(true)}>
-            {/* <RiDeleteBin6Line /> */}
-            Decline
-          </Button>
+          {
+            cancelledOrderHistory?.status.toLowerCase() === "denied" && 
+            <Button variant='outlined' onClick={() => setApproveModal(true)}>
+              {/* <PiExportBold /> */}
+              Approve
+            </Button>
+          }
+          
+
+          {
+            cancelledOrderHistory?.status.toLowerCase() !== "denied" && 
+            <Button variant='outlined' onClick={() => setDeclineModal(true)}>
+              {/* <RiDeleteBin6Line /> */}
+              Deny
+            </Button>
+          }
         </div>
       </div>
     

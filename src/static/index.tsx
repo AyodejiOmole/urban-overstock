@@ -52,6 +52,7 @@ export const links: ISidebarLink[] = [
     page: '/admin/discount-codes',
   },
   { name: 'notification', icon: <LuMail />, page: '/admin/notifications' },
+  { name: 'settings', icon: <LuMail />, page: '/admin/settings' },
 ];
 
 export type ISidebarLink = {
