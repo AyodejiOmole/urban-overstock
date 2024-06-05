@@ -24,7 +24,7 @@ export default function NotificationsTable({
   );
 
   console.log(notifications);
-  
+
   const [rowClick, setRowClick] = useState<boolean>(true);
 
   const cookies = new Cookies();
@@ -51,10 +51,16 @@ export default function NotificationsTable({
 
   function actionTemplate(notification: INotification) {
     return (
-      <div className='flex items-center gap-3 justify-end'>
-        <button onClick={() => markNotificationAsRead(notification.id)}>
-          <IoCheckmarkDoneOutline className='text-xl'/>
-        </button>
+      <div className={`flex items-center gap-3 justify-end`}>
+        {
+          !notification.viewed 
+          ?
+          <button onClick={() => markNotificationAsRead(notification.id)}>
+            <IoCheckmarkDoneOutline className='text-xl'/>
+          </button> 
+          :
+          <p className='text-xs text-green-300 text-center'>Read</p>
+        }
       </div>
     );
   }

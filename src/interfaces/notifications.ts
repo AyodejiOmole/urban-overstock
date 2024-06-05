@@ -7,6 +7,7 @@ export interface INotification {
   metadata: Metadata
   createdAt: string
   updatedAt: string
+  viewed: boolean
 }
   
 export interface Metadata {
