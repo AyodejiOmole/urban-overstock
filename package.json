@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.40.1",
     "@uppy/dashboard": "^3.7.4",
     "@uppy/drag-drop": "^3.0.3",
     "@uppy/react": "^3.2.2",

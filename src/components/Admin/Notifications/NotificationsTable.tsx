@@ -3,51 +3,16 @@
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 import { INotification, INotifications } from '@/interfaces/notifications';
 import moment from 'moment';
-import Link from 'next/link';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import React, { useState } from 'react';
-import { FaEye } from 'react-icons/fa';
 import { IoIosArrowDown } from 'react-icons/io';
-import { RxPencil2 } from 'react-icons/rx';
-
-export interface INotificationType {
-  _id: string;
-  type: string;
-  userType: 'admin' | 'shopper';
-  displayLocation: 'in-app' | 'external';
-  message: string;
-}
-
-// {
-//   notifications
-// }: {
-//   notifications: INotifications | null
-// }
-
-// const notifications: INotificationType[] = [
-//   {
-//     _id: '1',
-//     type: 'order shipped',
-//     userType: 'shopper',
-//     displayLocation: 'in-app',
-//     message: 'Your order #30132 has been shipped',
-//   },
-//   {
-//     _id: '2',
-//     type: 'order out for delivery',
-//     userType: 'shopper',
-//     displayLocation: 'in-app',
-//     message: 'Your order #305671 has been shipped',
-//   },
-//   {
-//     _id: '3',
-//     type: 'order cancellation',
-//     userType: 'admin',
-//     displayLocation: 'external',
-//     message: 'User John Doe has cancelled order #654321',
-//   },
-// ];
+import Cookies from 'universal-cookie';
+import HTTPService from '@/services/http';
+import toast from 'react-hot-toast';
+import ENDPOINTS from '@/config/ENDPOINTS';
+import { useRouter } from 'next/navigation';
+import { IoCheckmarkDoneOutline } from "react-icons/io5";
 
 export default function NotificationsTable({
   notifications
@@ -59,23 +24,37 @@ export default function NotificationsTable({
   );
 
   console.log(notifications);
+  
   const [rowClick, setRowClick] = useState<boolean>(true);
 
-  function actionTemplate(discount: INotificationType) {
+  const cookies = new Cookies();
+  const httpService = new HTTPService();
+  
+  const router = useRouter();
+
+  async function markNotificationAsRead (id: number) {
+      const token = cookies.get('urban-token');
+      toast.loading('Marking as read...');
+
+      const res = await httpService.patchById(
+        `${ENDPOINTS.NOTIFICATIONS}/mark-as-viewed/${String(id)}`,
+        `Bearer ${token}`
+      );
+
+      toast.dismiss();
+      if (res.status === 200) {
+        console.log(res);
+        toast.success('Notification marked as read.');
+        router.refresh();
+      } else toast.error('Cannot update notification at this time.');
+  }
+
+  function actionTemplate(notification: INotification) {
     return (
       <div className='flex items-center gap-3 justify-end'>
-        <Link
-          href={`/admin/discount-notifications/${discount._id}?edit=false`}
-          className='text-xl text-neutral'
-        >
-          <FaEye />
-        </Link>
-        <Link
-          href={`/admin/discount-notifications/${discount._id}?edit=true`}
-          className='text-xl text-neutral'
-        >
-          <RxPencil2 />
-        </Link>
+        <button onClick={() => markNotificationAsRead(notification.id)}>
+          <IoCheckmarkDoneOutline className='text-xl'/>
+        </button>
       </div>
     );
   }
@@ -106,7 +85,7 @@ export default function NotificationsTable({
         sortField='id'
         sortIcon={<IoIosArrowDown />}
       >
-        <Column field='metadateType' header='Notification Type' sortable></Column>
+        <Column field='metadataType' header='Notification Type' sortable></Column>
         <Column field='title' header='User Type' sortable></Column>
         {/* <Column
           field='displayLocation'
@@ -124,6 +103,11 @@ export default function NotificationsTable({
           header='Message'
           sortable
           className='text-gray-500'
+        ></Column>
+        <Column
+          field='action' 
+          header='Action'
+          body={actionTemplate}
         ></Column>
       </DataTable>
     </div>

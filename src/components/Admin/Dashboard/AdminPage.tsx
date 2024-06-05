@@ -12,6 +12,8 @@ import { useState } from 'react';
 import CategoryNavigation from '@/components/Shared/CategoryNavigation';
 import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa';
+import getTopChart, { getDashboardGraph, getTopProductsAndUsers } from '@/libs/dashboard';
+import getOrders from '@/libs/orders';
 
 const filter_options = [
     'all time',
@@ -33,11 +35,13 @@ export default function AdminPage ({
     graph,
     topSellingProducts,
     orders,
+    setTimeFilter,
 }: {
-    dashboardData: IDashboardData | null;
-    graph: IGraphDetails | null,
-    topSellingProducts: ITopSellingProducts | undefined,
-    orders: IOrder[] | null;
+    dashboardData?: IDashboardData | null;
+    graph?: IGraphDetails | null,
+    topSellingProducts?: ITopSellingProducts | undefined,
+    orders?: IOrder[] | null;
+    setTimeFilter?: any;
 }) {
 
     // const [categoryNavigation, setCategoryNavigation] = useState<any>();
@@ -55,27 +59,32 @@ export default function AdminPage ({
         
         switch (option) {
             case 'All time':
-            dateRange.startDate = new Date(0); // earliest possible date
-            dateRange.endDate = now;
-            break;
+                dateRange.startDate = new Date(0); // earliest possible date
+                dateRange.endDate = now;
+                setTimeFilter("All-Time");
+                break;
             case '12 months':
-            dateRange.startDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
-            dateRange.endDate = now;
-            break;
+                dateRange.startDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+                dateRange.endDate = now;
+                setTimeFilter("12-Months");
+                break;
             case '30 days':
-            dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30);
-            dateRange.endDate = now;
-            break;
+                dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30);
+                dateRange.endDate = now;
+                setTimeFilter("30-Days");
+                break;
             case '7 days':
-            dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
-            dateRange.endDate = now;
-            break;
+                dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+                dateRange.endDate = now;
+                setTimeFilter("7-Days");
+                break;
             case '24 hours':
-            dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() - 24);
-            dateRange.endDate = now;
-            break;
+                dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() - 24);
+                dateRange.endDate = now;
+                setTimeFilter("24-hours");
+                break;
             default:
-            return; // return null for unknown filter options
+                return; // return null for unknown filter options
         }
 
         // setCategoryNavigation(dateRange);
@@ -105,7 +114,7 @@ export default function AdminPage ({
                 </div>
             </div>
             <StatCards dashboardData={dashboardData}/>
-            <SalesChart graph={graph}/>
+            <SalesChart graph={graph!}/>
             <Sales 
                 products={topSellingProducts?.topProducts} 
                 salesByLocation={topSellingProducts?.topOrdersLocation}
@@ -116,10 +125,32 @@ export default function AdminPage ({
                 selectedOrders={[]}
                 searchValue=''
                 page="recent orders"
-                categoryNavigation={categoryNavigation}
+                // categoryNavigation={categoryNavigation}
             />
         </div>
     )
-}
+};
 
-// export default AdminPage;
+export async function getServerSideProps() {
+    const dashboardDataPromise = getTopChart("30-Days");
+    const topSellingProductsPromise = getTopProductsAndUsers();
+    const ordersPromise = getOrders();
+    const graphPromise = getDashboardGraph();
+  
+    const [dashboardData, topSellingProducts, orders, graph] = await Promise.all([
+      dashboardDataPromise,
+      topSellingProductsPromise,
+      ordersPromise,
+      graphPromise,
+    ]);
+  
+    return {
+      props: {
+        dashboardData,
+        topSellingProducts,
+        orders,
+        graph,
+      },
+    };
+}
+  

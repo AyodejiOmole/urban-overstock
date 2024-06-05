@@ -3,12 +3,12 @@ import ENDPOINTS from '@/config/ENDPOINTS';
 import { getCookie } from 'cookies-next';
 import { cookies } from 'next/headers';
 
-export default async function getTopChart() {
+export default async function getTopChart(type: string) {
   const token = getCookie('urban-token', { cookies });
 
   const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
 
-  const apiRes = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.DASHBOARD_TOP_CHART}`, {
+  const apiRes = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.DASHBOARD_TOP_CHART}?type="${type}"`, {
     headers: {
       Authorization: `Bearer ${token}`,
       'Cache-Control': 'no-cache, max-age=0',

@@ -40,11 +40,14 @@ const Settings = () => {
           zipCode: Yup.string().required().label('Zip Code'),
         }),
         onSubmit: async (values) => {
-          const token = cookies.get('urban-token');
+            const token = cookies.get('urban-token');
+
+            const zipCode = String(values.zipCode);
+            const data = { ...values, zipCode }
         
             const apiRes = await httpService.post(
-              ENDPOINTS.ADMIN_SHIPPING_ADDRESS,
-              values,
+              `${ENDPOINTS.ADMIN_SHIPPING_ADDRESS}`,
+              data,
               `Bearer ${token}`
             );
     
@@ -62,7 +65,7 @@ const Settings = () => {
 
     return (
         <div>
-            <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-4 py-4'>
+            <div className='w-full justify-between lg:items-center gap-8 mb-4 py-4'>
                 <div>
                     <p className='text-xl font-medium text-gray-700'>Orders</p>
                     <Pagination /> 
@@ -72,7 +75,7 @@ const Settings = () => {
                 <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4'>
                     <p className='text-lg font-semibold text-gray-700 mb-8'>Admin Shipping Details</p>
 
-                    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-x-4 items-center'>
+                    <div className='w-full items-center'>
                         <div className='mb-6'>
                             <label htmlFor='firstName' className='text-sm text-neutral mb-2 block'>
                                 First Name
@@ -100,7 +103,7 @@ const Settings = () => {
                                 onChange={formik.handleChange}
                                 value={formik.values.lastName}
                                 error={formik.errors.lastName}
-                                type='number'
+                                type='text'
                             />
                         </div>
                         

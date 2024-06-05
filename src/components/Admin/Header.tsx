@@ -32,7 +32,7 @@ export default function AdminHeader({
 }: {
   isOpen: boolean;
   toggleSidebar: () => void;
-  unreadNotifications: number;
+  unreadNotifications: any;
 }) {
   const [adminDetails, setAdminDetails] = useState<null | AdminType>(null);
   console.log(unreadNotifications);
@@ -68,9 +68,7 @@ export default function AdminHeader({
         {/* <button className='text-xl'>
           <IoSearchOutline />
         </button> */}
-        {/* <Notification icon={<TbCalendar />} number={2} /> */}
-        {/* <Notification icon={<BiBell />} number={10} /> */}
-        <Notification icon={<FiMail />} number={unreadNotifications} />
+        <Notification icon={<FiMail />} number={unreadNotifications.data.count} />
 
         <div className='h-12 w-[2px] bg-gray-200'></div>
 

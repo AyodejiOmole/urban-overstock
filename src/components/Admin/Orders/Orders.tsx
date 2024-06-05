@@ -74,6 +74,7 @@ export default function Orders(
       
       if(!deliveredOrder) {
         const token = cookies.get('urban-token');
+        console.log(token);
   
         toast.loading('Updating orders...');
 

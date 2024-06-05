@@ -19,11 +19,11 @@ export default function Notification({ number, icon }: IProps) {
       <button className='relative'>
         <span className='text-xl text-gray-600'>{icon}</span>
 
-        {showNumber && (
+        {/* {showNumber && ( */}
           <div className='py-1 px-[6px] bg-red-500 rounded-full absolute -right-4 -top-4 text-[10px] text-white'>
             {number}
           </div>
-        )}
+        {/* )} */}
       </button>
     </Link>
   );

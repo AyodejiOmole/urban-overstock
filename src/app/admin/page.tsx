@@ -1,64 +1,118 @@
+'use client';
+
 import Header from '@/components/Admin/Dashboard/Header';
 import OrdersTable from '@/components/Admin/Orders/OrdersTable';
 import SalesChart from '@/components/Admin/SalesChart';
 import StatCards from '@/components/Admin/StatCards';
 import React from 'react';
 import Sales from '@/components/Admin/Sales';
-import { IProducts } from '@/interfaces/products';
-import getAllProducts from '@/libs/products';
-import getTopChart from '@/libs/dashboard';
-import { ITopSellingProducts } from '@/interfaces/top-selling-products';
-import { getTopProductsAndUsers } from '@/libs/dashboard';
-import getOrders from '@/libs/orders';
-import { IOrder } from '@/interfaces/orders';
-import { getDashboardGraph } from '@/libs/dashboard';
-import { IGraphDetails } from '@/interfaces/graph';
 import AdminPage from '@/components/Admin/Dashboard/AdminPage';
-// import AdminPageWrapper from '@/components/Admin/Dashboard/AdminPageWrapper';
+// import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import Cookies from 'universal-cookie';
+import ENDPOINTS from '@/config/ENDPOINTS';
+// import { IDashboardData } from '@/interfaces/dashboard-data';
+import { IDashboardData } from '@/components/Admin/Dashboard/AdminPage';
+import { ITopSellingProducts } from '@/interfaces/top-selling-products';
+import { IOrder } from '@/interfaces/orders';
+import { IGraphDetails } from '@/interfaces/graph';
 
-export interface IDashboardData {
-    costomers: number
-    quantity: number
-    sales: number
-    revenue: number
-}
+const fetchTopChart = async (type: string, token: string, baseUrl: string): Promise<{ data: IDashboardData | null }> => {
+  const response = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.DASHBOARD_TOP_CHART}?type=${type}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Cache-Control': 'no-cache, max-age=0',
+    },
+    cache: 'no-store',
+  });
+  if (!response.ok) throw new Error('Failed to fetch dashboard details!');
+  return response.json();
+};
 
-const AdminDashboard = async () => {
-    const apiTopChart: Promise<IDashboardData | null> = getTopChart();
-    const dashboardData = await apiTopChart;
+const fetchTopProductsAndUsers = async (token: string, baseUrl: string): Promise<{ data: ITopSellingProducts | undefined  }> => {
+  const response = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.DASHBOARD_TOP_SELLERS}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Cache-Control': 'no-cache, max-age=0',
+    },
+    cache: 'no-store',
+  });
+  if (!response.ok) throw new Error('Failed to fetch top selling products!');
+  return response.json();
+};
 
-    const topSellingProductsApiRes: Promise<ITopSellingProducts | undefined> = getTopProductsAndUsers();
-    const topSellingProducts = await topSellingProductsApiRes;
+const fetchDashboardGraph = async (token: string, baseUrl: string): Promise<{ data: IGraphDetails | null }> => {
+  const response = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.DASHBOARD_GRAPH}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Cache-Control': 'no-cache, max-age=0',
+    },
+    cache: 'no-store',
+  });
+  if (!response.ok) throw new Error('Failed to fetch dashboard graph!');
+  return response.json();
+};
 
-    const apiRes: Promise<IOrder[] | null> = getOrders();
-    const orders = await apiRes;
+const fetchOrders = async (token: string, baseUrl: string): Promise<{ data: IOrder[] | null }> => {
+  const response = await fetch(`${baseUrl}/api/v1/${ENDPOINTS.ORDERS}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Cache-Control': 'no-cache, max-age=0',
+    },
+    cache: 'no-store',
+  });
+  if (!response.ok) throw new Error('Failed to fetch orders!');
+  return response.json();
+};
 
-    const apiResGraph: Promise<IGraphDetails | null> = getDashboardGraph();
-    const graph = await apiResGraph;
+const AdminDashboard = () => {
+  const cookies = new Cookies();
+  const token = cookies.get('urban-token');
+  const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
+  const timeFilter = '30-Days';
 
-    console.log(orders);
-    console.log("dashd",dashboardData)
+//   const {
+//     data: dashboardData,
+//     isLoading: loadingDashboardData,
+//     error: dashboardDataError
+//   } = useQuery({ queryKey: ['dashboardData', timeFilter], queryFn: () => fetchTopChart(timeFilter, token, baseUrl!) });
 
-    return (
-        <section>
-            {/* <AdminPage dashboardData={dashboardData} graph={graph} topSellingProducts={topSellingProducts} orders={orders}/> */}
-            <Header />
-            <StatCards dashboardData={dashboardData}/>
-            <SalesChart graph={graph}/>
-            <Sales 
-                products={topSellingProducts?.topProducts} 
-                salesByLocation={topSellingProducts?.topOrdersLocation}
-                // categoryNavigation={categoryNavigation}
-            />
-            {/* orders?.sort((a: IOrder, b: IOrder) => Date.parse(b.createdAt) - Date.parse(a.createdAt)) */}
-            <OrdersTable
-                orders={orders?.sort((a: IOrder, b: IOrder) => Date.parse(b.createdAt) - Date.parse(a.createdAt)).slice(0, 10) ?? null}
-                selectedOrders={[]}
-                searchValue=''
-                page="recent orders"
-                // categoryNavigation={[]}
-            />
-        </section>
+//   const {
+//     data: topSellingProducts,
+//     isLoading: loadingTopSellingProducts,
+//     error: topSellingProductsError
+//   } = useQuery({queryKey: ['topSellingProducts'], queryFn: () => fetchTopProductsAndUsers(token, baseUrl!)});
+
+//   const {
+//     data: graph,
+//     isLoading: loadingGraph,
+//     error: graphError
+//   } = useQuery({ queryKey: ['graph'], queryFn: () => fetchDashboardGraph(token, baseUrl!)});
+
+//   const {
+//     data: orders,
+//     isLoading: loadingOrders,
+//     error: ordersError
+//   } = useQuery({ queryKey: ['orders'], queryFn: () => fetchOrders(token, baseUrl!)});
+
+//   if (loadingDashboardData || loadingTopSellingProducts || loadingGraph || loadingOrders) {
+//     return <div>Loading...</div>;
+//   }
+
+//   if (dashboardDataError || topSellingProductsError || graphError || ordersError) {
+//     return <div>Error loading data</div>;
+//   }
+
+  return (
+    <section>
+      <AdminPage
+        // dashboardData={dashboardData!.data}
+        // graph={graph!.data}
+        // topSellingProducts={topSellingProducts!.data}
+        // setTimeFilter={() => {}}
+        // orders={orders!.data}
+      />
+    </section>
   );
 };
 

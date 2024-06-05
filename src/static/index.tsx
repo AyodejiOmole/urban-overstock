@@ -10,6 +10,7 @@ import {
   MdWallpaper,
 } from 'react-icons/md';
 import { CiShop } from "react-icons/ci";
+import { IoMdSettings } from "react-icons/io";
 import { RiPercentLine } from 'react-icons/ri';
 import testimonial1 from '../../public/assets/testimonials/testimonial-1.png';
 import testimonial2 from '../../public/assets/testimonials/testimonial-2.png';
@@ -52,7 +53,7 @@ export const links: ISidebarLink[] = [
     page: '/admin/discount-codes',
   },
   { name: 'notification', icon: <LuMail />, page: '/admin/notifications' },
-  { name: 'settings', icon: <LuMail />, page: '/admin/settings' },
+  { name: 'settings', icon: <IoMdSettings />, page: '/admin/settings' },
 ];
 
 export type ISidebarLink = {
