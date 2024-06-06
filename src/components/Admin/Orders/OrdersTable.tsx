@@ -215,7 +215,7 @@ export default function OrdersTable({
         onSelectionChange={handleChangeSelectedOrders}
         dataKey='uuid'
         tableStyle={{ minWidth: '50rem' }}
-        paginator
+        paginator={page !== "recent orders" ? true : false}
         paginatorTemplate={paginatorTemplate}
         paginatorClassName='flex justify-between'
         rows={10}
