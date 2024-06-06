@@ -280,11 +280,14 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                 <p>Customer</p>
               </div>
             </div>
-            <p>{order?.receiverName}</p>
+            <p>
+              {/* {order?.receiverName} */}
+              {order?.user.firstName + " " + order?.user.lastName}
+            </p>
           </div>
 
           {/*  */}
-          {/* <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
+          <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
             <div className='flex items-center gap-2'>
               <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
                 <CiMail />
@@ -293,8 +296,8 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                 <p>Email</p>
               </div>
             </div>
-            <p>josh_adam@mail.com</p>
-          </div> */}
+            <p>{order?.user.email}</p>
+          </div>
           {/*  */}
           <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
             <div className='flex items-center gap-2'>

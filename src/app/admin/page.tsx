@@ -38,12 +38,10 @@ const AdminDashboard = async () => {
         dashboardData={dashboardData}
         graph={graph}
         topSellingProducts={topSellingProducts}
-        // setTimeFilter={() => {}}
         orders={orders}
       />
     </section>
   );
 };
-
 
 export default AdminDashboard;

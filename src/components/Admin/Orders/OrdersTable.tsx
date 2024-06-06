@@ -131,8 +131,9 @@ export default function OrdersTable({
   function customerTemplate(order: IOrder) {
     return (
       <div className='flex flex-col gap-2 capitalize'>
-        <p className='text-sm flex-1 font-medium'>{order.receiverName}</p>
-        <p className='text-xs text-neutral'>{order.receiverPhone}</p>
+        <p className='text-sm flex-1 font-medium'>{order.user.firstName + " " + order.user.lastName}</p>
+        {/* <p className='text-xs text-neutral'>{order.receiverPhone}</p> */}
+        <p className='text-xs text-neutral'>{order.user.email}</p>
       </div>
     );
   }
@@ -217,7 +218,7 @@ export default function OrdersTable({
         paginator
         paginatorTemplate={paginatorTemplate}
         paginatorClassName='flex justify-between'
-        rows={20}
+        rows={10}
         rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-md text-sm'
         sortOrder={-1}
