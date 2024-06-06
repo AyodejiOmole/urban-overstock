@@ -50,7 +50,7 @@ export default function AdminPage ({
 
     const handleCategoryChange = (newIndex: number, option: any) => {            
         switch (option) {
-            case 'All time':
+            case 'all time':
                 setTimeFilter("All-Time");
                 break;
             case '12 months':
