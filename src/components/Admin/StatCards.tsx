@@ -5,7 +5,8 @@ import { FiShoppingCart } from 'react-icons/fi';
 import { GiReceiveMoney } from 'react-icons/gi';
 import { TbLineScan } from 'react-icons/tb';
 import Link from 'next/link';
-import { IDashboardData } from '@/app/admin/page';
+// import { IDashboardData } from '@/app/admin/page';
+import { IDashboardData } from './Dashboard/AdminPage';
 
 export default function StatCards({
   dashboardData,

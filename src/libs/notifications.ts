@@ -14,10 +14,10 @@ export default async function getAllNotifications() {
       'Cache-Control': 'no-cache, max-age=0',
     },
 
-    // cache: 'no-store',
-    next: {
-      revalidate: 10,
-    },
+    cache: 'no-store',
+    // next: {
+    //   revalidate: 10,
+    // },
   });
 
   console.log(apiRes);

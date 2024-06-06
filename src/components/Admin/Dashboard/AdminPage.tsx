@@ -1,4 +1,5 @@
-"use client"
+'use client'
+
 import React from 'react'
 import Header from './Header';
 import StatCards from '../StatCards';
@@ -8,12 +9,14 @@ import OrdersTable from '../Orders/OrdersTable';
 import { IGraphDetails } from '@/interfaces/graph';
 import { ITopSellingProducts } from '@/interfaces/top-selling-products';
 import { IOrder } from '@/interfaces/orders';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CategoryNavigation from '@/components/Shared/CategoryNavigation';
 import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa';
 import getTopChart, { getDashboardGraph, getTopProductsAndUsers } from '@/libs/dashboard';
 import getOrders from '@/libs/orders';
+import Cookies from 'universal-cookie';
+import ENDPOINTS from '@/config/ENDPOINTS';
 
 const filter_options = [
     'all time',
@@ -21,7 +24,7 @@ const filter_options = [
     '30 days',
     '7 days',
     '24 hours',
-  ];
+];
 
 export interface IDashboardData {
     costomers: number
@@ -35,66 +38,76 @@ export default function AdminPage ({
     graph,
     topSellingProducts,
     orders,
-    setTimeFilter,
 }: {
     dashboardData?: IDashboardData | null;
     graph?: IGraphDetails | null,
     topSellingProducts?: ITopSellingProducts | undefined,
     orders?: IOrder[] | null;
-    setTimeFilter?: any;
 }) {
 
-    // const [categoryNavigation, setCategoryNavigation] = useState<any>();
-    const [categoryNavigation, setCategoryNavigation] = useState<{ startDate: Date | null; endDate: Date | null } | null>(null);
+    const [newDashboardData, setNewDashboardData] = useState<IDashboardData>({} as IDashboardData);
 
+    const [timeFilter, setTimeFilter] = useState<string>("All-time");
     const [defaultFilterOption, setDefaultFilterOption] = useState(0);
 
-    const handleCategoryChange = (newIndex: number, option: any) => {
-                            
-        const now = new Date();
-        let dateRange: { startDate: Date | null, endDate: Date | null } = {
-            startDate: null,
-            endDate: null,
-        };
-        
+    const handleCategoryChange = (newIndex: number, option: any) => {            
         switch (option) {
             case 'All time':
-                dateRange.startDate = new Date(0); // earliest possible date
-                dateRange.endDate = now;
                 setTimeFilter("All-Time");
                 break;
             case '12 months':
-                dateRange.startDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
-                dateRange.endDate = now;
                 setTimeFilter("12-Months");
                 break;
             case '30 days':
-                dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30);
-                dateRange.endDate = now;
                 setTimeFilter("30-Days");
                 break;
             case '7 days':
-                dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
-                dateRange.endDate = now;
                 setTimeFilter("7-Days");
                 break;
             case '24 hours':
-                dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() - 24);
-                dateRange.endDate = now;
                 setTimeFilter("24-hours");
                 break;
             default:
                 return; // return null for unknown filter options
         }
-
-        // setCategoryNavigation(dateRange);
-        // setDefaultFilterOption(newIndex);
+        setDefaultFilterOption(newIndex);
         console.log(option);
     }
 
+    useEffect(() => {
+        const fetchData = () => {
+            const cookies = new Cookies();
+            const token = cookies.get('urban-token');
+            const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
+
+            fetch(`${baseUrl}/api/v1/${ENDPOINTS.DASHBOARD_TOP_CHART}?type=${timeFilter}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                cache: 'no-store',
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.data) {
+                        console.log(data.data);
+                        setNewDashboardData(data.data);
+                    }
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        };
+
+        fetchData();
+    }, [timeFilter]);
+
     return (
         <div>
-            {/* <Header setCategoryNavigation={setCategoryNavigation} defaultFilterOption={defaultFilterOption} setDefaultFilterOption={setDefaultFilterOption}/> */}
             <div className='flex lg:flex-row gap-2 flex-col mb-4 justify-between w-full'>
                 {/* flex flex-col w-full justify-between lg:flex-col 2xl:items-center gap-8 mb-8 */}
                 <CategoryNavigation
@@ -106,19 +119,18 @@ export default function AdminPage ({
                 <div className='flex items-center gap-[16px]'>
                     {/* <DatePicker handleSelectDate={(date) => console.log(date)} /> */}
                     <Link href='/admin/products/new'>
-                    <button className='rounded-[8px] h-fit w-fit text-[14px] text-[#090917] gap-[4px] flex items-center whitespace-nowrap bg-[#F2C94C] py-[10px] px-[14px] ' >
-                        <FaPlus />
-                        Add Product
-                    </button>
+                        <button className='rounded-[8px] h-fit w-fit text-[14px] text-[#090917] gap-[4px] flex items-center whitespace-nowrap bg-[#F2C94C] py-[10px] px-[14px] ' >
+                            <FaPlus />
+                            Add Product
+                        </button>
                     </Link>
                 </div>
             </div>
-            <StatCards dashboardData={dashboardData}/>
+            <StatCards dashboardData={newDashboardData}/>
             <SalesChart graph={graph!}/>
             <Sales 
                 products={topSellingProducts?.topProducts} 
                 salesByLocation={topSellingProducts?.topOrdersLocation}
-                // categoryNavigation={categoryNavigation}
             />
             <OrdersTable
                 orders={orders?.sort((a: IOrder, b: IOrder) => Date.parse(b.createdAt) - Date.parse(a.createdAt)).slice(0, 10) ?? null}
@@ -130,27 +142,4 @@ export default function AdminPage ({
         </div>
     )
 };
-
-export async function getServerSideProps() {
-    const dashboardDataPromise = getTopChart("30-Days");
-    const topSellingProductsPromise = getTopProductsAndUsers();
-    const ordersPromise = getOrders();
-    const graphPromise = getDashboardGraph();
-  
-    const [dashboardData, topSellingProducts, orders, graph] = await Promise.all([
-      dashboardDataPromise,
-      topSellingProductsPromise,
-      ordersPromise,
-      graphPromise,
-    ]);
-  
-    return {
-      props: {
-        dashboardData,
-        topSellingProducts,
-        orders,
-        graph,
-      },
-    };
-}
   

@@ -4,7 +4,7 @@ import SalesByLocationTable from './SalesByLocationTable';
 import { ITopOrdersLocation, ITopProduct } from '@/interfaces/top-selling-products';
 import { IoIosLock } from "react-icons/io";
 
-const Sales = async ({ 
+const Sales = ({ 
     products, 
     // categoryNavigation 
     salesByLocation,
@@ -24,8 +24,7 @@ const Sales = async ({
                 <div>
                     <TopSellingProductsTable 
                         products={products} 
-                        // categoryNavigation={categoryNavigation}
-                        />
+                    />
                 </div>
             </div>
 
