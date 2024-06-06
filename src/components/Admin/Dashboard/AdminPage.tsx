@@ -13,8 +13,6 @@ import { useState, useEffect } from 'react';
 import CategoryNavigation from '@/components/Shared/CategoryNavigation';
 import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa';
-import getTopChart, { getDashboardGraph, getTopProductsAndUsers } from '@/libs/dashboard';
-import getOrders from '@/libs/orders';
 import Cookies from 'universal-cookie';
 import ENDPOINTS from '@/config/ENDPOINTS';
 
