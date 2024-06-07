@@ -8,7 +8,7 @@ export function middleware(request: NextRequest) {
 
   const token = cookies.get('urban-token');
 
-  if (token) {
+  if (token && token.value !== "") {
     const decoded = jwtDecode(token.value);
 
     const now = new Date().getTime();

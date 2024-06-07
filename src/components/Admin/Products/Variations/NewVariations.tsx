@@ -1241,6 +1241,12 @@ const ProductVariations = ({
     setNewVariation({ ...newVariation, sizeOptions: newSizeOptions });
   };
 
+  const deleteNewSizeVariation = (index: number) => {
+    const newSizeOptions = newVariation.sizeOptions.filter((option, idx) => idx !== index);
+
+    setNewVariation( { ...newVariation, sizeOptions: newSizeOptions }, );
+  };
+
   return (
     <div>
         <div className='flex items-center gap-4 mt-8'>
@@ -1340,13 +1346,13 @@ const ProductVariations = ({
 
               {/* Add color variaiton */}
               <div className='w-full flex justify-between gap-2 align-center justify-center'>
-                <div className='mb-4 w-full relative'>
+                <div className='w-full relative'>
                     <label htmlFor='color' className='text-sm text-neutral mb-2 block'>
                         Color:
                     </label>
                     <div 
                         className = {
-                            clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                          clsx('h-[48px] text-black font-medium bg-[#F0F1F3] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
                         }
                         onClick={() => setActiveColorPicker(true)}
                     >
@@ -1450,6 +1456,10 @@ const ProductVariations = ({
               {newVariation.sizeOptions?.map((option, index) => {
                 return (
                   <div className='items-start gap-4 w-full' key={index}>
+                    <div className='flex items-center justify-between mb-3'>
+                      <p className='text-lg font-semibold text-gray-700'>Size Option</p>
+                      <CloseButton handleClick={() => deleteNewSizeVariation(index)} />
+                    </div>
                     <div className='w-full flex justify-between gap-2 mb-4'>
                       <div className='w-full relative'>
                         <label htmlFor='size' className='text-sm text-neutral mb-2 block'>
@@ -1457,7 +1467,7 @@ const ProductVariations = ({
                         </label>
                         <div 
                             className = {
-                                clsx('h-[48px] bg-[#E0E2E7] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                                clsx('h-[48px] bg-[#E0E2E7] font-medium text-black px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
                             }
                             onClick={() => setSizePicker(index)}
                         >

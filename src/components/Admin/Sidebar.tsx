@@ -30,8 +30,17 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
   const cookies = new Cookies();
   const router = useRouter();
   
+  // const logOut = () => {
+  //   cookies.remove("urban-token");
+  //   router.push("/auth/admin/login");
+  // }
+
   const logOut = () => {
     cookies.remove("urban-token");
+    cookies.set('urban-token', "", {
+      path: '/',
+      // expires: tokenExpiryTime,
+    });
     router.push("/auth/admin/login");
   }
 

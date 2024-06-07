@@ -279,10 +279,7 @@ export default function ProductForm({
       description: Yup.string().required().label('Description'),
       // tag: Yup.string().required().label('Tag'),
       quantity: Yup.number().min(1).required().label('Quantity'),
-      // amount: Yup.number().min(1).required().label('Price'),
       amount: Yup.number().min(1).required().label('Price').test('amount', 'Amount cannot be less than cost price.', function () {
-        // const { amount, costPrice } = this.parent;
-        // return costPrice > amount;
         const { costPrice, amount } = this.parent;
         return costPrice <= amount;
       }),
@@ -294,7 +291,6 @@ export default function ProductForm({
       sku: Yup.string().required().label('SKU'),
       barcode: Yup.string().required().label('Bar Code'),
       status: Yup.string().required().label('Status'),
-      // costPrice: Yup.number().min(1).required().label('Cost Price'),
       costPrice: Yup.number().min(1).required().label('Cost Price').test('costPrice', 'Cost Price cannot exceed Base Price/Amount', function () {
         const { costPrice, amount } = this.parent;
         return costPrice <= amount;
@@ -819,7 +815,7 @@ export default function ProductForm({
               placeholder='Type product description here...'
               onChange={formik.handleChange}
               value={formik.values.description}
-              className='bg-[#F0F1F3] text-black'
+              className='bg-[#F0F1F3] text-black font-medium'
             ></textarea>
 
             <CustomError error={formik.errors.description} />
@@ -1084,7 +1080,7 @@ export default function ProductForm({
                 <select
                   name='discountType'
                   id='discountType'
-                  className='text-black bg-[#F0F1F3]'
+                  className='text-black bg-[#F0F1F3] font-medium'
                   // onChange={formik.handleChange}
                   onChange={(e) => handleDiscountChange(e)}
                   value={formik.values.discountType}
@@ -1114,7 +1110,7 @@ export default function ProductForm({
                 <select
                   name='taxClass'
                   id='taxClass'
-                  className='text-black bg-[#F0F1F3]'
+                  className='text-black bg-[#F0F1F3] font-mdeium'
                   onChange={formik.handleChange}
                   value={formik.values.taxClass}
                 >

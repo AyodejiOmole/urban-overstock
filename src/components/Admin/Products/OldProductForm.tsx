@@ -578,7 +578,7 @@ export default function OldProductForm({
               placeholder='Type product description here...'
               onChange={formik.handleChange}
               value={formik.values.description}
-              className='bg-[#F0F1F3] text-black'
+              className='bg-[#F0F1F3] text-black font-medium'
             ></textarea>
 
             <CustomError error={formik.errors.description} />
@@ -819,7 +819,7 @@ export default function OldProductForm({
                 <select
                   name='discountType'
                   id='discountType'
-                  className='text-black bg-[#F0F1F3] '
+                  className='text-black bg-[#F0F1F3] font-medium'
                   onChange={formik.handleChange}
                   // onChange={handleDiscountChange}
                   value={formik.values.discountType}

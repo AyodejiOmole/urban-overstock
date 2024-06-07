@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from 'react';
 import { IoChevronDownOutline } from 'react-icons/io5';
-import Cookies from 'universal-cookie';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { CiLogout } from "react-icons/ci";
+import Cookies from 'universal-cookie';
 
 type PropTypes = {
   name: string;
@@ -13,12 +13,41 @@ type PropTypes = {
 
 export default function UserAvatar({ name, title = '' }: PropTypes) {
   const cookies = new Cookies();
+  // const cookieStore = new Cookies();
   const router = useRouter();
 
   const [dropDown, setDropDown] = useState<boolean>(false);
 
-  const logOut = () => {
+  // const handleLogout = async () => {
+  //   try {
+  //     const response = await fetch('/api/logout', {
+  //       method: 'POST',
+  //     });
+
+  //     if (response.ok) {
+  //       router.push('/auth/admin/login');
+  //     } else {
+  //       console.error('Failed to log out');
+  //     }
+  //   } catch (error) {
+  //     console.error('An error occurred during logout:', error);
+  //   }
+  // };
+
+  const deleteCookie = (name: string) => {
+    document.cookie = `${name}=; Max-Age=0; path=/;`;
+  };
+  
+
+  const handleLogout = () => {
     cookies.remove("urban-token");
+    // cookieStore.forEach((cookie) => {
+    //   cookie.remove(cookie.key);
+    // });
+    cookies.set('urban-token', "", {
+      path: '/',
+      // expires: tokenExpiryTime,
+    });
     router.push("/auth/admin/login");
   }
 
@@ -38,7 +67,7 @@ export default function UserAvatar({ name, title = '' }: PropTypes) {
 
       {
         dropDown && 
-        <div className='absolute cursor-pointer py-2 px-2 rounded bg-white text-md top-14 w-full flex justify-center items-center' onClick={() => logOut()}>
+        <div className='absolute cursor-pointer py-2 px-2 rounded bg-white text-md top-14 w-full flex justify-center items-center' onClick={() => handleLogout()}>
           {/* <CiLogout /> */}
           <p>Logout</p>
         </div>
