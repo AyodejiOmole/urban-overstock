@@ -20,7 +20,7 @@ const Pagination: React.FC<IPaginationProps> = ({ lastPage }) => {
         }
     }
 
-    const segments = pathname.split('/').filter(segment => segment !== '');
+    const segments = pathname.split('/').filter(segment => segment !== '' && !(/^\d+$/.test(segment)));
 
     let currentPath = '';
     const paginationLinks: React.ReactNode[] = [];

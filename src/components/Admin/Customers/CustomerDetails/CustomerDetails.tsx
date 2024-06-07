@@ -87,7 +87,7 @@ export default function CustomerDetails({
         {/* Column 1 */}
         <div className='lg:col-span-2'>
           <div className='p-2 border border-gray-200 bg-white rounded-lg pb-16 relative'>
-            <div className='bg-blue-800 p-4 h-52 rounded-lg'></div>
+            <div className='bg-[#F2C94C] p-4 h-52 rounded-lg'></div>
             <div className='w-48 h-48 bg-gray-200 rounded-full absolute left-1/2 -translate-x-1/2 top-32'></div>
 
             <div className='pt-32 px-4'>

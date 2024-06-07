@@ -89,6 +89,35 @@ export default function Products({
     } else toast.error("Please select at least one product to update!");
   }
 
+  async function deleteProducts(products: IProducts) {
+    if(products) {
+      if(products.length === 0) {
+        toast.error('Please select at least one product.');
+        return;
+      }
+
+      const token = cookies.get('urban-token');
+
+      toast.loading('Deleting products...');
+
+      const data = { ids: [...products.map((product: IProduct) => { return product.id } )] }
+      console.log(data);
+
+      const res = await httpService.deleteLikePatch(
+        `${ENDPOINTS.PRODUCTS}/delete-bulk`,
+        data,
+        `Bearer ${token}`
+      );
+
+      toast.dismiss();
+      if (res.status === 200) {
+        console.log(res);
+        toast.success('Product(s) status successfully deleted!');
+        router.refresh();
+      } else toast.error('Cannot delete product(s) at this time!');
+    } else toast.error("Please select at least one product to delete!");
+  }
+
   return (
     <section>
       <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8 py-4'>
@@ -107,7 +136,7 @@ export default function Products({
             {/* <PiExportBold /> */}
             Unpublish
           </Button>
-          <Button>
+          <Button onClick={() => deleteProducts(selectedProducts)}>
             <RiDeleteBin5Fill />
             Delete
           </Button>

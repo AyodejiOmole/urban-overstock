@@ -75,6 +75,8 @@ export default function ProductsTable({
     // }
   }
 
+ 
+
   const dateTemplate = (product: IProduct) =>
     moment(product.createdAt).format('MMM Do YYYY');
 
