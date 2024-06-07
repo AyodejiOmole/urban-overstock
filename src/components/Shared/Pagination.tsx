@@ -20,7 +20,11 @@ const Pagination: React.FC<IPaginationProps> = ({ lastPage }) => {
         }
     }
 
-    const segments = pathname.split('/').filter(segment => segment !== '' && !(/^\d+$/.test(segment)));
+    const segments = pathname.split('/').filter(segment => segment !== '');
+
+    if((/^\d+$/.test(segments[segments.length - 1]))) {
+        segments[segments.length - 1] = lastPage ?? "";
+    }
 
     let currentPath = '';
     const paginationLinks: React.ReactNode[] = [];
@@ -33,7 +37,8 @@ const Pagination: React.FC<IPaginationProps> = ({ lastPage }) => {
                 <Link href={link}>
                     <div className='flex gap-1 items-center justify-center'>
                         <p className={`text-sm ${index === segments.length - 1 ? "text-neutral" : "text-[#CFA31C]" }`}>
-                            {index === segments.length - 1 ? formatString(lastPage ?? segment) : formatString(segment) + ' '}
+                        {/* {index === segments.length - 1 ? formatString(lastPage ?? segment) : formatString(segment) + ' '} */}
+                            {index === segments.length - 1 ? formatString((lastPage && !(/^\d+$/.test(lastPage))) ? segment : lastPage ?? segment) : formatString(segment) + ' '}
                         </p>
                         {index < segments.length - 1 && <FaAngleRight className='' color='gray'/>}
                     </div> 

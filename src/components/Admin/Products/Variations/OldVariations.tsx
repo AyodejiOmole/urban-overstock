@@ -414,6 +414,26 @@ const VariationItem = ({
     }
   };
 
+  const deleteSizeVariation = (index: number) => {
+    const newSizeOptions = variation.sizeOptions.filter((option, idx) => idx !== index);
+
+    dispatch({
+      type: 'UPDATE',
+      payload: { ...variation, sizeOptions: newSizeOptions },
+    });
+  };
+
+  function CloseButton({ handleClick }: {handleClick: () => void;}) {
+    return (
+      <button
+        className='p-2 bg-gray-100 text-xl rounded-full text-secondary-text'
+        onClick={handleClick}
+      >
+        <AiOutlineClose />
+      </button>
+    );
+  }
+
   return (
     <div className='flex items-start gap-4 w-full flex-col sm:items-center py-4 border-b border-b-gray-100'>
 
@@ -595,7 +615,6 @@ const VariationItem = ({
                   )} 
             </div>
 
-            
             <div
               className='bg-red-100 px-6 h-[48px] text-xs text-red-600 text-center flex items-center justify-center mt-auto gap-2 rounded-md'
               onClick={() => updateColorVaritionValue(0)}
@@ -607,6 +626,10 @@ const VariationItem = ({
         {variation.sizeOptions.map((option, index) => {
           return (
             <div className='items-start gap-4 w-full' key={index}>
+              <div className='flex items-center justify-between mb-3'>
+                <p className='text-lg font-semibold text-gray-700'>Size Option</p>
+                <CloseButton handleClick={() => deleteSizeVariation(index)} />
+              </div>
               <div className='w-full flex justify-between gap-2 mb-4'>
                 <div className='w-full relative'>
                   <label htmlFor='size' className='text-sm text-neutral mb-2 block'>

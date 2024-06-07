@@ -420,6 +420,27 @@ const VariationItem = ({
     }
   };
 
+  const deleteSizeVariation = (index: number) => {
+    const newSizeOptions = variation.sizeOptions.filter((option, idx) => idx !== index);
+
+    dispatch({
+      type: 'UPDATE',
+      payload: { ...variation, sizeOptions: newSizeOptions },
+      newState: [],
+    });
+  };
+
+  function CloseButton({ handleClick }: {handleClick: () => void;}) {
+    return (
+      <button
+        className='p-2 bg-gray-100 text-xl rounded-full text-secondary-text'
+        onClick={handleClick}
+      >
+        <AiOutlineClose />
+      </button>
+    );
+  }
+
   useEffect(() => {
     document.body.addEventListener('click', (event) => {
       
@@ -519,7 +540,7 @@ const VariationItem = ({
               </label>
               <div 
                   className = {
-                      clsx('h-[48px] text-black bg-[#F0F1F3] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                      clsx('h-[48px] text-black font-medium bg-[#F0F1F3] px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
                   }
                   onClick={() => setActiveColorPicker(true)}
               >
@@ -655,6 +676,10 @@ const VariationItem = ({
         {variation.sizeOptions.map((option, index) => {
           return (
             <div className='items-start gap-4 w-full' key={index}>
+              <div className='flex items-center justify-between mb-3'>
+                <p className='text-lg font-semibold text-gray-700'>Size Option</p>
+                <CloseButton handleClick={() => deleteSizeVariation(index)} />
+              </div>
               <div className='flex justify-between w-full gap-2'>
                 <div className='w-full relative'>
                   <label htmlFor='size' className='text-sm text-neutral mb-2 block'>
@@ -662,7 +687,7 @@ const VariationItem = ({
                   </label>
                   <div 
                       className = {
-                          clsx('h-[48px] bg-[#F0F1F3] text-black px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
+                          clsx('h-[48px] font-medium bg-[#F0F1F3] text-black px-4 py-2 rounded-lg border border-dark-100 flex gap-2 items-center',)
                       }
                       onClick={() => setSizePicker(index)}
                   >

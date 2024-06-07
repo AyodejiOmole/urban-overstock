@@ -129,10 +129,11 @@ const ProductDetails = ({
                     <Image
                         width={80}
                         height={50}
-                        className={`rounded border border-gray-300 ${currentImageCount === index ? "opacity-100" : "opacity-20"}`}
+                        className={`rounded border cursor-pointer border-gray-300 ${currentImageCount === index ? "opacity-100" : "opacity-20"}`}
                         alt="product image"
                         src={image || ''}
                         key={index}
+                        onClick={() => setCurrentImageCount(index)}
                     />
                 ))}
             </div>
@@ -298,7 +299,7 @@ const ProductDetails = ({
                                                     </div>
                                                 </div>
                                             
-                                                <div className='flex justify-between w-full gap-2'>
+                                                <div className='flex justify-between w-full gap-2 mt-4'>
                                                     <div className='mb-4 w-full'>
                                                         <label htmlFor='quantity' className='text-sm text-neutral mb-2 block'>
                                                             Quantity:

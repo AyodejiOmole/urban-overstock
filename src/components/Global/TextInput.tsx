@@ -102,7 +102,7 @@ export default function TextInput(props: InputType) {
           onChange={handleInputChange}
           onFocus={onFocus}
           onBlur={onBlur}
-          className={`h-full text-sm w-full bg-[#F0F1F3] font-light  caret-primary text-black leading-2 focus:outline-none block appearance-none`}
+          className={`h-full text-sm w-full bg-[#F0F1F3] font-medium caret-primary text-black leading-2 focus:outline-none block appearance-none`}
           placeholder={placeholder}
         />
         {rightIcon && (

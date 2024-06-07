@@ -1,7 +1,5 @@
 import ProductForm from '@/components/Admin/Products/ProductForm';
-// import PageHeading from './components/PageHeading';
-// import PageHeading from '../../components/PageHeading';
-import PageHeading from '../components/PageHeading';
+import PageHeading from './components/PageHeading';
 import React from 'react';
 import { getSingleProduct } from '@/libs/products';
 import { ISingleProduct } from '@/interfaces/products';

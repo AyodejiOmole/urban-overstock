@@ -591,7 +591,7 @@ export default function OldProductForm({
                 </label>
                 <div 
                     className = {
-                        clsx('h-[48px] bg-[#F0F1F3] text-black px-4 py-2 relative rounded-lg border border-dark-100 flex gap-2 items-center',)
+                        clsx('h-[48px] bg-[#F0F1F3] text-black font-medium px-4 py-2 relative rounded-lg border border-dark-100 flex gap-2 items-center',)
                     }
                     onClick={() => setBrandPicker(true)}
                 >
@@ -858,7 +858,7 @@ export default function OldProductForm({
                     Select tax class....
                   </option>
                   <option value='none'>Tax Free</option>
-                  
+                  <option value='VAT'>VAT</option>
                 </select>
 
                 <IoIosArrowDown className={`absolute right-4 ${formik.errors.taxClass ? "top-10" : "bottom-4"}`} />
@@ -1073,7 +1073,7 @@ export default function OldProductForm({
             <select
               name='categoryId'
               id='categoryId'
-              className='text-black bg-[#F0F1F3] '
+              className='text-black bg-[#F0F1F3] font-medium'
               onChange={formik.handleChange}
               ref={productCategorySelectRef}
               // value={formik.values.categoryId}
@@ -1132,7 +1132,7 @@ export default function OldProductForm({
               name='status'
               id='status'
               ref={productStatusSelectRef}
-              className='text-black bg-[#F0F1F3] '
+              className='text-black bg-[#F0F1F3] font-medium'
               onChange={formik.handleChange}
               value={formik.values.status}
             >

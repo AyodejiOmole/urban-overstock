@@ -14,7 +14,7 @@ import { DataTable } from 'primereact/datatable';
 import React, { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { FaEye } from 'react-icons/fa';
-import {MdOutlineEdit } from 'react-icons/md';
+import { MdOutlineEdit } from 'react-icons/md';
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineDelete, MdOutlineModeEdit } from 'react-icons/md';
 import { RxPencil2 } from 'react-icons/rx';
@@ -74,8 +74,6 @@ export default function ProductsTable({
       } else toast.error('Cannot delete product at this time');
     // }
   }
-
- 
 
   const dateTemplate = (product: IProduct) =>
     moment(product.createdAt).format('MMM Do YYYY');
