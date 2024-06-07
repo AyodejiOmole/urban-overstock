@@ -59,7 +59,7 @@ export default function NotificationsTable({
             <IoCheckmarkDoneOutline className='text-xl'/>
           </button> 
           :
-          <p className='text-xs text-green-300 text-center'>Read</p>
+          <p className='text-xs text-green-300 text-center'>Viewed</p>
         }
       </div>
     );
