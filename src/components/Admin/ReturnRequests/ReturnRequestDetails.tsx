@@ -108,7 +108,7 @@ const ReturnRequestDetails = ({
 
             <div className='flex items-center gap-4'>
                 {
-                    returnRequestDetails?.status.toLowerCase() === "denied" && 
+                    (returnRequestDetails?.status.toLowerCase() === "denied" || returnRequestDetails?.status.toLowerCase() === "pending") && 
                     <Button variant='outlined' onClick={() => updateReturnRequest(id, "Confirmed")}>
                         {/* <PiExportBold /> */}
                         Approve
@@ -116,7 +116,7 @@ const ReturnRequestDetails = ({
                 }
                 
                 {
-                    returnRequestDetails?.status.toLowerCase() === "confirmed" && 
+                    (returnRequestDetails?.status.toLowerCase() === "confirmed" || returnRequestDetails?.status.toLowerCase() === "pending" ) && 
                     <Button variant='outlined' onClick={() => updateReturnRequest(id, "Denied")}>
                         {/* <FaPlus /> */}
                         {/* <RiDeleteBin6Line /> */}
