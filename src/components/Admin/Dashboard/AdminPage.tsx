@@ -76,6 +76,7 @@ export default function AdminPage ({
         const fetchData = () => {
             const cookies = new Cookies();
             const token = cookies.get('urban-token');
+            console.log(token);
             const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
 
             fetch(`${baseUrl}/api/v1/${ENDPOINTS.DASHBOARD_TOP_CHART}?type=${timeFilter}`, {
@@ -83,22 +84,19 @@ export default function AdminPage ({
                     Authorization: `Bearer ${token}`,
                 },
                 cache: 'no-store',
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.data) {
-                        console.log(data.data);
-                        setNewDashboardData(data.data);
-                    }
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
-                });
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            }).then(data => {
+                if (data.data) {
+                    console.log(data.data);
+                    setNewDashboardData(data.data);
+                }
+            }).catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
         };
 
         fetchData();

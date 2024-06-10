@@ -56,7 +56,7 @@ export default function AdminSignup() {
         else {
           const data = {
             ...values,
-            userType: '',
+            userType: 'ADMIN',
           };
 
           const res = await httpService.post(ENDPOINTS.SIGN_UP, data);

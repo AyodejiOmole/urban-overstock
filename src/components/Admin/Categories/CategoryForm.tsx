@@ -219,6 +219,7 @@ export default function CategoryForm() {
                 name="name"
                 disabled={!editCategory}
                 error={formik.errors.name}
+                maxLength={12}
               />
             </div>
             

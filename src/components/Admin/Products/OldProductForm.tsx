@@ -163,6 +163,7 @@ export default function OldProductForm({
 
   const [brandPicker, setBrandPicker] = useState<boolean | null>(false);
   const brandPickerRef = useRef<HTMLDivElement>(null);
+  // const brandRef = useRef<HTMLDivElement>(null);
 
   const [brandToAdd, setBrandToAdd] = useState<string | null | undefined | any>("");
 
@@ -170,14 +171,16 @@ export default function OldProductForm({
   const addBrandPresetRef = useRef<HTMLDivElement>(null);
 
   const productCategorySelectRef = useRef<HTMLSelectElement>(null);
-  const handleSelectProductCategoryClick = () => {
+  const handleSelectProductCategoryClick = (event: any) => {
+    event.stopPropagation(); 
     if (productCategorySelectRef && productCategorySelectRef.current) {
       productCategorySelectRef.current.focus();
     }
   };
 
   const productStatusSelectRef = useRef<HTMLSelectElement>(null);
-  const handleSelectProductStatusClick = () => {
+  const handleSelectProductStatusClick = (event: any) => {
+    event.stopPropagation(); 
     if (productStatusSelectRef && productStatusSelectRef.current) {
       productStatusSelectRef.current.focus();
     }
@@ -494,6 +497,11 @@ export default function OldProductForm({
     };
   }, []);
 
+  const handleBrandArrowClick = (event: any) => {
+    event.stopPropagation();
+    setBrandPicker(true);
+  }
+
   const deleteBrandPreset = async (brandId: number) => {
     const cookies = new Cookies();
     const token = cookies.get('urban-token');
@@ -593,10 +601,11 @@ export default function OldProductForm({
                     className = {
                         clsx('h-[48px] bg-[#F0F1F3] text-black font-medium px-4 py-2 relative rounded-lg border border-dark-100 flex gap-2 items-center',)
                     }
+                    // ref={brandRef}
                     onClick={() => setBrandPicker(true)}
                 >
                     {brands?.filter((brand) => brand.id === formik.values.brandId)[0]?.name ? brands?.filter((brand) => brand.id === formik.values.brandId)[0]?.name : "Select a brand..."}
-                    <IoIosArrowDown className='absolute right-4 top-auto bottom-auto' onClick={() => setBrandPicker(true)}/>
+                    <IoIosArrowDown className='absolute right-4 top-auto bottom-auto' onClick={handleBrandArrowClick}/>
                 </div>
 
                 {brandPicker && (

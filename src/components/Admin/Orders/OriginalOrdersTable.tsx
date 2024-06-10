@@ -6,17 +6,26 @@ import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import React, { useState, useMemo } from 'react';
+import { DataTable, DataTableFilterMeta, DataTablePageEvent } from 'primereact/datatable';
+import React, { useState, useMemo, useEffect } from 'react';
 import { FaEye } from 'react-icons/fa';
-import { RxPencil2 } from 'react-icons/rx';
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 import { IoIosArrowDown } from 'react-icons/io';
-import { IReturnRequests } from '@/interfaces/return-requests';
 import { useRouter } from 'next/navigation';
-import { ICancelledOrders } from '@/interfaces/cancelled-orders';
+import ENDPOINTS from '@/config/ENDPOINTS';
+import Cookies from 'universal-cookie';
 
-export default function OrdersTable({
+interface LazyTableState {
+    first: number;
+    rows: number;
+    page?: number | undefined;
+    pageCount?: number;
+    sortField?: string;
+    sortOrder?: number;
+    filters?: DataTableFilterMeta;
+}
+
+export default function OriginalOrdersTable({
   orders,
   page = 'orders',
   handleChangeSelectedOrders,
@@ -36,6 +45,88 @@ export default function OrdersTable({
   setCurrentPage?: any;
 }) {
   const [rowClick, setRowClick] = useState<boolean>(true);
+  const [totalRecords, setTotalRecords] = useState<number>(0);
+  const [lazyOrders, setLazyOrders] = useState<IOrder[] | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [lazyState, setlazyState] = useState<LazyTableState>({
+    first: 0,
+    rows: 10,
+    page: 1,
+    // pageCount: 100,
+    // sortField: null,
+    // sortOrder: null,
+    // filters: {
+    //     name: { value: '', matchMode: 'contains' },
+    //     'country.name': { value: '', matchMode: 'contains' },
+    //     company: { value: '', matchMode: 'contains' },
+    //     'representative.name': { value: '', matchMode: 'contains' }
+    // }
+    });
+
+    let networkTimeout: string | number | NodeJS.Timeout | null | undefined = null;
+
+    useEffect(() => {
+        loadLazyData();
+    }, [lazyState]);
+
+    const loadLazyData = () => {
+        setLoading(true);
+
+        if (networkTimeout) {
+            clearTimeout(networkTimeout);
+        }
+
+        //imitate delay of a backend call
+        networkTimeout = setTimeout(() => {
+            // CustomerService.getCustomers({ lazyEvent: JSON.stringify(lazyState) }).then((data) => {
+            //     setTotalRecords(data.totalRecords);
+            //     setCustomers(data.customers);
+            //     setLoading(false);
+            // });
+            const fetchData = () => {
+                const cookies = new Cookies();
+                const token = cookies.get('urban-token');
+                console.log(token);
+                const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
+        
+                fetch(`${baseUrl}/api/v1/${ENDPOINTS.ORDERS}?page=${lazyState.page}&size=${lazyState.rows}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    cache: 'no-store',
+                }).then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                }).then(data => {
+                    if (data.data) {
+                        console.log(data.data);
+                        setLazyOrders(data.data);
+                        setLoading(false);
+                    }
+                }).catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+            };
+        
+            fetchData();
+        }, Math.random() * 1000 + 250);
+    };
+
+    // const onPage = (event: any) => {
+    //     setlazyState(event);
+    // };
+
+  const onPage = (event: DataTablePageEvent) => {
+      setlazyState({
+        first: 0,
+        rows: 10,
+        page: lazyState?.page ? lazyState.page++ : 1,
+      });
+      console.log(event);
+      // setlazyState(event);
+  };
 
   const dateTemplate = (order: IOrder) => {
     const { createdAt } = order;
@@ -142,19 +233,19 @@ export default function OrdersTable({
 
   const getOrdersByDate = useMemo(() => {
     if (selectedDate) {
-      return orders?.filter(
+      return lazyOrders?.filter(
         (order) => moment(order.createdAt).valueOf() >= selectedDate
       );
     }
 
     if(categoryNavigation) {
-      return orders?.filter((item) => {
+      return lazyOrders?.filter((item) => {
         const itemDate = new Date(item.createdAt);
         return itemDate >= categoryNavigation.startDate && itemDate <= categoryNavigation.endDate;
       });
-    } else return orders;
+    } else return lazyOrders;
 
-  }, [orders, selectedDate, categoryNavigation]);
+  }, [lazyOrders, selectedDate, categoryNavigation]);
 
   const getOrdersByCategoryDate = useMemo(() => {
     if(categoryNavigation) {
@@ -175,18 +266,6 @@ export default function OrdersTable({
         order.shippingId.toLowerCase().includes(searchValue) ||
         order.orderProduct[0].productName.toLowerCase().includes(searchValue)
     );
-    // if(selectedDate) {
-      
-    // }
-
-    // if(categoryNavigation) {
-    //   return getOrdersByCategoryDate?.filter(
-    //     (order) =>
-    //       order.uuid.toLowerCase().includes(searchValue) ||
-    //       order.shippingId.toLowerCase().includes(searchValue)
-    //   );
-    // }
-    
   }, [searchValue, getOrdersByDate]);
 
   const checkBoxTemplate = () => {
@@ -197,31 +276,23 @@ export default function OrdersTable({
 
   return (
     <div className='card rounded-xl p-4 bg-white border border-gray-200'>
-      {page.toLowerCase() === "recent orders" && (
-        <div className='flex justify-between items-center mb-3'>
-          <p className="text-black text-md font-semibold">Recent orders</p>
-        
-          <Link
-            href="/admin/orders"
-          >
-            <Button className='text-black'>
-              See more
-            </Button>
-          </Link>
-        </div>
-      )}
       <DataTable
         value={matchedOrders ?? []}
+        lazy
+        first={lazyState.first} 
+        onPage={onPage}
+        loading={loading}
+        totalRecords={totalRecords}
         selectionMode={rowClick ? null : 'multiple'}
         selection={selectedOrders!}
         onSelectionChange={handleChangeSelectedOrders}
         dataKey='uuid'
         tableStyle={{ minWidth: '50rem' }}
-        paginator={page !== "recent orders" ? true : false}
-        paginatorTemplate={paginatorTemplate}
-        paginatorClassName='flex justify-between'
+        paginator
+        // paginatorTemplate={paginatorTemplate}
+        // paginatorClassName='flex justify-between'
         rows={10}
-        rowsPerPageOptions={[20, 50, 100, 250]}
+        // rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-md text-sm'
         sortOrder={-1}
         sortField='createdAt'
@@ -229,9 +300,8 @@ export default function OrdersTable({
         sortIcon={<IoIosArrowDown />}
         selectionAutoFocus={true}
         onRowClick={(e) => router.push(`/admin/orders/${e.data.id}`)}
-        
       >
-        {page !== "recent orders" && <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} className='group'/>}
+        <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} className='group'/>
         <Column field='uuid' header='Order ID' className='text-[#F2C94C]'/>
         <Column body={productTemplate} header='Product' />
         <Column field='date' header='Date' body={dateTemplate} sortable />

@@ -266,7 +266,7 @@ export default function ProductForm({
       vatAmount: activeProduct?.vatAmount ?? undefined,
       sku: activeProduct?.sku ?? " ",
       barcode: activeProduct?.barcode ?? " ",
-      status: activeProduct?.status ?? " ",
+      status: activeProduct?.status.toLowerCase() ?? " ",
       categoryId: activeProduct?.categoryId ?? undefined,
       costPrice: activeProduct?.costPrice ?? undefined,
       weight: activeProduct?.weight ?? undefined,
@@ -789,6 +789,8 @@ export default function ProductForm({
           <p className='text-lg font-semibold text-gray-700 mb-8'>
             General Information
           </p>
+
+          {/* Product Name */}
           <div className='mb-6'>
             <label htmlFor='name' className='text-sm text-neutral mb-2 block'>
               Product Name
@@ -801,7 +803,8 @@ export default function ProductForm({
               error={formik.errors.name}
             />
           </div>
-          {/*  */}
+
+          {/* Product Description */}
           <div className='mb-6'>
             <label
               htmlFor='description'
@@ -821,6 +824,7 @@ export default function ProductForm({
             <CustomError error={formik.errors.description} />
           </div>
 
+          {/* Product Brand */}
           <div className='w-full flex justify-between gap-2'>
             <div className='mb-4 w-full relative'>
                 <label htmlFor='brandId' className='text-sm text-neutral mb-2 block'>
@@ -1031,6 +1035,7 @@ export default function ProductForm({
         {/* Pricing */}
         <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4'>
           <p className='text-lg font-semibold text-gray-700 mb-8'>Pricing</p>
+
           <div className='mb-6'>
             <label
               htmlFor='basePrice'
@@ -1049,6 +1054,7 @@ export default function ProductForm({
               type='number'
             />
           </div>
+
           <div className='mb-6'>
             <label
               htmlFor='basePrice'
@@ -1067,6 +1073,7 @@ export default function ProductForm({
               type='number'
             />
           </div>
+          
           {/*  */}
           <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 xl:grid-cols-2 sm:gap-6 md:gap-0 xl:gap-6 items-center'>
             <div>
@@ -1238,6 +1245,8 @@ export default function ProductForm({
           <p className='text-lg font-semibold text-gray-700 mb-8'>Variation</p>
           <Variations dispatch={dispatch} state={state} />
         </div> */}
+
+        {/* Product Variations */}
         <div>
           <NewVariations amount={formik.values.quantity} dispatch={dispatch} productId={activeProduct?.id} state={state} colors={colors} sizes={sizes}/>
         </div>
@@ -1322,7 +1331,7 @@ export default function ProductForm({
         <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg max-h-96'>
           <p className='text-lg font-semibold text-gray-700 mb-8'>Category</p>
           {/* Product Category */}
-          <div className='mb-6'>
+          <div className='mb-6 relative'>
             <label
               htmlFor='categoryId'
               className='text-sm text-neutral mb-2 block '
@@ -1375,7 +1384,7 @@ export default function ProductForm({
           </div>
 
           {/*  */}
-          <div className='mb-6'>
+          <div className='mb-6 relative'>
             <label
               htmlFor='category'
               className='text-sm text-neutral mb-2 block'

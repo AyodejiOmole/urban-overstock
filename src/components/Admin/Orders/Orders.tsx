@@ -2,7 +2,7 @@
 import Button from '@/components/Global/Button';
 import CategoryNavigation from '@/components/Shared/CategoryNavigation';
 import { IOrder } from '@/interfaces/orders';
-import React, { useState, useMemo, ChangeEvent } from 'react';
+import React, { useState, useMemo, ChangeEvent, useEffect } from 'react';
 import { LuClipboardCheck } from 'react-icons/lu';
 import { PiExportBold } from 'react-icons/pi';
 import { CiSearch } from 'react-icons/ci';
@@ -17,6 +17,7 @@ import Cookies from 'universal-cookie';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import OriginalOrdersTable from './OriginalOrdersTable';
 
 export default function Orders(
   { 
@@ -30,6 +31,9 @@ export default function Orders(
   const [selectedOrders, setSelectedOrders] = useState<IOrder[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
+
+  const [retrievedOrders, setRetrievedOrders] = useState<IOrder[] | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const [categoryNavigation, setCategoryNavigation] = useState<any>();
   const [defaultFilterOption, setDefaultFilterOption] = useState(0);
@@ -120,6 +124,36 @@ export default function Orders(
       setSelectedDate(formatted);
     } else setSelectedDate(null);
   };
+
+  useEffect(() => {
+    const fetchData = () => {
+        const cookies = new Cookies();
+        const token = cookies.get('urban-token');
+        console.log(token);
+        const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
+
+        fetch(`${baseUrl}/api/v1/${ENDPOINTS.ORDERS}?page=${currentPage}&size=10`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            cache: 'no-store',
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }).then(data => {
+            if (data.data) {
+                console.log(data.data);
+                setRetrievedOrders(data.data);
+            }
+        }).catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    };
+
+    fetchData();
+}, [currentPage]);
 
   return (
     <>
