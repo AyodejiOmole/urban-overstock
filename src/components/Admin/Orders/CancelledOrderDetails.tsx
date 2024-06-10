@@ -88,22 +88,26 @@ export default function CancelledOrderDetails({
         </div>
 
         <div className='flex items-center gap-4'>
-          {
-            cancelledOrderHistory?.status.toLowerCase() === "denied" && 
-            <Button variant='outlined' onClick={() => setApproveModal(true)}>
+        {/*{
+           // cancelledOrderHistory?.status.toLowerCase() === "denied" &&  */}
+            <Button variant={cancelledOrderHistory?.status.toLowerCase() === "approved" ? "fill" : "outlined"} onClick={() => setApproveModal(true)}>
               {/* <PiExportBold /> */}
               Approve
             </Button>
-          }
+        {/*  }*/}
           
 
-          {
+         {/*  {
             cancelledOrderHistory?.status.toLowerCase() !== "denied" && 
             <Button variant='outlined' onClick={() => setDeclineModal(true)}>
-              {/* <RiDeleteBin6Line /> */}
+              <RiDeleteBin6Line /> 
               Deny
             </Button>
-          }
+          } */}
+          <Button variant={cancelledOrderHistory?.status.toLowerCase() === "denied" ? "fill" : "outlined"} onClick={() => setDeclineModal(true)}>
+              {/* <PiExportBold /> */}
+              Deny
+          </Button>
         </div>
       </div>
     
