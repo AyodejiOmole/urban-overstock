@@ -65,7 +65,7 @@ export default function CancelledOrderDetails({
     toast.loading('Declining cancel order request...');
 
     const res = await httpService.patchById(
-      `${ENDPOINTS.ORDERS}/cancel-request/approved/${id}`,
+      `${ENDPOINTS.ORDERS}/cancel-request/denied/${id}`,
       `Bearer ${token}`
     );
     toast.dismiss();
