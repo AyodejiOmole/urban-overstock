@@ -15,7 +15,7 @@ import getOrders from '@/libs/orders';
 import { getDashboardGraph } from '@/libs/dashboard';
 
 const AdminDashboard = async () => {
-  const timeFilter = '30-Days';
+  const timeFilter = 'All-Time';
 
   const apiTopChart: Promise<IDashboardData | null> = getTopChart(timeFilter);
   const dashboardData = await apiTopChart;

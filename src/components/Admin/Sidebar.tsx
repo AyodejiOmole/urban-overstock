@@ -266,7 +266,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
           }
         </div>
 
-              {/* Settings */}
+        {/* Settings */}
         <div className='cursor-pointer self-end  p-2 flex items-center'>
             <div
               onClick={() => logOut()}
@@ -277,7 +277,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
             >
               <IoIosLogOut />
               {isOpen && <p className='capitalize'>Logout</p>}
-        </div>
+            </div>
         </div>
       </div>
     </div>

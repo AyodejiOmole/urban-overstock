@@ -83,7 +83,7 @@ export default function SalesChart({
             <span className='tooltip'>70%</span>
             <span className='graph'></span>
             <div className='absolute left-[50%] top-[60%] -translate-x-[50%] flex items-center justify-center flex-col'>
-              <p className='font-bold text-2xl mb-1 text-gray-800'>{graph?.revenueDifference.percentageDifference.toFixed(2)}%</p>
+              <p className='font-bold text-2xl mb-1 text-gray-800'>{graph?.revenueDifference.percentageDifference?.toFixed(2) ?? 0}%</p>
               {/* <span className='bg-green-100 text-green-600 p-1 px-4 text-[12px] rounded-full'>
                 +10%
               </span> */}
@@ -91,7 +91,7 @@ export default function SalesChart({
           </div>
 
           <p className='text-neutral text-center'>
-            You succeeded in earning <span className='font-bold'>${graph?.revenueDifference.todayRevenue.toFixed(2)}</span>{' '}
+            You succeeded in earning <span className='font-bold'>${graph?.revenueDifference.todayRevenue.toFixed(2) ?? 0}</span>{' '}
             today, it`s {(graph?.revenueDifference.todayRevenue && graph.revenueDifference.yesterdayRevenue) && graph?.revenueDifference.todayRevenue > graph?.revenueDifference.yesterdayRevenue ? "higher" : "lower"} than yesterday.
           </p>
 
@@ -104,7 +104,7 @@ export default function SalesChart({
               <div className='flex items-center'>
                 <p className='text-[#101828] text-[24px] leading-[32px]  font-medium'>
                   {/* $30K{' '} */}
-                  ${graph?.revenueDifference.todayRevenue.toFixed(2)}
+                  ${graph?.revenueDifference.todayRevenue.toFixed(2) ?? 0}
                 </p>
                 <GoArrowUp className='text-green-500 h-[20px] w-[20px] '/>
               </div>
@@ -115,7 +115,7 @@ export default function SalesChart({
               <div className='flex items-center'>
                 <p className='text-[#101828] text-[24px] leading-[32px]  font-medium'>
                   {/* $2.5K{' '} */}
-                  ${graph?.revenueDifference.todayRevenue.toFixed(2)}
+                  ${graph?.revenueDifference.todayRevenue.toFixed(2) ?? 0}
                 </p>
                 <GoArrowUp className='text-green-500 h-[20px] w-[20px] '/>
               </div>

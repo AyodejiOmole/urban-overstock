@@ -274,7 +274,7 @@ export default function Orders(
       </div>
       {/* Orders Table */}
 
-      <OrdersTable
+      <OriginalOrdersTable
         orders={orders}
         handleChangeSelectedOrders={handleChangeSelectedOrders}
         selectedOrders={selectedOrders}

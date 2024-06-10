@@ -101,6 +101,8 @@ export default function OriginalOrdersTable({
                     return response.json();
                 }).then(data => {
                     if (data.data) {
+                        console.log(data.meta);
+                        setTotalRecords(data.meta.total_items);
                         console.log(data.data);
                         setLazyOrders(data.data);
                         setLoading(false);
@@ -289,8 +291,8 @@ export default function OriginalOrdersTable({
         dataKey='uuid'
         tableStyle={{ minWidth: '50rem' }}
         paginator
-        // paginatorTemplate={paginatorTemplate}
-        // paginatorClassName='flex justify-between'
+        paginatorTemplate={paginatorTemplate}
+        paginatorClassName='flex justify-between'
         rows={10}
         // rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-md text-sm'

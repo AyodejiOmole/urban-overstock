@@ -179,6 +179,7 @@ export default function OldProductForm({
   };
 
   const productStatusSelectRef = useRef<HTMLSelectElement>(null);
+  const productStatusArrow = useRef<any>(null);
   const handleSelectProductStatusClick = (event: any) => {
     event.stopPropagation(); 
     if (productStatusSelectRef && productStatusSelectRef.current) {
@@ -487,7 +488,7 @@ export default function OldProductForm({
   useEffect(() => {
     document.body.addEventListener('click', (event) => {
       
-      if (!brandPickerRef.current?.contains(event.target as Node) &&  !addBrandPresetRef.current?.contains(event.target as Node)) {
+      if (!brandPickerRef.current?.contains(event.target as Node) &&  !addBrandPresetRef.current?.contains(event.target as Node) && productStatusArrow.current !== event.target) {
         setAddBrandDisplay(false);
         setBrandPicker(false);
       }
@@ -1154,13 +1155,21 @@ export default function OldProductForm({
               <option value='out of stock'>Out of Stock</option>
             </select>
 
+            <div
+              onClick={handleSelectProductStatusClick}
+              ref={productStatusArrow}
+              // className='border border-red-300'
+              className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`}
+            >
             <IoIosArrowDown 
             // onClick={ () => {
             //   productStatusSelectRef.current?.focus()
             //   console.log("this");
             // } }  
-              onClick={handleSelectProductStatusClick}
-              className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`} />
+              // size={20}
+              // className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`}
+               />
+            </div>
             {/* {productStatusSelectRef.current?.focus && 
               <IoIosArrowUp 
                 onClick={handleSelectProductStatusClick}

@@ -115,7 +115,6 @@ const ProductDetails = ({
                                 return (
                                     <div key={index} style={{ backgroundColor: color }}  className={` rounded-full p-4`}>
                                         {/* this */}
-                                        
                                     </div>
                                 )
                             })}
