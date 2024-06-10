@@ -51,7 +51,7 @@ export default function OriginalOrdersTable({
   const [lazyState, setlazyState] = useState<LazyTableState>({
     first: 0,
     rows: 10,
-    page: 1,
+    page: 0,
     // pageCount: 100,
     // sortField: null,
     // sortOrder: null,
