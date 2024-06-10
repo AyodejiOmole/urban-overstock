@@ -374,8 +374,9 @@ export default function OldProductForm({
             const data = {
               ...values,
               categoryId: +values.categoryId,
-              discountPercentage: discounts?.find((discount) => discount.code === values.discountType)?.percentage,
+              discountPercentage: discounts?.find((discount) => discount.code === values.discountType)?.percentage ?? 0,
               productVarations: getFormattedVariations(state, variationImages),
+              vatAmount: values.vatAmount === undefined ? 0 : values.vatAmount,
               // productImages: product_images,
               imageUrls: product_images,
               tag: "empty"
@@ -401,8 +402,9 @@ export default function OldProductForm({
                 }
               });
           } else console.log('Products array not provided');
-        } catch (error) {
+        } catch (error: any) {
           console.log(error);
+          toast.error(error.message);
         }
       }
     },
