@@ -16,7 +16,7 @@ export default function AdminNewHomeSlideshow() {
   const cookies = new Cookies();
   const httpService = new HTTPService();
   const [image, setImage] = useState<File | null>(null);
-  const { back, replace } = useRouter();
+  const { back, replace, push } = useRouter();
   const [loading, setLoading] = useState(false);
 
   const imageInputRef = useRef<HTMLInputElement | null>(null);
@@ -85,7 +85,7 @@ export default function AdminNewHomeSlideshow() {
           toast.success('Slide image saved successfully.');
 
           setTimeout(() => {
-            replace('/admin/home-slideshow');
+            push('/admin/home-slideshow');
           }, 1000);
         }
       } catch (error) {

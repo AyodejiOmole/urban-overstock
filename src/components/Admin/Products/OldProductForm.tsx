@@ -152,7 +152,7 @@ export default function OldProductForm({
   discounts: IDiscountCodes | undefined;
 }) {
   const cookies = new Cookies();
-  const { replace } = useRouter();
+  const router = useRouter();
   const httpService = new HTTPService();
   const imageInputRef = useRef<HTMLInputElement | null>(null);
   const searchParams = useSearchParams();
@@ -395,8 +395,9 @@ export default function OldProductForm({
                   toast.success('Product added successfully.');
 
                   setTimeout(() => {
-                    replace('/admin/products');
+                    router.push('/admin/products');
                   }, 1000);
+                  
                 }
               });
           } else console.log('Products array not provided');

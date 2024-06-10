@@ -80,7 +80,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
 
   const httpService = new HTTPService();
 
-  const { replace } = useRouter();
+  const { replace, push } = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -112,7 +112,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                   toast.success('Order successfully updated to shipping.');
 
                   setTimeout(() => {
-                    replace('/admin/orders');
+                    push('/admin/orders');
                   }, 1000);
                 }
               });
@@ -151,7 +151,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                   toast.success('Order successfully updated to Delivered.');
 
                   setTimeout(() => {
-                    replace('/admin/orders');
+                    push('/admin/orders');
                   }, 1000);
                 }
               });
@@ -192,7 +192,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
     
                 toast.success('Order successfully updated.');
                 setTimeout(() => {
-                  replace('/admin/orders');
+                  push('/admin/orders');
                 }, 1000);
               }
             });

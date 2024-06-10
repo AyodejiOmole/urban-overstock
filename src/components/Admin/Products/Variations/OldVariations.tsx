@@ -341,6 +341,7 @@ const VariationItem = ({
               toast.success('Color preset added successfully.');
               colors?.push(apiRes.data);
               setDisplayAddColor(false);
+              setActiveColorPicker(true);
             }
           });
       } catch (error) {

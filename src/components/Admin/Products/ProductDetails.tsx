@@ -36,7 +36,7 @@ const ProductDetails = ({
                 {/* Image Carousel */}
                 <div className='relative lg:w-1/2 w-full mb-3'>
                     <div className='w-full h-[200px]'>
-                        <Image
+                        {/* <Image
                             // width={200}
                             // height={200}
                             layout="fill"
@@ -45,25 +45,44 @@ const ProductDetails = ({
                             className="mx-auto rounded transition-500 transition-all"
                             alt="product image"
                             src={productDetails?.imageUrls[currentImageCount] || ''}
-                        />
+                        /> */}
+
+                            {/* // eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                                src={productDetails?.imageUrls[currentImageCount] || ''}
+                                alt="product image"
+                                // width="200"
+                                // height="200"
+                                className="mx-auto w-auto h-[250px] rounded transition-500 transition-all"
+                                style={{
+                                    // objectFit: 'cover',
+                                    overflow: 'hidden',
+                                    // aspectRatio: "3/2",
+                                }}
+                            />
 
                         <div className="absolute top-0 justify-between h-full hidden md:flex w-[100%] lg:w-[100%] xl:w-[100%] items-center z-10">
-                            <MdKeyboardArrowLeft 
-                                // width={50}
-                                // height={50}
-                                size={50}
-                                className='cursor-pointer'
-                                color='white'
-                                onClick={() => changeImage("previous")}
-                            />
-                            <MdKeyboardArrowRight 
-                                // width={100}
-                                // height={100}
-                                size={50}
-                                color='white'
-                                className='cursor-pointer'
-                                onClick={() => changeImage("next")}
-                            />
+                            {productDetails?.imageUrls !== undefined && productDetails.imageUrls.length > 1 && 
+                                <MdKeyboardArrowLeft 
+                                    // width={50}
+                                    // height={50}
+                                    size={50}
+                                    className='cursor-pointer'
+                                    color='black'
+                                    onClick={() => changeImage("previous")}
+                                />
+                            }
+                            
+                            {productDetails?.imageUrls !== undefined && productDetails.imageUrls.length > 1 && 
+                                <MdKeyboardArrowRight 
+                                    // width={100}
+                                    // height={100}
+                                    size={50}
+                                    color='black'
+                                    className='cursor-pointer'
+                                    onClick={() => changeImage("next")}
+                                />
+                            }
                             
                         </div>
                     </div>
@@ -103,13 +122,13 @@ const ProductDetails = ({
 
                     <div className=''>
                         {/* Description */}
-                        <div className='flex gap-1'>
+                        <div className='flex gap-1 border-b-2 border-gray-300'>
                             <p className='text-black text-md font-semibold'>Description:</p>
-                            <p className='w-full text-md text-black mb-3 text-left border-b-2 border-gray-300 pb-4'>{productDetails?.description}</p>
+                            <p className='w-full text-md text-black mb-3 text-left  pb-4'>{productDetails?.description}</p>
                         </div>
                         
                         {/* Colors */}
-                        <div className='flex flex-start gap-2'>
+                        <div className='flex flex-start gap-2 mt-3'>
                             {productDetails?.productVarations.map((variation: ProductVarationSingle, index) => {
                                 const color = variation.color.code;
                                 return (

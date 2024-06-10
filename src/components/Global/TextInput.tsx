@@ -13,6 +13,7 @@ type InputType = React.InputHTMLAttributes<HTMLInputElement> & {
   rightIconClick?: () => void;
   rounded?: boolean;
   value?: string | any;
+  ifCategory?: boolean;
 };
 
 export default function TextInput(props: InputType) {
@@ -36,6 +37,7 @@ export default function TextInput(props: InputType) {
     onFocus,
     onBlur,
     rounded = false,
+    ifCategory,
   } = props;
 
   const inputStyles = clsx(
@@ -104,6 +106,7 @@ export default function TextInput(props: InputType) {
           onBlur={onBlur}
           className={`h-full text-sm w-full bg-[#F0F1F3] font-medium caret-primary text-black leading-2 focus:outline-none block appearance-none`}
           placeholder={placeholder}
+          maxLength={ifCategory ? 12 : undefined}
         />
         {rightIcon && (
           <div

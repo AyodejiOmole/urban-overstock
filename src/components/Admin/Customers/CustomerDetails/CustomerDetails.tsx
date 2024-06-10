@@ -35,7 +35,8 @@ export default function CustomerDetails({
   const cookies = new Cookies();
   const token = cookies.get('urban-token');
 
-  const { replace } = useRouter();
+  // const { replace } = useRouter();
+  const router = useRouter();
 
   const deleteCustomer = (customerId?: number) => {
     if(customerId) {
@@ -57,7 +58,7 @@ export default function CustomerDetails({
   
               toast.success('Customer successfully deleted.');
               setTimeout(() => {
-                replace('/admin/customers');
+                router.push('/admin/customers');
               }, 1000);
             }
           });
