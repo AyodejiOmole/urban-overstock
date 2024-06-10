@@ -1,5 +1,4 @@
 "use client";
-"use client";
 import React from 'react';
 import { CiLocationOn, CiLock, CiMail, CiShoppingCart } from 'react-icons/ci';
 import { MdOutlineAlternateEmail } from 'react-icons/md';
