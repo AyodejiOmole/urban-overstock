@@ -1,5 +1,4 @@
 "use client";
-"use client";
 import React from 'react';
 import { CiLocationOn, CiLock, CiMail, CiShoppingCart } from 'react-icons/ci';
 import { MdOutlineAlternateEmail } from 'react-icons/md';
@@ -65,7 +64,7 @@ export default function CancelledOrderDetails({
     toast.loading('Declining cancel order request...');
 
     const res = await httpService.patchById(
-      `${ENDPOINTS.ORDERS}/cancel-request/approved/${id}`,
+      `${ENDPOINTS.ORDERS}/cancel-request/denied/${id}`,
       `Bearer ${token}`
     );
     toast.dismiss();
@@ -88,22 +87,26 @@ export default function CancelledOrderDetails({
         </div>
 
         <div className='flex items-center gap-4'>
-          {/* {
-            cancelledOrderHistory?.status.toLowerCase() === "denied" &&  */}
+        {/*{
+           // cancelledOrderHistory?.status.toLowerCase() === "denied" &&  */}
             <Button variant={cancelledOrderHistory?.status.toLowerCase() === "approved" ? "fill" : "outlined"} onClick={() => setApproveModal(true)}>
               {/* <PiExportBold /> */}
               Approve
             </Button>
-          {/* } */}
+        {/*  }*/}
           
-{/* 
-          {
-            cancelledOrderHistory?.status.toLowerCase() !== "denied" &&  */}
-            <Button variant={cancelledOrderHistory?.status.toLowerCase() === "denied" ? "fill" : "outlined"} onClick={() => setDeclineModal(true)}>
-              {/* <RiDeleteBin6Line /> */}
+
+         {/*  {
+            cancelledOrderHistory?.status.toLowerCase() !== "denied" && 
+            <Button variant='outlined' onClick={() => setDeclineModal(true)}>
+              <RiDeleteBin6Line /> 
               Deny
             </Button>
-          {/* } */}
+          } */}
+          <Button variant={cancelledOrderHistory?.status.toLowerCase() === "denied" ? "fill" : "outlined"} onClick={() => setDeclineModal(true)}>
+              {/* <PiExportBold /> */}
+              Deny
+          </Button>
         </div>
       </div>
     
