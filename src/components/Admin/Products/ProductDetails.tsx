@@ -29,6 +29,11 @@ const ProductDetails = ({
             setCurrentImageCount(newImageCount < 0 ? productDetails!.imageUrls.length - 1 : newImageCount);
         }
     }
+
+    const scrollToSection = (elementId: string) => {
+        document.getElementById(elementId ?? "")?.scrollIntoView({ behavior: 'smooth' });
+    };
+      
     
     return (
         <div>
@@ -132,7 +137,7 @@ const ProductDetails = ({
                             {productDetails?.productVarations.map((variation: ProductVarationSingle, index) => {
                                 const color = variation.color.code;
                                 return (
-                                    <div key={index} style={{ backgroundColor: color }}  className={` rounded-full p-4`}>
+                                    <div key={index} onClick={() => scrollToSection(`variation-${index}`)} style={{ backgroundColor: color }}  className={` rounded-full p-4`}>
                                         {/* this */}
                                     </div>
                                 )
@@ -251,7 +256,7 @@ const ProductDetails = ({
                 {
                     productDetails?.productVarations.map((variation, index) => {
                         return (
-                            <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4' key={index}>
+                            <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4' key={index} id={`variation-${index}`}>
                                 <div className='flex items-start gap-4 w-full flex-col sm:items-center py-4 border-b border-b-gray-100'>
                                     {/* Media Upload */}
                                     <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4'>
