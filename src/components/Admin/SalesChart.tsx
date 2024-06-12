@@ -1,9 +1,11 @@
-import { admin_sales_chart_options, months_labels } from '@/utils/chart';
+// "use client";
+import { admin_sales_chart_options } from '@/utils/chart';
 import { faker } from '@faker-js/faker';
 import { GoArrowDown, GoArrowUp } from 'react-icons/go';
 import AreaChart from '../Chart/AreaChart';
 import { IGraphDetails } from '@/interfaces/graph';
 import { Graph } from '@/interfaces/graph';
+// import { useEffect, useState } from 'react';
 
 // export const data = {
 //   labels: months_labels,
@@ -36,12 +38,36 @@ import { Graph } from '@/interfaces/graph';
 // };
 
 export default function SalesChart({
-  graph
+  graph,
+  month_labels,
 }: {
-  graph: IGraphDetails | null
+  graph: IGraphDetails | null,
+  month_labels: string[],
 }) {
+  const currentMonth = new Date().toLocaleString('en-US', { month: 'short' }); 
+  // console.log(currentMonth);
+  // const [currentMonth, setCurrentMonth] = useState('');
+
+  // const currentMonthIndex = months_labels.indexOf(currentMonth);
+  // console.log(currentMonthIndex);
+
+  // const new_month_labels = months_labels.splice(0, (currentMonthIndex ?? months_labels.length) + 1);
+  // console.log(new_month_labels);
+
+  // useEffect(() => {
+  //   const currentMonth = new Date().toLocaleString('en-US', { month: 'short' });
+  //   setCurrentMonth(currentMonth);
+  // }, []);
+
   const data = {
-    labels: graph?.graph.map((item: Graph) => item.month),
+    // labels: graph?.graph.map((item: Graph, index) => {
+    //   const currentMontIndex = months_labels.indexOf(new Date().toLocaleString('en-US', { month: 'short' }));
+    //   if(index <= currentMontIndex) {
+    //     return item.month;
+    //   }
+    // }),
+    labels: month_labels,
+    // labels: months_labels.splice(0, months_labels.indexOf(new Date().toLocaleString('en-US', { month: 'short' })) + 1),
     datasets: [
       {
         fill: true,
@@ -69,6 +95,7 @@ export default function SalesChart({
       },
     ],
   };
+
   return (
     <section className='grid grid-cols-1 xl:grid-cols-6 gap-4 my-8'>
       <div className='rounded-lg bg-white border border-neural p-6 xl:col-span-2'>

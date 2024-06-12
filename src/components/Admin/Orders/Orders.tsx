@@ -73,6 +73,12 @@ export default function Orders(
             deliveredOrder = true;
             return;
           }
+
+          if(status.toLowerCase() === "processing") {
+            toast.error("You cannot update a cancelled order to processing.");
+            deliveredOrder = true;
+            return;
+          }
         }); 
       }
       

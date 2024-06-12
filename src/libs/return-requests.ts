@@ -14,10 +14,7 @@ export default async function getReturnRequests() {
       'Cache-Control': 'no-cache, max-age=0',
     },
 
-    // cache: 'no-store',
-    // next: {
-    //   revalidate: 10,
-    // },
+    cache: 'no-store',
   });
 
   const res = await apiRes.json();
@@ -39,9 +36,6 @@ export async function getReturnRequestById(returnRequestId: string) {
     },
 
     cache: 'no-store',
-    // next: {
-    //   revalidate: 10,
-    // },
   });
 
   const res = await apiRes.json();

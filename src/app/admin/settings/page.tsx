@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import React from 'react';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
@@ -13,8 +13,13 @@ import Button from '@/components/Global/Button';
 import { TfiSave } from 'react-icons/tfi';
 import { FaX } from 'react-icons/fa6';
 import TextInput from '@/components/Global/TextInput';
+import { IAdminShippingAddress } from '@/interfaces/shipping-address';
+import getAdminShippingAddress from '@/libs/shipping-address';
 
-const Settings = () => {
+const Settings = async () => {
+    const apiRes: Promise<IAdminShippingAddress | null> = getAdminShippingAddress();
+    const adminShippingAddress = await apiRes;
+    
     const cookies = new Cookies();
     const httpService = new HTTPService();
 
@@ -76,6 +81,8 @@ const Settings = () => {
                     <p className='text-lg font-semibold text-gray-700 mb-8'>Admin Shipping Details</p>
 
                     <div className='w-full items-center'>
+
+                        {/* First name */}
                         <div className='mb-6'>
                             <label htmlFor='firstName' className='text-sm text-neutral mb-2 block'>
                                 First Name
@@ -90,6 +97,7 @@ const Settings = () => {
                             />
                         </div>
                         
+                        {/* Last name */}
                         <div className='mb-6'>
                             <label
                                 htmlFor='lastName'
@@ -107,6 +115,7 @@ const Settings = () => {
                             />
                         </div>
                         
+                        {/* Street address */}
                         <div className='mb-6'>
                             <label
                                 htmlFor='streetAddress'
@@ -125,6 +134,7 @@ const Settings = () => {
                             />
                         </div>
                         
+                        {/* Country */}
                         <div className='mb-6'>
                             <label
                                 htmlFor='country'
@@ -142,6 +152,7 @@ const Settings = () => {
                             />
                         </div>
 
+                        {/* State */}
                         <div className='mb-6'>
                             <label
                                 htmlFor='state'
@@ -159,6 +170,7 @@ const Settings = () => {
                             />
                         </div>
 
+                        {/* City */}
                         <div className='mb-6'>
                             <label
                                 htmlFor='city'
@@ -176,6 +188,7 @@ const Settings = () => {
                             />
                         </div>
 
+                        {/* State */}
                         <div className='mb-6'>
                             <label
                                 htmlFor='state'
@@ -212,7 +225,6 @@ const Settings = () => {
                         </Button>
                     </div>
                 </div>
-
             </div>
         </div>
     )

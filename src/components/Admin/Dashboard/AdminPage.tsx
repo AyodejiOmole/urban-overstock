@@ -1,5 +1,4 @@
 'use client'
-
 import React from 'react'
 import Header from './Header';
 import StatCards from '../StatCards';
@@ -9,12 +8,13 @@ import OrdersTable from '../Orders/OrdersTable';
 import { IGraphDetails } from '@/interfaces/graph';
 import { ITopSellingProducts } from '@/interfaces/top-selling-products';
 import { IOrder } from '@/interfaces/orders';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import CategoryNavigation from '@/components/Shared/CategoryNavigation';
 import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa';
 import Cookies from 'universal-cookie';
 import ENDPOINTS from '@/config/ENDPOINTS';
+import { months_labels } from '@/utils/chart';
 
 const filter_options = [
     'all time',
@@ -45,6 +45,11 @@ export default function AdminPage ({
 
     const [newDashboardData, setNewDashboardData] = useState<IDashboardData>({} as IDashboardData);
 
+    // const currentMonth = new Date().toLocaleString('en-US', { month: 'short' }); 
+    // console.log(currentMonth);
+    const [currentMonth, setCurrentMonth] = useState('');
+    const [newMonthLabels, setNewMonthLabels] = useState<string[]>([]);
+
     const [timeFilter, setTimeFilter] = useState<string>("All-time");
     const [defaultFilterOption, setDefaultFilterOption] = useState(0);
 
@@ -71,6 +76,16 @@ export default function AdminPage ({
         setDefaultFilterOption(newIndex);
         console.log(option);
     }
+
+    const currentMonthIndex = useMemo(() => {
+        const currentMonth = new Date().toLocaleString('en-US', { month: 'short' });
+        return months_labels.indexOf(currentMonth) + 1;
+    }, []);
+      
+    const slicedMonths = useMemo(() => {
+        return months_labels.filter((month, index) => index <= currentMonthIndex);
+    }, [currentMonthIndex]);
+      
 
     useEffect(() => {
         const fetchData = () => {
@@ -100,7 +115,20 @@ export default function AdminPage ({
         };
 
         fetchData();
+        
+        // const month = new Date().toLocaleString('en-US', { month: 'short' });
+        // const currentMonthIndex = months_labels.indexOf(month);
+        // console.log(currentMonthIndex);
+
+        // months_labels.indexOf(new Date().toLocaleString('en-US', { month: 'short' }));
+        // months_labels.splice(0, months_labels.indexOf(new Date().toLocaleString('en-US', { month: 'short' })) + 1);
+    
+        // const new_month_labels = months_labels.splice(0, (currentMonthIndex ?? months_labels.length) + 1);
+        // console.log(new_month_labels);
+        // setNewMonthLabels(months_labels);
+
     }, [timeFilter]);
+    console.log(newMonthLabels);
 
     return (
         <div>
@@ -123,7 +151,13 @@ export default function AdminPage ({
                 </div>
             </div>
             <StatCards dashboardData={newDashboardData}/>
-            <SalesChart graph={graph!}/>
+            <SalesChart 
+                graph={graph!} 
+                // month_labels={newMonthLabels}
+                // month_labels={months_labels}
+                month_labels={slicedMonths}
+                // month_labels={months_labels.splice(0, months_labels.indexOf(new Date().toLocaleString('en-US', { month: 'short' })) + 1)}
+            />
             <Sales 
                 products={topSellingProducts?.topProducts} 
                 salesByLocation={topSellingProducts?.topOrdersLocation}
