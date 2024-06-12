@@ -73,9 +73,13 @@ export default function Orders(
             deliveredOrder = true;
             return;
           }
+        }); 
+      }
 
-          if(status.toLowerCase() === "processing") {
-            toast.error("You cannot update a cancelled order to processing.");
+      if(status.toLowerCase() === "processing") {
+        const checkingOrders = orders.map((order) => {
+          if(order.status.toLowerCase() === "cancelled") {
+            toast.error("You cannot set a cancelled order to processing.");
             deliveredOrder = true;
             return;
           }
