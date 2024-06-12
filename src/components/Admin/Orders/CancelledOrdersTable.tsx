@@ -76,10 +76,10 @@ export default function CancelledOrdersTable({
       case 'shipped':
         styles = 'bg-[#E8F8FD] text-[#13B2E4]';
         break;
-      case 'delivered':
+      case 'delivered' || 'approved':
         styles = 'bg-green-100 text-green-600';
         break;
-      case 'cancelled' || 'refunded':
+      case 'cancelled' || 'refunded' || 'denied':
         styles = 'bg-red-100 text-red-600';
         break;
       case 'packed':
