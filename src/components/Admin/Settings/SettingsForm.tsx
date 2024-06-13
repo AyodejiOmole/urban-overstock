@@ -88,8 +88,8 @@ const SettingsForm = ({
                 toast.success('Address settings updated successfully.');
         
                 setTimeout(() => {
-                    // router.push('/admin');
-                    router.refresh();
+                    router.push('/admin');
+                    // router.refresh();
                 }, 1000);
             }
             console.log(apiRes);
