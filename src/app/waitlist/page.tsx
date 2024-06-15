@@ -7,10 +7,10 @@ import { useRouter } from 'next/navigation';
 import TextInput from '@/components/Global/TextInput';
 import { FaX } from 'react-icons/fa6';
 import { TfiSave } from 'react-icons/tfi';
-import ENDPOINTS from '@/config/ENDPOINTS';
+// import ENDPOINTS from '@/config/ENDPOINTS';
 import toast from 'react-hot-toast';
 import HTTPService from '@/services/http';
-import Cookies from 'universal-cookie';
+// import Cookies from 'universal-cookie';
 import * as Yup from 'yup';
 import { IoIosArrowDown } from 'react-icons/io';
 
@@ -27,7 +27,7 @@ function CustomError({ error }: { error?: string }) {
 }
 
 const Waitlist = () => {
-    const cookies = new Cookies();
+    // const cookies = new Cookies();
     const httpService = new HTTPService();
 
     const router = useRouter();
@@ -43,7 +43,6 @@ const Waitlist = () => {
           productsToSell: "",
           shippingPossible:  "",
           productAvailable: "",
-          zipCode:"",
         },
         validationSchema: Yup.object({
           firstName: Yup.string().required().label('First Name'),
@@ -52,31 +51,32 @@ const Waitlist = () => {
           preferredModeOfContact: Yup.string().required().label('Preferred Mode of Contact'),
           emailAddress: Yup.string().required().label('Email Address'),
           productsToSell: Yup.string().required().label('Interest Products'),
-        questions: Yup.string().required().label('Questions'),
-          country: Yup.string().required().label('Country'),
+          questions: Yup.string().required().label('Questions'),
           shippingPossible: Yup.string().required().label('Shippng possible'),
           productAvailable: Yup.string().required().label('Product Available'),
-          zipCode: Yup.string().required().label('Zip Code'),
         }),
         onSubmit: async (values) => {
-            // toast.loading("Updating admin shipping address...");
-            // const token = cookies.get('urban-token');
+            toast.loading("Submitting...");
 
-            // const zipCode = String(values.zipCode);
-            // const data = { ...values, zipCode }
-
-            // let apiRes;
-
-            // toast.dismiss();
-            // if (apiRes.status === 200) {
-            //     toast.success('Address settings updated successfully.');
-        
-            //     setTimeout(() => {
-            //         router.push('/admin');
-            //         // router.refresh();
-            //     }, 1000);
-            // }
-            // console.log(apiRes);
+            fetch("https://formspree.io/f/xwkggneo", {
+                method: 'POST',
+                body: JSON.stringify(values), 
+                headers: {
+                    'Accept': 'application/json'
+                }
+              }).then(response => {
+                toast.dismiss();
+                if (response.ok) {
+                    toast.dismiss();
+                    toast.success("Thanks for your submission! You have been added to the waitlist.");
+                    router.push("/");
+                } else {
+                    toast.error("Oops! There was a problem submitting your form");
+                }
+              }).catch(error => {
+                toast.dismiss();
+                toast.error("Oops! There was a problem submitting your form");
+              });
         },
         validateOnChange: true,
     });
@@ -146,7 +146,7 @@ const Waitlist = () => {
                                 htmlFor='phoneNumber'
                                 className='text-sm text-neutral mb-2 block'
                             >
-                                Last Name
+                                Phone number
                             </label>
                             <TextInput
                                 placeholder='Type your phone number...'

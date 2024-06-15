@@ -34,6 +34,12 @@ export function Footer() {
               <span>700-6464-644</span>
             </a>
           </div>
+
+          <Link href="/waitlist">
+            <div className='text-white p-2 rounded font-medium bg-black'>
+              Become A Seller On Urban Overstock
+            </div>
+          </Link>
         </div>
 
         {/* Column 2 */}
