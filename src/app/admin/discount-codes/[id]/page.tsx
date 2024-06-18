@@ -9,13 +9,13 @@ import Pagination from '@/components/Shared/Pagination';
 
 export default function AdminDiscountCodeDetails() {
   const params = useSearchParams();
-  const [discountCode, setDiscountCode] = useState<any>(null);
-  const [discountPer, setDiscountPer] = useState<any>(null);
+  // const [discountCode, setDiscountCode] = useState<any>(null);
+  // const [discountPer, setDiscountPer] = useState<any>(null);
 
-  useEffect(() => {
-    setDiscountCode(params.get("code"));
-    setDiscountPer(params.get("percentage"));
-  }, [params]);
+  // useEffect(() => {
+  //   setDiscountCode(params.get("code"));
+  //   setDiscountPer(params.get("percentage"));
+  // }, [params]);
 
   return (
     <section>
@@ -27,16 +27,15 @@ export default function AdminDiscountCodeDetails() {
       </div>
       <Card>
         <div className='p-4'>
-          <div className='flex items-center justify-end gap-4 mb-8'>
+          {/* <div className='flex items-center justify-end gap-4 mb-8'>
             <Button variant='outlined' size='small'>
               Deactivate
             </Button>
             <Button size='small'>Activate</Button>
-          </div>
+          </div> */}
 
           <div>
-            <p className='mb-8 text-gray-700 text-lg font-medium'>Inventory</p>
-
+            <p className='mb-8 text-gray-700 text-lg font-medium'>Details</p>
             <form className='grid grid-cols-1 md:grid-cols-2 gap-4'>
               <div className='mb-6'>
                 <label
@@ -46,7 +45,7 @@ export default function AdminDiscountCodeDetails() {
                   Code
                 </label>
 
-                <TextInput id='code' placeholder={'Discount code...'} value={discountCode} disabled />
+                <TextInput id='code' disabled placeholder={'Discount code...'} value={params.get("code") ?? ""} />
                 {/* <input type="text" value={discountCode || ''} disabled /> */}
 
               </div>
@@ -57,7 +56,7 @@ export default function AdminDiscountCodeDetails() {
                 >
                   Percentage Off
                 </label>
-                <TextInput placeholder={'Percentage off...'} disabled value={discountPer}/>
+                <TextInput placeholder={'Percentage off...'} disabled value={params.get("percentage") ?? 0}/>
                 {/* <input type="text" value={discountPer || ''} disabled /> */}
               </div>
             </form>

@@ -78,7 +78,7 @@ export default function DiscountCodesTable({
       <div className='flex items-center gap-3 justify-end'>
         <Link
           // href={`/admin/discount-codes/${discount.id}?code=${discount.code}&percentage=${discount.percentage}`}
-          href={`/admin/discount-codes/edit?id=${discount.id}&code=${discount.code}&percentage=${discount.percentage}`}
+          href={`/admin/discount-codes/${discount.id}?code=${discount.code}&percentage=${discount.percentage}`}
           className='text-xl text-neutral'
         >
           <FaEye />
@@ -126,9 +126,9 @@ export default function DiscountCodesTable({
     <div className='card rounded-md p-4 bg-white border border-gray-200'>
       <DataTable
         value={discounts}
-        selectionMode={rowClick ? null : 'multiple'}
-        selection={selectedCode!}
-        onSelectionChange={selectRowHandler}
+        // selectionMode={rowClick ? null : 'multiple'}
+        // selection={selectedCode!}
+        // onSelectionChange={selectRowHandler}
         dataKey='id'
         tableStyle={{ minWidth: '50rem' }}
         paginator
@@ -141,12 +141,12 @@ export default function DiscountCodesTable({
         sortField='id'
         sortIcon={<IoIosArrowDown />}
       >
-        <Column
+        {/* <Column
           selectionMode='multiple'
           headerStyle={{ width: '3rem' }}
           className='group'
           
-        ></Column>
+        ></Column> */}
         <Column
           field='code'
           header='Code'

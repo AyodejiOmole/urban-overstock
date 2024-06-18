@@ -59,6 +59,8 @@ export default function AddDiscountCodeDetails() {
                 router.push('/admin/discount-codes');
                 // router.back();
               }, 1000);
+            } else {
+              toast.error(apiRes.message);
             }
             console.log(apiRes);
         },
