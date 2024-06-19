@@ -88,9 +88,12 @@ const SettingsForm = ({
                 toast.success('Address settings updated successfully.');
         
                 setTimeout(() => {
+                    formik.resetForm();
                     router.push('/admin');
                     // router.refresh();
                 }, 1000);
+            } else {
+                toast.error(apiRes.messsage);
             }
             console.log(apiRes);
         },

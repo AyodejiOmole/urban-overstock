@@ -14,6 +14,12 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
 import ENDPOINTS from '@/config/ENDPOINTS';
 import Cookies from 'universal-cookie';
+import toast from 'react-hot-toast';
+import { classNames } from 'primereact/utils';
+import { MdKeyboardArrowRight } from "react-icons/md";
+import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
+import { Paginator, PaginatorPageChangeEvent, PaginatorJumpToPageInputOptions, PaginatorCurrentPageReportOptions, PaginatorRowsPerPageDropdownOptions,
+    PaginatorLastPageLinkOptions, PaginatorNextPageLinkOptions, PaginatorPageLinksOptions, PaginatorPrevPageLinkOptions, PaginatorFirstPageLinkOptions } from 'primereact/paginator';
 
 interface LazyTableState {
     first: number;
@@ -26,7 +32,7 @@ interface LazyTableState {
 }
 
 export default function OriginalOrdersTable({
-  orders,
+  // orders,
   page = 'orders',
   handleChangeSelectedOrders,
   selectedOrders,
@@ -35,7 +41,7 @@ export default function OriginalOrdersTable({
   categoryNavigation,
   setCurrentPage,
 }: {
-  orders: IOrder[] | null;
+  // orders: IOrder[] | null;
   searchValue: string;
   selectedDate?: number | null;
   page?: 'orders' | 'return-request' | 'cancelled orders' | 'recent orders';
@@ -108,6 +114,7 @@ export default function OriginalOrdersTable({
                         setLoading(false);
                     }
                 }).catch(error => {
+                    toast.error(error.message);
                     console.error('There was a problem with the fetch operation:', error);
                 });
             };
@@ -122,13 +129,90 @@ export default function OriginalOrdersTable({
 
   const onPage = (event: DataTablePageEvent) => {
       setlazyState({
-        first: 0,
+        first: lazyState.first++,
         rows: 10,
         page: lazyState?.page ? lazyState.page++ : 1,
       });
       console.log(event);
       // setlazyState(event);
   };
+
+  const paginatorTemplateOrder = {
+    // layout: 'RowsPerPageDropdown PrevPageLink PageLinks NextPageLink CurrentPageReport',
+    layout: 'CurrentPageReport RowsPerPageDropdown PrevPageLink PageLinks NextPageLink ',
+    RowsPerPageDropdown: (options: PaginatorRowsPerPageDropdownOptions) => {
+        return (
+            <div className="invisible">
+            {/* <Tooltip target=".slider>.p-slider-handle" content={`${options.value} / page`} position="top" event="focus" /> */}
+
+                {/* <span className="mr-3" style={{ color: 'var(--text-color)', userSelect: 'none' }}>
+                    Items per page:{' '}
+                </span> */}
+                {/* <Slider className="slider" value={options.value} onChange={options.onChange} min={10} max={120} step={30} style={{ width: '10rem' }} /> */}
+            </div>
+        );
+    },
+    PageLinks: (options: PaginatorPageLinksOptions) => {
+        if ((options.view.startPage === options.page && options.view.startPage !== 0) || (options.view.endPage === options.page && options.page + 1 !== options.totalPages)) {
+            const className = classNames(options.className, { 'p-disabled': true });
+
+            return (
+                <span className={classNames(options.className, 'border p-0 mx-1 rounded-none border-[#F2C94C]')} style={{ userSelect: 'none' }}>
+                    ...
+                </span>
+            );
+        }
+
+        return (
+            <button 
+              type="button" 
+              className={classNames(options.className, `${options.page ? "bg-[#F2C94C]" : "bg-white"} p-0 mx-1 rounded-none border border-[#F2C94C] `)} 
+              onClick={() => {
+                setlazyState({
+                  first: 0,
+                  rows: 10,
+                  page: options.page === 0 ? 0 : options.page,
+                });
+                // console.log(options.page);
+              }}>
+                {options.page + 1}
+                {/* <Ripple /> */}
+            </button>
+        );
+    },
+    CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
+        return (
+            <div style={{ color: 'var(--text-color)', userSelect: 'none', width: 'auto', textAlign: 'left'}} className='text-sm text-neutral items-center my-auto mr-auto'>
+                {`Showing ${options.first} - ${options.last} from ${options.totalRecords}`}
+            </div>
+        );
+    },
+    PrevPageLink: (options: PaginatorPrevPageLinkOptions) => {
+        return (
+            <span 
+                className={classNames('rounded-none bg-[#F2C94C] p-[11px] mx-1')} 
+                onClick={() => {
+                    setlazyState({
+                      first: 0,
+                      rows: 10,
+                      page: lazyState?.page ? lazyState.page === 0 ? 0 : lazyState.page - 1 : 0,
+                    });
+                    console.log("This works.");
+                    // options.onClick
+                }} 
+            >
+                <MdOutlineKeyboardArrowLeft color="black"/>
+            </span>
+        );
+    },
+    NextPageLink: (options: PaginatorNextPageLinkOptions) => {
+        return (
+            <span className={classNames(options.className, 'rounded-none p-0 mx-1 bg-[#F2C94C]')} onClick={options.onClick}>
+                <MdKeyboardArrowRight color="black"/>
+            </span>
+        );
+    },
+};
 
   const dateTemplate = (order: IOrder) => {
     const { createdAt } = order;
@@ -249,15 +333,15 @@ export default function OriginalOrdersTable({
 
   }, [lazyOrders, selectedDate, categoryNavigation]);
 
-  const getOrdersByCategoryDate = useMemo(() => {
-    if(categoryNavigation) {
-      return orders?.filter((item) => {
-        const itemDate = new Date(item.createdAt);
-        return itemDate >= categoryNavigation.startDate && itemDate <= categoryNavigation.endDate;
-      });
-    } else return orders;
+  // const getOrdersByCategoryDate = useMemo(() => {
+  //   if(categoryNavigation) {
+  //     return orders?.filter((item) => {
+  //       const itemDate = new Date(item.createdAt);
+  //       return itemDate >= categoryNavigation.startDate && itemDate <= categoryNavigation.endDate;
+  //     });
+  //   } else return orders;
 
-  }, [orders, categoryNavigation]);
+  // }, [orders, categoryNavigation]);
 
   const matchedOrders = useMemo(() => {
     if (searchValue?.trim().length === 0) return getOrdersByDate;
@@ -291,9 +375,10 @@ export default function OriginalOrdersTable({
         dataKey='uuid'
         tableStyle={{ minWidth: '50rem' }}
         paginator
-        paginatorTemplate={paginatorTemplate}
+        paginatorTemplate={paginatorTemplateOrder}
         paginatorClassName='flex justify-between'
         rows={10}
+        // prevPageLing={}
         // rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-md text-sm'
         sortOrder={-1}

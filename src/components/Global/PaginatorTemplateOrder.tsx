@@ -1,12 +1,5 @@
 "use client";
 
-import { Button } from 'primereact/button';
-import { Ripple } from 'primereact/ripple';
-import { Divider } from 'primereact/divider';
-import { Dropdown } from 'primereact/dropdown';
-import { InputText } from 'primereact/inputtext';
-import { Slider } from 'primereact/slider';
-import { Tooltip } from 'primereact/tooltip';
 import { classNames } from 'primereact/utils';
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";

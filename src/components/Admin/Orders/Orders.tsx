@@ -4,7 +4,6 @@ import CategoryNavigation from '@/components/Shared/CategoryNavigation';
 import { IOrder } from '@/interfaces/orders';
 import React, { useState, useMemo, ChangeEvent, useEffect } from 'react';
 import { LuClipboardCheck } from 'react-icons/lu';
-import { PiExportBold } from 'react-icons/pi';
 import { CiSearch } from 'react-icons/ci';
 import { RiDeleteBin5Line, RiShoppingBasket2Line } from 'react-icons/ri';
 import OrdersTable from './OrdersTable';
@@ -32,7 +31,7 @@ export default function Orders(
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
 
-  const [retrievedOrders, setRetrievedOrders] = useState<IOrder[] | null>(null);
+  // const [retrievedOrders, setRetrievedOrders] = useState<IOrder[] | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const [categoryNavigation, setCategoryNavigation] = useState<any>();
@@ -135,35 +134,35 @@ export default function Orders(
     } else setSelectedDate(null);
   };
 
-  useEffect(() => {
-    const fetchData = () => {
-        const cookies = new Cookies();
-        const token = cookies.get('urban-token');
-        console.log(token);
-        const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
+//   useEffect(() => {
+//     const fetchData = () => {
+//         const cookies = new Cookies();
+//         const token = cookies.get('urban-token');
+//         console.log(token);
+//         const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
 
-        fetch(`${baseUrl}/api/v1/${ENDPOINTS.ORDERS}?page=${currentPage}&size=10`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            cache: 'no-store',
-        }).then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        }).then(data => {
-            if (data.data) {
-                console.log(data.data);
-                setRetrievedOrders(data.data);
-            }
-        }).catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-        });
-    };
+//         fetch(`${baseUrl}/api/v1/${ENDPOINTS.ORDERS}?page=${currentPage}&size=10`, {
+//             headers: {
+//                 Authorization: `Bearer ${token}`,
+//             },
+//             cache: 'no-store',
+//         }).then(response => {
+//             if (!response.ok) {
+//                 throw new Error('Network response was not ok');
+//             }
+//             return response.json();
+//         }).then(data => {
+//             if (data.data) {
+//                 console.log(data.data);
+//                 setRetrievedOrders(data.data);
+//             }
+//         }).catch(error => {
+//             console.error('There was a problem with the fetch operation:', error);
+//         });
+//     };
 
-    fetchData();
-}, [currentPage]);
+//     fetchData();
+// }, [currentPage]);
 
   return (
     <>
@@ -285,7 +284,7 @@ export default function Orders(
       {/* Orders Table */}
 
       <OriginalOrdersTable
-        orders={orders}
+        // orders={orders}
         handleChangeSelectedOrders={handleChangeSelectedOrders}
         selectedOrders={selectedOrders}
         selectedDate={selectedDate}
