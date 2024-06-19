@@ -93,7 +93,8 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
       estimateDeliveryDate: Yup.string().required().label('Estimated Delivery Date'),
       trackingService: Yup.string().required().label('Tracking Service'),
       trackingNumber: Yup.string().required().label('Tracking Number'),
-      trackingLink: Yup.string().required().label('Trackling Link'),
+      // trackingLink: Yup.string().required().label('Trackling Link'),
+      trackingLink: Yup.string().url("Invalid url").required().label('Tracking Link'),
     }),
     onSubmit: async (values) => {
         try {

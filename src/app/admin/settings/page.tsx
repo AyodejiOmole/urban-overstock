@@ -1,7 +1,7 @@
 import React from 'react';
-import SettingsForm from '@/components/Admin/Settings/SettingsForm';
 import { IAdminShippingAddress } from '@/interfaces/shipping-address';
 import getAdminShippingAddress from '@/libs/shipping-address';
+import Setting from '@/components/Admin/Settings/Settings';
 
 const Settings = async () => {
     const apiRes: Promise<IAdminShippingAddress | null> = getAdminShippingAddress();
@@ -9,7 +9,8 @@ const Settings = async () => {
 
     return (
         <div>
-            <SettingsForm adminShippingAddress={adminShippingAddress}/>
+            {/* <SettingsForm adminShippingAddress={adminShippingAddress}/> */}
+            <Setting adminShippingAddress={adminShippingAddress}/>
         </div>
     )
 }

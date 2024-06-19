@@ -88,7 +88,6 @@ const SettingsForm = ({
                 toast.success('Address settings updated successfully.');
         
                 setTimeout(() => {
-                    formik.resetForm();
                     router.push('/admin');
                     // router.refresh();
                 }, 1000);
@@ -102,11 +101,11 @@ const SettingsForm = ({
 
     return (
         <div>
-            <div className='w-full justify-between lg:items-center gap-8 mb-4 py-4'>
-                <div>
-                    <p className='text-xl font-medium text-gray-700'>Orders</p>
+            {/* <div className='w-full justify-between lg:items-center gap-8 mb-4 py-4'> */}
+                {/* <div>
+                    <p className='text-xl font-medium text-gray-700'>Settings</p>
                     <Pagination /> 
-                </div>
+                </div> */}
 
                  {/* address settings form */}
                 <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4'>
@@ -291,7 +290,7 @@ const SettingsForm = ({
                         </Button>
                     </div>
                 </div>
-            </div>
+            {/* </div> */}
         </div>
     )
 }
