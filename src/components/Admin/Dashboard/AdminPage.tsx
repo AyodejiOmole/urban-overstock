@@ -59,7 +59,7 @@ export default function AdminPage ({
                 setTimeFilter("All-Time");
                 break;
             case '12 months':
-                setTimeFilter("12-Months");
+                setTimeFilter("12-Month");
                 break;
             case '30 days':
                 setTimeFilter("30-Days");
@@ -68,7 +68,7 @@ export default function AdminPage ({
                 setTimeFilter("7-Days");
                 break;
             case '24 hours':
-                setTimeFilter("24-hours");
+                setTimeFilter("24-Hours");
                 break;
             default:
                 return; // return null for unknown filter options
