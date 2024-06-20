@@ -157,7 +157,7 @@ export default function OriginalOrdersTable({
             const className = classNames(options.className, { 'p-disabled': true });
 
             return (
-                <span className={classNames(options.className, 'border p-0 mx-1 rounded-none border-[#F2C94C]')} style={{ userSelect: 'none' }}>
+                <span className={classNames('border px-3 py-1 mx-1 rounded-sm border-[#F2C94C]')} style={{ userSelect: 'none' }}>
                     ...
                 </span>
             );
@@ -166,7 +166,7 @@ export default function OriginalOrdersTable({
         return (
             <button 
               type="button" 
-              className={classNames(options.className, `${options.page ? "bg-[#F2C94C]" : "bg-white"} p-0 mx-1 rounded-none border border-[#F2C94C] `)} 
+              className={classNames(`${options.page ? "bg-[#F2C94C]" : "bg-white"} px-3 py-1 rounded-sm border border-[#F2C94C] `)} 
               onClick={() => {
                 setlazyState({
                   first: 0,
@@ -190,7 +190,7 @@ export default function OriginalOrdersTable({
     PrevPageLink: (options: PaginatorPrevPageLinkOptions) => {
         return (
             <span 
-                className={classNames('rounded-none bg-[#F2C94C] p-[11px] mx-1')} 
+                className={classNames('rounded-sm bg-[#F2C94C] p-2 mx-1')} 
                 onClick={() => {
                     setlazyState({
                       first: 0,
@@ -207,7 +207,7 @@ export default function OriginalOrdersTable({
     },
     NextPageLink: (options: PaginatorNextPageLinkOptions) => {
         return (
-            <span className={classNames(options.className, 'rounded-none p-0 mx-1 bg-[#F2C94C]')} onClick={options.onClick}>
+            <span className={classNames('rounded-sm p-2 mx-1 bg-[#F2C94C]')} onClick={options.onClick}>
                 <MdKeyboardArrowRight color="black"/>
             </span>
         );

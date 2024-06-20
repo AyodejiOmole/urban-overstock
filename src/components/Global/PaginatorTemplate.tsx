@@ -33,17 +33,17 @@ const paginatorTemplate = {
             const className = classNames(options.className, { 'p-disabled': true });
 
             return (
-                <span className={classNames(options.className, 'border rounded-none p-0 mx-1 border-[#F2C94C]')} style={{ userSelect: 'none' }}>
+                <span className={classNames('border rounded-sm p-2 mx-1 border-[#F2C94C]')} style={{ userSelect: 'none' }}>
                     ...
                 </span>
             );
         }
 
         return (
-            <button type="button" className={classNames(options.className, `${options.page ? "bg-[#F2C94C]" : "bg-white"} rounded-none p-0 mx-1 border border-[#F2C94C] `)} onClick={options.onClick}>
+            <span className={classNames(`${options.page ? "bg-[#F2C94C]" : "bg-white"} rounded-sm px-3 py-1 mx-1 border border-[#F2C94C] `)} onClick={options.onClick}>
                 {options.page + 1}
                 {/* <Ripple /> */}
-            </button>
+            </span>
         );
     },
     CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
@@ -56,10 +56,8 @@ const paginatorTemplate = {
     PrevPageLink: (options: PaginatorPrevPageLinkOptions) => {
         return (
             <span 
-                className={classNames(options.className, 'rounded-none p-0 mx-1 bg-[#F2C94C]')} 
-                onClick={(event) => {
-                    options.onClick
-                }} 
+                className={classNames('rounded-sm p-2 mx-1 bg-[#F2C94C]')} 
+                onClick={options.onClick} 
             >
                 {/* <span className="p-3">Previous</span>
                 <Ripple /> */}
@@ -70,7 +68,7 @@ const paginatorTemplate = {
     },
     NextPageLink: (options: PaginatorNextPageLinkOptions) => {
         return (
-            <span className={classNames(options.className, 'rounded-none p-0 mx-1 bg-[#F2C94C]')} onClick={options.onClick}>
+            <span className={classNames('rounded-sm p-2 mx-1 bg-[#F2C94C]')} onClick={options.onClick}>
                 {/* <span className="p-3">Previous</span>
                 <Ripple /> */}
                 {/* <MdKeyboardArrowRight color="black"/> */}
