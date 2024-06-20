@@ -35,7 +35,7 @@ export default function SellerHeader({
         </div>
       </div>
 
-      <UserAvatar name='Aiden Max' title='' />
+      {/* <UserAvatar name='Aiden Max' title='' /> */}
     </div>
   );
 }
