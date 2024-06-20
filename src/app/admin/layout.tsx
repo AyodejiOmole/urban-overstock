@@ -25,6 +25,8 @@ export default function DashboardLayout({
 
   const [unreadReturnRequests, setUnreadReturnRequests] = useState<any>();
 
+  const [dropDown, setDropDown] = useState<boolean>(false);
+
   useEffect(() => {
     const cookies = new Cookies();
     const token = cookies.get('urban-token');
@@ -58,7 +60,7 @@ export default function DashboardLayout({
     .then(response => response.json())
     .then(data => setUnreadOrders(data));
     
-  }, [])
+  }, []);
 
   useEffect(() => {
     const cookies = new Cookies();
@@ -76,7 +78,21 @@ export default function DashboardLayout({
     .then(response => response.json())
     .then(data => setUnreadReturnRequests(data));
     
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    document.body.addEventListener('click', (event) => {
+      
+      // if (!brandPickerRef.current?.contains(event.target as Node) &&  !addBrandPresetRef.current?.contains(event.target as Node) && productStatusArrow.current !== event.target) {
+      //   setAddBrandDisplay(false);
+      //   setBrandPicker(false);
+      // }
+      setDropDown(false);
+    });
+    return () => {
+      document.body.removeEventListener('click', () => {});
+    };
+  }, []);
 
   const handleToggleSidebar = () => setSidebarOpen((prev) => !prev);
 
@@ -104,7 +120,7 @@ export default function DashboardLayout({
           }`}
         >
 
-          <Header isOpen={sidebarOpen} toggleSidebar={handleToggleSidebar} unreadNotifications={unreadNotifications}/>
+          <Header isOpen={sidebarOpen} dropDown={dropDown} setDropDown={setDropDown} toggleSidebar={handleToggleSidebar} unreadNotifications={unreadNotifications}/>
           
             {/* <Component {...pageProps} /> */}
             {children}

@@ -9,30 +9,16 @@ import Cookies from 'universal-cookie';
 type PropTypes = {
   name: string;
   title?: string;
+  dropDown: boolean;
+  setDropDown: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function UserAvatar({ name, title = '' }: PropTypes) {
+export default function UserAvatar({ name, title = '', dropDown, setDropDown }: PropTypes) {
   const cookies = new Cookies();
   // const cookieStore = new Cookies();
   const router = useRouter();
 
-  const [dropDown, setDropDown] = useState<boolean>(false);
-
-  // const handleLogout = async () => {
-  //   try {
-  //     const response = await fetch('/api/logout', {
-  //       method: 'POST',
-  //     });
-
-  //     if (response.ok) {
-  //       router.push('/auth/admin/login');
-  //     } else {
-  //       console.error('Failed to log out');
-  //     }
-  //   } catch (error) {
-  //     console.error('An error occurred during logout:', error);
-  //   }
-  // };
+  // const [dropDown, setDropDown] = useState<boolean>(false);
 
   const deleteCookie = (name: string) => {
     document.cookie = `${name}=; Max-Age=0; path=/;`;
@@ -41,9 +27,6 @@ export default function UserAvatar({ name, title = '' }: PropTypes) {
 
   const handleLogout = () => {
     cookies.remove("urban-token");
-    // cookieStore.forEach((cookie) => {
-    //   cookie.remove(cookie.key);
-    // });
     cookies.set('urban-token', "", {
       path: '/',
       // expires: tokenExpiryTime,

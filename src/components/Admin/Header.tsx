@@ -29,10 +29,14 @@ export default function AdminHeader({
   isOpen,
   toggleSidebar,
   unreadNotifications,
+  dropDown,
+  setDropDown,
 }: {
   isOpen: boolean;
   toggleSidebar: () => void;
   unreadNotifications: any;
+  dropDown: boolean;
+  setDropDown: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [adminDetails, setAdminDetails] = useState<null | AdminType>(null);
   console.log(unreadNotifications);
@@ -75,6 +79,8 @@ export default function AdminHeader({
         <UserAvatar
           name={`${adminDetails?.firstName} ${adminDetails?.lastName}`}
           title={adminDetails?.userType}
+          dropDown={dropDown} 
+          setDropDown={setDropDown} 
         />
       </div>
     </div>
