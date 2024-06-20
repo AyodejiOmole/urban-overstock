@@ -3,7 +3,7 @@ import { IAdminShippingAddress } from '@/interfaces/shipping-address';
 import getAdminShippingAddress from '@/libs/shipping-address';
 import Setting from '@/components/Admin/Settings/Settings';
 
-const Settings = async () => {
+export default async function Settings () {
     const apiRes: Promise<IAdminShippingAddress | null> = getAdminShippingAddress();
     const adminShippingAddress = await apiRes;
 
@@ -13,6 +13,4 @@ const Settings = async () => {
             <Setting adminShippingAddress={adminShippingAddress}/>
         </div>
     )
-}
-
-export default Settings;
+};

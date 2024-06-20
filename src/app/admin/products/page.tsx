@@ -4,7 +4,6 @@ import getAllProducts from '@/libs/products';
 import React from 'react';
 import PageHeading from './components/PageHeading';
 
-
 export default async function AdminProducts() {
   const apiRes: Promise<IProducts | undefined> = getAllProducts();
   const products = await apiRes;
