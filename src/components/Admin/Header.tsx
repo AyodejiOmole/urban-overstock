@@ -31,12 +31,14 @@ export default function AdminHeader({
   unreadNotifications,
   dropDown,
   setDropDown,
+  logOutRef
 }: {
   isOpen: boolean;
   toggleSidebar: () => void;
   unreadNotifications: any;
   dropDown: boolean;
   setDropDown: React.Dispatch<React.SetStateAction<boolean>>;
+  logOutRef: React.RefObject<HTMLDivElement>;
 }) {
   const [adminDetails, setAdminDetails] = useState<null | AdminType>(null);
   console.log(unreadNotifications);
@@ -81,6 +83,7 @@ export default function AdminHeader({
           title={adminDetails?.userType}
           dropDown={dropDown} 
           setDropDown={setDropDown} 
+          logOutRef={logOutRef}
         />
       </div>
     </div>

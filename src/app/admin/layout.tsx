@@ -1,7 +1,7 @@
 'use client';
 import Header from '@/components/Admin/Header';
 import AdminSidebar from '@/components/Admin/Sidebar';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ENDPOINTS from '@/config/ENDPOINTS';
 import { getCookie } from 'cookies-next';
 import { cookies } from 'next/headers';
@@ -26,6 +26,8 @@ export default function DashboardLayout({
   const [unreadReturnRequests, setUnreadReturnRequests] = useState<any>();
 
   const [dropDown, setDropDown] = useState<boolean>(false);
+
+  const logOutRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const cookies = new Cookies();
@@ -82,12 +84,9 @@ export default function DashboardLayout({
 
   useEffect(() => {
     document.body.addEventListener('click', (event) => {
-      
-      // if (!brandPickerRef.current?.contains(event.target as Node) &&  !addBrandPresetRef.current?.contains(event.target as Node) && productStatusArrow.current !== event.target) {
-      //   setAddBrandDisplay(false);
-      //   setBrandPicker(false);
-      // }
-      setDropDown(false);
+      if (!logOutRef.current?.contains(event.target as Node) && logOutRef.current !== event.target) {
+        setDropDown(false);
+      }
     });
     return () => {
       document.body.removeEventListener('click', () => {});
@@ -120,7 +119,14 @@ export default function DashboardLayout({
           }`}
         >
 
-          <Header isOpen={sidebarOpen} dropDown={dropDown} setDropDown={setDropDown} toggleSidebar={handleToggleSidebar} unreadNotifications={unreadNotifications}/>
+          <Header 
+            isOpen={sidebarOpen} 
+            dropDown={dropDown} 
+            setDropDown={setDropDown} 
+            toggleSidebar={handleToggleSidebar} 
+            unreadNotifications={unreadNotifications}
+            logOutRef={logOutRef}
+          />
           
             {/* <Component {...pageProps} /> */}
             {children}

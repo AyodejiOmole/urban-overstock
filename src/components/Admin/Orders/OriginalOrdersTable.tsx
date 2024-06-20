@@ -164,9 +164,9 @@ export default function OriginalOrdersTable({
         }
 
         return (
-            <button 
-              type="button" 
-              className={classNames(`${options.page ? "bg-[#F2C94C]" : "bg-white"} px-3 py-1 rounded-sm border border-[#F2C94C] `)} 
+            <span 
+              // type="button" 
+              className={classNames(`${options.page ? "bg-[#F2C94C]" : "bg-white"} px-3 py-1 mx-1 rounded-sm border border-[#F2C94C] `)} 
               onClick={() => {
                 setlazyState({
                   first: 0,
@@ -177,7 +177,7 @@ export default function OriginalOrdersTable({
               }}>
                 {options.page + 1}
                 {/* <Ripple /> */}
-            </button>
+            </span>
         );
     },
     CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {

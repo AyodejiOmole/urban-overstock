@@ -11,9 +11,10 @@ type PropTypes = {
   title?: string;
   dropDown: boolean;
   setDropDown: React.Dispatch<React.SetStateAction<boolean>>;
+  logOutRef: React.RefObject<HTMLDivElement>;
 };
 
-export default function UserAvatar({ name, title = '', dropDown, setDropDown }: PropTypes) {
+export default function UserAvatar({ name, title = '', dropDown, setDropDown, logOutRef }: PropTypes) {
   const cookies = new Cookies();
   // const cookieStore = new Cookies();
   const router = useRouter();
@@ -50,7 +51,7 @@ export default function UserAvatar({ name, title = '', dropDown, setDropDown }: 
 
       {
         dropDown && 
-        <div className='absolute cursor-pointer py-2 px-2 rounded bg-white text-md top-14 w-full flex justify-center items-center' onClick={() => handleLogout()}>
+        <div ref={logOutRef} className='absolute cursor-pointer py-2 px-2 rounded bg-white text-md top-14 w-full flex justify-center items-center' onClick={() => handleLogout()}>
           {/* <CiLogout /> */}
           <p>Logout</p>
         </div>
