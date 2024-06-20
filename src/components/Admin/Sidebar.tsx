@@ -19,7 +19,7 @@ type SidebarProps = {
   isOpen: Boolean;
   toggleSidebar: () => void;
   setSidebarOpen: any;
-  notifications: any;
+  notifications: number;
   orders: any;
   returnRequests: any;
 };
@@ -138,7 +138,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
                         
                         {link.name.toLowerCase() === "notification" && isOpen && (
                             <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
-                              {notifications?.data.count ?? 0}
+                              {notifications ?? 0}
                               {/* {10} */}
                             </div>
                           )}
@@ -340,7 +340,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
 
                           {link.name.toLowerCase() === "notification" && isOpen && (
                             <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
-                              {notifications?.data.count ?? 0}
+                              {notifications ?? 0}
                               {/* {10} */}
                             </div>
                           )}

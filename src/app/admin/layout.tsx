@@ -9,6 +9,8 @@ import Cookies from 'universal-cookie';
 import { Tooltip } from 'primereact/tooltip';
 import { IOrder } from '@/interfaces/orders';
 import getOrders from '@/libs/orders';
+import { useContext } from 'react';
+import { NotificationContext } from '@/context/NotificationContext';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -18,7 +20,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
-  const [unreadNotifications, setUnreadNotifications] = useState<any>();
+  // const [unreadNotifications, setUnreadNotifications] = useState<any>();
 
   const [unreadOrders, setUnreadOrders] = useState<any>();
   const queryClient = new QueryClient();
@@ -29,22 +31,27 @@ export default function DashboardLayout({
 
   const logOutRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const cookies = new Cookies();
-    const token = cookies.get('urban-token');
+  const { unreadNotifications } = useContext(NotificationContext) ?? {
+    unreadNotifications: 0,
+    
+  };
 
-    const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
+  // useEffect(() => {
+  //   const cookies = new Cookies();
+  //   const token = cookies.get('urban-token');
+
+  //   const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
   
-    fetch(`${baseUrl}/api/v1/${ENDPOINTS.NOTIFICATIONS}/count-unread`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  //   fetch(`${baseUrl}/api/v1/${ENDPOINTS.NOTIFICATIONS}/count-unread`, {
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
   
-      cache: 'no-store',
-    })
-    .then(response => response.json())
-    .then(data => setUnreadNotifications(data));
-  }, []);
+  //     cache: 'no-store',
+  //   })
+  //   .then(response => response.json())
+  //   .then(data => setUnreadNotifications(data));
+  // }, []);
 
   useEffect(() => {
     const cookies = new Cookies();

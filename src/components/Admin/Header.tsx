@@ -35,7 +35,7 @@ export default function AdminHeader({
 }: {
   isOpen: boolean;
   toggleSidebar: () => void;
-  unreadNotifications: any;
+  unreadNotifications: number;
   dropDown: boolean;
   setDropDown: React.Dispatch<React.SetStateAction<boolean>>;
   logOutRef: React.RefObject<HTMLDivElement>;
@@ -74,7 +74,7 @@ export default function AdminHeader({
         {/* <button className='text-xl'>
           <IoSearchOutline />
         </button> */}
-        <Notification icon={<FiMail />} number={unreadNotifications?.data.count ?? 0} />
+        <Notification icon={<FiMail />} number={unreadNotifications ?? 0} />
 
         <div className='h-12 w-[2px] bg-gray-200'></div>
 

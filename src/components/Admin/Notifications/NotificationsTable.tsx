@@ -1,18 +1,20 @@
 'use client';
-
-import paginatorTemplate from '@/components/Global/PaginatorTemplate';
-import { INotification, INotifications } from '@/interfaces/notifications';
 import moment from 'moment';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import Cookies from 'universal-cookie';
-import HTTPService from '@/services/http';
 import toast from 'react-hot-toast';
-import ENDPOINTS from '@/config/ENDPOINTS';
 import { useRouter } from 'next/navigation';
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
+
+import paginatorTemplate from '@/components/Global/PaginatorTemplate';
+import { INotification, INotifications } from '@/interfaces/notifications';
+import HTTPService from '@/services/http';
+import ENDPOINTS from '@/config/ENDPOINTS';
+import { NotificationContext } from '@/context/NotificationContext';
+
 
 export default function NotificationsTable({
   notifications
@@ -24,6 +26,10 @@ export default function NotificationsTable({
   );
 
   console.log(notifications);
+
+  const { setUnreadNotifications } = useContext(NotificationContext) ?? {
+    setUnreadNotifications: () => {},
+  };
 
   const [rowClick, setRowClick] = useState<boolean>(true);
 
@@ -45,6 +51,8 @@ export default function NotificationsTable({
       if (res.status === 200) {
         console.log(res);
         toast.success('Notification marked as read.');
+        // console.log(unreadNotifications);
+        setUnreadNotifications((prev: number) => prev - 1);
         router.refresh();
       } else toast.error('Cannot update notification at this time.');
   }
