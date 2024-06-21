@@ -293,10 +293,30 @@ export default function OldProductForm({
       const variationPromises: Promise<Response>[] = [];
 
       const variationQuantitySum: number = variations.reduce((acc, current) => acc + current.sizeOptions.reduce((accum, cur) => accum + (cur.quantity ?? 0), 0), 0);
-
+      
       if(values.quantity) {
         if(variationQuantitySum > values?.quantity) {
           toast.error("Your variation quantities must not exceed actual product quantity.");
+          return;
+        }
+      };
+
+      if(variations.length !== 0) {
+        if(variations.some(variation => variation.sizeOptions.length === 0)) {
+          toast.error("Please ensure that all variations have a size before you can proceed.");
+          return;
+        }
+  
+        const hasInvalidSizeOptions = variations.some(variation => {
+          return variation.sizeOptions.some(sizeOption => {
+            return !('sizeId' in sizeOption) || sizeOption.sizeId === 0 || sizeOption.sizeId === null || sizeOption.sizeId === undefined;
+          });
+        });
+  
+        console.log(hasInvalidSizeOptions);
+  
+        if (hasInvalidSizeOptions) {
+          toast.error("Please ensure that all variations have a size before you can proceed.");
           return;
         }
       }
