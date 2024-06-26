@@ -36,7 +36,7 @@ const Waitlist = () => {
         initialValues: {
           firstName: "",
           lastName: "",
-          phoneNumber: "",
+          phoneNumber: undefined,
           emailAddress: "",
           preferredModeOfContact: "",
           questions: "",
@@ -47,9 +47,9 @@ const Waitlist = () => {
         validationSchema: Yup.object({
           firstName: Yup.string().required().label('First Name'),
           lastName: Yup.string().required().label('Last Name'),
-          phoneNumber: Yup.string().required().label('Phone number'),
+          phoneNumber: Yup.number().min(1).required().label("Phone number"),
           preferredModeOfContact: Yup.string().required().label('Preferred Mode of Contact'),
-          emailAddress: Yup.string().required().label('Email Address'),
+          emailAddress: Yup.string().email("Invalid email address").required().label('Email Address'),
           productsToSell: Yup.string().required().label('Interest Products'),
           questions: Yup.string().required().label('Questions'),
           shippingPossible: Yup.string().required().label('Shippng possible'),
@@ -154,7 +154,7 @@ const Waitlist = () => {
                                 onChange={formik.handleChange}
                                 value={formik.values.phoneNumber}
                                 error={formik.errors.phoneNumber}
-                                type='text'
+                                type='number'
                             />
                         </div>
                     </div>
