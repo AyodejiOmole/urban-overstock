@@ -15,8 +15,6 @@ export default async function AdminCustomers() {
 
   return (
     <section>
-      
-
       {/* Categories Table */}
       <Customers 
         // customers={customers}

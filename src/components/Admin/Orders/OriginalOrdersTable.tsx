@@ -1,7 +1,5 @@
 'use client';
-import Button from '@/components/Global/Button';
-import { formatCurrency } from '@/helpers';
-import { IOrder, OrderProductItem } from '@/interfaces/orders';
+
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,17 +7,24 @@ import { Column } from 'primereact/column';
 import { DataTable, DataTableFilterMeta, DataTablePageEvent } from 'primereact/datatable';
 import React, { useState, useMemo, useEffect } from 'react';
 import { FaEye } from 'react-icons/fa';
-import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
-import ENDPOINTS from '@/config/ENDPOINTS';
 import Cookies from 'universal-cookie';
 import toast from 'react-hot-toast';
 import { classNames } from 'primereact/utils';
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
-import { Paginator, PaginatorPageChangeEvent, PaginatorJumpToPageInputOptions, PaginatorCurrentPageReportOptions, PaginatorRowsPerPageDropdownOptions,
-    PaginatorLastPageLinkOptions, PaginatorNextPageLinkOptions, PaginatorPageLinksOptions, PaginatorPrevPageLinkOptions, PaginatorFirstPageLinkOptions } from 'primereact/paginator';
+import { 
+  PaginatorCurrentPageReportOptions, 
+  PaginatorRowsPerPageDropdownOptions, 
+  PaginatorNextPageLinkOptions, 
+  PaginatorPageLinksOptions, 
+  PaginatorPrevPageLinkOptions } 
+from 'primereact/paginator';
+
+import { formatCurrency } from '@/helpers';
+import { IOrder, OrderProductItem } from '@/interfaces/orders';
+import ENDPOINTS from '@/config/ENDPOINTS';
 
 interface LazyTableState {
     first: number;
@@ -32,7 +37,6 @@ interface LazyTableState {
 }
 
 export default function OriginalOrdersTable({
-  // orders,
   page = 'orders',
   handleChangeSelectedOrders,
   selectedOrders,
@@ -41,7 +45,6 @@ export default function OriginalOrdersTable({
   categoryNavigation,
   setCurrentPage,
 }: {
-  // orders: IOrder[] | null;
   searchValue: string;
   selectedDate?: number | null;
   page?: 'orders' | 'return-request' | 'cancelled orders' | 'recent orders';
@@ -67,65 +70,56 @@ export default function OriginalOrdersTable({
     //     company: { value: '', matchMode: 'contains' },
     //     'representative.name': { value: '', matchMode: 'contains' }
     // }
-    });
+  });
 
-    let networkTimeout: string | number | NodeJS.Timeout | null | undefined = null;
+  let networkTimeout: string | number | NodeJS.Timeout | null | undefined = null;
 
-    useEffect(() => {
-        loadLazyData();
-    }, [lazyState]);
+  useEffect(() => {
+      loadLazyData();
+  }, [lazyState]);
 
-    const loadLazyData = () => {
-        setLoading(true);
+  const loadLazyData = () => {
+      setLoading(true);
 
-        if (networkTimeout) {
-            clearTimeout(networkTimeout);
-        }
+      if (networkTimeout) {
+          clearTimeout(networkTimeout);
+      }
 
-        //imitate delay of a backend call
-        networkTimeout = setTimeout(() => {
-            // CustomerService.getCustomers({ lazyEvent: JSON.stringify(lazyState) }).then((data) => {
-            //     setTotalRecords(data.totalRecords);
-            //     setCustomers(data.customers);
-            //     setLoading(false);
-            // });
-            const fetchData = () => {
-                const cookies = new Cookies();
-                const token = cookies.get('urban-token');
-                console.log(token);
-                const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
-        
-                fetch(`${baseUrl}/api/v1/${ENDPOINTS.ORDERS}?page=${lazyState.page}&size=${lazyState.rows}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                    cache: 'no-store',
-                }).then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                }).then(data => {
-                    if (data.data) {
-                        console.log(data.meta);
-                        setTotalRecords(data.meta.total_items);
-                        console.log(data.data);
-                        setLazyOrders(data.data);
-                        setLoading(false);
-                    }
-                }).catch(error => {
-                    toast.error(error.message);
-                    console.error('There was a problem with the fetch operation:', error);
-                });
-            };
-        
-            fetchData();
-        }, Math.random() * 1000 + 250);
-    };
-
-    // const onPage = (event: any) => {
-    //     setlazyState(event);
-    // };
+      //imitate delay of a backend call
+      networkTimeout = setTimeout(() => {
+          const fetchData = () => {
+              const cookies = new Cookies();
+              const token = cookies.get('urban-token');
+              console.log(token);
+              const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
+      
+              fetch(`${baseUrl}/api/v1/${ENDPOINTS.ORDERS}?page=${lazyState.page}&size=${lazyState.rows}`, {
+                  headers: {
+                      Authorization: `Bearer ${token}`,
+                  },
+                  cache: 'no-store',
+              }).then(response => {
+                  if (!response.ok) {
+                      throw new Error('Network response was not ok');
+                  }
+                  return response.json();
+              }).then(data => {
+                  if (data.data) {
+                      console.log(data.meta);
+                      setTotalRecords(data.meta.total_items);
+                      console.log(data.data);
+                      setLazyOrders(data.data);
+                      setLoading(false);
+                  }
+              }).catch(error => {
+                  toast.error(error.message);
+                  console.error('There was a problem with the fetch operation:', error);
+              });
+          };
+      
+          fetchData();
+      }, Math.random() * 1000 + 250);
+  };
 
   const onPage = (event: DataTablePageEvent) => {
       setlazyState({
@@ -138,7 +132,6 @@ export default function OriginalOrdersTable({
   };
 
   const paginatorTemplateOrder = {
-    // layout: 'RowsPerPageDropdown PrevPageLink PageLinks NextPageLink CurrentPageReport',
     layout: 'CurrentPageReport RowsPerPageDropdown PrevPageLink PageLinks NextPageLink ',
     RowsPerPageDropdown: (options: PaginatorRowsPerPageDropdownOptions) => {
         return (
@@ -212,7 +205,7 @@ export default function OriginalOrdersTable({
             </span>
         );
     },
-};
+  };
 
   const dateTemplate = (order: IOrder) => {
     const { createdAt } = order;
@@ -239,12 +232,6 @@ export default function OriginalOrdersTable({
         >
           <FaEye />
         </Link>
-        {/* <Link
-          href={`/admin/${page}/${order.id}`}
-          className='text-xl text-neutral'
-        >
-          <RxPencil2 />
-        </Link> */}
       </div>
     );
   }

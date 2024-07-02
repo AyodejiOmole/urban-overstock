@@ -1,8 +1,3 @@
-
-// import Header from '@/components/Admin/Dashboard/Header';
-// import OrdersTable from '@/components/Admin/Orders/OrdersTable';
-// import SalesChart from '@/components/Admin/SalesChart';
-// import StatCards from '@/components/Admin/StatCards';
 import React from 'react';
 import AdminPage from '@/components/Admin/Dashboard/AdminPage';
 import { IDashboardData } from '@/components/Admin/Dashboard/AdminPage';

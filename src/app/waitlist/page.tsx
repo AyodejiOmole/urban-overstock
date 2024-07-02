@@ -1,18 +1,19 @@
 "use client";
+
 import React from 'react'
 import Link from 'next/link';
-import Button from '@/components/Global/Button';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import TextInput from '@/components/Global/TextInput';
 import { FaX } from 'react-icons/fa6';
 import { TfiSave } from 'react-icons/tfi';
-// import ENDPOINTS from '@/config/ENDPOINTS';
 import toast from 'react-hot-toast';
-import HTTPService from '@/services/http';
-// import Cookies from 'universal-cookie';
 import * as Yup from 'yup';
 import { IoIosArrowDown } from 'react-icons/io';
+import emailjs from "@emailjs/browser"
+
+import HTTPService from '@/services/http';
+import TextInput from '@/components/Global/TextInput';
+import Button from '@/components/Global/Button';
 
 function CustomError({ error }: { error?: string }) {
     if (!error) return;
@@ -58,17 +59,37 @@ const Waitlist = () => {
         onSubmit: async (values) => {
             toast.loading("Submitting...");
 
-            fetch("https://formspree.io/f/xwkggneo", {
-                method: 'POST',
-                body: JSON.stringify(values), 
-                headers: {
-                    'Accept': 'application/json'
-                }
-              }).then(response => {
+            const data = {
+                "First name": values.firstName,
+                "Last name": values.lastName,
+                "Phonenumber": values.phoneNumber,
+                "Email Address": values.emailAddress,
+                "Preferred Mode Of Contact": values.preferredModeOfContact,
+                "Questions": values.questions,
+                "Products To Sell": values.productsToSell,
+                "Is Shipping Possible?":  values.shippingPossible,
+                "Products Available": values.productAvailable,
+            };
+
+            const SERVICE_ID = process.env.EMAILJS_SERVICE_ID ?? "";
+            const TEMPLATE_ID = process.env.EMAILJS_TEMPLATE_ID ?? "";
+            const PUBLIC_KEY = process.env.EMAILJS_PUBLIC_KEY;
+
+            emailjs.send(
+                "service_f16wtzk",
+                // SERVICE_ID,
+                "template_0qt98r4",
+                // TEMPLATE_ID,
+                data,
+                "YbrQltdijHhFWYz8S"
+                // PUBLIC_KEY
+            ).then(response => {
                 toast.dismiss();
-                if (response.ok) {
+                if (response) {
                     toast.dismiss();
                     toast.success("Thanks for your submission! You have been added to the waitlist.");
+                    // toast.success(response.text);
+                    console.log(response.text);
                     router.push("/");
                 } else {
                     toast.error("Oops! There was a problem submitting your form");

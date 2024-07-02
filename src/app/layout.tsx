@@ -1,12 +1,14 @@
-import ClientProvider from '@/components/ClientProvider';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
-import NotificationProvider from '@/context/NotificationContext';
 // import function to register Swiper custom elements
 import { register } from 'swiper/element/bundle';
 // register Swiper custom elements
 register();
+
+
+import NotificationProvider from '@/context/NotificationContext';
+import ClientProvider from '@/components/ClientProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -30,6 +32,13 @@ export default function RootLayout({
           </NotificationProvider>
         </ClientProvider>
       </body>
+      {/* <script type="text/javascript">
+        (function(){
+            emailjs.init({
+              publicKey: "YbrQltdijHhFWYz8S",
+            })
+        })();
+      </script> */}
     </html>
   );
 }

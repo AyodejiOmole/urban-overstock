@@ -1,7 +1,5 @@
 'use client';
-import Button from '@/components/Global/Button';
-import { formatCurrency } from '@/helpers';
-import { IOrder, OrderProductItem } from '@/interfaces/orders';
+
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,12 +7,13 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import React, { useState, useMemo } from 'react';
 import { FaEye } from 'react-icons/fa';
-import { RxPencil2 } from 'react-icons/rx';
-import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 import { IoIosArrowDown } from 'react-icons/io';
-import { IReturnRequests } from '@/interfaces/return-requests';
+
 import { useRouter } from 'next/navigation';
-import { ICancelledOrders } from '@/interfaces/cancelled-orders';
+import Button from '@/components/Global/Button';
+import { formatCurrency } from '@/helpers';
+import { IOrder, OrderProductItem } from '@/interfaces/orders';
+import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 
 export default function OrdersTable({
   orders,

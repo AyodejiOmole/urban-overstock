@@ -12,8 +12,6 @@ import getOrders from '@/libs/orders';
 import { useContext } from 'react';
 import { NotificationContext } from '@/context/NotificationContext';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
 export default function DashboardLayout({
   children
 }: {
@@ -23,7 +21,6 @@ export default function DashboardLayout({
   // const [unreadNotifications, setUnreadNotifications] = useState<any>();
 
   const [unreadOrders, setUnreadOrders] = useState<any>();
-  const queryClient = new QueryClient();
 
   const [unreadReturnRequests, setUnreadReturnRequests] = useState<any>();
 
@@ -103,7 +100,7 @@ export default function DashboardLayout({
   const handleToggleSidebar = () => setSidebarOpen((prev) => !prev);
 
   return (
-    <QueryClientProvider client={queryClient}>
+    // <QueryClientProvider client={queryClient}>
       <div className='grid grid-cols-12 bg-gray-50 relative min-h-screen'>
         <div
           className={`bg-white duration-500 transition-all border-r-[1px] border-r-gray-50 w-0 h-0 ${
@@ -141,7 +138,7 @@ export default function DashboardLayout({
         </div>
         <Tooltip target=".uo-tool-tip" />
       </div>
-    </QueryClientProvider>
+    // </QueryClientProvider>
   );
 };
 
