@@ -47,7 +47,8 @@ export function Footer() {
           <p className='mb-6 font-medium text text-2xl md:text-3xl'>Legal</p>
           <ul>
             <li className={listItemStyle}>
-              <Link href='/terms-of-use'>Terms of Use</Link>
+              {/* <Link href='/terms-of-use'>Terms of Use</Link> */}
+              <Link href='/terms-and-conditions'>Terms of Use</Link>
             </li>
             <li className={listItemStyle}>
               <Link href='/privacy-policy'>Privacy Policy</Link>

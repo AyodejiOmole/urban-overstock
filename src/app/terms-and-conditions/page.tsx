@@ -2,7 +2,7 @@ import Button from '@/components/Global/Button';
 import Link from 'next/link';
 import React from 'react';
 
-export default function TermsOfUse() {
+export default function TermsAndConditions() {
   return (
     <section className='p-6 sm:px-8 xl:px-16 2xl:px-32 pt-16 pb-16 bg-white'>
       <p className='text-primary-2 font-semibold text-lg'>Terms of Use</p>
@@ -148,13 +148,13 @@ export default function TermsOfUse() {
 
       {/* Buttons */}
 
-      {/* <div className='mt-16 flex items-center gap-4 justify-end'>
+      <div className='mt-16 flex items-center gap-4 justify-end'>
         <Link href='/'>
           <Button variant='outlined' color='dark'>
             Close
           </Button>
         </Link>
-      </div> */}
+      </div>
     </section>
   );
 }

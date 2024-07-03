@@ -15,7 +15,7 @@ export default function PrivacyPolicy() {
           empowering everyone to thrive. Our community is based on trust and
           respect, and we think it`s something special, so we`ve established our
           Community Guidelines (“Guidelines”) as part of our{' '}
-          <Link href='/terms-of-use' className='underline'>
+          <Link href='/terms-and-conditions' className='underline'>
             Terms of Use
           </Link>{' '}
           to ensure UrbanOverstock can be a safe and trustworthy place to buy
