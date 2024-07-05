@@ -84,18 +84,17 @@ export default function NotificationsTable({
     <div className='card rounded-md p-4 bg-white border border-gray-200'>
       <DataTable
         value={notifications}
-        selectionMode={rowClick ? null : 'multiple'}
-        selection={selectedCode!}
-        onSelectionChange={selectRowHandler}
+        // selectionMode={rowClick ? null : 'multiple'}
+        // selection={selectedCode!}
+        // onSelectionChange={selectRowHandler}
         dataKey='id'
         tableStyle={{ minWidth: '50rem' }}
         paginator
         rows={20}
-        rowsPerPageOptions={[25, 50, 100]}
         className='rounded-md text-sm capitalize'
         paginatorTemplate={paginatorTemplate}
         paginatorClassName='flex justify-between'
-        sortOrder={-1}
+        // sortOrder={-1}
         sortField='id'
         sortIcon={<IoIosArrowDown />}
       >

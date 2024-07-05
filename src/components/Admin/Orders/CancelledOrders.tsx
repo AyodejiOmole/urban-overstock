@@ -43,81 +43,19 @@ export default function CancelledOrdersDisplay({ orders }: { orders: ICancelledO
     <>
       <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-4 py-4'>
         <div>
-          <p className='text-xl font-medium text-gray-700'>Order</p>
+          <p className='text-xl font-medium text-gray-700'>Cancelled Orders</p>
           <Pagination /> 
         </div>
         
-        <div className='flex items-center gap-4'>
+        {/* <div className='flex items-center gap-4'>
           <Button>
-            {/* <RiShoppingBasket2Line /> */}
+            <RiShoppingBasket2Line />
             <RiDeleteBinLine />
             Delete
           </Button>
-        </div>
+        </div> */}
       </div>
 
-      {/* <div className='justify-between flex flex-wrap items-center gap-4 mb-2 w-full'>
-        <div className='w-full max-w-md'>
-          <TextInput
-            placeholder='Search orders...'
-            leftIcon={<CiSearch />}
-            onChange={debouncedSearch}
-            value={searchValue}
-          />
-        </div>
-
-        <DatePicker handleSelectDate={handleSelectDate} />
-
-        <div className='w-full'>
-          <CategoryNavigation
-            categories={[
-              'All time',
-              '12 months',
-              '30 days',
-              '7 days',
-              '24 hours',
-            ]}
-            // className="w-full"
-            defaultOption={defaultFilterOption}
-            handleCategoryChange={function (newIndex: number, option): void {
-                
-                const now = new Date();
-                let dateRange: { startDate: Date | null, endDate: Date | null } = {
-                  startDate: null,
-                  endDate: null,
-                };
-              
-                switch (option) {
-                  case 'All time':
-                    dateRange.startDate = new Date(0); // earliest possible date
-                    dateRange.endDate = now;
-                    break;
-                  case '12 months':
-                    dateRange.startDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
-                    dateRange.endDate = now;
-                    break;
-                  case '30 days':
-                    dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30);
-                    dateRange.endDate = now;
-                    break;
-                  case '7 days':
-                    dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
-                    dateRange.endDate = now;
-                    break;
-                  case '24 hours':
-                    dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() - 24);
-                    dateRange.endDate = now;
-                    break;
-                  default:
-                    return; // return null for unknown filter options
-                }
-                setCategoryNavigation(dateRange);
-                setDefaultFilterOption(newIndex);
-              // throw new Error('Function not implemented.');
-            }}
-          />
-        </div>
-      </div> */}
       {/* Orders Table */}
 
       <CancelledOrdersTable
