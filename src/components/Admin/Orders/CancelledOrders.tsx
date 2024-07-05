@@ -37,6 +37,8 @@ export default function CancelledOrdersDisplay({ orders }: { orders: ICancelledO
     setSelectedOrders(e.value);
   };
 
+  console.log(orders);
+
   return (
     <>
       <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-4 py-4'>
