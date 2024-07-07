@@ -29,14 +29,8 @@ export const links: ISidebarLink[] = [
       { name: 'Categories', page: '/admin/categories' },
     ],
   },
-  // {
-  //   name: 'categories',
-  //   icon: <MdOutlineCategory />,
-  //   page: '/admin/categories',
-  // },
   { name: 'orders', icon: <FiShoppingCart />, page: '/admin/orders' },
   { name: 'customers', icon: <FiUsers />, page: '/admin/customers' },
-  // { name: 'sellers', icon: <CiShop />, page: '/admin/sellers' },
   {
     name: 'home slideshow',
     icon: <MdWallpaper />,
@@ -53,7 +47,7 @@ export const links: ISidebarLink[] = [
     page: '/admin/discount-codes',
   },
   { name: 'notification', icon: <LuMail />, page: '/admin/notifications' },
-  { name: 'settings', icon: <IoMdSettings />, page: '/admin/settings' },
+  // { name: 'settings', icon: <IoMdSettings />, page: '/admin/settings' },
 ];
 
 export type ISidebarLink = {

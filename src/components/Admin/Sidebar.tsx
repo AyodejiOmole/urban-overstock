@@ -10,7 +10,7 @@ import logoIcon from '../../../public/logo-icon.png';
 import logo from '../../../public/logo.png';
 import Image from 'next/image';
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
-import { IoIosLogOut } from "react-icons/io";
+import { IoIosLogOut, IoMdSettings } from "react-icons/io";
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
 // Rest of your imports...
@@ -308,184 +308,200 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
             />
         </div>
         {/* Sidebar content */}
-        <div className="flex flex-col h-full gap-[10px] px-[18px]">
-        {/* Your sidebar navigation links */}
-        {
-            links.map((link: ISidebarLink, index: number) => {
-              if(!link.children) {
-                return (
-                    <Link
-                      key={link.name}
-                      href={link.page}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        //margin: '16px 0',
-                      }}
-                    >
-                      <div
-                        className={`py-4 uo-tool-tip flex gap-4 w-full h-10 items-center duration-500 rounded-md text-sm ${
-                          pathname.trim() === link.page
-                            ? 'bg-primary-2 text-white hover:bg-primary'
-                            : 'white text-neutral hover:bg-gray-100'
-                        } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
-                        // onClick={handleNavItemClick}
-                        data-pr-tooltip={link.name.replace(/\b\w/g, (l) => {return l.toUpperCase()})}
-                        data-pr-position="right"
+        <div className="flex flex-col relative h-full gap-[10px] px-[18px]">
+          {/* Your sidebar navigation links */}
+          {
+              links.map((link: ISidebarLink, index: number) => {
+                if(!link.children) {
+                  return (
+                      <Link
+                        key={link.name}
+                        href={link.page}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          //margin: '16px 0',
+                        }}
                       >
-                        
-                          <span>{link.icon}</span>
-            
-                          {isOpen && <p className={`capitalize`}>{link.name}</p>}
+                        <div
+                          className={`py-4 uo-tool-tip flex gap-4 w-full h-10 items-center duration-500 rounded-md text-sm ${
+                            pathname.trim() === link.page
+                              ? 'bg-primary-2 text-white hover:bg-primary'
+                              : 'white text-neutral hover:bg-gray-100'
+                          } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
+                          // onClick={handleNavItemClick}
+                          data-pr-tooltip={link.name.replace(/\b\w/g, (l) => {return l.toUpperCase()})}
+                          data-pr-position="right"
+                        >
+                          
+                            <span>{link.icon}</span>
+              
+                            {isOpen && <p className={`capitalize`}>{link.name}</p>}
 
-                          {link.name.toLowerCase() === "notification" && isOpen && (
-                            <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
-                              {notifications ?? 0}
-                              {/* {10} */}
-                            </div>
-                          )}
+                            {link.name.toLowerCase() === "notification" && isOpen && (
+                              <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
+                                {notifications ?? 0}
+                                {/* {10} */}
+                              </div>
+                            )}
 
-                          {link.name.toLowerCase() === "orders" && isOpen && (
-                            <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
-                              {/* {notifications} */}
-                              {orders?.data.length ?? 0}
-                              {/* {10} */}
-                            </div>
-                          )}
+                            {link.name.toLowerCase() === "orders" && isOpen && (
+                              <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
+                                {/* {notifications} */}
+                                {orders?.data.length ?? 0}
+                                {/* {10} */}
+                              </div>
+                            )}
 
-                          {link.name.toLowerCase() === "return request" && isOpen && (
-                            <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
-                              {/* {notifications} */}
-                              {returnRequests?.data.length ?? 0}
-                              {/* {10} */}
-                            </div>
-                          )}
-                      </div>
-                    </Link>
-                )              
-              }
-              // ${
-              //   pathname.trim() === link.page
-              //     ? 'bg-primary'
-              //     : 'bg-gray-50'
-              // } 
-              return (
-                <div
-                  key={link.name}
-                  className={`rounded-lg  w-full duration-500 'bg-gray-50' 
-                    
-                  `}
-                  // onClick={toggleSidebar}
-                >
-                  <button
-                    onClick={() => {
-                      isExpanded === index
-                        ? setIsExpanded(null)
-                        : setIsExpanded(index);
-                    }}
-                    className={`flex gap-4 w-full h-10 items-center py-4 uo-tool-tip
-                    ${isOpen ? 'justify-between pl-6' : 'justify-center'}
-                    ${
-                      isExpanded === index
-                        ? 'border-b-2 border-b-white'
-                        : 'border-0'
-                    }
-                      ${
-                        // isSimilar(pathname, link.root) > 50
-                        pathname.trim() === link.page
-                          ? 'text-neutral'
-                          : 'text-neutral hover:bg-gray-100'
-                      } 
-                      `}
-                      // data-pr-tooltip={link.name}
-                      data-pr-tooltip={link.name.replace(/\b\w/g, (l) => {return l.toUpperCase()})}
-                    data-pr-position="right"
-                  >
-                    <div className='flex items-center gap-4 ' 
-                    
-                    >
-                        <p>{link.icon}</p>
-                      {isOpen && <p className='capitalize'>{link.name}</p>}
-                    </div>
-                    {isOpen && (
-                      <span className='text-xl'>
-                        {isExpanded === index ? (
-                          <MdKeyboardArrowUp />
-                        ) : (
-                          <MdKeyboardArrowDown />
-                        )}
-                      </span>
-                    )}
-                  </button>
-
-                  {/* Children */}
-                  {isOpen && isExpanded === index && (
-                    <div className={`py-2 duration-500`}>
-                      {link.children && (
-                        <div className='pl-10 text-sm'>
-                          {link?.children?.map((el) => (
-                            <Link
-                              key={el.name}
-                              className={`capitalize my-3 rounded-[8px] block ${
-                                pathname.trim() === el.page
-                                ? 'bg-primary text-white px-[10px] py-[10px]'
-                                : 'text-neutral'
-                                } 
-                              `}
-                              href={el.page}
-                            >
-                              <span className='flex items-center justify-between pl-4'>
-                                {el.name}
-                                {el.children && (
-                                  <span className='text-xl'>
-                                    {isExpanded === index ? (
-                                      <MdKeyboardArrowUp />
-                                    ) : (
-                                      <MdKeyboardArrowDown />
-                                    )}
-                                  </span>
-                                )}
-                              </span>
-                              {el.children && (
-                                <div className=''>
-                                  {el.children.map((innerEl) => (
-                                    <Link
-                                      href={innerEl.page}
-                                      key={innerEl.name}
-                                      className={`capitalize flex p-2 ${
-                                        pathname === innerEl.page
-                                          ? 'text-white'
-                                          : 'text-gray-800'
-                                      }`}
-                                    >
-                                      {innerEl.name}
-                                    </Link>
-                                  ))}
-                                </div>
-                              )}
-                            </Link>
-                          ))}
+                            {link.name.toLowerCase() === "return request" && isOpen && (
+                              <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
+                                {/* {notifications} */}
+                                {returnRequests?.data.length ?? 0}
+                                {/* {10} */}
+                              </div>
+                            )}
                         </div>
+                      </Link>
+                  )              
+                }
+      
+                return (
+                  <div
+                    key={link.name}
+                    className={`rounded-lg  w-full duration-500 'bg-gray-50' 
+                      
+                    `}
+                    // onClick={toggleSidebar}
+                  >
+                    <button
+                      onClick={() => {
+                        isExpanded === index
+                          ? setIsExpanded(null)
+                          : setIsExpanded(index);
+                      }}
+                      className={`flex gap-4 w-full h-10 items-center py-4 uo-tool-tip
+                      ${isOpen ? 'justify-between pl-6' : 'justify-center'}
+                      ${
+                        isExpanded === index
+                          ? 'border-b-2 border-b-white'
+                          : 'border-0'
+                      }
+                        ${
+                          // isSimilar(pathname, link.root) > 50
+                          pathname.trim() === link.page
+                            ? 'text-neutral'
+                            : 'text-neutral hover:bg-gray-100'
+                        } 
+                        `}
+                        // data-pr-tooltip={link.name}
+                        data-pr-tooltip={link.name.replace(/\b\w/g, (l) => {return l.toUpperCase()})}
+                      data-pr-position="right"
+                    >
+                      <div className='flex items-center gap-4 ' 
+                      
+                      >
+                          <p>{link.icon}</p>
+                        {isOpen && <p className='capitalize'>{link.name}</p>}
+                      </div>
+                      {isOpen && (
+                        <span className='text-xl'>
+                          {isExpanded === index ? (
+                            <MdKeyboardArrowUp />
+                          ) : (
+                            <MdKeyboardArrowDown />
+                          )}
+                        </span>
                       )}
-                    </div>
-                  )}
+                    </button>
+
+                    {/* Children */}
+                    {isOpen && isExpanded === index && (
+                      <div className={`py-2 duration-500`}>
+                        {link.children && (
+                          <div className='pl-10 text-sm'>
+                            {link?.children?.map((el) => (
+                              <Link
+                                key={el.name}
+                                className={`capitalize my-3 rounded-[8px] block ${
+                                  pathname.trim() === el.page
+                                  ? 'bg-primary text-white px-[10px] py-[10px]'
+                                  : 'text-neutral'
+                                  } 
+                                `}
+                                href={el.page}
+                              >
+                                <span className='flex items-center justify-between pl-4'>
+                                  {el.name}
+                                  {el.children && (
+                                    <span className='text-xl'>
+                                      {isExpanded === index ? (
+                                        <MdKeyboardArrowUp />
+                                      ) : (
+                                        <MdKeyboardArrowDown />
+                                      )}
+                                    </span>
+                                  )}
+                                </span>
+                                {el.children && (
+                                  <div className=''>
+                                    {el.children.map((innerEl) => (
+                                      <Link
+                                        href={innerEl.page}
+                                        key={innerEl.name}
+                                        className={`capitalize flex p-2 ${
+                                          pathname === innerEl.page
+                                            ? 'text-white'
+                                            : 'text-gray-800'
+                                        }`}
+                                      >
+                                        {innerEl.name}
+                                      </Link>
+                                    ))}
+                                  </div>
+                                )}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })
+          }
+
+          {/* Settings and Logout */}
+          <div className='cursor-pointer mt-[20px] p-2'>
+              <Link
+                href="/admin/settings"
+              >
+                <div
+                  className={`py-4 uo-tool-tip flex gap-4 w-full h-10 items-center duration-500 font-medium rounded-md text-sm hover:bg-gray-50
+                    ${
+                      pathname.trim() === "/admin/settings"
+                        ? 'bg-primary-2 text-white hover:bg-primary'
+                        : 'white text-neutral hover:bg-gray-100'
+                    } 
+                    ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}
+                  `}
+                  data-pr-tooltip="Settings"
+                  data-pr-position="right"
+                >
+                    <IoMdSettings />
+                    {isOpen && <p className='capitalize'>Settings</p>}
                 </div>
-              );
-            })
-        }
-        {/* Settings */}
-        <div className='cursor-pointer mt-[20px] p-2 flex items-center'>
-            <div
-              onClick={() => logOut()}
-              className={`uo-tool-tip py-4 flex  gap-4 w-full h-10 items-center duration-500 rounded-md font-medium white text-neutral hover:bg-gray-50
-              } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
-              data-pr-tooltip="Logout"
-              data-pr-position="right"
-            >
-              <IoIosLogOut />
-              {isOpen && <p className='capitalize'>Logout</p>}
-            </div>
-        </div>
+              </Link>
+              <div
+                onClick={() => logOut()}
+                className={`uo-tool-tip py-4 flex gap-4 w-full h-10 items-center duration-500 rounded-md font-medium white text-neutral hover:bg-gray-50
+                } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
+                data-pr-tooltip="Logout"
+                data-pr-position="right"
+              >
+                <IoIosLogOut />
+                {isOpen && <p className='capitalize'>Logout</p>}
+              </div>
+          </div>
       </div>
       </div>
     </div>

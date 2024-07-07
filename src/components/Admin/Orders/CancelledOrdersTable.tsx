@@ -223,6 +223,8 @@ export default function CancelledOrdersTable({
         sortIcon={<IoIosArrowDown />}
         selectionAutoFocus={true}
         onRowClick={(e) => router.push(`/admin/orders/cancelled-orders/${e.data.id}`)}
+        // rowClassName={"cursor-pointer"}
+        // rowClassName=""
       >
         <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} className='descendant:border descendant:border-gray-800'/>
         <Column field='orderId' header='Order ID' className='text-[#F2C94C]'/>
