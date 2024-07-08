@@ -42,9 +42,6 @@ export default function ProductsTable({
 
   const router = useRouter();
 
-  // const [selectedProducts, setSelectedProducts] = useState<IProduct[] | null>(
-  //   null
-  // );
   const [rowClick, setRowClick] = useState<boolean>(true);
 
   const [deleteProductModal, setDeleteProductModal] = useState<boolean>(false);

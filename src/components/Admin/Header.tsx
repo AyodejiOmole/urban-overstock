@@ -68,7 +68,8 @@ export default function AdminHeader({
         <CgMenu />
       </button>
       <div className="hidden cursor-pointer font-bold text-gray-700 lg:flex items-center justify-center" onClick={toggleSidebar}>
-          {isOpen ? <CgClose className='h-[20px] w-[20px]' /> : <CgMenu className='h-[20px] w-[20px] '/>}
+          {/* {isOpen ? <CgClose className='h-[20px] w-[20px]' /> : <CgMenu className='h-[20px] w-[20px]'/>} */}
+          <CgMenu className='h-[20px] w-[20px]'/>
       </div>
       <div className='flex items-center gap-8'>
         {/* <button className='text-xl'>

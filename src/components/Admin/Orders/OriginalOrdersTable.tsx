@@ -263,7 +263,7 @@ export default function OriginalOrdersTable({
     }
 
     return (
-      <span className={`p-2 px-4 text-xs font-medium rounded-full ${styles}`}>
+      <span className={`p-2 px-4 text-xs font-medium rounded-full whitespace-nowrap ${styles}`}>
         {order.status}
       </span>
     );

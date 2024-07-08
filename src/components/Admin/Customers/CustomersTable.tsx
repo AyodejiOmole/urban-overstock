@@ -138,7 +138,7 @@ export default function CustomersTable({
 
     return (
       <span
-        className={`p-2 px-4 text-xs font-semibold rounded-full ${styles}`}
+        className={`p-2 px-4 text-xs font-semibold rounded-full whitespace-nowrap ${styles}`}
       >
         {customer.status.toLowerCase() === "activated" ? "Active" : customer.status.toLowerCase() === "suspended" ? "Blocked" : customer.status}
       </span>
