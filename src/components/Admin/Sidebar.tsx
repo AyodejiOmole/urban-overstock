@@ -77,8 +77,9 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
           className='font-bold mt-2 mb-4 capitalize text-2xl text-gray-700 flex items-center justify-center'
           onClick={toggleSidebar}
         >
-          {isOpen && <CgClose />}
-          {!isOpen && <CgMenu />}
+          {/* {isOpen && <CgClose />} */}
+          {/* {!isOpen && <CgMenu />} */}
+          <CgMenu />
         </div>
         <div className='p-4 mt-2 mb-4 flex items-center justify-center'>
           <Image
@@ -266,28 +267,49 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
           }
         </div>
 
-        {/* Settings */}
-        <div className='cursor-pointer self-end  p-2 flex items-center'>
-            <div
-              onClick={() => logOut()}
-              className={`uo-tool-tip py-4 flex  gap-4 w-full h-10 items-center duration-500 rounded-md font-medium white text-neutral hover:bg-gray-50
-              } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
-              data-pr-tooltip="Logout"
-              data-pr-position="right"
-            >
-              <IoIosLogOut />
-              {isOpen && <p className='capitalize'>Logout</p>}
-            </div>
+        {/* Settings and Logout */}
+        <div className='cursor-pointer mt-[20px] p-2'>
+              <Link
+                href="/admin/settings"
+              >
+                <div
+                  className={`py-4 uo-tool-tip flex gap-4 w-full h-10 items-center duration-500 font-medium rounded-md text-sm hover:bg-gray-50
+                    ${
+                      pathname.trim() === "/admin/settings"
+                        ? 'bg-primary-2 text-white hover:bg-primary'
+                        : 'white text-neutral hover:bg-gray-100'
+                    } 
+                    ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}
+                  `}
+                  data-pr-tooltip="Settings"
+                  data-pr-position="right"
+                >
+                    <IoMdSettings />
+                    {isOpen && <p className='capitalize'>Settings</p>}
+                </div>
+              </Link>
+              <div
+                onClick={() => logOut()}
+                className={`uo-tool-tip py-4 flex gap-4 w-full h-10 items-center duration-500 rounded-md text-sm font-medium white text-neutral hover:bg-gray-50
+                } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
+                data-pr-tooltip="Logout"
+                data-pr-position="right"
+              >
+                <IoIosLogOut />
+                {isOpen && <p className='capitalize'>Logout</p>}
+              </div>
         </div>
       </div>
     </div>
+
+    {/* On Large Screens */}
     <div className='hidden lg:block'>
-      <div
+      {/* <div
         className={`w-screen h-screen z-30 fixed top-0 left-0 bg-[#0000004f] duration-300 block lg:hidden ${
           isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
         onClick={toggleSidebar}
-      ></div>
+      ></div> */}
       <div
         className={`fixed top-0 z-50 bg-white h-screen duration-300 ${
           isOpen
