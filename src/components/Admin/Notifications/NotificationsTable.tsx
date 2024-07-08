@@ -84,9 +84,6 @@ export default function NotificationsTable({
     <div className='card rounded-md p-4 bg-white border border-gray-200'>
       <DataTable
         value={notifications}
-        // selectionMode={rowClick ? null : 'multiple'}
-        // selection={selectedCode!}
-        // onSelectionChange={selectRowHandler}
         dataKey='id'
         tableStyle={{ minWidth: '50rem' }}
         paginator
@@ -94,17 +91,12 @@ export default function NotificationsTable({
         className='rounded-md text-sm capitalize'
         paginatorTemplate={paginatorTemplate}
         paginatorClassName='flex justify-between'
-        // sortOrder={-1}
+        sortOrder={-1}
         sortField='id'
         sortIcon={<IoIosArrowDown />}
       >
-        <Column field='metadataType' header='Notification Type' sortable></Column>
-        <Column field='title' header='User Type' sortable></Column>
-        {/* <Column
-          field='displayLocation'
-          header='Display Location'
-          sortable
-        ></Column> */}
+        <Column field='metadataType' header='Notification Type'></Column>
+        <Column field='title' header='User Type'></Column>
         <Column
           field='createdAt'
           header='Date'
@@ -114,7 +106,6 @@ export default function NotificationsTable({
         <Column
           field='body'
           header='Message'
-          sortable
           className='text-gray-500'
         ></Column>
         <Column
