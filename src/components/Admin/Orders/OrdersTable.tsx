@@ -192,6 +192,12 @@ export default function OrdersTable({
     return 
   }
 
+  const rowClassTemplate = (data: IOrder) => {
+    return {
+        'cursor-pointer': data.id
+    };
+  };
+
   const router = useRouter();
 
   return (
@@ -228,7 +234,7 @@ export default function OrdersTable({
         sortIcon={<IoIosArrowDown />}
         selectionAutoFocus={true}
         onRowClick={(e) => router.push(`/admin/orders/${e.data.id}`)}
-        
+        rowClassName={rowClassTemplate}
       >
         {page !== "recent orders" && <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} className='group'/>}
         <Column field='uuid' header='Order ID' className='text-[#F2C94C]'/>

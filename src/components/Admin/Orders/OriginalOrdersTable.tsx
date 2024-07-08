@@ -3,7 +3,7 @@
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Column } from 'primereact/column';
+import { Column, ColumnBodyOptions } from 'primereact/column';
 import { DataTable, DataTableFilterMeta, DataTablePageEvent } from 'primereact/datatable';
 import React, { useState, useMemo, useEffect } from 'react';
 import { FaEye } from 'react-icons/fa';
@@ -341,11 +341,23 @@ export default function OriginalOrdersTable({
     );
   }, [searchValue, getOrdersByDate]);
 
-  const checkBoxTemplate = () => {
-    return 
+  const checkBoxTemplate = (data: IOrder, options: ColumnBodyOptions) => {
+    // return {
+    //   "border-red-200": data.id
+    // }
+    options.props = "border-red-500";
+    return options.column.render();
+    // options.column.props.style = "border-red-500"
   }
 
   const router = useRouter();
+
+  const rowClassTemplate = (data: IOrder) => {
+    return {
+        'cursor-pointer': data.id
+    };
+  };
+
 
   return (
     <div className='card rounded-xl p-4 bg-white border border-gray-200'>
@@ -374,8 +386,9 @@ export default function OriginalOrdersTable({
         sortIcon={<IoIosArrowDown />}
         selectionAutoFocus={true}
         onRowClick={(e) => router.push(`/admin/orders/${e.data.id}`)}
+        rowClassName={rowClassTemplate}
       >
-        <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} className='group'/>
+        <Column selectionMode='multiple' body={checkBoxTemplate} headerStyle={{ width: '3rem' }} className='group'/>
         <Column field='uuid' header='Order ID' className='text-[#F2C94C]'/>
         <Column body={productTemplate} header='Product' />
         <Column field='date' header='Date' body={dateTemplate} sortable />

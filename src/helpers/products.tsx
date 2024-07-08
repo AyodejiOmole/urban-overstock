@@ -24,7 +24,7 @@ export function productStatusTemplate(product: IProduct) {
 
   return (
     <span
-      className={`p-2 px-4 text-xs font-semibold rounded-full capitalize ${styles}`}
+      className={`p-2 px-4 text-xs font-semibold rounded-full ${styles}`}
     >
       {product.status}
     </span>

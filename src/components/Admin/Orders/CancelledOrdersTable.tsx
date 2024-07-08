@@ -42,12 +42,6 @@ export default function CancelledOrdersTable({
   };
 
   function amountTemplate(order: ICancelledOrders) {
-    // const { order } = order;
-
-    // const totalAmount = orderProduct.reduce((a, b: OrderProductItem) => {
-    //   return a + b.amount;
-    // }, 0);
-
     return formatCurrency(order.order.totalAmount);
   }
 
@@ -134,54 +128,11 @@ export default function CancelledOrdersTable({
     );
   }
 
-//   const getOrdersByDate = useMemo(() => {
-//     if (selectedDate) {
-//       return orders?.filter(
-//         (order) => moment(order.createdAt).valueOf() >= selectedDate
-//       );
-//     }
-
-//     if(categoryNavigation) {
-//       return orders?.filter((item) => {
-//         const itemDate = new Date(item.createdAt);
-//         return itemDate >= categoryNavigation.startDate && itemDate <= categoryNavigation.endDate;
-//       });
-//     } else return orders;
-
-//   }, [orders, selectedDate, categoryNavigation]);
-
-//   const getOrdersByCategoryDate = useMemo(() => {
-//     if(categoryNavigation) {
-//       return orders?.filter((item) => {
-//         const itemDate = new Date(item.createdAt);
-//         return itemDate >= categoryNavigation.startDate && itemDate <= categoryNavigation.endDate;
-//       });
-//     } else return orders;
-
-//   }, [orders, categoryNavigation]);
-
-//   const matchedOrders = useMemo(() => {
-//     if (searchValue?.trim().length === 0) return getOrdersByDate;
-
-//     return getOrdersByDate?.filter(
-//       (order) =>
-//         order.uuid.toLowerCase().includes(searchValue) ||
-//         order.shippingId.toLowerCase().includes(searchValue) ||
-//         order.orderProduct[0].productName.toLowerCase().includes(searchValue)
-//     );
-//     // if(selectedDate) {
-      
-//     // }
-
-//     // if(categoryNavigation) {
-//     //   return getOrdersByCategoryDate?.filter(
-//     //     (order) =>
-//     //       order.uuid.toLowerCase().includes(searchValue) ||
-//     //       order.shippingId.toLowerCase().includes(searchValue)
-//     //   );
-//     // }
-    
-//   }, [searchValue, getOrdersByDate]);
+  const rowClassTemplate = (data: ICancelledOrders) => {
+    return {
+        'cursor-pointer': data.id
+    };
+  };
 
   const checkBoxTemplate = () => {
     return 
@@ -223,8 +174,7 @@ export default function CancelledOrdersTable({
         sortIcon={<IoIosArrowDown />}
         selectionAutoFocus={true}
         onRowClick={(e) => router.push(`/admin/orders/cancelled-orders/${e.data.id}`)}
-        // rowClassName={"cursor-pointer"}
-        // rowClassName=""
+        rowClassName={rowClassTemplate}
       >
         <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} className='descendant:border descendant:border-gray-800'/>
         <Column field='orderId' header='Order ID' className='text-[#F2C94C]'/>

@@ -3,7 +3,6 @@
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 import { formatCurrency, formatDate } from '@/helpers';
 import { ICustomer, ICustomers } from '@/interfaces/customers';
-// import { customers } from '@/services/customers';
 import Link from 'next/link';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
@@ -139,7 +138,7 @@ export default function CustomersTable({
 
     return (
       <span
-        className={`p-2 px-4 text-xs font-semibold rounded-full capitalize ${styles}`}
+        className={`p-2 px-4 text-xs font-semibold rounded-full ${styles}`}
       >
         {customer.status.toLowerCase() === "activated" ? "Active" : customer.status.toLowerCase() === "suspended" ? "Blocked" : customer.status}
       </span>
@@ -160,6 +159,12 @@ export default function CustomersTable({
 
   const router = useRouter();
   console.log(customers);
+
+  const rowClassTemplate = (data: ICustomer) => {
+    return {
+        'cursor-pointer': data.id
+    };
+  };
 
   return (
     <div className='card rounded-md p-4 bg-white border border-gray-200'>
@@ -183,6 +188,7 @@ export default function CustomersTable({
         sortField='createdAt'
         sortIcon={<IoIosArrowDown />}
         onRowClick={(e) => router.push(`/admin/customers/${e.data.id}`)}
+        rowClassName={rowClassTemplate}
       >
         <Column
           selectionMode='multiple'

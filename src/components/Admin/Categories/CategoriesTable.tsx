@@ -1,24 +1,21 @@
 'use client';
 
-import ENDPOINTS from '@/config/ENDPOINTS';
-import { ICategories, ICategory } from '@/interfaces/categories';
-import HTTPService from '@/services/http';
 import moment from 'moment';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import React, { useState, useMemo } from 'react';
 import toast from 'react-hot-toast';
-// import { FaEye } from 'react-icons/fa';
-// import { MdOutlineDelete } from 'react-icons/md';
-// import { RxPencil2 } from 'react-icons/rx';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
-import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { IoIosArrowDown } from 'react-icons/io';
+
+import ENDPOINTS from '@/config/ENDPOINTS';
+import { ICategories, ICategory } from '@/interfaces/categories';
+import HTTPService from '@/services/http';
+import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 
 export default function CategoriesTable({
   selectedDate,
@@ -51,12 +48,6 @@ export default function CategoriesTable({
       )
     ) {
       toast.loading('Deleting category...');
-
-      // const res = await httpService.delete(
-      //   ENDPOINTS.CATEGORIES,
-      //   String(id),
-      //   `Bearer ${token}`
-      // );
       const res = await httpService.deleteById(
         `${ENDPOINTS.CATEGORIES}?id=${String(id)}`,
         `Bearer ${token}`
@@ -114,22 +105,8 @@ export default function CategoriesTable({
   function template(category: ICategory) {
     return (
       <div className='flex items-center gap-4'>
-        {/* {category.iconUrl?.length > 0 && checkIfUrl(category.iconUrl) ? (
-          <Image
-            src={category?.iconUrl}
-            height={20}
-            width={20}
-            className='h-12 w-12 bg-[#1b1b1b] rounded-md'
-            alt={category.description}
-          />
-        ) : (
-          <div className='h-12 w-12 bg-[#1b1b1b] rounded-md'></div>
-        )} */}
         <div className='flex-1'>
           <p className='text-sm font-medium'>{category?.name}</p>
-          {/* <p className='text-neutral text-sm font-light'>
-            {category?.description}
-          </p> */}
         </div>
       </div>
     );
@@ -183,11 +160,6 @@ export default function CategoriesTable({
         sortField='createdAt'
         sortIcon={<IoIosArrowDown />}
       >
-       {/*  <Column
-          selectionMode='multiple'
-          headerStyle={{ width: '3rem' }}
-        ></Column> */}
-        {/* <Column field='id' header='ID' sortable></Column> */}
         <Column body={template} header='Category'></Column>
         <Column
           field='createdAt'
@@ -195,12 +167,6 @@ export default function CategoriesTable({
           body={dateTemplate}
           sortable
         ></Column>
-        {/* <Column
-          field='updatedAt'
-          header='Last Updated'
-          body={dateTemplate}
-          sortable
-        ></Column> */}
         <Column field='action' header='Action' body={actionTemplate}></Column>
       </DataTable>
     </div>
