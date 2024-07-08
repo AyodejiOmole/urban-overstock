@@ -44,7 +44,7 @@ export default function TopSellingProductsTable({
   
     return (
       <span
-        className={`p-2 px-4 text-xs font-semibold rounded-full capitalize ${styles}`}
+        className={`p-2 px-4 text-xs font-semibold rounded-full capitalize whitespace-nowrap ${styles}`}
       >
         {product?.product.status}
       </span>
