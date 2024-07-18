@@ -123,30 +123,30 @@ export default function Products({
       <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8 py-4'>
       {/* <p className='text-xl font-bold text-gray-700'>Products</p> */}
       <div>
-       <p className='text-xl font-bold text-gray-700'>Products</p>
-       <Pagination/>
-      </div>
+        <p className='text-xl font-bold text-gray-700'>Products</p>
+        <Pagination/>
+        </div>
 
-      <div className='flex items-center gap-4'>
-          <Button variant='outlined' color='primary-2' onClick={() => updateProduct(selectedProducts, "PUBLISHED")}>
-            {/* <PiExportBold /> */}
-            Publish
-          </Button>
-          <Button variant='outlined' color='primary-2' onClick={() => updateProduct(selectedProducts, "DRAFT")}>
-            {/* <PiExportBold /> */}
-            Unpublish
-          </Button>
-          <Button onClick={() => deleteProducts(selectedProducts)}>
-            <RiDeleteBin5Fill />
-            Delete
-          </Button>
-          <Link href='/admin/products/new'>
-            <Button>
-              <FaPlus />
-              Add Product
+        <div className='flex items-center gap-4'>
+            <Button variant='outlined' color='primary-2' onClick={() => updateProduct(selectedProducts, "PUBLISHED")}>
+              {/* <PiExportBold /> */}
+              Publish
             </Button>
-          </Link>
-      </div>
+            <Button variant='outlined' color='primary-2' onClick={() => updateProduct(selectedProducts, "DRAFT")}>
+              {/* <PiExportBold /> */}
+              Unpublish
+            </Button>
+            <Button onClick={() => deleteProducts(selectedProducts)}>
+              <RiDeleteBin5Fill />
+              Delete
+            </Button>
+            <Link href='/admin/products/new'>
+              <Button>
+                <FaPlus />
+                Add Product
+              </Button>
+            </Link>
+        </div>
       </div>
 
       <div className='flex items-center justify-between mb-4'>
@@ -156,6 +156,7 @@ export default function Products({
             leftIcon={<CiSearch />}
             onChange={debouncedSearch}
             value={searchValue}
+            ifSearchBar="bg-white"
           />
         </div>
 

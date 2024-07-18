@@ -113,6 +113,7 @@ export default function Customers({
               placeholder='Search customer...'
               leftIcon={<CiSearch />}
               onChange={debouncedSearch}
+              ifSearchBar="bg-white"
             />
           </div>
         </div>

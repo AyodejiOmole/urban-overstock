@@ -14,6 +14,7 @@ type InputType = React.InputHTMLAttributes<HTMLInputElement> & {
   rounded?: boolean;
   value?: string | any;
   ifCategory?: boolean;
+  ifSearchBar?: string;
 };
 
 export default function TextInput(props: InputType) {
@@ -38,10 +39,13 @@ export default function TextInput(props: InputType) {
     onBlur,
     rounded = false,
     ifCategory,
+    ifSearchBar = "bg-[#F0F1F3]"
   } = props;
 
+  // bg-[#F0F1F3]
+
   const inputStyles = clsx(
-    'h-[48px] bg-[#F0F1F3] px-4 py-2 border border-dark-100 flex gap-2 items-center',
+    'h-[48px]  px-4 py-2 border border-dark-100 flex gap-2 items-center', ifSearchBar,
     disabled && 'pointer-events-none opacity-60',
     rounded ? 'rounded-full' : 'rounded-lg',
     className
@@ -104,7 +108,7 @@ export default function TextInput(props: InputType) {
           onChange={handleInputChange}
           onFocus={onFocus}
           onBlur={onBlur}
-          className={`h-full text-sm w-full bg-[#F0F1F3] font-medium caret-primary text-black leading-2 focus:outline-none block appearance-none`}
+          className={`h-full text-sm w-full ${ifSearchBar} font-medium caret-primary text-black leading-2 focus:outline-none block appearance-none`}
           placeholder={placeholder}
           maxLength={ifCategory ? 12 : undefined}
         />

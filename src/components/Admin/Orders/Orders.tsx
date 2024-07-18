@@ -226,10 +226,9 @@ export default function Orders(
             leftIcon={<CiSearch />}
             onChange={debouncedSearch}
             value={searchValue}
+            ifSearchBar="bg-white"
           />
         </div>
-
-        {/* <DatePicker handleSelectDate={handleSelectDate} /> */}
 
         <div className='w-full'>
           <CategoryNavigation

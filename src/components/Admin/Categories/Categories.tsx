@@ -46,6 +46,7 @@ export default function Categories({
             leftIcon={<CiSearch />}
             // onChange={() => {}}
             onChange={debouncedSearch}
+            ifSearchBar="bg-white"
           />
         </div>
 
