@@ -132,9 +132,9 @@ export default function ProductsTable({
           <div className='h-12 w-12 bg-[#1b1b1b] rounded-md'></div>
         )}
         {/* <p className='text-sm flex-1'>{product?.name}</p> */}
-        <div className='flex-1'>
+        <div className='flex-1 whitespace-nowrap'>
           <p className='text-sm font-medium'>{product?.name}</p>
-          <p className='text-neutral text-sm font-light'>
+          <p className='text-neutral text-xs font-light'>
             {`${product?.productVarations.length} variations`}
           </p>
         </div>
@@ -181,7 +181,7 @@ export default function ProductsTable({
         // onSelectionChange={dateChangeHandler}
         onSelectionChange={handleChangeSelectedProducts}
         dataKey='id'
-        tableStyle={{ minWidth: '50rem' }}
+        tableStyle={{ minWidth: '80rem' }}
         paginator
         paginatorTemplate={paginatorTemplate}
         paginatorClassName='flex justify-between'
