@@ -1,19 +1,20 @@
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { ISidebarLink, links } from '@/static/index';
 import { FaHeadphonesAlt } from 'react-icons/fa';
 import { FiSettings } from 'react-icons/fi';
 import { CgMenu } from 'react-icons/cg';
 import { CgClose } from 'react-icons/cg';
-import logoIcon from '../../../public/logo-icon.png';
-import logo from '../../../public/logo.png';
 import Image from 'next/image';
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 import { IoIosLogOut, IoMdSettings } from "react-icons/io";
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
-// Rest of your imports...
+import { MdArrowRight } from "react-icons/md";
+
+import logoIcon from '../../../public/logo-icon.png';
+import logo from '../../../public/logo.png';
+import { ISidebarLink, links } from '@/static/index';
 
 type SidebarProps = {
   isOpen: Boolean;
@@ -29,11 +30,6 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
   const [isExpanded, setIsExpanded] = useState<null | number>(null);
   const cookies = new Cookies();
   const router = useRouter();
-  
-  // const logOut = () => {
-  //   cookies.remove("urban-token");
-  //   router.push("/auth/admin/login");
-  // }
 
   const logOut = () => {
     cookies.remove("urban-token");
@@ -73,15 +69,17 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
             : 'lg:w-1/12 -translate-x-[100%] lg:translate-x-0 w-0 -left-4 lg:left-0'
         }`}
       >
-        <div
+        {/* <div
           className='font-bold mt-2 mb-4 capitalize text-2xl text-gray-700 flex items-center justify-center'
           onClick={toggleSidebar}
         >
-          {/* {isOpen && <CgClose />} */}
-          {/* {!isOpen && <CgMenu />} */}
+          {isOpen && <CgClose />}
+          {!isOpen && <CgMenu />}
           <CgMenu />
-        </div>
+        </div> */}
+        
         <div className='p-4 mt-2 mb-4 flex items-center justify-center'>
+          { isOpen ? <CgClose className='h-[20px] w-[20px] cursor-pointer' onClick={toggleSidebar} /> : <MdArrowRight className='cursor-pointer' onClick={toggleSidebar}/> }
           <Image
             onClick={toggleSidebar}
             src={isOpen ? logo : logoIcon}
@@ -163,17 +161,11 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
                     </Link>
                 )              
               }
-              // ${
-              //   pathname.trim() === link.page
-              //     ? 'bg-primary'
-              //     : 'bg-gray-50'
-              // } 
+              
               return (
                 <div
                   key={link.name}
-                  className={`rounded-lg mt-4 duration-500 'bg-gray-50' 
-                    
-                  `}
+                  className={`rounded-lg mt-4 duration-500 'bg-gray-50' `}
                 >
                   <button
                     // onClick={() => expand(index)}
@@ -322,6 +314,21 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
           {isOpen ? <CgClose /> : <CgMenu />}
         </div> */}
         <div className='flex items-center justify-center py-[15px] px-[20px]'>
+          { isOpen ? 
+            <CgClose 
+              className='h-[20px] w-[20px] cursor-pointer uo-tool-tip' 
+              onClick={toggleSidebar}
+              data-pr-tooltip={"Close Sidebar"}
+              data-pr-position="right"
+            /> 
+            : 
+            <MdArrowRight 
+              className='h-[20px] w-[20px] cursor-pointer uo-tool-tip' 
+              onClick={toggleSidebar}
+              data-pr-tooltip={"Open Sidebar"}
+              data-pr-position="right"
+            /> 
+          }
           <Image
               onClick={toggleSidebar}
               src={isOpen? logo : logoIcon}
@@ -329,6 +336,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
               className={`duration-500 ${isOpen ? 'w-2/3' : 'w-1/2'}`}
             />
         </div>
+
         {/* Sidebar content */}
         <div className="flex flex-col relative h-full gap-[10px] px-[18px]">
           {/* Your sidebar navigation links */}
@@ -494,7 +502,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
 
           {/* Settings and Logout */}
           <div className='cursor-pointer mt-[20px] p-2'>
-              <Link
+              {/* <Link
                 href="/admin/settings"
               >
                 <div
@@ -512,7 +520,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
                     <IoMdSettings />
                     {isOpen && <p className='capitalize'>Settings</p>}
                 </div>
-              </Link>
+              </Link> */}
               <div
                 onClick={() => logOut()}
                 className={`uo-tool-tip py-4 flex gap-4 w-full h-10 items-center duration-500 rounded-md text-sm font-medium white text-neutral hover:bg-gray-50

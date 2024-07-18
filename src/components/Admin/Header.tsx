@@ -5,9 +5,10 @@ import { CgMenu } from 'react-icons/cg';
 import { FiMail } from 'react-icons/fi';
 import { IoSearchOutline } from 'react-icons/io5';
 import { TbCalendar } from 'react-icons/tb';
+import { CgClose } from 'react-icons/cg';
+
 import Notification from '../Shared/Notification';
 import UserAvatar from '../Shared/UserAvatar';
-import { CgClose } from 'react-icons/cg';
 
 export interface AdminType {
   createdAt: string;
@@ -67,14 +68,14 @@ export default function AdminHeader({
       >
         <CgMenu />
       </button>
-      <div className="hidden cursor-pointer font-bold text-gray-700 lg:flex items-center justify-center" onClick={toggleSidebar}>
+      <div 
+        className="hidden cursor-pointer font-bold text-gray-700 lg:flex items-center justify-center" 
+        // onClick={toggleSidebar}
+      >
           {/* {isOpen ? <CgClose className='h-[20px] w-[20px]' /> : <CgMenu className='h-[20px] w-[20px]'/>} */}
-          <CgMenu className='h-[20px] w-[20px]'/>
+          {/* <CgMenu className='h-[20px] w-[20px]'/> */}
       </div>
       <div className='flex items-center gap-8'>
-        {/* <button className='text-xl'>
-          <IoSearchOutline />
-        </button> */}
         <Notification icon={<FiMail />} number={unreadNotifications ?? 0} />
 
         <div className='h-12 w-[2px] bg-gray-200'></div>
