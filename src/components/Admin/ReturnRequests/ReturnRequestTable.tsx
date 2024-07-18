@@ -71,35 +71,38 @@ export default function ReturnRequestTable({
     );
   }
 
-//   function statusTemplate(order: IReturnRequest) {
-//     const { status } = order;
+  function statusTemplate(order: IReturnRequest) {
+    const { status } = order;
 
-//     let styles = '';
+    let styles = '';
 
-//     switch (status.toLowerCase()) {
-//       case 'processing':
-//         styles = 'bg-orange-100 text-orange-600';
-//         break;
-//       case 'shipped':
-//         styles = 'bg-blue-100 text-blue-600';
-//         break;
-//       case 'delivered':
-//         styles = 'bg-green-100 text-green-600';
-//         break;
-//       case 'cancelled' || 'refunded':
-//         styles = 'bg-red-100 text-red-600';
-//         break;
-//       default:
-//         styles = 'bg-purple-50 text-purple-600';
-//         break;
-//     }
+    switch (status.toLowerCase()) {
+      case 'processing':
+        styles = 'bg-orange-100 text-orange-600';
+        break;
+      case 'shipped':
+        styles = 'bg-blue-100 text-blue-600';
+        break;
+      case 'confirmed':
+        styles = 'bg-green-100 text-green-600';
+        break;
+      case 'cancelled':
+        styles = 'bg-red-100 text-red-600';
+        break;
+      case 'denied':
+        styles = 'bg-red-100 text-red-600';
+        break;
+      default:
+        styles = 'bg-purple-50 text-purple-600';
+        break;
+    }
 
-//     return (
-//       <span className={`p-2 px-4 text-xs font-medium rounded-full ${styles}`}>
-//         {order.status}
-//       </span>
-//     );
-//   }
+    return (
+      <span className={`p-2 px-4 text-xs font-medium rounded-full ${styles}`}>
+        {status.toLowerCase() === "confirmed" ? "Accepted" : status.toLowerCase() === "denied" ? "Denied" : status}
+      </span>
+    );
+  }
 
   function productTemplate(order: IReturnRequest) {
     return (
@@ -207,7 +210,7 @@ export default function ReturnRequestTable({
           sortable
         />
         <Column header='Payment' field="order.paymentMethod" />
-        {/* <Column field='status' header='Status' sortable body={statusTemplate} /> */}
+        <Column field='status' header='Status' sortable body={statusTemplate} />
         <Column field='action' header='Action' body={actionTemplate} />
       </DataTable>
     </div>
