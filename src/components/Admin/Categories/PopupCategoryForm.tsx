@@ -24,7 +24,7 @@ export default function PopupCategoryForm({ categoryToBeEdited, closeModal } : I
   const cookies = new Cookies();
   const httpService = new HTTPService();
   // const params = useSearchParams();
-  // const router = useRouter();
+  const router = useRouter();
 
   const [editCategory, setEditCategory] = useState(false);
 
@@ -53,8 +53,8 @@ export default function PopupCategoryForm({ categoryToBeEdited, closeModal } : I
           toast.success('Category updated successfully.');
   
           setTimeout(() => { 
-            // router.back();
             closeModal();
+            router.refresh();
           }, 1000);
         }
 
@@ -73,8 +73,8 @@ export default function PopupCategoryForm({ categoryToBeEdited, closeModal } : I
           toast.success('Category added successfully.');
 
           setTimeout(() => {
-            // router.push('/admin/categories');
             closeModal();
+            router.refresh();
           }, 1000);
         }
         console.log(apiRes);

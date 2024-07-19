@@ -105,9 +105,11 @@ export default function Categories({
       <Modal
         isOpen={modalOpen}
         handleClose={closeModal}
-        title='Add & Edit Category'
+        title='Add/Edit Category'
       > 
-        <h3 className='mb-4 text-lg text-black'> Add a new category? </h3>
+        <h3 className='mb-4 text-lg text-black'> 
+          {categoryToBeEdited ? "Edit existing category" : "Add a new category"}
+        </h3>
         <PopupCategoryForm 
           categoryToBeEdited={categoryToBeEdited}
           closeModal={closeModal}
