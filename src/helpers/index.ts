@@ -49,3 +49,13 @@ export function calculateStringSimilarity(str1: string, str2: string) {
 
   return +percentageMatch.toFixed(2);
 }
+
+export function checkIfUrl(imageUrl: string) {
+  if (!/^https?:\/\//.test(imageUrl) && !/^\/ /.test(imageUrl)) {
+    // console.error(`Invalid image URL: ${imageUrl}`);
+    // // You can also return a default image or a placeholder here
+    // imageUrl = '/default-image.jpg'; // Replace with your default image
+    return false;
+  }
+  return true;
+}

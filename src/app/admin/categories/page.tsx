@@ -1,10 +1,11 @@
 'use server';
+
+import React from 'react';
+
 import Categories from '@/components/Admin/Categories/Categories';
 import { ICategories } from '@/interfaces/categories';
 import getAllCategories from '@/libs/categories';
-import React from 'react';
 
-import PageHeading from './components/PageHeading';
 
 export default async function AdminCategories() {
   const apiRes: Promise<ICategories | undefined> = getAllCategories();
@@ -12,9 +13,10 @@ export default async function AdminCategories() {
 
   return (
     <section className='py-8'>
-      <PageHeading />
+      {/* <PageHeading /> */}
+      
 
-      {/* Categories Table */}
+      {/* Categories */}
       <Categories categories={categories} />
     </section>
   );

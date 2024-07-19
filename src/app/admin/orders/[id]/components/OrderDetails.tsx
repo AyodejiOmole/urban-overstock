@@ -1,7 +1,3 @@
-import Button from '@/components/Global/Button';
-import Modal from '@/components/Global/Modal';
-import TextInput from '@/components/Global/TextInput';
-import { IOrder, OrderProductItem } from '@/interfaces/orders';
 import clsx from 'clsx';
 import moment from 'moment';
 import React, { useState } from 'react';
@@ -18,17 +14,22 @@ import { LuTruck } from 'react-icons/lu';
 import { PiCalendarCheck } from 'react-icons/pi';
 import { RiRefreshLine } from 'react-icons/ri';
 import { TbFileInvoice } from 'react-icons/tb';
-import OrderDetailsTable from './OrderDetailsTable';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
-import HTTPService from '@/services/http';
 import Cookies from 'universal-cookie';
-import ENDPOINTS from '@/config/ENDPOINTS';
 import { useRouter } from 'next/navigation';
-import DatePicker from '@/components/Shared/DatePicker';
 import { Calendar, CalendarProps } from 'primereact/calendar';
 import { FiCalendar } from 'react-icons/fi';
+
+import OrderDetailsTable from './OrderDetailsTable';
+import ENDPOINTS from '@/config/ENDPOINTS';
+import HTTPService from '@/services/http';
+import DatePicker from '@/components/Shared/DatePicker';
+import Button from '@/components/Global/Button';
+import Modal from '@/components/Global/Modal';
+import TextInput from '@/components/Global/TextInput';
+import { IOrder, OrderProductItem } from '@/interfaces/orders';
 
 function StatusTemplate ({ status }: { status: string | undefined}) {
   let styles = '';
@@ -267,6 +268,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
           </div>
           {/*  */}
         </div>
+
         {/* Customer Details */}
         <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-xl'>
           <p className='text-lg font-medium text-gray-700 mb-8'>Customer</p>
@@ -312,6 +314,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
             <p>{order?.receiverPhone}</p>
           </div>
         </div>
+        
         {/* Document */}
         <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-xl'>
           <p className='text-lg font-medium text-gray-700 mb-8'>Document</p>

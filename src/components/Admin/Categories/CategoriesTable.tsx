@@ -16,28 +16,29 @@ import ENDPOINTS from '@/config/ENDPOINTS';
 import { ICategories, ICategory } from '@/interfaces/categories';
 import HTTPService from '@/services/http';
 import paginatorTemplate from '@/components/Global/PaginatorTemplate';
+import { ICategoryToBeEdited } from './Categories';
 
 export default function CategoriesTable({
   selectedDate,
   categories,
   searchValue,
+  openModal,
+  closeModal,
+  setCategoryToBeEdited
 }: {
   // selectedDate: Date | (Date | null)[] | Date[] | null | undefined | number;
   selectedDate: number | null;
   categories: ICategories | undefined;
   searchValue: string;
-  // selectedDate: number | null;
+  openModal: () => void;
+  closeModal?: () => void;
+  setCategoryToBeEdited: React.Dispatch<React.SetStateAction<ICategoryToBeEdited | undefined | null>>
 }) {
   const cookies = new Cookies();
   const httpService = new HTTPService();
   const router = useRouter();
 
   console.log(categories);
-
-  const [selectedCategories, setSelectedCategories] = useState<
-    ICategory[] | null
-  >(null);
-  const [rowClick, setRowClick] = useState<boolean>(true);
 
   async function deleteCategory(id: number) {
     const token = cookies.get('urban-token');
@@ -68,38 +69,30 @@ export default function CategoriesTable({
   function actionTemplate(category: ICategory) {
     return (
       <div className='flex items-center gap-3'>
+
         {/* <Link
           href={`/admin/categories/${category.id}?edit=false`}
           className='text-xl text-neutral'
         >
           <FaEye />
         </Link> */}
-        <Link
-          href={{
-            pathname: `/admin/categories/${category.id}`,
-            query: { id: category.id, name: category.name, edit: true }
+
+        <button
+          onClick={() => {
+            setCategoryToBeEdited({
+              id: category.id,
+              name: category.name
+            });
+            openModal();
           }}
-          className='text-xl text-neutral'
         >
-          {/* <RxPencil2 /> */}
-          <MdOutlineModeEdit />
-        </Link>
+          <MdOutlineModeEdit className='text-xl'/>
+        </button>
         <button onClick={() => deleteCategory(category.id)}>
-          {/* <MdOutlineDelete className='text-xl' /> */}
           <RiDeleteBin6Line className='text-xl'/>
         </button>
       </div>
     );
-  }
-
-  function checkIfUrl(imageUrl: string) {
-    if (!/^https?:\/\//.test(imageUrl) && !/^\/ /.test(imageUrl)) {
-      // console.error(`Invalid image URL: ${imageUrl}`);
-      // // You can also return a default image or a placeholder here
-      // imageUrl = '/default-image.jpg'; // Replace with your default image
-      return false;
-    }
-    return true;
   }
 
   function template(category: ICategory) {
@@ -111,12 +104,6 @@ export default function CategoriesTable({
       </div>
     );
   }
-
-  const selectChangeHandler = (e: any) => {
-    setSelectedCategories(e.value);
-
-    console.log(e.value);
-  };
 
   const getCategoriesByDate = useMemo(() => {
     if (selectedDate) {
@@ -143,16 +130,11 @@ export default function CategoriesTable({
       </div>
       <DataTable
         value={matchedCategories}
-        // selectionMode={rowClick ? null : 'multiple'}
-        // selection={selectedCategories!}
-        // onSelectionChange={selectChangeHandler}
         dataKey='id'
         tableStyle={{ minWidth: '50rem'}}
         paginator
         paginatorTemplate={paginatorTemplate}
-        // paginatorClassName='flex'
         paginatorClassName='flex justify-between'
-        // paginatorPosition='left'
         rows={5}
         rowsPerPageOptions={[5, 25, 50, 100]}
         className='rounded-md text-sm'

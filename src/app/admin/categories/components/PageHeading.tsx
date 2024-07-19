@@ -14,10 +14,6 @@ export default function PageHeading() {
       </div>
       
       <div className='flex items-center gap-4'>
-        {/* <Button variant='outlined' color='dark'>
-          <PiExportBold />
-          Export
-        </Button> */}
         <Link href='/admin/categories/new'>
           <Button>
             <FaPlus />
