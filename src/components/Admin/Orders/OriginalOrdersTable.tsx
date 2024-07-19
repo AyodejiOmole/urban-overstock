@@ -150,7 +150,7 @@ export default function OriginalOrdersTable({
             const className = classNames(options.className, { 'p-disabled': true });
 
             return (
-                <span className={classNames('border px-3 py-1 mx-1 rounded-sm border-[#F2C94C]')} style={{ userSelect: 'none' }}>
+                <span className={classNames('border px-3 py-1 mx-1 rounded-sm cursor-pointer border-[#F2C94C]')} style={{ userSelect: 'none' }}>
                     ...
                 </span>
             );
@@ -158,32 +158,30 @@ export default function OriginalOrdersTable({
 
         return (
             <span 
-              // type="button" 
-              className={classNames(`${options.page ? "bg-[#F2C94C]" : "bg-white"} px-3 py-1 mx-1 rounded-sm border border-[#F2C94C] `)} 
+              className={classNames(`${options.page === options.currentPage ? "bg-[#F2C94C]" : "bg-white"} px-3 cursor-pointer py-1 mx-1 rounded-sm border border-[#F2C94C] `)} 
               onClick={() => {
                 setlazyState({
                   first: 0,
                   rows: 10,
                   page: options.page === 0 ? 0 : options.page,
                 });
-                // console.log(options.page);
               }}>
                 {options.page + 1}
-                {/* <Ripple /> */}
             </span>
         );
     },
     CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
         return (
             <div style={{ color: 'var(--text-color)', userSelect: 'none', width: 'auto', textAlign: 'left'}} className='text-sm text-neutral items-center my-auto mr-auto'>
-                {`Showing ${options.first} - ${options.last} from ${options.totalRecords}`}
+                {`Showing ${lazyState.first + ((lazyState.page ?? 0) * 10)} - ${(lazyState.first + ((lazyState.page ?? 0) * 10)) + 10} from ${options.totalRecords}`}
+                {/* {`Showing ${options.first} - ${options.last} from ${options.totalRecords}`} */}
             </div>
         );
     },
     PrevPageLink: (options: PaginatorPrevPageLinkOptions) => {
         return (
             <span 
-                className={classNames('rounded-sm bg-[#F2C94C] p-2 mx-1')} 
+                className={classNames('rounded-sm bg-[#F2C94C] p-2 mx-1 cursor-pointer')} 
                 onClick={() => {
                     setlazyState({
                       first: 0,
@@ -200,7 +198,7 @@ export default function OriginalOrdersTable({
     },
     NextPageLink: (options: PaginatorNextPageLinkOptions) => {
         return (
-            <span className={classNames('rounded-sm p-2 mx-1 bg-[#F2C94C]')} onClick={options.onClick}>
+            <span className={classNames('rounded-sm p-2 mx-1 bg-[#F2C94C] cursor-pointer')} onClick={options.onClick}>
                 <MdKeyboardArrowRight color="black"/>
             </span>
         );
@@ -320,16 +318,6 @@ export default function OriginalOrdersTable({
 
   }, [lazyOrders, selectedDate, categoryNavigation]);
 
-  // const getOrdersByCategoryDate = useMemo(() => {
-  //   if(categoryNavigation) {
-  //     return orders?.filter((item) => {
-  //       const itemDate = new Date(item.createdAt);
-  //       return itemDate >= categoryNavigation.startDate && itemDate <= categoryNavigation.endDate;
-  //     });
-  //   } else return orders;
-
-  // }, [orders, categoryNavigation]);
-
   const matchedOrders = useMemo(() => {
     if (searchValue?.trim().length === 0) return getOrdersByDate;
 
@@ -342,9 +330,6 @@ export default function OriginalOrdersTable({
   }, [searchValue, getOrdersByDate]);
 
   const checkBoxTemplate = (data: IOrder, options: ColumnBodyOptions) => {
-    // return {
-    //   "border-red-200": data.id
-    // }
     options.props = "border-red-500";
     return options.column.render();
     // options.column.props.style = "border-red-500"
@@ -372,7 +357,7 @@ export default function OriginalOrdersTable({
         selection={selectedOrders!}
         onSelectionChange={handleChangeSelectedOrders}
         dataKey='uuid'
-        tableStyle={{ minWidth: '50rem' }}
+        tableStyle={{ minWidth: '60rem' }}
         paginator
         paginatorTemplate={paginatorTemplateOrder}
         paginatorClassName='flex justify-between'

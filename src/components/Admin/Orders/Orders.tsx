@@ -219,8 +219,8 @@ export default function Orders(
         </div>
       </div>
 
-      <div className='justify-between flex flex-wrap items-center gap-4 mb-2 w-full'>
-        <div className='w-full max-w-md'>
+      <div className='justify-between flex items-center gap-3 mb-2 w-full'>
+        <div className=''>
           <TextInput
             placeholder='Search orders...'
             leftIcon={<CiSearch />}
@@ -230,7 +230,7 @@ export default function Orders(
           />
         </div>
 
-        <div className='w-full'>
+        <div >
           <CategoryNavigation
             categories={[
               'All time',
@@ -277,13 +277,13 @@ export default function Orders(
                 setDefaultFilterOption(newIndex);
               // throw new Error('Function not implemented.');
             }}
+            // className='w-full'
           />
         </div>
       </div>
-      {/* Orders Table */}
 
+      {/* Orders Table */}
       <OriginalOrdersTable
-        // orders={orders}
         handleChangeSelectedOrders={handleChangeSelectedOrders}
         selectedOrders={selectedOrders}
         selectedDate={selectedDate}
