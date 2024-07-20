@@ -19,24 +19,6 @@ export default async function AdminHomeSlideshow() {
   const apiRes: Promise<ISlideShows[] | null> = getSliderImages();
   const sliderImages = await apiRes;
 
-  // if (sliderImages) {
-  //   await Promise.all(sliderImages.map(async (slideshow, index) => {
-  //     const response = await fetch(slideshow.image);
-  //     const blob = await response.blob();
-  //     const img = new Image();
-  //     img.src = URL.createObjectURL(blob);
-  //     await new Promise(resolve => img.onload = resolve);
-      
-  //     console.log('Image type:', blob.type); // e.g. "image/jpeg"
-  //     console.log('Image size:', blob.size); // e.g. 102400 (in bytes)
-  //     console.log('Image dimensions:', img.width, 'x', img.height); // e.g. 800 x 600
-
-  //     slideshow.imageType = blob.type;
-  //     slideshow.imageDimensions = img.width + 'x' + img.height;
-  //     slideshow.imageSize = `${((blob.size)/1024).toFixed(2)}kb`;
-  //   }));
-  // };
-
   if (sliderImages) {
     await Promise.all(sliderImages.map(async (slideshow, index) => {
       const response = await fetch(slideshow.image);
