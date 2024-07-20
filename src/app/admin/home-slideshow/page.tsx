@@ -1,15 +1,60 @@
+import Link from 'next/link';
+import React from 'react';
+import { FaPlus } from 'react-icons/fa';
+import sharp from "sharp";
+
 import HomeSlideshowTable from '@/components/Admin/HomeSlideshow/HomeSlideshowTable';
 import Button from '@/components/Global/Button';
 import { SliderImageType } from '@/interfaces';
 import getSliderImages from '@/libs/slider-images';
-import Link from 'next/link';
-import React from 'react';
-import { FaPlus } from 'react-icons/fa';
 import Pagination from '@/components/Shared/Pagination';
 
+export interface ISlideShows extends SliderImageType {
+  imageType?: string
+  imageSize?: string
+  imageDimensions?: string
+}
+
 export default async function AdminHomeSlideshow() {
-  const apiRes: Promise<SliderImageType[] | null> = getSliderImages();
+  const apiRes: Promise<ISlideShows[] | null> = getSliderImages();
   const sliderImages = await apiRes;
+
+  // if (sliderImages) {
+  //   await Promise.all(sliderImages.map(async (slideshow, index) => {
+  //     const response = await fetch(slideshow.image);
+  //     const blob = await response.blob();
+  //     const img = new Image();
+  //     img.src = URL.createObjectURL(blob);
+  //     await new Promise(resolve => img.onload = resolve);
+      
+  //     console.log('Image type:', blob.type); // e.g. "image/jpeg"
+  //     console.log('Image size:', blob.size); // e.g. 102400 (in bytes)
+  //     console.log('Image dimensions:', img.width, 'x', img.height); // e.g. 800 x 600
+
+  //     slideshow.imageType = blob.type;
+  //     slideshow.imageDimensions = img.width + 'x' + img.height;
+  //     slideshow.imageSize = `${((blob.size)/1024).toFixed(2)}kb`;
+  //   }));
+  // };
+
+  if (sliderImages) {
+    await Promise.all(sliderImages.map(async (slideshow, index) => {
+      const response = await fetch(slideshow.image);
+      const arrayBuffer = await response.arrayBuffer();
+      const imageBuffer = Buffer.from(arrayBuffer);
+      const image = sharp(imageBuffer);
+      const metadata = await image.metadata();
+
+      console.log('Image type:', metadata.format); // e.g. "jpeg"
+      console.log('Image size:', imageBuffer.length); // e.g. 102400 (in bytes)
+      console.log('Image dimensions:', metadata.width, 'x', metadata.height); // e.g. 800 x 600
+
+      slideshow.imageType = metadata.format?.toString().toUpperCase();
+      slideshow.imageDimensions = `${metadata.width}x${metadata.height}`;
+      slideshow.imageSize = `${((imageBuffer.length)/1024).toFixed(2)}kb`;
+    }));
+  }
+
 
   return (
     <section>

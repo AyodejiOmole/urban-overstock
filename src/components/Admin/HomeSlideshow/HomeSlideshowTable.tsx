@@ -1,34 +1,34 @@
 'use client';
 
-import { SliderImageType } from '@/interfaces';
 import Image from 'next/image';
-import Link from 'next/link';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
-import React, { useState } from 'react';
-import { FaEye } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
 import { MdOutlineDelete } from 'react-icons/md';
-import { RxPencil2 } from 'react-icons/rx';
-import paginatorTemplate from '@/components/Global/PaginatorTemplate';
 import { IoIosArrowDown } from 'react-icons/io';
-import HTTPService from '@/services/http';
 import Cookies from 'universal-cookie';
 import toast from 'react-hot-toast';
-import ENDPOINTS from '@/config/ENDPOINTS';
 import { useRouter } from 'next/navigation';
-import { MdOutlineModeEdit } from "react-icons/md";
+
+import { SliderImageType } from '@/interfaces';
+import HTTPService from '@/services/http';
+import ENDPOINTS from '@/config/ENDPOINTS';
+import paginatorTemplate from '@/components/Global/PaginatorTemplate';
+import { ISlideShows } from '@/app/admin/home-slideshow/page';
 
 export default function HomeSlideshowTable({
   selectedDate,
   slideshows,
 }: {
   selectedDate: number | null;
-  slideshows: SliderImageType[] | null;
+  slideshows: SliderImageType[] | null | ISlideShows[];
 }) {
   const [selectedImages, setSelectedImages] = useState<
     SliderImageType[] | null
   >(null);
   const [rowClick, setRowClick] = useState<boolean>(true);
+
+  const [expandedSlideShows, setExpandedSlideShows] = useState<ISlideShows[] | null | undefined>(slideshows);
 
   console.log(slideshows);
 
@@ -60,6 +60,36 @@ export default function HomeSlideshowTable({
       } else toast.error('Cannot delete slider image at this time');
     }
   }
+
+  // useEffect(() => {
+  //   expandedSlideShows?.forEach((slideshow, index) => {
+  //     fetch(slideshow.image)
+  //       .then(response => response.blob())
+  //       .then(blob => {
+  //         const img = new window.Image();
+  //         img.src = URL.createObjectURL(blob);
+  //         img.onload = () => {
+  //           console.log('Image type:', blob.type); // e.g. "image/jpeg"
+  //           console.log('Image size:', blob.size); // e.g. 102400 (in bytes)
+  //           console.log('Image dimensions:', img.width, 'x', img.height); // e.g. 800 x 600
+
+  //           const newState = expandedSlideShows.map((obj, slideShowIndex) => {
+  //             if (index === slideShowIndex) {
+  //               return {
+  //                 ...obj,
+  //                 imageType: blob.type,
+  //                 imageDimensions: img.width + 'x' + img.height,
+  //                 imageSize: `${((blob.size)/1024).toFixed(2)}kb`,
+  //               };
+  //             }
+  //             return obj;
+  //           });
+           
+  //           setExpandedSlideShows(newState);
+  //         };
+  //     });
+  //   })
+  // }, [expandedSlideShows, slideshows])
 
   function actionTemplate(slideshow: SliderImageType) {
     return (
@@ -111,7 +141,7 @@ export default function HomeSlideshowTable({
   return (
     <div className='rounded-xl p-4 bg-white border border-gray-200'>
       <DataTable
-        value={slideshows ?? []}
+        value={expandedSlideShows ?? []}
         selectionMode={rowClick ? null : 'multiple'}
         selection={selectedImages!}
         onSelectionChange={selectChangeHandler}
@@ -132,6 +162,9 @@ export default function HomeSlideshowTable({
           headerStyle={{ width: '3rem' }}
         ></Column>
         <Column body={template} header='Image'></Column>
+        <Column field='imageType' header="Type"></Column>
+        <Column field='imageSize' header="Size"></Column>
+        <Column field='imageDimensions' header="Dimension"></Column>
         <Column
           field='action'
           header='Action'

@@ -222,7 +222,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
       {/* Grid 1 */}
       <div className='grid md:grid-cols-2 xl:grid-cols-3 gap-4 mb-8'>
         {/* Order Details */}
-        <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-xl'>
+        <div className='py-4 px-2 sm:p-4 border border-gray-200 bg-white rounded-xl'>
           <p className='text-lg font-medium text-gray-700 mb-8 flex items-center justify-between'>
             <span>Order #{order?.id}</span>
             {/* <span className='p-2 px-4 text-xs bg-blue-100 rounded-full'>
@@ -270,11 +270,11 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
         </div>
 
         {/* Customer Details */}
-        <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-xl'>
+        <div className='py-4 px-2 sm:p-4 border border-gray-200 bg-white rounded-xl'>
           <p className='text-lg font-medium text-gray-700 mb-8'>Customer</p>
 
           {/*  */}
-          <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm capitalize'>
+          <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
             <div className='flex items-center gap-2'>
               <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
                 <CiUser />
@@ -290,7 +290,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
           </div>
 
           {/*  */}
-          <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
+          <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm '>
             <div className='flex items-center gap-2'>
               <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
                 <CiMail />
@@ -299,8 +299,10 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                 <p>Email</p>
               </div>
             </div>
-            <p>{order?.user.email}</p>
+            <p className='break-all'>{order?.user.email}</p>
+            {/* <p className='break-word'>{"These are words for me to use."}</p> */}
           </div>
+
           {/*  */}
           <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
             <div className='flex items-center gap-2'>
@@ -316,7 +318,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
         </div>
         
         {/* Document */}
-        <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-xl'>
+        <div className='py-4 px-2 sm:p-4 border border-gray-200 bg-white rounded-xl'>
           <p className='text-lg font-medium text-gray-700 mb-8'>Document</p>
 
           {/*  */}
