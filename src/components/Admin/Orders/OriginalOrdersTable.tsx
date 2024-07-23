@@ -146,19 +146,19 @@ export default function OriginalOrdersTable({
         );
     },
     PageLinks: (options: PaginatorPageLinksOptions) => {
-        if ((options.view.startPage === options.page && options.view.startPage !== 0) || (options.view.endPage === options.page && options.page + 1 !== options.totalPages)) {
-            const className = classNames(options.className, { 'p-disabled': true });
+        // if ((options.view.startPage === options.page && options.view.startPage !== 0) || (options.view.endPage === options.page && options.page + 1 !== options.totalPages)) {
+        //     const className = classNames(options.className, { 'p-disabled': true });
 
-            return (
-                <span className={classNames('border px-3 py-1 mx-1 rounded-sm cursor-pointer border-[#F2C94C]')} style={{ userSelect: 'none' }}>
-                    ...
-                </span>
-            );
-        }
+        //     return (
+        //         <span className={classNames('border px-3 py-1 mx-1 rounded-sm cursor-pointer border-[#F2C94C]')} style={{ userSelect: 'none' }}>
+        //             ...
+        //         </span>
+        //     );
+        // }
 
         return (
             <span 
-              className={classNames(`${options.page === options.currentPage ? "bg-[#F2C94C]" : "bg-white"} px-3 cursor-pointer py-1 mx-1 rounded-sm border border-[#F2C94C] `)} 
+              className={classNames(`${options.page === lazyState.page ? "bg-[#F2C94C]" : "bg-white"} px-3 cursor-pointer py-1 mx-1 rounded-sm border border-[#F2C94C] `)} 
               onClick={() => {
                 setlazyState({
                   first: 0,

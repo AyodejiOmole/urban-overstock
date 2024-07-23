@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
 import { FaPlus } from 'react-icons/fa';
-// import sharp from "sharp";
 import sizeOf from "image-size";
 
 import HomeSlideshowTable from '@/components/Admin/HomeSlideshow/HomeSlideshowTable';
