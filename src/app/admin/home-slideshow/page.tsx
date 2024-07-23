@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import React from 'react';
 import { FaPlus } from 'react-icons/fa';
-import sharp from "sharp";
+// import sharp from "sharp";
+import sizeOf from "image-size";
 
 import HomeSlideshowTable from '@/components/Admin/HomeSlideshow/HomeSlideshowTable';
 import Button from '@/components/Global/Button';
@@ -24,14 +25,16 @@ export default async function AdminHomeSlideshow() {
       const response = await fetch(slideshow.image);
       const arrayBuffer = await response.arrayBuffer();
       const imageBuffer = Buffer.from(arrayBuffer);
-      const image = sharp(imageBuffer);
-      const metadata = await image.metadata();
+      // const image = sharp(imageBuffer);
+      // const metadata = await image.metadata();
+      const metadata = sizeOf(imageBuffer);
 
-      console.log('Image type:', metadata.format); // e.g. "jpeg"
+
+      console.log('Image type:', metadata.type); // e.g. "jpeg"
       console.log('Image size:', imageBuffer.length); // e.g. 102400 (in bytes)
       console.log('Image dimensions:', metadata.width, 'x', metadata.height); // e.g. 800 x 600
 
-      slideshow.imageType = metadata.format?.toString().toUpperCase();
+      slideshow.imageType = metadata.type?.toString().toUpperCase();
       slideshow.imageDimensions = `${metadata.width}x${metadata.height}`;
       slideshow.imageSize = `${((imageBuffer.length)/1024).toFixed(2)}kb`;
     }));
