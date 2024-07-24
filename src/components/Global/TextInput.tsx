@@ -42,8 +42,6 @@ export default function TextInput(props: InputType) {
     ifSearchBar = "bg-[#F0F1F3]"
   } = props;
 
-  // bg-[#F0F1F3]
-
   const inputStyles = clsx(
     'h-[48px]  px-4 py-2 border border-dark-100 flex gap-2 items-center', ifSearchBar,
     disabled && 'pointer-events-none opacity-60',
@@ -89,7 +87,7 @@ export default function TextInput(props: InputType) {
   };
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col relative'>
       <div className={inputStyles}>
         {leftIcon && (
           <div
@@ -122,7 +120,7 @@ export default function TextInput(props: InputType) {
         )}
       </div>
       {(error || hint) && (
-        <div className='text-xs font-light mt-1 ml-1 p-2'>
+        <div className='text-xs font-light ml-1 p-2 absolute -bottom-6'>
           {error && <span className='text-red-600'>{error}</span>}
           {hint && <span className='text-dark-200'>{hint}</span>}
         </div>

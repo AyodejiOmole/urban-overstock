@@ -1,11 +1,7 @@
-// import ProductForm from '@/components/Admin/Products/ProductForm';
-import Button from '@/components/Global/Button';
-import { ICategories } from '@/interfaces/categories';
-import getAllCategories from '@/libs/categories';
 import Link from 'next/link';
 import React from 'react';
-import { FaPlus } from 'react-icons/fa';
 import { FaX } from 'react-icons/fa6';
+
 import getAllBrands from '@/libs/brands';
 import getAllColors from '@/libs/colors';
 import getAllSizes from '@/libs/sizes';
@@ -16,6 +12,9 @@ import { ISizes } from '@/interfaces/sizes';
 import Pagination from '@/components/Shared/Pagination';
 import { IDiscountCodes } from '@/interfaces/discount-codes';
 import OldProductForm from '@/components/Admin/Products/OldProductForm';
+import Button from '@/components/Global/Button';
+import { ICategories } from '@/interfaces/categories';
+import getAllCategories from '@/libs/categories';
 
 export default async function AdminNewProduct() {
   const apiRes: Promise<ICategories | undefined> = getAllCategories();

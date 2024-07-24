@@ -1,38 +1,39 @@
 'use client';
 
-import Button from '@/components/Global/Button';
-import TextInput from '@/components/Global/TextInput';
-import ENDPOINTS from '@/config/ENDPOINTS';
-import { ICategories, ICategory } from '@/interfaces/categories';
-import { IProduct } from '@/interfaces/products';
-import HTTPService from '@/services/http';
+import React, { ChangeEvent, useReducer, useRef, useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { useFormik } from 'formik';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { ChangeEvent, useReducer, useRef, useState, useEffect } from 'react';
 import { SketchPicker } from 'react-color';
 import toast from 'react-hot-toast';
 import { BiDollar } from 'react-icons/bi';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
 import Cookies from 'universal-cookie';
 import * as Yup from 'yup';
+import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowUp } from 'react-icons/io';
+import { AiOutlineClose } from 'react-icons/ai';
+import { IoClose } from 'react-icons/io5';
+
 import OldVariations from "./Variations/OldVariations"
 // import Variations, { VariationData } from './Variations/Variations';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { FaX, FaPlus } from 'react-icons/fa6';
 import { TfiSave } from 'react-icons/tfi';
-import NewVariations from "./Variations/NewVariations";
 import { IBrand } from '@/interfaces/brands';
 import { IBrands } from '@/interfaces/brands';
 import { IColors } from '@/interfaces/colors';
 import { ISizes } from '@/interfaces/sizes';
 import { IDiscountCodes } from '@/interfaces/discount-codes';
-import { IoIosArrowDown } from "react-icons/io";
-import { IoIosArrowUp } from 'react-icons/io';
-import { AiOutlineClose } from 'react-icons/ai';
-import { IoClose } from 'react-icons/io5';
+import Button from '@/components/Global/Button';
+import TextInput from '@/components/Global/TextInput';
+import ENDPOINTS from '@/config/ENDPOINTS';
+import { ICategories, ICategory } from '@/interfaces/categories';
+import { IProduct } from '@/interfaces/products';
+import HTTPService from '@/services/http';
+
 
 interface ProductImage {
   // color: string;
@@ -129,7 +130,7 @@ function CustomError({ error }: { error?: string }) {
   if (!error) return;
 
   return (
-    <div className='text-xs font-light mt-1 ml-1 p-2'>
+    <div className='text-xs font-light ml-1 p-2 absolute -bottom-6'>
       <span className='text-red-600'>
         {error === "Category must be greater than or equal to 1" ? "Category field is required!": error}
       </span>
@@ -262,8 +263,6 @@ export default function OldProductForm({
       // tag: Yup.string().required().label('Tag'),
       quantity: Yup.number().min(1).required().label('Quantity'),
       amount: Yup.number().min(1).required().label('Price').test('amount', 'Amount cannot be less than cost price.', function () {
-        // const { amount, costPrice } = this.parent;
-        // return costPrice > amount;
         const { costPrice, amount } = this.parent;
         return costPrice <= amount;
       }),
@@ -803,6 +802,8 @@ export default function OldProductForm({
         {/* Pricing */}
         <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-lg my-4'>
           <p className='text-lg font-semibold text-gray-700 mb-8'>Pricing</p>
+          
+          {/* Cost price */}
           <div className='mb-6'>
             <label
               htmlFor='basePrice'
@@ -821,6 +822,8 @@ export default function OldProductForm({
               type='number'
             />
           </div>
+
+          {/* Base Price */}
           <div className='mb-6'>
             <label
               htmlFor='basePrice'
@@ -896,27 +899,11 @@ export default function OldProductForm({
 
                 <IoIosArrowDown className={`absolute right-4 ${formik.errors.taxClass ? "top-10" : "bottom-4"}`} />
                 <CustomError error={formik.errors.taxClass} />
-                
               </div>
             </div>
             {/*  */}
             <div>
               <div className='mb-6'>
-                {/* <label
-                  htmlFor='discountPercentage'
-                  className='text-sm text-neutral mb-2 block'
-                >
-                  Discount Percentage (%)
-                </label>
-                <TextInput
-                  inputMode='numeric'
-                  placeholder='Discount Percentage'
-                  id='discountPercentage'
-                  onChange={formik.handleChange}
-                  value={formik.values.discountPercentage}
-                  error={formik.errors.discountPercentage}
-                  type='number'
-                /> */}
                 <div className='w-full'>
                     <label htmlFor='brandId' className='text-sm text-neutral mb-2 block'>
                       Discount Percentage (%)
@@ -927,7 +914,7 @@ export default function OldProductForm({
                         }
                     >
                         {discounts?.find((discount) => discount.code === formik.values.discountType)?.percentage ? discounts?.find((discount) => discount.code === formik.values.discountType)?.percentage : "Discount percent..."}
-                        {/* <IoIosArrowDown className='absolute right-4 top-auto bottom-auto'/> */}
+                        <IoIosArrowDown className='absolute right-4 top-auto bottom-auto'/>
                     </div>
                 </div>
               </div>
