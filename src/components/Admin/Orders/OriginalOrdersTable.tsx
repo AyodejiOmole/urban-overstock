@@ -55,6 +55,7 @@ export default function OriginalOrdersTable({
 }) {
   const [rowClick, setRowClick] = useState<boolean>(true);
   const [totalRecords, setTotalRecords] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(0);
   const [lazyOrders, setLazyOrders] = useState<IOrder[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [lazyState, setlazyState] = useState<LazyTableState>({
@@ -107,6 +108,7 @@ export default function OriginalOrdersTable({
                   if (data.data) {
                       console.log(data.meta);
                       setTotalRecords(data.meta.total_items);
+                      setTotalPages(data.meta.total_pages);
                       console.log(data.data);
                       setLazyOrders(data.data);
                       setLoading(false);
@@ -174,7 +176,6 @@ export default function OriginalOrdersTable({
         return (
             <div style={{ color: 'var(--text-color)', userSelect: 'none', width: 'auto', textAlign: 'left'}} className='text-sm text-neutral items-center my-auto mr-auto'>
                 {`Showing ${lazyState.first + ((lazyState.page ?? 0) * 10)} - ${(lazyState.first + ((lazyState.page ?? 0) * 10)) + 10} from ${options.totalRecords}`}
-                {/* {`Showing ${options.first} - ${options.last} from ${options.totalRecords}`} */}
             </div>
         );
     },
@@ -188,7 +189,6 @@ export default function OriginalOrdersTable({
                       rows: 10,
                       page: lazyState?.page ? lazyState.page === 0 ? 0 : lazyState.page - 1 : 0,
                     });
-                    console.log("This works.");
                 }} 
             >
                 <MdOutlineKeyboardArrowLeft color="black"/>
@@ -203,9 +203,8 @@ export default function OriginalOrdersTable({
                 setlazyState({
                   first: 0,
                   rows: 10,
-                  page: lazyState?.page ? lazyState.page === 0 ? 0 : lazyState.page + 1 : 0,
+                  page: ((lazyState.page ?? 0) + 1) > totalPages ? lazyState.page : ((lazyState.page ?? 0) + 1),
                 });
-                // console.log("This works.");
               }} 
             >
                 <MdKeyboardArrowRight color="black"/>
@@ -371,7 +370,6 @@ export default function OriginalOrdersTable({
         paginatorTemplate={paginatorTemplateOrder}
         paginatorClassName='flex justify-between'
         rows={10}
-        // prevPageLing={}
         // rowsPerPageOptions={[20, 50, 100, 250]}
         className='rounded-md text-sm'
         sortOrder={-1}

@@ -5,6 +5,8 @@ const ENDPOINTS = {
   NOTIFICATIONS: `notification`,
   CUSTOMERS: `user/customer`,
   RETURN_REQUEST: `return-request`,
+
+  // Authentication
   SIGN_IN_FIREBASE: `auth/login/firebase`,
   SIGN_IN: `auth/login`,
   SIGN_UP: `auth/register`,
@@ -13,21 +15,24 @@ const ENDPOINTS = {
   FORGOT_PASSWORD: `auth/forgot`,
   RESET_PASSWORD: `auth/reset`,
   RESEND_OTP: `auth/resend-otp`,
-  SLIDER_IMAGE: `settings/slider-image`,
-
+  
   // Orders
   ORDERS: 'order',
   CANCEL_REQUEST: `order/cancel-request`,
   USER_ORDER_HISTORY: `order/user`,
   ORDER_TRACKING_INFORMATION: `order/tacking-information`,
+
+  // Discount codes
   DISCOUNT_CODE: `discount-code`,
 
-  // Landing Page Settings
-  LANDING_PAGE_SETTINGS: `settings/landing-page`,
-
+  // Settings
   COLOR_SETTINGS: `settings/color`,
   BRAND_SETTINGS: `settings/brand`,
   SIZE_SETTINGS: `settings/size`,
+  SLIDER_IMAGE: `settings/slider-image`,
+  // Landing Page Settings
+  LANDING_PAGE_SETTINGS: `settings/landing-page`,
+
   ADMIN_SHIPPING_ADDRESS: `admin-shipping-address`,
 
   // Dashboard

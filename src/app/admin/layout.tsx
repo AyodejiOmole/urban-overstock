@@ -30,25 +30,7 @@ export default function DashboardLayout({
 
   const { unreadNotifications } = useContext(NotificationContext) ?? {
     unreadNotifications: 0,
-    
   };
-
-  // useEffect(() => {
-  //   const cookies = new Cookies();
-  //   const token = cookies.get('urban-token');
-
-  //   const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
-  
-  //   fetch(`${baseUrl}/api/v1/${ENDPOINTS.NOTIFICATIONS}/count-unread`, {
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  
-  //     cache: 'no-store',
-  //   })
-  //   .then(response => response.json())
-  //   .then(data => setUnreadNotifications(data));
-  // }, []);
 
   useEffect(() => {
     const cookies = new Cookies();
@@ -65,7 +47,6 @@ export default function DashboardLayout({
     })
     .then(response => response.json())
     .then(data => setUnreadOrders(data));
-    
   }, []);
 
   useEffect(() => {
