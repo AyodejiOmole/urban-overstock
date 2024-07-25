@@ -261,7 +261,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
 
         {/* Settings and Logout */}
         <div className='cursor-pointer mt-[20px] p-2'>
-              <Link
+              {/* <Link
                 href="/admin/settings"
               >
                 <div
@@ -279,7 +279,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
                     <IoMdSettings />
                     {isOpen && <p className='capitalize'>Settings</p>}
                 </div>
-              </Link>
+              </Link> */}
               <div
                 onClick={() => logOut()}
                 className={`uo-tool-tip py-4 flex gap-4 w-full h-10 items-center duration-500 rounded-md text-sm font-medium white text-neutral hover:bg-gray-50
