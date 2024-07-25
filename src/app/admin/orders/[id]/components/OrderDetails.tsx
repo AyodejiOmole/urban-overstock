@@ -568,12 +568,6 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                 >
                   Estimated Delivery Date
                 </label>
-                {/* <TextInput
-                  id='estimateDeliveryDate'
-                  onChange={formik.handleChange}
-                  value={formik.values.estimateDeliveryDate}
-                  error={formik.values.estimateDeliveryDate}
-                /> */}
                 {/* <DatePicker handleSelectDate={handleSelectDate} /> */}
                 <Calendar
                   id='estimateDeliveryDate'
@@ -581,13 +575,14 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                   onChange={formik.handleChange}
                   // showTime
                   hourFormat='24'
-                  placeholder='Select Dates'
+                  placeholder='Select Date'
                   className='pl-[16px] text-[12px] bg-white rounded-[8px] h-[40px] w-[170px]'
                   icon={<FiCalendar className='text-black h-[20px] w-[20px]'/>}
                   showButtonBar
                   showIcon
                   iconPos='left'
                   hideOnDateTimeSelect={true}
+                  minDate={new Date()}
                 />
               </div>
               {/* <div className='mb-6'>
@@ -615,12 +610,6 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
               title='Status Update'
             > 
               <h3 className='mb-4 text-lg text-black'> Has your order been delivered? </h3>
-              {/* <div className='flex items-center gap-2 justify-between'>
-                <Button onClick={() => updateOrder(order?.id, "Delivered")}>Yes</Button>
-                <Button variant='outlined' onClick={() =>  setOrderShippedModal(false)}>
-                  No
-                </Button>
-              </div> */}
               <div className='mb-6'>
                 <label
                   htmlFor='deliveryDate'

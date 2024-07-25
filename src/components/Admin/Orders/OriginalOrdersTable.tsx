@@ -189,7 +189,6 @@ export default function OriginalOrdersTable({
                       page: lazyState?.page ? lazyState.page === 0 ? 0 : lazyState.page - 1 : 0,
                     });
                     console.log("This works.");
-                    // options.onClick
                 }} 
             >
                 <MdOutlineKeyboardArrowLeft color="black"/>
@@ -198,7 +197,17 @@ export default function OriginalOrdersTable({
     },
     NextPageLink: (options: PaginatorNextPageLinkOptions) => {
         return (
-            <span className={classNames('rounded-sm p-2 mx-1 bg-[#F2C94C] cursor-pointer')} onClick={options.onClick}>
+            <span 
+              className={classNames('rounded-sm p-2 mx-1 bg-[#F2C94C] cursor-pointer')} 
+              onClick={() => {
+                setlazyState({
+                  first: 0,
+                  rows: 10,
+                  page: lazyState?.page ? lazyState.page === 0 ? 0 : lazyState.page + 1 : 0,
+                });
+                // console.log("This works.");
+              }} 
+            >
                 <MdKeyboardArrowRight color="black"/>
             </span>
         );
