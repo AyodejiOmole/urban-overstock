@@ -9,6 +9,9 @@ register();
 
 import NotificationProvider from '@/context/NotificationContext';
 import ClientProvider from '@/components/ClientProvider';
+import ReturnRequestProvider from '@/context/ReturnRequestContext';
+import OrdersProvider from '@/context/OrdersContext';
+
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,7 +31,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <ClientProvider>
           <NotificationProvider>
-            {children}
+            <ReturnRequestProvider>
+              <OrdersProvider>
+                {children}
+              </OrdersProvider>
+            </ReturnRequestProvider>
           </NotificationProvider>
         </ClientProvider>
       </body>

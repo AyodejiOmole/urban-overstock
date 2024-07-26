@@ -1,16 +1,13 @@
 'use client';
+
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import { Tooltip } from 'primereact/tooltip';
+
+import { NotificationContext } from '@/context/NotificationContext';
+import { ReturnRequestContext } from '@/context/ReturnRequestContext';
+import { OrdersContext } from '@/context/OrdersContext';
 import Header from '@/components/Admin/Header';
 import AdminSidebar from '@/components/Admin/Sidebar';
-import React, { useState, useEffect, useRef } from 'react';
-import ENDPOINTS from '@/config/ENDPOINTS';
-import { getCookie } from 'cookies-next';
-import { cookies } from 'next/headers';
-import Cookies from 'universal-cookie';
-import { Tooltip } from 'primereact/tooltip';
-import { IOrder } from '@/interfaces/orders';
-import getOrders from '@/libs/orders';
-import { useContext } from 'react';
-import { NotificationContext } from '@/context/NotificationContext';
 
 export default function DashboardLayout({
   children
@@ -18,11 +15,6 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
-  // const [unreadNotifications, setUnreadNotifications] = useState<any>();
-
-  const [unreadOrders, setUnreadOrders] = useState<any>();
-
-  const [unreadReturnRequests, setUnreadReturnRequests] = useState<any>();
 
   const [dropDown, setDropDown] = useState<boolean>(false);
 
@@ -32,40 +24,13 @@ export default function DashboardLayout({
     unreadNotifications: 0,
   };
 
-  useEffect(() => {
-    const cookies = new Cookies();
-    const token = cookies.get('urban-token');
+  const { unreadReturnRequests } = useContext(ReturnRequestContext) ?? {
+    unreadReturnRequests : null
+  };
 
-    const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
-  
-    fetch(`${baseUrl}/api/v1/${ENDPOINTS.ORDERS}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-  
-      cache: 'no-store',
-    })
-    .then(response => response.json())
-    .then(data => setUnreadOrders(data));
-  }, []);
-
-  useEffect(() => {
-    const cookies = new Cookies();
-    const token = cookies.get('urban-token');
-
-    const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
-  
-    fetch(`${baseUrl}/api/v1/${ENDPOINTS.RETURN_REQUEST}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-  
-      cache: 'no-store',
-    })
-    .then(response => response.json())
-    .then(data => setUnreadReturnRequests(data));
-    
-  }, []);
+  const { unreadOrders } = useContext(OrdersContext) ?? {
+    unreadOrders : null
+  }
 
   useEffect(() => {
     document.body.addEventListener('click', (event) => {
@@ -81,7 +46,6 @@ export default function DashboardLayout({
   const handleToggleSidebar = () => setSidebarOpen((prev) => !prev);
 
   return (
-    // <QueryClientProvider client={queryClient}>
       <div className='grid grid-cols-12 bg-gray-50 relative min-h-screen'>
         <div
           className={`bg-white duration-500 transition-all border-r-[1px] border-r-gray-50 w-0 h-0 ${
@@ -115,11 +79,9 @@ export default function DashboardLayout({
           
             {/* <Component {...pageProps} /> */}
             {children}
-          {/* </QueryClientProvider> */}
         </div>
         <Tooltip target=".uo-tool-tip" />
       </div>
-    // </QueryClientProvider>
   );
 };
 

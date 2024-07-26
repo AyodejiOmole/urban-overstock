@@ -1,8 +1,9 @@
-import NotificationsTable from '@/components/Admin/Notifications/NotificationsTable';
 import React from 'react';
+
 import PageHeading from "./components/PageHeading"
 import getAllNotifications from '@/libs/notifications';
 import { INotifications } from '@/interfaces/notifications';
+import NotificationsTable from '@/components/Admin/Notifications/NotificationsTable';
 
 export default async function AdminNotifications() {
   const apiRes: Promise<INotifications | undefined> = getAllNotifications();

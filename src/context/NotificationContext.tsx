@@ -29,7 +29,10 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
           cache: 'no-store',
         })
         .then(response => response.json())
-        .then(data => setUnreadNotifications(data.data.count));
+        .then(data => {
+          console.log(data);
+          setUnreadNotifications(data.data.count)
+        });
     }, []);
 
     return (
