@@ -31,7 +31,7 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
         .then(response => response.json())
         .then(data => {
           console.log(data);
-          setUnreadNotifications(data.data.count)
+          setUnreadNotifications(data.data.count ?? 0)
         });
     }, []);
 
