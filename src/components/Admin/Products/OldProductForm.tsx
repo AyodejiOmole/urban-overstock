@@ -1183,7 +1183,8 @@ export default function OldProductForm({
                 // }                      
               }}  
               ref={productStatusArrow}
-              className={`absolute w-20 h-20 bg-red-500 cursor-pointer right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`}
+              className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`}
+              // className={`absolute w-20 h-20 bg-red-500 cursor-pointer right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`}
             >
               <IoIosArrowDown 
             // onClick={ () => {
