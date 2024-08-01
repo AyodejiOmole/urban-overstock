@@ -3,6 +3,7 @@ import { createContext, useState, useEffect } from "react";
 import Cookies from "universal-cookie";
 
 import ENDPOINTS from "@/config/ENDPOINTS";
+import { IOrder } from "@/interfaces/orders";
 
 interface IOrdersContext {
     unreadOrders: any,
@@ -29,7 +30,31 @@ const OrdersProvider = ({ children }: { children: React.ReactNode}) => {
           cache: 'no-store',
         })
         .then(response => response.json())
-        .then(data => setUnreadOrders(data));
+        .then(data => {
+          console.log(data);
+
+          // const orders = data.data;
+          // orders.sort((a: IOrder, b: IOrder) => new Date(a.createdAt) > new Date(b.createdAt));
+
+          // const latestOrder = new Date(orders[0].createdAt);
+          // console.log(JSON.parse(localStorage.getItem("latest-order") ?? "").createdAt);
+          // const storedLatestOrders = new Date(JSON.parse(localStorage.getItem("latest-order") ?? "0")?.order.createdAt);
+
+          // if(data.data.some((order: IOrder) => new Date(order.createdAt) > storedLatestOrders)) {
+          //   const newestOrders = data.data.filter((a: IOrder) => new Date(a.createdAt) >= storedLatestOrders);
+          //   console.log(newestOrders);
+
+          //   setUnreadOrders(newestOrders);
+
+          //   localStorage.setItem("latest-order", JSON.stringify({
+          //     order: orders[0],
+          //     viewed: false,
+          //   }));
+          // } else {
+          //   setUnreadOrders([]);
+          // }
+          setUnreadOrders(data.data)
+        });
       }, []);
 
     return (

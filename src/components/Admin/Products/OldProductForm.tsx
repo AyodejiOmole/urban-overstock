@@ -507,18 +507,18 @@ export default function OldProductForm({
     // });
   }
 
-  useEffect(() => {
-    document.body.addEventListener('click', (event) => {
+  // useEffect(() => {
+  //   document.body.addEventListener('click', (event) => {
       
-      if (!brandPickerRef.current?.contains(event.target as Node) &&  !addBrandPresetRef.current?.contains(event.target as Node) && productStatusArrow.current !== event.target) {
-        setAddBrandDisplay(false);
-        setBrandPicker(false);
-      }
-    });
-    return () => {
-      document.body.removeEventListener('click', () => {});
-    };
-  }, []);
+  //     if (!brandPickerRef.current?.contains(event.target as Node) &&  !addBrandPresetRef.current?.contains(event.target as Node) && productStatusArrow.current !== event.target) {
+  //       setAddBrandDisplay(false);
+  //       setBrandPicker(false);
+  //     }
+  //   });
+  //   return () => {
+  //     document.body.removeEventListener('click', () => {});
+  //   };
+  // }, []);
 
   const handleBrandArrowClick = (event: any) => {
     event.stopPropagation();
@@ -1143,7 +1143,7 @@ export default function OldProductForm({
           {/*  */}
           <div className='mb-6 relative'>
             <label
-              htmlFor='category'
+              htmlFor='status'
               className='text-sm text-neutral mb-2 block'
             >
               Product Status
@@ -1166,18 +1166,32 @@ export default function OldProductForm({
             </select>
 
             <div
-              onClick={handleSelectProductStatusClick}
+              // onClick={handleSelectProductStatusClick}
+              onClick={ () => {
+                productStatusSelectRef.current?.focus();
+                // const clickEvent = new MouseEvent("mousedown");
+                // window.document.getElementById("status")?.dispatchEvent(clickEvent);
+                // console.log("this");
+                // if (productStatusSelectRef.current) {
+                //   const clickEvent = new MouseEvent('mousedown', { bubbles: true });
+                //   productStatusSelectRef.current.dispatchEvent(clickEvent);
+                // }      
+                // if (productStatusSelectRef.current) {
+                //   productStatusSelectRef.current.focus();
+                //   const keyboardEvent = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+                //   productStatusSelectRef.current.dispatchEvent(keyboardEvent);
+                // }                      
+              }}  
               ref={productStatusArrow}
-              // className='border border-red-300'
-              className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`}
+              className={`absolute w-20 h-20 bg-red-500 cursor-pointer right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`}
             >
-            <IoIosArrowDown 
+              <IoIosArrowDown 
             // onClick={ () => {
             //   productStatusSelectRef.current?.focus()
             //   console.log("this");
-            // } }  
-              // size={20}
-              // className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`}
+            //   } }  
+                size={20}
+                className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`}
                />
             </div>
             {/* {productStatusSelectRef.current?.focus && 
@@ -1220,7 +1234,6 @@ export default function OldProductForm({
               </Button>
             </Link>
 
-            
             <Button>
               <TfiSave />
               Save Product

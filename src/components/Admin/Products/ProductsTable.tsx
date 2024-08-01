@@ -198,7 +198,7 @@ export default function ProductsTable({
         <Column field='product.item' header='Product' body={productTemplate} />
         <Column field='sku' header='SKU' sortable body={skuTemplate}/>
         <Column field='category.name' header='Category' sortable />
-        <Column field='amount' header='Stock' sortable />
+        <Column field='quantity' header='Stock' sortable />
         <Column
           field='totalAmount'
           header='Price'

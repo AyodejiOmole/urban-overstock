@@ -145,7 +145,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
                           {link.name.toLowerCase() === "orders" && isOpen && (
                             <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
                               {/* {notifications} */}
-                              {orders?.data.length ?? 0}
+                              {orders?.length ?? 0}
                               {/* {10} */}
                             </div>
                           )}
@@ -153,7 +153,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
                           {link.name.toLowerCase() === "return request" && isOpen && (
                             <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
                               {/* {notifications} */}
-                              {returnRequests?.data.length ?? 0}
+                              {returnRequests?.length ?? 0}
                               {/* {10} */}
                             </div>
                           )}
@@ -378,7 +378,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
                             {link.name.toLowerCase() === "orders" && isOpen && (
                               <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
                                 {/* {notifications} */}
-                                {orders?.data.length ?? 0}
+                                {orders?.length ?? 0}
                                 {/* {10} */}
                               </div>
                             )}
@@ -386,7 +386,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
                             {link.name.toLowerCase() === "return request" && isOpen && (
                               <div className='px-[6px] bg-red-500 rounded-full text-[8px] text-white'>
                                 {/* {notifications} */}
-                                {returnRequests?.data.length ?? 0}
+                                {returnRequests?.length ?? 0}
                                 {/* {10} */}
                               </div>
                             )}

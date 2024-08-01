@@ -629,6 +629,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                   showIcon
                   iconPos='left'
                   hideOnDateTimeSelect={true}
+                  minDate={new Date()}
                 />
               </div>
               <div className='flex items-center gap-2'>

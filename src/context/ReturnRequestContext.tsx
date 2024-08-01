@@ -3,6 +3,7 @@ import { createContext, useState, useEffect } from "react";
 import Cookies from "universal-cookie";
 
 import ENDPOINTS from "@/config/ENDPOINTS";
+import { IReturnRequest } from "@/interfaces/return-requests";
 
 type ReturnRequestCotextType = {
     unreadReturnRequests: any;
@@ -28,7 +29,31 @@ const ReturnRequestProvider = ({ children }: { children: React.ReactNode }) => {
           cache: 'no-store',
         })
         .then(response => response.json())
-        .then(data => setUnreadReturnRequests(data));
+        .then(data => {
+          console.log(data);
+          // const returnRequests = data.data;
+          // returnRequests.sort((a: IReturnRequest, b: IReturnRequest) => {
+          //   return new Date(a.createdAt) > new Date(b.createdAt)
+          // });
+
+          // console.log(returnRequests[0]);
+
+          // const latestReturnRequest = new Date(returnRequests[0].createdAt);
+          // const storedLatestReturnRequest = new Date(JSON.parse(localStorage.getItem("latest-return-request") ?? "")?.returnRequest.createdAt);
+
+          // if(latestReturnRequest > storedLatestReturnRequest) {
+          //   localStorage.setItem("latest-return-request", JSON.stringify({
+          //     returnRequest: returnRequests[0],
+          //     viewed: false,
+          //   }));
+            
+          //   setUnreadReturnRequests(data.data.map((request: IReturnRequest) => new Date(request.createdAt) > storedLatestReturnRequest))
+          // } else {
+          //   setUnreadReturnRequests([]);
+          // }
+
+          setUnreadReturnRequests(data.data);
+        });
         
       }, []);
 
@@ -37,7 +62,6 @@ const ReturnRequestProvider = ({ children }: { children: React.ReactNode }) => {
             {children}
         </ReturnRequestContext.Provider>
     )
-
-}
+};
 
 export default ReturnRequestProvider;
