@@ -112,11 +112,11 @@ export default function TopSellingProductsTable({
       >
         <Column body={productTemplate} header='Product' />
         <Column field='totalCount' header='Sales' sortable />
-        <Column
+        {/* <Column
           field='product.amount'
           body={amountTemplate}
           header='Amount'
-        />
+        /> */}
         <Column
           field='product.amount'
           header='Price'

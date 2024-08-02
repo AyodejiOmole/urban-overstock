@@ -1183,15 +1183,16 @@ export default function OldProductForm({
                 // }                      
               }}  
               ref={productStatusArrow}
-              className={`absolute w-20 h-20 bg-red-500 cursor-pointer right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`}
+              className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`}
             >
               <IoIosArrowDown 
-            // onClick={ () => {
-            //   productStatusSelectRef.current?.focus()
-            //   console.log("this");
-            //   } }  
-                size={20}
-                className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`}
+                // onClick={ () => {
+                //   productStatusSelectRef.current?.focus()
+                //   console.log("this");
+                //   } }  
+                // size={20}
+                // className={`absolute right-4 ${formik.errors.status ? "top-10" : "bottom-4"}`}
+                // className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`}
                />
             </div>
             {/* {productStatusSelectRef.current?.focus && 
@@ -1201,7 +1202,6 @@ export default function OldProductForm({
               />
             } */}
             <CustomError error={formik.errors.status} />
-
             {/* <div onClick={handleSelectProductStatusClick}>stuff</div> */}
           </div>
         </div>
