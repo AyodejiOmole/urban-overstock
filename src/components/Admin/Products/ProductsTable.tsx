@@ -168,6 +168,12 @@ export default function ProductsTable({
     );
   }, [getProductsByDate, searchValue]);
 
+  const rowClassTemplate = (data: IProduct) => {
+    return {
+        'cursor-pointer': data.id
+    };
+  };
+
   return (
     <div>
     <div className='card rounded-xl p-4 bg-white border border-gray-200'>
@@ -193,6 +199,7 @@ export default function ProductsTable({
         sortIcon={<IoIosArrowDown />}
         alwaysShowPaginator={true}
         onRowClick={(e) => router.push(`/admin/products/${e.data.id}`)}
+        rowClassName={rowClassTemplate}
       >
         <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} />
         <Column field='product.item' header='Product' body={productTemplate} />

@@ -174,6 +174,12 @@ export default function ReturnRequestTable({
 //     );
 //   }, [searchValue, getOrdersByDate]);
 
+  const rowClassTemplate = (data: IReturnRequest) => {
+    return {
+        'cursor-pointer': data.id
+    };
+  };
+
   return (
     <div className='card rounded-xl p-4 bg-white border border-gray-200'>
       <DataTable
@@ -193,6 +199,7 @@ export default function ReturnRequestTable({
         sortField='createdAt'
         sortIcon={<IoIosArrowDown />}
         onRowClick={(e) => router.push(`/admin/return-request/${e.data.id}`)}
+        rowClassName={rowClassTemplate}
       >
         {/* <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} /> */}
         <Column field='order.uuid' header='Order ID' className='text-[#F2C94C]'/>
