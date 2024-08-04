@@ -37,6 +37,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar, setSidebarOpen, no
       path: '/',
       // expires: tokenExpiryTime,
     });
+    window.history.pushState({}, '', '/auth/admin/login');
     router.push("/auth/admin/login");
   }
 
